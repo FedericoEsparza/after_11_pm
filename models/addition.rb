@@ -10,6 +10,6 @@ class Addition
   end
 
   def evaluate
-    args.inject(0){|e,r| r + e}
+    args.inject(0){|r,e| r + e}
   end
 end

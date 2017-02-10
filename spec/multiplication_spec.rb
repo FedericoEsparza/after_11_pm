@@ -32,11 +32,13 @@ describe Multiplication do
       expect(multiplication.evaluate).to eq -6
     end
   end
-  #
-  # describe '#simplify' do
-  #   it 'simplifies 2x * 3x' do
-  #     exp = mtp(mtp(2,'x'),mtp(3,'x'))
-  #     expect(exp.simplify).to eq mtp(6,pow('x',2))
-  #   end
-  # end
+
+  describe '#simplify' do
+    it 'simplifies 2x * 3x' do
+      exp = mtp(mtp(2,'x'),mtp(3,'x'))
+      expect(exp.simplify).to eq mtp(6,pow('x',2))
+    end
+  end
+
+  
 end
