@@ -12,6 +12,14 @@ describe Power do
     end
   end
 
+  describe "#==" do
+    it 'asserts equality when arguments are the same' do
+      pow_1 = pow('x',2)
+      pow_2 = pow('x',2)
+      expect(pow_1).to eq pow_2
+    end
+  end
+
   describe '#evaluate' do
     it 'evaluates to a product of the arguments' do
       power = pow(-2,3)

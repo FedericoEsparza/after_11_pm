@@ -5,6 +5,10 @@ class Addition
     @args = args
   end
 
+  def ==(exp)
+    args = exp.args
+  end
+
   def evaluate
     args.inject(0){|e,r| r + e}
   end

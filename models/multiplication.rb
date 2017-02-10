@@ -5,6 +5,10 @@ class Multiplication
     @args = args
   end
 
+  def ==(exp)
+    args = exp.args
+  end  
+
   def evaluate
     args.inject(1){|e,r| r * e}
   end

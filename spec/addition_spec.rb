@@ -12,6 +12,14 @@ describe Addition do
     end
   end
 
+  describe "#==" do
+    it 'asserts equality when arguments are the same' do
+      add_1 = add(1,2,'x')
+      add_2 = add(1,2,'x')
+      expect(add_1).to eq add_2
+    end
+  end
+
   describe '#evaluate' do
     it 'evaluates a sum of numbers' do
       addition = add(1,-2,3)
