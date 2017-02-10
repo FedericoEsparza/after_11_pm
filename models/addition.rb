@@ -2,11 +2,15 @@ class Addition
   attr_accessor :args
 
   def initialize(*args)
-    @args = args
+    if args.length == 1 && args[0].class == Array
+      @args = args.first
+    else
+      @args = args
+    end
   end
 
   def ==(exp)
-    args = exp.args
+    args == exp.args
   end
 
   def evaluate
