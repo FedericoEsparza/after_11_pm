@@ -6,4 +6,8 @@ module Factory
   def mtp(*args)
     Multiplication.new(*args)
   end
+
+  def pow(*args)
+    Power.new(*args)
+  end
 end
