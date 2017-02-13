@@ -7,7 +7,7 @@ module Factory
     Multiplication.new(*args)
   end
 
-  def pow(*args)
-    Power.new(*args)
+  def pow(base,index)
+    Power.new(base,index)
   end
 end

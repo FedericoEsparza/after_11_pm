@@ -6,9 +6,10 @@ include Factory
 describe Power do
   describe '#initialize/new' do
     it 'initialize with an array of two values take power' do
-      power = pow(2,'x')
+      power = pow('x',2)
       expect(power.class).to eq described_class
-      expect(power.args).to eq [2,'x']
+      expect(power.base).to eq 'x'
+      expect(power.index).to eq 2
     end
   end
 

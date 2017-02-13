@@ -30,10 +30,10 @@ class Multiplication
   end
 
   def combine_powers
-    string_var = args.first.args.first
+    string_var = args.first.base
     sum_of_powers = []
     args.each do |a|
-      sum_of_powers << a.args[1]
+      sum_of_powers << a.index
     end
     step_1 = pow(string_var,add(sum_of_powers))
     step_2 = pow(string_var,add(sum_of_powers).evaluate)
