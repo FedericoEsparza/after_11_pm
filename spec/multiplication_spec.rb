@@ -32,26 +32,6 @@ describe Multiplication do
     end
   end
 
-  describe '#evaluate' do
-    it 'evaluates to a product of the arguments' do
-      multiplication = mtp(1,-2,3)
-      expect(multiplication.evaluate).to eq -6
-    end
-
-    it 'evaluates x * x to x^2' do
-      multiplication = mtp('x','x')
-      expect(multiplication.evaluate).to eq pow('x',2)
-    end
-  end
-
-  describe '#simplify' do
-    it 'simplifies 2x * 3x' do
-      exp = mtp(mtp(2,'x'),mtp(3,'x'))
-      # expect(exp.simplify).to eq mtp(6,mtp('x','x'))
-      expect(exp.simplify).to eq mtp(6,'x','x')
-    end
-  end
-
   describe '#convert_to_power' do
     it 'converts string arguments to power of one' do
       exp = mtp(2,'x','y')
@@ -59,5 +39,29 @@ describe Multiplication do
       expect(exp.args).to eq [2,pow('x',1),pow('y',1)]
     end
   end
+
+  describe '#combine_powers' do
+    it 'combines two powers of x multiplied together' do
+      exp = mtp(pow('x',2),pow('x',3))
+      result = exp.combine_powers
+      expect(result[:value]).to eq pow('x',5)
+      expect(result[:steps]).to eq [mtp(pow('x',2),pow('x',3)),pow('x',add(2,3)),pow('x',5)]
+    end
+  end
+
+  # describe '#eval_numerics' do
+  #   it 'evaluates to a product of the arguments' do
+  #     multiplication = mtp(1,-2,3)
+  #     expect(multiplication.eval_numerics).to eq [mtp(1,-2,3),-6]
+  #   end
+  # end
+  #
+  # describe '#simplify' do
+  #   it 'simplifies 2x * 3x' do
+  #     exp = mtp(mtp(2,'x'),mtp(3,'x'))
+  #     # expect(exp.simplify).to eq mtp(6,mtp('x','x'))
+  #     expect(exp.simplify).to eq mtp(6,'x','x')
+  #   end
+  # end
 
 end
