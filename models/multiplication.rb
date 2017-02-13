@@ -70,7 +70,7 @@ class Multiplication
     args.each do |m|
       i = 1
       while i <= m.args.length do
-        if m.args[i-1].base == base
+        if m.args[i-1] == base || m.args[i-1].base == base
           result << m.delete_arg(i)
         else
           i = i + 1
@@ -100,23 +100,28 @@ class Multiplication
     result_args = []
     i = 1
     while not_empty? && i < 10 do
-      # temp_args = []
-      if args.first.args.first.is_a?(Power)
-        current_base = args.first.args.first.base
-        temp_args = self.collect_same_base(current_base)
-        result_args << mtp(temp_args)
-        delete_empty_args
-      elsif args.first.args.first.is_a?(Fixnum)
-        temp_args = self.collect_fixnums
-        result_args << mtp(temp_args)
-        delete_empty_args
-      end
+      result_args << mtp(collect_next_variables)
+      delete_empty_args
       i = i + 1
     end
     result = {}
     result[:value] = mtp(result_args)
     result[:steps] = [copy,mtp(result_args)]
     result
+  end
+
+  def collect_next_variables
+    first_factor = args.first.args.first
+
+    if first_factor.is_a?(String)
+      current_base = first_factor
+      self.collect_same_base(current_base)
+    elsif first_factor.is_a?(Power)
+      current_base = first_factor.base
+      self.collect_same_base(current_base)
+    elsif first_factor.is_a?(Fixnum)
+      self.collect_fixnums
+    end
   end
 
   def empty?

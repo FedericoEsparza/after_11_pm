@@ -15,7 +15,8 @@ class Power
   end
 
   def ==(exp)
-    base = exp.base && index = exp.index
+    exp.class == self.class && base == exp.base && index == exp.index
+
     # args == exp.args
   end
 
