@@ -109,8 +109,22 @@ describe Multiplication do
     end
   end
 
+  describe '#delete_empty_args' do
+    it 'delete one empty arg' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp())
+      exp.delete_empty_args
+      expect(exp).to eq mtp(mtp(pow('x',2),pow('y',3)))
+    end
+
+    it 'delete all empty arg' do
+      exp = mtp(mtp(),mtp())
+      exp.delete_empty_args
+      expect(exp).to eq mtp()
+    end
+  end
+
   describe '#separate variables' do
-    xit 'separates (x^2y^3)(x^4y^5) as (x^2x^4)(y^3y^5)' do
+    it 'separates (x^2y^3)(x^4y^5) as (x^2x^4)(y^3y^5)' do
       exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
       result  = exp.separate_variables
       expect(result[:value]).to eq mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))

@@ -87,10 +87,14 @@ class Multiplication
       # temp_args = []
       current_base = args.first.args.first.base
       temp_args = self.collect_same_base(current_base)
+      result_args << mtp(temp_args)
       delete_empty_args
       i = i + 1
     end
-
+    result = {}
+    result[:value] = mtp(result_args)
+    result[:steps] = [copy,mtp(result_args)]
+    result
   end
 
   def empty?
@@ -103,7 +107,7 @@ class Multiplication
 
   def delete_empty_args
     i = 1
-    while i <= args.length && i < 10 do
+    while i <= args.length do
       if args[i-1].empty?
         delete_arg(i)
       else
