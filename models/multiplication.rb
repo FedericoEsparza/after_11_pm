@@ -17,6 +17,10 @@ class Multiplication
     args == exp.args
   end
 
+  def copy
+    mtp(args)
+  end
+
   def convert_to_power
     new_args = []
     args.each do |a|
@@ -30,6 +34,8 @@ class Multiplication
   end
 
   def combine_powers
+    copy = self.copy
+    convert_to_power
     string_var = args.first.base
     sum_of_powers = []
     args.each do |a|
@@ -39,7 +45,11 @@ class Multiplication
     step_2 = pow(string_var,add(sum_of_powers).evaluate)
     result = {}
     result[:value] = step_2
-    result[:steps] = [self,step_1,step_2]
+    if copy == self
+      result[:steps] = [self,step_1,step_2]
+    else
+      result[:steps] = [copy,self,step_1,step_2]
+    end
     result
   end
   #

@@ -32,6 +32,15 @@ describe Multiplication do
     end
   end
 
+  describe '#copy' do
+    it 'copies mtp(x,y)' do
+      exp = mtp('x','y')
+      copy_of_exp = exp.copy
+      expect(copy_of_exp).to eq exp
+      expect(copy_of_exp.object_id).not_to eq exp.object_id
+    end
+  end
+
   describe '#convert_to_power' do
     it 'converts string arguments to power of one' do
       exp = mtp(2,'x','y')
@@ -46,6 +55,28 @@ describe Multiplication do
       result = exp.combine_powers
       expect(result[:value]).to eq pow('x',5)
       expect(result[:steps]).to eq [mtp(pow('x',2),pow('x',3)),pow('x',add(2,3)),pow('x',5)]
+    end
+
+    it 'combines x times x^2' do
+      exp = mtp('x',pow('x',2))
+      result = exp.combine_powers
+      expect(result[:value]).to eq pow('x',3)
+      expect(result[:steps]).to eq [
+        mtp('x',pow('x',2)),
+        mtp(pow('x',1),pow('x',2)),
+        pow('x',add(1,2)),
+        pow('x',3)                  ]
+    end
+
+    it 'combine y times y^3 times y^-2' do
+      exp = mtp('y',pow('y',3),pow('y',-2))
+      result = exp.combine_powers
+      expect(result[:value]).to eq pow('y',2)
+      expect(result[:steps]).to eq [
+        mtp('y',pow('y',3),pow('y',-2)),
+        mtp(pow('y',1),pow('y',3),pow('y',-2)),
+        pow('y',add(1,3,-2)),
+        pow('y',2)                  ]
     end
   end
 
