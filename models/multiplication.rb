@@ -43,6 +43,7 @@ class Multiplication
   def combine_powers
     copy = self.copy
     convert_to_power
+
     string_var = args.first.base
     sum_of_powers = []
     args.each do |a|
@@ -79,16 +80,37 @@ class Multiplication
     result
   end
 
+  def collect_fixnums
+    result = []
+    args.each do |m|
+      i = 1
+      while i <= m.args.length do
+        if m.args[i-1].is_a?(Fixnum)
+          result << m.delete_arg(i)
+        else
+          i = i + 1
+        end
+      end
+    end
+    result
+  end
+
   def separate_variables
     copy = self.copy
     result_args = []
     i = 1
     while not_empty? && i < 10 do
       # temp_args = []
-      current_base = args.first.args.first.base
-      temp_args = self.collect_same_base(current_base)
-      result_args << mtp(temp_args)
-      delete_empty_args
+      if args.first.args.first.is_a?(Power)
+        current_base = args.first.args.first.base
+        temp_args = self.collect_same_base(current_base)
+        result_args << mtp(temp_args)
+        delete_empty_args
+      elsif args.first.args.first.is_a?(Fixnum)
+        temp_args = self.collect_fixnums
+        result_args << mtp(temp_args)
+        delete_empty_args
+      end
       i = i + 1
     end
     result = {}

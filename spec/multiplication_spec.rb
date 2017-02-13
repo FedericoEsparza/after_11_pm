@@ -133,6 +133,15 @@ describe Multiplication do
         mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
       ]
     end
+
+    it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
+      exp = mtp(mtp(3,pow('x',2)),mtp(4,pow('x',3),pow('y',2)))
+      result = exp.separate_variables
+      expect(result[:steps]).to eq [
+        mtp(mtp(3,pow('x',2)),mtp(4,pow('x',3),pow('y',2))),
+        mtp(mtp(3,4),mtp(pow('x',2),pow('x',3)),mtp(pow('y',2)))
+      ]
+    end
   end
 
   # describe '#eval_numerics' do
