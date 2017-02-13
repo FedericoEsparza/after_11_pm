@@ -18,7 +18,14 @@ class Multiplication
   end
 
   def copy
-    mtp(args)
+    new_args = args.inject([]) do |r,e|
+      if e.is_a?(string) || e.is_a?(integer)
+        r << e
+      else
+        r << e.copy
+      end
+    end
+    mtp(new_args)
   end
 
   def convert_to_power
@@ -51,6 +58,58 @@ class Multiplication
       result[:steps] = [copy,self,step_1,step_2]
     end
     result
+  end
+
+  def delete_arg(n)
+    @args.delete_at(n-1)
+  end
+
+  def collect_same_base(base)
+    result = []
+    args.each do |m|
+      i = 1
+      while i <= m.args.length do
+        if m.args[i-1].base == base
+          result << m.delete_arg(i)
+        else
+          i = i + 1
+        end
+      end
+    end
+    result
+  end
+
+  def separate_variables
+    copy = self.copy
+    result_args = []
+    i = 1
+    while not_empty? && i < 10 do
+      # temp_args = []
+      current_base = args.first.args.first.base
+      temp_args = self.collect_same_base(current_base)
+      delete_empty_args
+      i = i + 1
+    end
+
+  end
+
+  def empty?
+    args.length == 0
+  end
+
+  def not_empty?
+    args.length != 0
+  end
+
+  def delete_empty_args
+    i = 1
+    while i <= args.length && i < 10 do
+      if args[i-1].empty?
+        delete_arg(i)
+      else
+        i = i + 1
+      end
+    end
   end
   #
   # def eval_numerics(args)

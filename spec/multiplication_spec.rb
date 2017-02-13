@@ -39,6 +39,15 @@ describe Multiplication do
       expect(copy_of_exp).to eq exp
       expect(copy_of_exp.object_id).not_to eq exp.object_id
     end
+
+    it 'creates a deep copy of mtp(mtp(x,y),mtp(w,z))' do
+      exp = mtp(mtp('x','y'),mtp('w','z'))
+      copy_of_exp = exp.copy
+      expect(copy_of_exp).to eq exp
+      expect(copy_of_exp.object_id).not_to eq exp.object_id
+      expect(copy_of_exp.args[0].object_id).not_to eq exp.args[0].object_id
+      expect(copy_of_exp.args[1].object_id).not_to eq exp.args[1].object_id
+    end
   end
 
   describe '#convert_to_power' do
@@ -65,7 +74,8 @@ describe Multiplication do
         mtp('x',pow('x',2)),
         mtp(pow('x',1),pow('x',2)),
         pow('x',add(1,2)),
-        pow('x',3)                  ]
+        pow('x',3)
+      ]
     end
 
     it 'combine y times y^3 times y^-2' do
@@ -76,7 +86,38 @@ describe Multiplication do
         mtp('y',pow('y',3),pow('y',-2)),
         mtp(pow('y',1),pow('y',3),pow('y',-2)),
         pow('y',add(1,3,-2)),
-        pow('y',2)                  ]
+        pow('y',2)
+      ]
+    end
+  end
+
+  describe '#delete_arg' do
+    it 'deletes the 2nd arg and returns it' do
+      exp = mtp(1,2,3,4)
+      result = exp.delete_arg(2)
+      expect(exp).to eq mtp(1,3,4)
+      expect(result).to eq 2
+    end
+  end
+
+  describe '#collect_same_base' do
+    it 'collects powers of the same base while deleting them from self' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      result = exp.collect_same_base('x')
+      expect(exp).to eq mtp(mtp(pow('y',3)),mtp(pow('y',5)))
+      expect(result).to eq [pow('x',2),pow('x',4)]
+    end
+  end
+
+  describe '#separate variables' do
+    xit 'separates (x^2y^3)(x^4y^5) as (x^2x^4)(y^3y^5)' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      result  = exp.separate_variables
+      expect(result[:value]).to eq mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
+      expect(result[:steps]).to eq [
+        mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5))),
+        mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
+      ]
     end
   end
 
