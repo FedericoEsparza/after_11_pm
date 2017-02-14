@@ -6,4 +6,8 @@ module ClassName
   def integer
     Fixnum
   end
+
+  def power
+    Power
+  end
 end

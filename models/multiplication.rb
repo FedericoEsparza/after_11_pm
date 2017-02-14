@@ -65,12 +65,13 @@ class Multiplication
     @args.delete_at(n-1)
   end
 
-  def collect_same_base(base)
+  def collect(first_factor)
     result = []
     args.each do |m|
       i = 1
       while i <= m.args.length do
-        if m.args[i-1] == base || m.args[i-1].base == base
+        # if (base.is_a?(string) && (m.args[i-1] == base || m.args[i-1].base == base)) || m.args[i-1].is_a?(Fixnum)
+        if same_base?(first_factor,m.args[i-1])
           result << m.delete_arg(i)
         else
           i = i + 1
@@ -80,27 +81,31 @@ class Multiplication
     result
   end
 
-  def collect(base)
-    result = []
-    args.each do |m|
-      i = 1
-      while i <= m.args.length do
-        if (base.is_a?(string) && (m.args[i-1] == base || m.args[i-1].base == base)) || m.args[i-1].is_a?(Fixnum)
-          result << m.delete_arg(i)
-        else
-          i = i + 1
-        end
-      end
-    end
-    result
+  def same_base?(first_factor,mtp_arg)
+    power_base?(first_factor,mtp_arg) || (first_factor.is_a?(string) && (mtp_arg == first_factor || mtp_arg.base == first_factor)) || mtp_arg.is_a?(Fixnum)
   end
 
-  def collect_fixnums
+  def power_base?(first_factor,mtp_arg)
+    if first_factor.is_a?(power)
+      if mtp_arg.is_a?(string) && first_factor.base == mtp_arg
+        return true
+      end
+      if mtp_arg.is_a?(power) && first_factor.base == mtp_arg.base
+        return true
+      end
+    else
+      false
+    end
+  end
+
+  def collect_next_variables
+    first_factor = args.first.args.first
     result = []
     args.each do |m|
       i = 1
       while i <= m.args.length do
-        if m.args[i-1].is_a?(Fixnum)
+        # if (base.is_a?(string) && (m.args[i-1] == base || m.args[i-1].base == base)) || m.args[i-1].is_a?(Fixnum)
+        if same_base?(first_factor,m.args[i-1])
           result << m.delete_arg(i)
         else
           i = i + 1
@@ -108,6 +113,7 @@ class Multiplication
       end
     end
     result
+    # self.collect(first_factor)
   end
 
   def separate_variables
@@ -123,20 +129,6 @@ class Multiplication
     result[:value] = mtp(result_args)
     result[:steps] = [copy,mtp(result_args)]
     result
-  end
-
-  def collect_next_variables
-    first_factor = args.first.args.first
-    if first_factor.is_a?(String)
-      # self.collect_same_base(first_factor)
-      self.collect(first_factor)
-    elsif first_factor.is_a?(Power)
-      # self.collect_same_base(first_factor.base)
-      self.collect(first_factor.base)
-    elsif first_factor.is_a?(Fixnum)
-      # self.collect_fixnums
-      self.collect(first_factor)
-    end
   end
 
   def empty?
@@ -182,5 +174,34 @@ class Multiplication
   #   end
   #   return true
   # end
-
+  #
+  # def collect_same_base(base)
+  #   result = []
+  #   args.each do |m|
+  #     i = 1
+  #     while i <= m.args.length do
+  #       if m.args[i-1] == base || m.args[i-1].base == base
+  #         result << m.delete_arg(i)
+  #       else
+  #         i = i + 1
+  #       end
+  #     end
+  #   end
+  #   result
+  # end
+  #
+  # def collect_fixnums
+  #   result = []
+  #   args.each do |m|
+  #     i = 1
+  #     while i <= m.args.length do
+  #       if m.args[i-1].is_a?(Fixnum)
+  #         result << m.delete_arg(i)
+  #       else
+  #         i = i + 1
+  #       end
+  #     end
+  #   end
+  #   result
+  # end
 end
