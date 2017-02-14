@@ -120,8 +120,8 @@ describe Multiplication do
     it 'separates (x^2y^3)(x^4y^5) as (x^2x^4)(y^3y^5)' do
       exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
       result  = exp.separate_variables
-      expect(result[:value]).to eq mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
-      expect(result[:steps]).to eq [
+      expect(exp).to eq mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
+      expect(result).to eq [
         mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5))),
         mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
       ]
@@ -130,7 +130,8 @@ describe Multiplication do
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
       exp = mtp(mtp(3,pow('x',2)),mtp(4,pow('x',3),pow('y',2)))
       result = exp.separate_variables
-      expect(result[:steps]).to eq [
+      expect(exp).to eq mtp(mtp(3,4),mtp(pow('x',2),pow('x',3)),mtp(pow('y',2)))
+      expect(result).to eq [
         mtp(mtp(3,pow('x',2)),mtp(4,pow('x',3),pow('y',2))),
         mtp(mtp(3,4),mtp(pow('x',2),pow('x',3)),mtp(pow('y',2)))
       ]
@@ -139,7 +140,8 @@ describe Multiplication do
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
       exp = mtp(mtp(3,pow('x',2)),mtp(4,'x',pow('y',2)))
       result = exp.separate_variables
-      expect(result[:steps]).to eq [
+      expect(exp).to eq mtp(mtp(3,4),mtp(pow('x',2),'x'),mtp(pow('y',2)))
+      expect(result).to eq [
         mtp(mtp(3,pow('x',2)),mtp(4,'x',pow('y',2))),
         mtp(mtp(3,4),mtp(pow('x',2),'x'),mtp(pow('y',2)))
       ]
@@ -148,7 +150,8 @@ describe Multiplication do
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
       exp = mtp(mtp(3,'x'),mtp(4,pow('x', 2),pow('y',2)))
       result = exp.separate_variables
-      expect(result[:steps]).to eq [
+      expect(exp).to eq mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
+      expect(result).to eq [
         mtp(mtp(3,'x'),mtp(4,pow('x', 2),pow('y',2))),
         mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
       ]
@@ -169,7 +172,7 @@ describe Multiplication do
   #     expect(exp.simplify).to eq mtp(6,'x','x')
   #   end
   # end
-  # 
+  #
   # describe '#collect_same_base' do
   #   it 'collects powers of the same base while deleting them from self' do
   #     exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))

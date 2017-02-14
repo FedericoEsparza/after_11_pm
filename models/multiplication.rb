@@ -43,7 +43,6 @@ class Multiplication
   def combine_powers
     copy = self.copy
     convert_to_power
-
     string_var = args.first.base
     sum_of_powers = []
     args.each do |a|
@@ -61,74 +60,63 @@ class Multiplication
     result
   end
 
-  def delete_arg(n)
-    @args.delete_at(n-1)
-  end
-
-  def collect(first_factor)
-    result = []
-    args.each do |m|
-      i = 1
-      while i <= m.args.length do
-        # if (base.is_a?(string) && (m.args[i-1] == base || m.args[i-1].base == base)) || m.args[i-1].is_a?(Fixnum)
-        if same_base?(first_factor,m.args[i-1])
-          result << m.delete_arg(i)
-        else
-          i = i + 1
-        end
-      end
-    end
-    result
-  end
-
-  def same_base?(first_factor,mtp_arg)
-    power_base?(first_factor,mtp_arg) || (first_factor.is_a?(string) && (mtp_arg == first_factor || mtp_arg.base == first_factor)) || mtp_arg.is_a?(Fixnum)
-  end
-
-  def power_base?(first_factor,mtp_arg)
-    if first_factor.is_a?(power)
-      if mtp_arg.is_a?(string) && first_factor.base == mtp_arg
-        return true
-      end
-      if mtp_arg.is_a?(power) && first_factor.base == mtp_arg.base
-        return true
-      end
-    else
-      false
-    end
-  end
-
   def collect_next_variables
     first_factor = args.first.args.first
     result = []
     args.each do |m|
       i = 1
       while i <= m.args.length do
-        # if (base.is_a?(string) && (m.args[i-1] == base || m.args[i-1].base == base)) || m.args[i-1].is_a?(Fixnum)
-        if same_base?(first_factor,m.args[i-1])
-          result << m.delete_arg(i)
-        else
-          i = i + 1
-        end
+        same_base?(first_factor,m.args[i-1]) ? result << m.delete_arg(i) : i+=1
       end
     end
     result
-    # self.collect(first_factor)
+  end
+
+  def same_base?(first_factor,mtp_arg)
+    same_pow_base?(first_factor,mtp_arg) ||
+    same_str_base?(first_factor,mtp_arg) ||
+    same_num_base?(first_factor,mtp_arg)
+  end
+
+  def same_pow_base?(first_factor,mtp_arg)
+    pow_same_base_as_str_mtp_arg?(first_factor,mtp_arg) ||
+    pow_same_base_as_pow_mtp_arg?(first_factor,mtp_arg)
+  end
+
+  def pow_same_base_as_str_mtp_arg?(first_factor,mtp_arg)
+    first_factor.is_a?(power) && mtp_arg.is_a?(string) &&
+    first_factor.base == mtp_arg
+  end
+
+  def pow_same_base_as_pow_mtp_arg?(first_factor,mtp_arg)
+    first_factor.is_a?(power) && mtp_arg.is_a?(power) &&
+    first_factor.base == mtp_arg.base
+  end
+
+  def same_str_base?(first_factor,mtp_arg)
+    first_factor.is_a?(string) && (mtp_arg == first_factor ||
+    (mtp_arg.is_a?(power) && mtp_arg.base == first_factor))
+  end
+
+  def same_num_base?(first_factor,mtp_arg)
+    first_factor.is_a?(integer) && mtp_arg.is_a?(integer)
+  end
+
+  def delete_arg(n)
+    @args.delete_at(n-1)
   end
 
   def separate_variables
     copy = self.copy
     result_args = []
     i = 1
-    while not_empty? && i < 10 do
+    while not_empty? && i < 100 do
       result_args << mtp(collect_next_variables)
       delete_empty_args
       i = i + 1
     end
-    result = {}
-    result[:value] = mtp(result_args)
-    result[:steps] = [copy,mtp(result_args)]
-    result
+    self.args = result_args
+    [copy,self]
   end
 
   def empty?
@@ -141,13 +129,7 @@ class Multiplication
 
   def delete_empty_args
     i = 1
-    while i <= args.length do
-      if args[i-1].empty?
-        delete_arg(i)
-      else
-        i = i + 1
-      end
-    end
+    while i <= args.length do args[i-1].empty? ? delete_arg(i) : i += 1 end
   end
   #
   # def eval_numerics(args)
