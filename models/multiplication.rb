@@ -80,6 +80,21 @@ class Multiplication
     result
   end
 
+  def collect(base)
+    result = []
+    args.each do |m|
+      i = 1
+      while i <= m.args.length do
+        if (base.is_a?(string) && (m.args[i-1] == base || m.args[i-1].base == base)) || m.args[i-1].is_a?(Fixnum)
+          result << m.delete_arg(i)
+        else
+          i = i + 1
+        end
+      end
+    end
+    result
+  end
+
   def collect_fixnums
     result = []
     args.each do |m|
@@ -112,15 +127,15 @@ class Multiplication
 
   def collect_next_variables
     first_factor = args.first.args.first
-
     if first_factor.is_a?(String)
-      current_base = first_factor
-      self.collect_same_base(current_base)
+      # self.collect_same_base(first_factor)
+      self.collect(first_factor)
     elsif first_factor.is_a?(Power)
-      current_base = first_factor.base
-      self.collect_same_base(current_base)
+      # self.collect_same_base(first_factor.base)
+      self.collect(first_factor.base)
     elsif first_factor.is_a?(Fixnum)
-      self.collect_fixnums
+      # self.collect_fixnums
+      self.collect(first_factor)
     end
   end
 
