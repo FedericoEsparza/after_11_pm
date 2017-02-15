@@ -90,6 +90,14 @@ describe Multiplication do
         pow('y',2)
       ]
     end
+
+    it 'combines 3 times 4 times 5' do
+      exp = mtp(3,4,5)
+      expect(exp.combine_powers).to eq [
+        mtp(3,4,5),
+        60
+      ]
+    end
   end
 
   describe '#delete_arg' do
@@ -157,12 +165,12 @@ describe Multiplication do
     end
   end
 
-  # describe '#eval_numerics' do
-  #   it 'evaluates to a product of the arguments' do
-  #     multiplication = mtp(1,-2,3)
-  #     expect(multiplication.eval_numerics).to eq [mtp(1,-2,3),-6]
-  #   end
-  # end
+  describe '#eval_numerics' do
+    it 'evaluates to a product of the arguments' do
+      multiplication = mtp(1,-2,3)
+      expect(multiplication.eval_numerics).to eq -6
+    end
+  end
   #
   # describe '#simplify' do
   #   it 'simplifies 2x * 3x' do

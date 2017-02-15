@@ -42,19 +42,24 @@ class Multiplication
 
   def combine_powers
     copy = self.copy
-    copy.convert_to_power
-    power_converted = copy
-    string_var = power_converted.args.first.base
-    sum_of_powers = []
-    power_converted.args.each do |a|
-      sum_of_powers << a.index
+    if copy.args.first.is_a?(string) || copy.args.first.is_a?(power)
+      copy.convert_to_power
+      power_converted = copy
+      string_var = power_converted.args.first.base
+      sum_of_powers = []
+      power_converted.args.each do |a|
+        sum_of_powers << a.index
+      end
+      aggregate_indices = pow(string_var,add(sum_of_powers))
+      evaluated_index = pow(string_var,add(sum_of_powers).evaluate)
+      if power_converted == self
+        return [self,aggregate_indices,evaluated_index]
+      else
+        return [self,power_converted,aggregate_indices,evaluated_index]
+      end
     end
-    aggregate_indices = pow(string_var,add(sum_of_powers))
-    evaluated_index = pow(string_var,add(sum_of_powers).evaluate)
-    if power_converted == self
-      [self,aggregate_indices,evaluated_index]
-    else
-      [self,power_converted,aggregate_indices,evaluated_index]
+    if args.first.is_a?(integer)
+      return [self,eval_numerics]
     end
   end
 
@@ -146,11 +151,10 @@ class Multiplication
     i = 1
     while i <= args.length do args[i-1].empty? ? delete_arg(i) : i += 1 end
   end
-  #
-  # def eval_numerics(args)
-  #   product = args.inject(1){|r,e| r * e}
-  #   [mtp(args),product]
-  # end
+
+  def eval_numerics
+    args.inject(1){|r,e| r * e}
+  end
   #
   # def simplify
   #   mtp_1 = args[0]
