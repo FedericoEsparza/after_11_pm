@@ -189,6 +189,14 @@ describe Multiplication do
       expect(multiplication.eval_numerics).to eq -6
     end
   end
+
+  describe '#equalise_array_lengths' do
+    it 'change [[1,2],[1,2,3]] to [[1,2,2],[1,2,3]]' do
+      arrays = [[1,2],[1,2,3]]
+      new_arrays = arrays.equalise_array_lengths
+      expect(new_arrays).to eq [[1,2,2],[1,2,3]]
+    end
+  end
   #
   # describe '#simplify' do
   #   it 'simplifies 2x * 3x' do

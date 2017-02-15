@@ -1,4 +1,5 @@
 require './models/class_names'
+require './models/arrays'
 
 include ClassName
 
@@ -163,6 +164,12 @@ class Multiplication
   def eval_numerics
     args.inject(1){|r,e| r * e}
   end
+
+  # def equalise_array_lengths(arrays)
+  #   max_length = arrays.inject(0) { |curr_max,arr| [arr.length,curr_max].max }
+  #   arrays.each{ |arr| (max_length - arr.length).times{ arr << arr.last } }
+  #   arrays
+  # end
   #
   # def simplify
   #   mtp_1 = args[0]
