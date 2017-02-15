@@ -14,7 +14,7 @@ class Multiplication
   end
 
   def ==(exp)
-    args == exp.args
+    exp.class == self.class && args == exp.args
   end
 
   def copy
@@ -52,33 +52,39 @@ class Multiplication
       end
       aggregate_indices = pow(string_var,add(sum_of_powers))
       evaluated_index = pow(string_var,add(sum_of_powers).evaluate)
-      if power_converted == self
-        return [self,aggregate_indices,evaluated_index]
-      else
-        return [self,power_converted,aggregate_indices,evaluated_index]
-      end
+      steps = [self,power_converted,aggregate_indices,evaluated_index]
     end
     if args.first.is_a?(integer)
-      return [self,eval_numerics]
+      evaled_pow = copy.eval_num_pow
+      evaled_nums = evaled_pow.eval_numerics
+      steps = [self,evaled_pow,evaled_nums]
     end
+    delete_duplicate_steps(steps)
   end
 
-  # def combine_powers
-  #   copy = self.copy
-  #   # copy.convert_to_power
-  #   string_var = args.first.base
-  #   sum_of_powers = []
-  #   args.each do |a|
-  #     sum_of_powers << a.index
-  #   end
-  #   step_1 = pow(string_var,add(sum_of_powers))
-  #   step_2 = pow(string_var,add(sum_of_powers).evaluate)
-  #   if copy == self
-  #     [self,step_1,step_2]
-  #   else
-  #     [copy,self,step_1,step_2]
-  #   end
-  # end
+  def delete_duplicate_steps(steps)
+    i = 0
+    while i < steps.length
+      if steps[i] == steps[i+1]
+        steps.delete_at(i)
+      else
+        i += 1
+      end
+    end
+    steps
+  end
+
+  def eval_num_pow
+    i = 0
+    for i in 0..args.length - 1
+      if args[i].is_a?(power)
+        args[i] = args[i].evaluate
+
+      end
+      i += 1
+    end
+    self
+  end
 
   def collect_next_variables
     first_factor = args.first.args.first
@@ -119,7 +125,9 @@ class Multiplication
   end
 
   def same_num_base?(first_factor,mtp_arg)
-    first_factor.is_a?(integer) && mtp_arg.is_a?(integer)
+    (first_factor.is_a?(integer) && mtp_arg.is_a?(integer)) ||
+    (first_factor.is_a?(power) && first_factor.base.is_a?(integer) &&
+    mtp_arg.is_a?(integer))
   end
 
   def delete_arg(n)

@@ -10,7 +10,7 @@ class Addition
   end
 
   def ==(exp)
-    args == exp.args
+    exp.class == self.class && args == exp.args
   end
 
   def evaluate

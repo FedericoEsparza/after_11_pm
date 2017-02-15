@@ -98,6 +98,15 @@ describe Multiplication do
         60
       ]
     end
+
+    it 'combines 3 times 2^2 times 5' do
+      exp = mtp(3,pow(2,2),5)
+      expect(exp.combine_powers).to eq [
+        mtp(3,pow(2,2),5),
+        mtp(3,4,5),
+        60
+      ]
+    end
   end
 
   describe '#delete_arg' do
@@ -161,6 +170,15 @@ describe Multiplication do
       expect(result).to eq [
         mtp(mtp(3,'x'),mtp(4,pow('x', 2),pow('y',2))),
         mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
+      ]
+    end
+    it 'separates (3^2x^2)(4x) as (3^2 4)(x^2x)' do
+      exp = mtp(mtp(pow(3,2),pow('x',2)),mtp(4,'x'))
+      result = exp.separate_variables
+      expect(exp).to eq mtp(mtp(pow(3,2),4),mtp(pow('x', 2),'x'))
+      expect(result).to eq [
+        mtp(mtp(pow(3,2),pow('x',2)),mtp(4,'x')),
+        mtp(mtp(pow(3,2),4),mtp(pow('x', 2),'x'))
       ]
     end
   end
