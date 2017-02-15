@@ -61,18 +61,19 @@ describe Multiplication do
   end
 
   describe '#combine_powers' do
-    it 'combines two powers of x multiplied together' do
+    it 'combines x^2 times x^3' do
       exp = mtp(pow('x',2),pow('x',3))
-      result = exp.combine_powers
-      expect(result[:value]).to eq pow('x',5)
-      expect(result[:steps]).to eq [mtp(pow('x',2),pow('x',3)),pow('x',add(2,3)),pow('x',5)]
+      expect(exp.combine_powers).to eq [
+        mtp(pow('x',2),
+        pow('x',3)),
+        pow('x',add(2,3)),
+        pow('x',5)
+      ]
     end
 
     it 'combines x times x^2' do
       exp = mtp('x',pow('x',2))
-      result = exp.combine_powers
-      expect(result[:value]).to eq pow('x',3)
-      expect(result[:steps]).to eq [
+      expect(exp.combine_powers).to eq [
         mtp('x',pow('x',2)),
         mtp(pow('x',1),pow('x',2)),
         pow('x',add(1,2)),
@@ -82,9 +83,7 @@ describe Multiplication do
 
     it 'combine y times y^3 times y^-2' do
       exp = mtp('y',pow('y',3),pow('y',-2))
-      result = exp.combine_powers
-      expect(result[:value]).to eq pow('y',2)
-      expect(result[:steps]).to eq [
+      expect(exp.combine_powers).to eq [
         mtp('y',pow('y',3),pow('y',-2)),
         mtp(pow('y',1),pow('y',3),pow('y',-2)),
         pow('y',add(1,3,-2)),

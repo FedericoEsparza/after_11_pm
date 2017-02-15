@@ -42,23 +42,38 @@ class Multiplication
 
   def combine_powers
     copy = self.copy
-    convert_to_power
-    string_var = args.first.base
+    copy.convert_to_power
+    power_converted = copy
+    string_var = power_converted.args.first.base
     sum_of_powers = []
-    args.each do |a|
+    power_converted.args.each do |a|
       sum_of_powers << a.index
     end
-    step_1 = pow(string_var,add(sum_of_powers))
-    step_2 = pow(string_var,add(sum_of_powers).evaluate)
-    result = {}
-    result[:value] = step_2
-    if copy == self
-      result[:steps] = [self,step_1,step_2]
+    aggregate_indices = pow(string_var,add(sum_of_powers))
+    evaluated_index = pow(string_var,add(sum_of_powers).evaluate)
+    if power_converted == self
+      [self,aggregate_indices,evaluated_index]
     else
-      result[:steps] = [copy,self,step_1,step_2]
+      [self,power_converted,aggregate_indices,evaluated_index]
     end
-    result
   end
+
+  # def combine_powers
+  #   copy = self.copy
+  #   # copy.convert_to_power
+  #   string_var = args.first.base
+  #   sum_of_powers = []
+  #   args.each do |a|
+  #     sum_of_powers << a.index
+  #   end
+  #   step_1 = pow(string_var,add(sum_of_powers))
+  #   step_2 = pow(string_var,add(sum_of_powers).evaluate)
+  #   if copy == self
+  #     [self,step_1,step_2]
+  #   else
+  #     [copy,self,step_1,step_2]
+  #   end
+  # end
 
   def collect_next_variables
     first_factor = args.first.args.first
