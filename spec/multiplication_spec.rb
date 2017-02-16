@@ -70,6 +70,14 @@ describe Multiplication do
       ]
     end
 
+    it 'leaves x alone' do
+      exp = mtp('x')
+      expect(exp.combine_powers).to eq [
+        mtp('x')
+      ]
+    end
+
+
     it 'combines x times x^2' do
       exp = mtp('x',pow('x',2))
       expect(exp.combine_powers).to eq [
@@ -180,6 +188,17 @@ describe Multiplication do
         mtp(mtp(pow(3,2),4),mtp(pow('x', 2),'x'))
       ]
     end
+
+    it 'separates (x^2)(4xy) as (4)(x^2x)(y)' do
+      exp = mtp(mtp(pow('x',2)),mtp('x','y'))
+      result = exp.separate_variables
+      # expect(exp).to eq mtp(4,mtp(pow('x',2),'x'),'y')
+      # expect(result).to eq [
+      #   mtp(pow('x',2),mtp(4,'x','y')),
+      #   mtp(4,mtp(pow('x',2),'x'),'y')
+      # ]
+    end
+
   end
 
   describe '#eval_numerics' do
@@ -191,17 +210,33 @@ describe Multiplication do
 
 
   describe '#simplify_product_of_m_forms' do
-    it 'simplifies some m forms' do
+    it 'simplifies (3x^2y3)(3xy^4) to 9x^3y^7' do
       exp = mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4)))
       result = exp.simplify_product_of_m_forms
+      expect(exp).to eq mtp(9,pow('x',3),pow('y',7))
       expect(result).to eq [
         mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4))),
-        mtp(mtp(3,3),mtp(pow('x',2),'x'),mtp(pow('y',3),pow('y',4)))
-
-
+        mtp(mtp(3,3),mtp(pow('x',2),'x'),mtp(pow('y',3),pow('y',4))),
+        mtp(9,mtp(pow('x',2),pow('x',1)),pow('y',add(3,4))),
+        mtp(9,pow('x',add(2,1)),pow('y',7)),
+        mtp(9,pow('x',3),pow('y',7))
+      ]
+    end
+      it 'simplifies (3x)(4y)(5z) to 60xyz' do
+        exp = mtp(mtp(3,'x'),mtp(4,'y'),mtp(5,'z'))
+        result = exp.simplify_product_of_m_forms
+        expect(exp).to eq mtp(60,'x','y','z')
+      expect(result).to eq [
+        mtp(mtp(3,'x'),mtp(4,'y'),mtp(5,'z')),
+        mtp(mtp(3,4,5),'x','y','z'),
+        mtp(60,'x','y','z')
       ]
     end
   end
+
+
+
+
   #
   # describe '#collect_same_base' do
   #   it 'collects powers of the same base while deleting them from self' do

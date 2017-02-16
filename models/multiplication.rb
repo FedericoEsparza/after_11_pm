@@ -166,7 +166,30 @@ class Multiplication
   end
 
   def simplify_product_of_m_forms
-    
+    copy = self.copy
+    copy.separate_variables
+    variables_separated = copy
+    new_args = []
+    i = 0
+    while i < variables_separated.args.length && i <=100 do
+      if variables_separated.args[i].args.length > 1
+        new_args << variables_separated.args[i].combine_powers
+      else
+        new_args << variables_separated.args[i].args
+      end
+      i += 1
+    end
+    new_args = new_args.equalise_array_lengths
+    new_args = new_args.transpose
+    i = 0
+    steps = []
+    while i < new_args.length
+      steps << mtp(new_args[i])
+      i += 1
+    end
+    steps.insert(0,self.copy)
+    self.args = steps[-1].args
+    steps
   end
 
   # def equalise_array_lengths(arrays)
