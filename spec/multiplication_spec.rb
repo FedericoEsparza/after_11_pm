@@ -71,7 +71,7 @@ describe Multiplication do
     end
 
     it 'leaves x alone' do
-      exp = mtp('x')
+      exp = mtp('y')
       expect(exp.combine_powers).to eq [
         mtp('x')
       ]
