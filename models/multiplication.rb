@@ -1,5 +1,5 @@
 require './models/class_names'
-require './models/arrays'
+require './models/array'
 
 include ClassName
 
@@ -163,6 +163,10 @@ class Multiplication
 
   def eval_numerics
     args.inject(1){|r,e| r * e}
+  end
+
+  def simplify_product_of_m_forms
+    
   end
 
   # def equalise_array_lengths(arrays)

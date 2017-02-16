@@ -64,8 +64,7 @@ describe Multiplication do
     it 'combines x^2 times x^3' do
       exp = mtp(pow('x',2),pow('x',3))
       expect(exp.combine_powers).to eq [
-        mtp(pow('x',2),
-        pow('x',3)),
+        mtp(pow('x',2),pow('x',3)),
         pow('x',add(2,3)),
         pow('x',5)
       ]
@@ -190,21 +189,19 @@ describe Multiplication do
     end
   end
 
-  describe '#equalise_array_lengths' do
-    it 'change [[1,2],[1,2,3]] to [[1,2,2],[1,2,3]]' do
-      arrays = [[1,2],[1,2,3]]
-      new_arrays = arrays.equalise_array_lengths
-      expect(new_arrays).to eq [[1,2,2],[1,2,3]]
+
+  describe '#simplify_product_of_m_forms' do
+    it 'simplifies some m forms' do
+      exp = mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4)))
+      result = exp.simplify_product_of_m_forms
+      expect(result).to eq [
+        mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4))),
+        mtp(mtp(3,3),mtp(pow('x',2),'x'),mtp(pow('y',3),pow('y',4)))
+
+
+      ]
     end
   end
-  #
-  # describe '#simplify' do
-  #   it 'simplifies 2x * 3x' do
-  #     exp = mtp(mtp(2,'x'),mtp(3,'x'))
-  #     # expect(exp.simplify).to eq mtp(6,mtp('x','x'))
-  #     expect(exp.simplify).to eq mtp(6,'x','x')
-  #   end
-  # end
   #
   # describe '#collect_same_base' do
   #   it 'collects powers of the same base while deleting them from self' do
