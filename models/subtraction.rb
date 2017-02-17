@@ -9,6 +9,21 @@ class Subtraction
     end
   end
 
+  def copy
+    new_args = args.inject([]) do |r,e|
+      if e.is_a?(string) || e.is_a?(integer)
+        r << e
+      else
+        r << e.copy
+      end
+    end
+    sbt(new_args)
+  end
+
+  def ==(exp)
+    exp.class == self.class && args == exp.args
+  end  
+
   def minuend
     args[0]
   end
@@ -23,6 +38,10 @@ class Subtraction
 
   def subend=(value)
     self.args[1] = value
+  end
+
+  def evaluate_numeral
+    minuend - subend
   end
 
 end

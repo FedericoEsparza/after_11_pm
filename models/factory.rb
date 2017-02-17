@@ -15,11 +15,11 @@ module Factory
     Equation.new(ls,rs)
   end
 
-  def div(top,bot)
-    Division.new(top,bot)
+  def div(*args)
+    Division.new(*args)
   end
 
-  def sbt(minuend,subend)
-    Subtraction.new(minuend,subend)
+  def sbt(*args)
+    Subtraction.new(*args)
   end
 end

@@ -25,4 +25,8 @@ class Division
     self.args[1] = value
   end
 
+  def ==(exp)
+    exp.class == self.class && args == exp.args
+  end
+
 end

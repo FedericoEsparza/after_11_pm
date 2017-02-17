@@ -8,6 +8,12 @@ describe Subtraction do
       expect(exp.minuend).to eq 'x'
       expect(exp.subend).to eq 3
     end
+
+    it 'can init with array' do
+      exp = sbt(['x',3])
+      expect(exp.minuend).to eq 'x'
+      expect(exp.subend).to eq 3
+    end
   end
 
   describe 'setters for minuend and subend' do

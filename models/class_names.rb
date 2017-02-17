@@ -10,4 +10,8 @@ module ClassName
   def power
     Power
   end
+
+  def addition
+    Addition
+  end
 end
