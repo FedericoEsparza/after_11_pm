@@ -1,7 +1,7 @@
 require './models/class_names'
 require './models/array'
-require './models/string'
-require './models/integer'
+require './models/variables'
+require './models/numerals'
 
 include ClassName
 
@@ -13,6 +13,37 @@ class Multiplication
       @args = args.first
     else
       @args = args
+    end
+  end
+
+  def standardize_args
+    # @args.map do |arg|
+    #   arg = Variable.new(arg) if arg.is_a?(String)
+    #   arg = Numeral.new(arg) if arg.is_a?(Integer)
+    #   arg
+    #
+    #   arg.args.map do |obj|
+    #     obj = Variable.new(obj) if obj.is_a?(String)
+    #     obj = Numeral.new(obj) if obj.is_a?(Integer)
+    #     obj
+    #
+    #     if obj.response
+    #   end
+    # end.flatten
+    scan!
+  end
+
+  def scan!(arg=nil)
+    arg ||= @args
+    if arg.respond_to?(:args)
+      arg.args = scan!(arg.args)
+      arg
+    elsif arg.respond_to?(:map)
+      arg.map { |element| scan!(element) }.flatten
+    else
+      arg = Variable.new(arg) if arg.is_a?(String)
+      arg = Numeral.new(arg) if arg.is_a?(Integer)
+      arg
     end
   end
 

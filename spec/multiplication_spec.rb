@@ -1,6 +1,8 @@
 require './models/multiplication'
 require './models/power'
 require './models/addition'
+require './models/variables'
+require './models/numerals'
 require './models/factory'
 
 include Factory
@@ -271,7 +273,14 @@ describe Multiplication do
 
   end
 
-
+  context '#standardize_args' do
+    it "converts strings and integers to variables and numerals respectively" do
+      exp = mtp('x', 3, mtp(2, pow('x', 2)))
+      response = [var('x'), num(3), mtp(num(2), pow(var('x'), num(2)))]
+      result = exp.standardize_args
+      expect(result).to match_array response
+    end
+  end
 
 
   #

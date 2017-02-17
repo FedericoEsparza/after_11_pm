@@ -10,4 +10,12 @@ module Factory
   def pow(base,index)
     Power.new(base,index)
   end
+
+  def var(string)
+    Variable.new(string)
+  end
+
+  def num(n)
+    Numeral.new(n)
+  end
 end
