@@ -6,4 +6,8 @@ class Variable
   def args
     @args
   end
+
+  def ==(arg)
+    @args.first == arg.args.first
+  end
 end

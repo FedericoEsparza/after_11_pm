@@ -30,12 +30,12 @@ class Power
   end
 
   def copy
-    if base.is_a?(string) || base.is_a?(integer)
+    if base.is_a?(Variable) || base.is_a?(Numeral)
       copied_base = base
     else
       copied_base = base.copy
     end
-    if index.is_a?(string) || index.is_a?(integer)
+    if index.is_a?(Variable) || index.is_a?(Numeral)
       copied_index = index
     else
       copied_index = index.copy

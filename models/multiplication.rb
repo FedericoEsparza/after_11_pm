@@ -16,21 +16,9 @@ class Multiplication
     end
   end
 
+  # RECURSION HELL
   def standardize_args
-    # @args.map do |arg|
-    #   arg = Variable.new(arg) if arg.is_a?(String)
-    #   arg = Numeral.new(arg) if arg.is_a?(Integer)
-    #   arg
-    #
-    #   arg.args.map do |obj|
-    #     obj = Variable.new(obj) if obj.is_a?(String)
-    #     obj = Numeral.new(obj) if obj.is_a?(Integer)
-    #     obj
-    #
-    #     if obj.response
-    #   end
-    # end.flatten
-    scan!
+    @args = scan!
   end
 
   def scan!(arg=nil)
@@ -46,17 +34,18 @@ class Multiplication
       arg
     end
   end
+  # END-RECURSION HELL
 
   def ==(exp)
     exp.class == self.class && args == exp.args
   end
 
   def copy
-    new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || e.is_a?(integer)
-        r << e
+    new_args = args.inject([]) do |result, arg|
+      if arg.is_a?(Variable) || arg.is_a?(Numeral)
+        result << arg
       else
-        r << e.copy
+        result << arg.copy
       end
     end
     mtp(new_args)

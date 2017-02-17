@@ -261,6 +261,7 @@ describe Multiplication do
 
     it 'simplifies x3(2x^2) to 6x^3' do
       exp = mtp('x', 3, mtp(2,pow('x',2)))
+      exp.standardize_args
       result = exp.simplify_product_of_m_forms
       expect(exp).to eq mtp(6,pow('x', 3))
       expect(result).to eq [
@@ -278,7 +279,7 @@ describe Multiplication do
       exp = mtp('x', 3, mtp(2, pow('x', 2)))
       response = [var('x'), num(3), mtp(num(2), pow(var('x'), num(2)))]
       result = exp.standardize_args
-      expect(result).to match_array response
+      expect(result).to eq response
     end
   end
 
