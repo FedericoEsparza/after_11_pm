@@ -14,4 +14,8 @@ module Factory
   def eqn(ls,rs)
     Equation.new(ls,rs)
   end
+
+  def div(top,bot)
+    Division.new(top,bot)
+  end
 end
