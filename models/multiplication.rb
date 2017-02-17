@@ -44,23 +44,31 @@ class Multiplication
   def combine_powers
     copy = self.copy
     if copy.args.first.is_a?(string) || copy.args.first.is_a?(power)
-      copy.convert_to_power
-      power_converted = copy
-      string_var = power_converted.args.first.base
-      sum_of_powers = []
-      power_converted.args.each do |a|
-        sum_of_powers << a.index
+      if (copy.args.length > 1)
+        copy.convert_to_power
+        power_converted = copy
+        string_var = power_converted.args.first.base
+        sum_of_powers = []
+        power_converted.args.each do |a|
+          sum_of_powers << a.index
+        end
+        aggregate_indices = pow(string_var,add(sum_of_powers))
+        evaluated_index = pow(string_var,add(sum_of_powers).evaluate)
+        steps = [self,power_converted,aggregate_indices,evaluated_index]
+      else
+        return [self.args.first]
       end
-      aggregate_indices = pow(string_var,add(sum_of_powers))
-      evaluated_index = pow(string_var,add(sum_of_powers).evaluate)
-      steps = [self,power_converted,aggregate_indices,evaluated_index]
     end
     if args.first.is_a?(integer)
       evaled_pow = copy.eval_num_pow
       evaled_nums = evaled_pow.eval_numerics
       steps = [self,evaled_pow,evaled_nums]
     end
-    delete_duplicate_steps(steps)
+    result = delete_duplicate_steps(steps)
+    if result[-1].is_a?(power) && result[-1].index == 1
+      result << result[-1].base
+    end
+    result
   end
 
   def delete_duplicate_steps(steps)
@@ -126,7 +134,8 @@ class Multiplication
   end
 
   def same_num_base?(first_factor,mtp_arg)
-    (first_factor.is_a?(integer) && mtp_arg.is_a?(integer)) ||
+    (first_factor.is_a?(integer) && (mtp_arg.is_a?(integer) ||
+    (mtp_arg.is_a?(power) && mtp_arg.base.is_a?(integer)))) ||
     (first_factor.is_a?(power) && first_factor.base.is_a?(integer) &&
     mtp_arg.is_a?(integer))
   end
@@ -172,11 +181,7 @@ class Multiplication
     new_args = []
     i = 0
     while i < variables_separated.args.length && i <=100 do
-      if variables_separated.args[i].args.length > 1
-        new_args << variables_separated.args[i].combine_powers
-      else
-        new_args << variables_separated.args[i].args
-      end
+      new_args << variables_separated.args[i].combine_powers
       i += 1
     end
     new_args = new_args.equalise_array_lengths

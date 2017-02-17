@@ -73,7 +73,17 @@ describe Multiplication do
     it 'leaves x alone' do
       exp = mtp('x')
       expect(exp.combine_powers).to eq [
-        mtp('x')
+        'x'
+      ]
+    end
+
+    it 'combines y^3 times y^-2' do
+      exp = mtp(pow('y',3),pow('y',-2))
+      expect(exp.combine_powers).to eq [
+      mtp(pow('y',3),pow('y',-2)),
+      pow('y',add(3,-2)),
+      pow('y',1),
+      'y'
       ]
     end
 
@@ -232,6 +242,21 @@ describe Multiplication do
         mtp(60,'x','y','z')
       ]
     end
+
+
+    it 'simplifies (3y^3z)(2^2y^-2)' do
+      exp = mtp(mtp(3,pow('y',3),'z'),mtp(pow(2,2),pow('y',-2)))
+      result = exp.simplify_product_of_m_forms
+      expect(exp).to eq mtp(12,'y','z')
+      expect(result).to eq [
+        mtp(mtp(3,pow('y',3),'z'),mtp(pow(2,2),pow('y',-2))),
+        mtp(mtp(3,pow(2,2)),mtp(pow('y',3),pow('y',-2)),'z'),
+        mtp(mtp(3,4),pow('y',add(3,-2)),'z'),
+        mtp(12,pow('y',1),'z'),
+        mtp(12,'y','z')
+      ]
+    end
+
   end
 
 
