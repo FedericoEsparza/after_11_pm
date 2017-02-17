@@ -10,4 +10,16 @@ module Factory
   def pow(base,index)
     Power.new(base,index)
   end
+
+  def eqn(ls,rs)
+    Equation.new(ls,rs)
+  end
+
+  def div(*args)
+    Division.new(*args)
+  end
+
+  def sbt(*args)
+    Subtraction.new(*args)
+  end
 end
