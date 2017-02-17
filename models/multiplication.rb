@@ -1,5 +1,5 @@
 require './models/class_names'
-require './models/array'
+require './lib/array'
 require './models/variables'
 require './models/numerals'
 
