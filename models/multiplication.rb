@@ -1,5 +1,7 @@
 require './models/class_names'
 require './models/array'
+require './models/string'
+require './models/integer'
 
 include ClassName
 
@@ -96,12 +98,22 @@ class Multiplication
   end
 
   def collect_next_variables
-    first_factor = args.first.args.first
+    if args.first.is_a?(String)
+      first_factor = args.first
+    else
+      first_factor = args.first.args.first
+    end
+
     result = []
     args.each do |m|
       i = 1
       while i <= m.args.length do
-        same_base?(first_factor,m.args[i-1]) ? result << m.delete_arg(i) : i+=1
+        if m.is_a?(String) || m.is_a?(Integer)
+          result << m.args.delete_at(i-1)
+          i+=1
+        else
+          same_base?(first_factor,m.args[i-1]) ? result << m.delete_arg(i) : i+=1
+        end
       end
     end
     result
@@ -154,7 +166,7 @@ class Multiplication
       i = i + 1
     end
     self.args = result_args
-    [copy,self]
+    [copy, self]
   end
 
   def empty?
@@ -167,7 +179,13 @@ class Multiplication
 
   def delete_empty_args
     i = 1
-    while i <= args.length do args[i-1].empty? ? delete_arg(i) : i += 1 end
+    while i <= args.length do
+      if args[i-1].is_a?(String) || args[i-1].is_a?(Integer)
+        i += 1
+      else
+        args[i-1].empty? ? delete_arg(i) : i += 1
+      end
+    end
   end
 
   def eval_numerics

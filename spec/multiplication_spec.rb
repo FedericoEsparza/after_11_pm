@@ -244,7 +244,7 @@ describe Multiplication do
     end
 
 
-    it 'simplifies (3y^3z)(2^2y^-2)' do
+    it 'simplifies (3y^3z)(2^2y^-2) to 12yz' do
       exp = mtp(mtp(3,pow('y',3),'z'),mtp(pow(2,2),pow('y',-2)))
       result = exp.simplify_product_of_m_forms
       expect(exp).to eq mtp(12,'y','z')
@@ -254,6 +254,18 @@ describe Multiplication do
         mtp(mtp(3,4),pow('y',add(3,-2)),'z'),
         mtp(12,pow('y',1),'z'),
         mtp(12,'y','z')
+      ]
+    end
+
+    it 'simplifies x3(2x^2) to 6x^3' do
+      exp = mtp('x', 3, mtp(2,pow('x',2)))
+      result = exp.simplify_product_of_m_forms
+      expect(exp).to eq mtp(6,pow('x', 3))
+      expect(result).to eq [
+        mtp(mtp('x', 3, mtp(2,pow('x',2)))),
+        mtp(mtp(3,2),mtp(pow('x',1),pow('x',2))),
+        mtp(mtp(6 ,pow('x',add(1,2)))),
+        mtp(6,pow('x', 3))
       ]
     end
 
