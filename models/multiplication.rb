@@ -1,3 +1,4 @@
+require 'deep_clone'
 require './models/class_names'
 require './lib/array'
 require './models/variables'
@@ -41,14 +42,7 @@ class Multiplication
   end
 
   def copy
-    new_args = args.inject([]) do |result, arg|
-      if arg.is_a?(Variable) || arg.is_a?(Numeral)
-        result << arg
-      else
-        result << arg.copy
-      end
-    end
-    mtp(new_args)
+    DeepClone.clone self
   end
 
   def convert_to_power
@@ -65,7 +59,7 @@ class Multiplication
 
   def combine_powers
     copy = self.copy
-    if copy.args.first.is_a?(string) || copy.args.first.is_a?(power)
+    if copy.args.first.is_a?(Variable) || copy.args.first.is_a?(power)
       if (copy.args.length > 1)
         copy.convert_to_power
         power_converted = copy
@@ -128,7 +122,7 @@ class Multiplication
     args.each do |m|
       i = 1
       while i <= m.args.length do
-        if m.is_a?(String) || m.is_a?(Integer)
+        if m.is_a?(Variable) || m.is_a?(Numeral)
           result << m.args.delete_at(i-1)
           i+=1
         else
@@ -151,7 +145,7 @@ class Multiplication
   end
 
   def pow_same_base_as_str_mtp_arg?(first_factor,mtp_arg)
-    first_factor.is_a?(power) && mtp_arg.is_a?(string) &&
+    first_factor.is_a?(power) && mtp_arg.is_a?(Variable) &&
     first_factor.base == mtp_arg
   end
 
@@ -161,15 +155,15 @@ class Multiplication
   end
 
   def same_str_base?(first_factor,mtp_arg)
-    first_factor.is_a?(string) && (mtp_arg == first_factor ||
+    first_factor.is_a?(Variable) && (mtp_arg == first_factor ||
     (mtp_arg.is_a?(power) && mtp_arg.base == first_factor))
   end
 
   def same_num_base?(first_factor,mtp_arg)
-    (first_factor.is_a?(integer) && (mtp_arg.is_a?(integer) ||
-    (mtp_arg.is_a?(power) && mtp_arg.base.is_a?(integer)))) ||
-    (first_factor.is_a?(power) && first_factor.base.is_a?(integer) &&
-    mtp_arg.is_a?(integer))
+    (first_factor.is_a?(Numeral) && (mtp_arg.is_a?(Numeral) ||
+    (mtp_arg.is_a?(power) && mtp_arg.base.is_a?(Numeral)))) ||
+    (first_factor.is_a?(power) && first_factor.base.is_a?(Numeral) &&
+    mtp_arg.is_a?(Numeral))
   end
 
   def delete_arg(n)

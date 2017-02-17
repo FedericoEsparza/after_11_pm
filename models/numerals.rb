@@ -11,4 +11,12 @@ class Numeral
     @args.first == arg.args.first
   end
 
+  def empty?
+    args.length == 0
+  end
+
+  def not_empty?
+    args.length != 0
+  end
+
 end
