@@ -18,4 +18,8 @@ module Factory
   def div(top,bot)
     Division.new(top,bot)
   end
+
+  def sbt(minuend,subend)
+    Subtraction.new(minuend,subend)
+  end
 end
