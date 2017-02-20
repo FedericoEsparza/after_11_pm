@@ -174,6 +174,10 @@ class Multiplication
     args.inject(1){|r,e| r * e}
   end
 
+  def evaluate_numeral
+    args.inject(1){|r,e| r * e}
+  end
+
   def simplify_product_of_m_forms
     copy = self.copy
     copy.separate_variables

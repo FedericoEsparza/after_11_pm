@@ -28,6 +28,10 @@ class Addition
     args.inject(0){|r,e| r + e}
   end
 
+  def evaluate_numeral
+    args.inject(0){|r,e| r + e}
+  end
+
   def reverse_step(rs)
     result = {}
     if args[0].is_a?(integer)

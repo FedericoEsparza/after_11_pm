@@ -22,7 +22,7 @@ class Subtraction
 
   def ==(exp)
     exp.class == self.class && args == exp.args
-  end  
+  end
 
   def minuend
     args[0]
@@ -42,6 +42,20 @@ class Subtraction
 
   def evaluate_numeral
     minuend - subend
+  end
+
+  def reverse_step(rs)
+    result = {}
+    if args[0].is_a?(integer)
+      result[:ls] = args[1]
+      result[:rs] = sbt(args[0],rs)
+      return result
+    end
+    if args[1].is_a?(integer)
+      result[:ls] = args[0]
+      result[:rs] = add(rs,args[1])
+      return result
+    end
   end
 
 end

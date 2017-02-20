@@ -44,4 +44,18 @@ class Division
     args[0]/args[1]
   end
 
+  def reverse_step(rs)
+    result = {}
+    if args[0].is_a?(integer)
+      result[:ls] = args[1]
+      result[:rs] = div(args[0],rs)
+      return result
+    end
+    if args[1].is_a?(integer)
+      result[:ls] = args[0]
+      result[:rs] = mtp(rs,args[1])
+      return result
+    end
+  end
+
 end

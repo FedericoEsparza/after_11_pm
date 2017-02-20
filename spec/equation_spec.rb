@@ -59,6 +59,46 @@ describe Equation do
           eqn('x',5)
         ]
       end
+
+      it 'reverses one step right subtraction' do
+        eqn = eqn(sbt('x',3),5)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(sbt('x',3),5),
+          eqn('x',add(5,3)),
+          eqn('x',8)
+        ]
+      end
+
+      it 'reverses one step left subtraction' do
+        eqn = eqn(sbt(5,'x'),3)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(sbt(5,'x'),3),
+          eqn('x',sbt(5,3)),
+          eqn('x',2)
+        ]
+      end
+
+      it 'reverses one step right division' do
+        eqn = eqn(div('x',3),5)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(div('x',3),5),
+          eqn('x',mtp(5,3)),
+          eqn('x',15)
+        ]
+      end
+
+      it 'reverses one step left division' do
+        eqn = eqn(div(6,'x'),3)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(div(6,'x'),3),
+          eqn('x',div(6,3)),
+          eqn('x',2)
+        ]
+      end
     end
   end
 end
