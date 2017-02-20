@@ -1,4 +1,6 @@
-class Equation
+require './models/expression'
+
+class Equation < Expression
   attr_accessor :ls, :rs
 
   def initialize(ls,rs)

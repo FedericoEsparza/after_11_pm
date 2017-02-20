@@ -1,7 +1,4 @@
-require './models/addition'
-require './models/factory'
-
-include Factory
+require './models/expression'
 
 describe Addition do
   describe '#initialize/new' do
@@ -26,4 +23,10 @@ describe Addition do
       expect(addition.evaluate).to eq 2
     end
   end
+
+  describe '#simplify_add_m_forms' do
+    addition = add(pow(var('x'),num(2)),mtp(var('x'),var('y')),mtp(var('y'),var('x')),pow(var('y'),num(2)))
+    expect(addition.simplify_add_m_forms).to eq add(pow('x',2),mtp(2,'x','y'),pow('y',2))
+  end
+
 end

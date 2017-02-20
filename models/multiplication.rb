@@ -1,12 +1,6 @@
-require 'deep_clone'
-require './models/class_names'
-require './lib/array'
-require './models/variables'
-require './models/numerals'
+require './models/expression'
 
-include ClassName
-
-class Multiplication
+class Multiplication < Expression
   attr_accessor :args
 
   def initialize(*args)
@@ -212,6 +206,7 @@ class Multiplication
       i += 1
     end
     steps.insert(0,self.copy)
+    steps = delete_duplicate_steps(steps)
     self.args = steps[-1].args
     steps.each {|a| a.delete_nils}
     steps
@@ -271,6 +266,40 @@ class Multiplication
     (first_factor.is_a?(power) && first_factor.base.is_a?(Numeral) &&
     mtp_arg.is_a?(Numeral))
   end
+
+
+
+
+
+
+  def combine_two_brackets
+    copy = self.copy
+    new_args = []
+    copy.args.first.args.each_with_index do |a|
+      copy.args.last.args.each_with_index do |b|
+        c = mtp(a,b)
+        c.standardize_args
+        new_args << c
+        end
+    end
+
+    new_args = new_args.map {|a| a.simplify_product_of_m_forms}
+    new_args.equalise_array_lengths
+    new_add = []
+    new_args.first.each_with_index do |a,i|
+      c = []
+      new_args.each_with_index do |b,j|
+        c << new_args[j][i]
+      end
+      new_add << add(c)
+    end
+    result = new_add.last
+    result.simplify_add_m_forms
+  end
+
+
+
+
 
   # def equalise_array_lengths(arrays)
   #   max_length = arrays.inject(0) { |curr_max,arr| [arr.length,curr_max].max }

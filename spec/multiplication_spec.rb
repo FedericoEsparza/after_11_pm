@@ -1,11 +1,10 @@
-require './models/multiplication'
+require './models/expression'
 require './models/power'
 require './models/addition'
 require './models/variables'
 require './models/numerals'
 require './models/factory'
-
-include Factory
+require './models/multiplication'
 
 describe Multiplication do
   describe '#initialize/new' do
@@ -316,6 +315,13 @@ describe Multiplication do
       ]
     end
 
+    it 'simplifies xy' do
+      exp = mtp('x','y')
+      exp.standardize_args
+      result = exp.simplify_product_of_m_forms
+      expect(exp).to eq mtp('x','y')
+    end
+
   end
 
   context '#standardize_args' do
@@ -346,4 +352,17 @@ describe Multiplication do
       expect(result).to eq [pow('x',2),pow('x',4)]
     end
   end
+
+  # describe '#combine_two_brackets' do
+  #
+  #   it 'comines (x+y)(x+y)' do
+  #     exp = mtp(add('x','y'),add('x','y'))
+  #     result = exp.combine_two_brackets
+  #     expect(result).to eq add(pow('x',2),mtp(2,'x','y'),pow('y',2))
+  #   end
+  #
+  # end
+
+
+
 end

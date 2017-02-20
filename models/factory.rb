@@ -18,7 +18,7 @@ module Factory
   def num(n)
     Numeral.new(n)
   end
-  
+
   def eqn(ls,rs)
     Equation.new(ls,rs)
   end

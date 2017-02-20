@@ -1,4 +1,6 @@
-class Power
+require './models/expression'
+
+class Power < Expression
   attr_accessor :args
 
   def initialize(*args)
