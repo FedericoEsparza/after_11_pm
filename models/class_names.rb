@@ -14,4 +14,8 @@ module ClassName
   def addition
     Addition
   end
+
+  def multiplication
+    Multiplication
+  end
 end

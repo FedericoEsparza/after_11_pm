@@ -29,4 +29,19 @@ class Division
     exp.class == self.class && args == exp.args
   end
 
+  def copy
+    new_args = args.inject([]) do |r,e|
+      if e.is_a?(string) || e.is_a?(integer)
+        r << e
+      else
+        r << e.copy
+      end
+    end
+    div(new_args)
+  end
+
+  def evaluate_numeral
+    args[0]/args[1]
+  end
+
 end

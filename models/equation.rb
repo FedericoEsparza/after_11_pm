@@ -43,11 +43,33 @@ class Equation
         value = ls.args[0]
         self.ls = ls.args[1]
         self.rs = sbt(rs,value)
-      else
-        # added_val = ls.args[1]
+        curr_steps << self.copy
+        return
+      end
+      if ls.args[1].is_a?(integer)
+        value = ls.args[1]
+        self.ls = ls.args[0]
+        self.rs = sbt(rs,value)
+        curr_steps << self.copy
+        return
       end
     end
-    curr_steps << self.copy
+    if ls.is_a?(multiplication)
+      if ls.args[0].is_a?(integer)
+        value = ls.args[0]
+        self.ls = ls.args[1]
+        self.rs = div(rs,value)
+        curr_steps << self.copy
+        return
+      end
+      if ls.args[1].is_a?(integer)
+        value = ls.args[1]
+        self.ls = ls.args[0]
+        self.rs = div(rs,value)
+        curr_steps << self.copy
+        return
+      end
+    end
   end
 
   def evaluate_right_side(curr_steps)
