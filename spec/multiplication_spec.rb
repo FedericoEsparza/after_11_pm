@@ -57,7 +57,7 @@ describe Multiplication do
   describe '#convert_to_power' do
     it 'converts string arguments to power of one' do
       exp = mtp(2,'x','y')
-      exp.standardize_args
+      exp.standardize_args(true)
       exp.convert_to_power
       expect(exp.args).to eq [2,pow('x',1),pow('y',1)]
     end
@@ -102,7 +102,7 @@ describe Multiplication do
 
     it 'combine y times y^3 times y^-2' do
       exp = mtp('y',pow('y',3),pow('y',-2))
-      exp.standardize_args
+      exp.standardize_args(true)
       expect(exp.combine_powers).to eq [
         mtp('y',pow('y',3),pow('y',-2)),
         mtp(pow('y',1),pow('y',3),pow('y',-2)),
@@ -113,7 +113,7 @@ describe Multiplication do
 
     it 'combines 3 times 4 times 5' do
       exp = mtp(3,4,5)
-      exp.standardize_args
+      exp.standardize_args(true)
       expect(exp.combine_powers).to eq [
         mtp(3,4,5),
         60
@@ -122,7 +122,7 @@ describe Multiplication do
 
     it 'combines 3 times 2^2 times 5' do
       exp = mtp(3,pow(2,2),5)
-      exp.standardize_args
+      exp.standardize_args(true)
       expect(exp.combine_powers).to eq [
         mtp(3,pow(2,2),5),
         mtp(3,4,5),
@@ -290,7 +290,7 @@ describe Multiplication do
       exp = mtp(3, 'x', mtp(2,pow('x',2)))
       exp.standardize_args
       result = exp.simplify_product_of_m_forms
-      result.each { |l| l.standardize_args }
+      result.each { |l| l.standardize_args(true) }
       expect(exp).to eq mtp(6,pow('x', 3))
       expect(result).to eq [
         mtp(mtp(num(3), var('x')), mtp(num(2),pow(var('x'),num(2)))),
@@ -307,7 +307,7 @@ describe Multiplication do
     it "converts strings and integers to variables and numerals respectively" do
       exp = mtp('x', 3, mtp(2, pow('x', 2)))
       response = [var('x'), num(3), mtp(num(2), pow(var('x'), num(2)))]
-      result = exp.standardize_args
+      result = exp.standardize_args(true)
       expect(result).to eq response
     end
   end
