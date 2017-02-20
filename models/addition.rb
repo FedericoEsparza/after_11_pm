@@ -1,3 +1,7 @@
+require './models/factory'
+
+include Factory
+
 class Addition
   attr_accessor :args
 
@@ -15,7 +19,7 @@ class Addition
 
   def copy
     new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || e.is_a?(integer)
+      if e.is_a?(string) || numerical?(e)
         r << e
       else
         r << e.copy

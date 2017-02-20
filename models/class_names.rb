@@ -11,6 +11,10 @@ module ClassName
     Float
   end
 
+  def rational
+    Rational
+  end
+
   def power
     Power
   end

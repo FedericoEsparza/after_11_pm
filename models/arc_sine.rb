@@ -1,3 +1,7 @@
+# require './models/factory'
+#
+# include Factory
+
 class ArcSine
   attr_accessor :args
 

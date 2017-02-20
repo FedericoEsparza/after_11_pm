@@ -1,7 +1,4 @@
 require './models/addition'
-require './models/factory'
-
-include Factory
 
 describe Addition do
   describe '#initialize/new' do
