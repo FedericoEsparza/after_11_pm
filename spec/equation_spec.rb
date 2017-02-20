@@ -127,5 +127,38 @@ describe Equation do
       end
     end
 
+    context '#three-steps' do
+      it 'solves 30/(16-2x) = 3' do
+        eqn = eqn(div(30,sbt(16,mtp(2,'x'))),3)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(div(30,sbt(16,mtp(2,'x'))),3),
+          eqn(sbt(16,mtp(2,'x')),div(30,3)),
+          eqn(sbt(16,mtp(2,'x')),10),
+          eqn(mtp(2,'x'),sbt(16,10)),
+          eqn(mtp(2,'x'),6),
+          eqn('x',div(6,2)),
+          eqn('x',3)
+        ]
+      end
+    end
+
+    context '#four-steps' do
+      it 'solves 9 + 36 / (7x - 2) = 12' do
+        eqn = eqn(add(9,div(36,sbt(mtp(7,'x'),2))),12)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add(9,div(36,sbt(mtp(7,'x'),2))),12),
+          eqn(div(36,sbt(mtp(7,'x'),2)),sbt(12,9)),
+          eqn(div(36,sbt(mtp(7,'x'),2)),3),
+          eqn(sbt(mtp(7,'x'),2),div(36,3)),
+          eqn(sbt(mtp(7,'x'),2),12),
+          eqn(mtp(7,'x'),add(12,2)),
+          eqn(mtp(7,'x'),14),
+          eqn('x',div(14,7)),
+          eqn('x',2)
+        ]
+      end
+    end
   end
 end
