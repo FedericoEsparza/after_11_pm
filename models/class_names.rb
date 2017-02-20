@@ -18,4 +18,8 @@ module ClassName
   def multiplication
     Multiplication
   end
+
+  def sine
+    Sine
+  end
 end

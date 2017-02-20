@@ -18,7 +18,7 @@ module Factory
   def num(n)
     Numeral.new(n)
   end
-  
+
   def eqn(ls,rs)
     Equation.new(ls,rs)
   end
@@ -29,5 +29,9 @@ module Factory
 
   def sbt(*args)
     Subtraction.new(*args)
+  end
+
+  def sin(*args)
+    Sine.new(*args)
   end
 end
