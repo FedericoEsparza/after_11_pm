@@ -18,9 +18,10 @@ class Multiplication
   end
 
   # RECURSION HELL
-  def standardize_args(group=false)
+  def standardize_args(internal=false)
     @args = scan!
-    if group
+    non_std_args_exist = @args.any? { |e| e.is_a?(Numeral) || e.is_a?(Variable) }
+    if non_std_args_exist && !internal
       new_args = nil
       non_mtp = @args.select do |arg|
         arg.is_a?(Variable) || arg.is_a?(Numeral)
@@ -71,7 +72,7 @@ class Multiplication
   end
 
   def combine_powers
-    self.standardize_args
+    self.standardize_args(true)
     copy = self.copy
     if copy.args.first.is_a?(Variable) || copy.args.first.is_a?(Power)
       if (copy.args.length > 1)
@@ -176,8 +177,6 @@ class Multiplication
     copy = self.copy
     copy.separate_variables
     variables_separated = copy
-    variables_separated.standardize_args
-    # p variables_separated
     new_args = []
     i = 0
     while i < variables_separated.args.length && i <=100 do

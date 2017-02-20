@@ -273,9 +273,9 @@ describe Multiplication do
 
     it 'simplifies x3(2x^2) to 6x^3' do
       exp = mtp('x', 3, mtp(2,pow('x',2)))
-      exp.standardize_args(true)
+      exp.standardize_args
       result = exp.simplify_product_of_m_forms
-      result.each { |l| l.standardize_args }
+      result.each { |l| l.scan! }
       expect(exp).to eq mtp(6,pow('x', 3))
       expect(result).to eq [
         mtp(mtp(num(3), var('x')), mtp(num(2),pow(var('x'),num(2)))),
@@ -288,7 +288,7 @@ describe Multiplication do
 
     it 'simplifies 3x(2x^2) to 6x^3' do
       exp = mtp(3, 'x', mtp(2,pow('x',2)))
-      exp.standardize_args(true)
+      exp.standardize_args
       result = exp.simplify_product_of_m_forms
       result.each { |l| l.standardize_args }
       expect(exp).to eq mtp(6,pow('x', 3))
