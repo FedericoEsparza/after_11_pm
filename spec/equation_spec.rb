@@ -100,5 +100,32 @@ describe Equation do
         ]
       end
     end
+
+    context '#two-steps' do
+      it 'solves 2x + 3 = 15' do
+        eqn = eqn(add(mtp(2,'x'),3),15)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add(mtp(2,'x'),3),15),
+          eqn(mtp(2,'x'),sbt(15,3)),
+          eqn(mtp(2,'x'),12),
+          eqn('x',div(12,2)),
+          eqn('x',6)
+        ]
+      end
+
+      it 'solves 20 - 3x = 5' do
+        eqn = eqn(sbt(20,mtp('x',3)),5)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(sbt(20,mtp('x',3)),5),
+          eqn(mtp('x',3),sbt(20,5)),
+          eqn(mtp('x',3),15),
+          eqn('x',div(15,3)),
+          eqn('x',5)
+        ]
+      end
+    end
+
   end
 end
