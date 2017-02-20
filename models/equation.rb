@@ -38,38 +38,43 @@ class Equation
   end
 
   def reverse_last_step(curr_steps)
-    if ls.is_a?(addition)
-      if ls.args[0].is_a?(integer)
-        value = ls.args[0]
-        self.ls = ls.args[1]
-        self.rs = sbt(rs,value)
-        curr_steps << self.copy
-        return
-      end
-      if ls.args[1].is_a?(integer)
-        value = ls.args[1]
-        self.ls = ls.args[0]
-        self.rs = sbt(rs,value)
-        curr_steps << self.copy
-        return
-      end
-    end
-    if ls.is_a?(multiplication)
-      if ls.args[0].is_a?(integer)
-        value = ls.args[0]
-        self.ls = ls.args[1]
-        self.rs = div(rs,value)
-        curr_steps << self.copy
-        return
-      end
-      if ls.args[1].is_a?(integer)
-        value = ls.args[1]
-        self.ls = ls.args[0]
-        self.rs = div(rs,value)
-        curr_steps << self.copy
-        return
-      end
-    end
+    new_sides = ls.reverse_step(rs)
+    self.ls = new_sides[:ls]
+    self.rs = new_sides[:rs]
+    curr_steps << self.copy
+    return
+    # if ls.is_a?(addition)
+    #   if ls.args[0].is_a?(integer)
+    #     value = ls.args[0]
+    #     self.ls = ls.args[1]
+    #     self.rs = sbt(rs,value)
+    #     curr_steps << self.copy
+    #     return
+    #   end
+    #   if ls.args[1].is_a?(integer)
+    #     value = ls.args[1]
+    #     self.ls = ls.args[0]
+    #     self.rs = sbt(rs,value)
+    #     curr_steps << self.copy
+    #     return
+    #   end
+    # end
+    # if ls.is_a?(multiplication)
+    #   if ls.args[0].is_a?(integer)
+    #     value = ls.args[0]
+    #     self.ls = ls.args[1]
+    #     self.rs = div(rs,value)
+    #     curr_steps << self.copy
+    #     return
+    #   end
+    #   if ls.args[1].is_a?(integer)
+    #     value = ls.args[1]
+    #     self.ls = ls.args[0]
+    #     self.rs = div(rs,value)
+    #     curr_steps << self.copy
+    #     return
+    #   end
+    # end
   end
 
   def evaluate_right_side(curr_steps)
