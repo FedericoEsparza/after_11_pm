@@ -1,3 +1,10 @@
+require './models/sine'
+require './models/arc_sine'
+require './models/addition'
+require './models/subtraction'
+require './models/division'
+require './models/multiplication'
+
 module Factory
   def add(*args)
     Addition.new(*args)
@@ -37,5 +44,9 @@ module Factory
 
   def arcsin(*args)
     ArcSine.new(*args)
+  end
+
+  def sin_eqn(ls,rs,options={ans_min:0,ans_max:360})
+    SineEquation.new(ls,rs,options)
   end
 end

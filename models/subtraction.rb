@@ -11,7 +11,7 @@ class Subtraction
 
   def copy
     new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || e.is_a?(integer)
+      if e.is_a?(string) || e.is_a?(integer) || e.is_a?(float)
         r << e
       else
         r << e.copy

@@ -36,4 +36,11 @@ class Sine
     rad = angle.to_f / 180 * (Math::PI)
     Math.sin(rad).round(5)
   end
+
+  def reverse_step(rs)
+    result = {}
+    result[:ls] = args[0]
+    result[:rs] = arcsin(rs)
+    result
+  end
 end

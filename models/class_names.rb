@@ -7,6 +7,10 @@ module ClassName
     Fixnum
   end
 
+  def float
+    Float
+  end
+
   def power
     Power
   end
