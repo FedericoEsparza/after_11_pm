@@ -25,6 +25,9 @@ class Addition
   end
 
   def evaluate
-    args.inject(0){|r,e| r + e}
+    args.inject(0){ |r, arg|
+      arg = arg.is_a?(Numeral) ? arg.value : arg
+      r + arg
+    }
   end
 end
