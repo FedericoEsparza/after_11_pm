@@ -1,5 +1,5 @@
 require './models/class_names'
-require './models/array'
+require './lib/array'
 
 describe Array do
   describe '#equalise_array_lengths' do
