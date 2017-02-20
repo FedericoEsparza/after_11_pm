@@ -1,4 +1,4 @@
-class Addition
+class Subtraction
   attr_accessor :args
 
   def initialize(*args)
@@ -9,10 +9,6 @@ class Addition
     end
   end
 
-  def ==(exp)
-    exp.class == self.class && args == exp.args
-  end
-
   def copy
     new_args = args.inject([]) do |r,e|
       if e.is_a?(string) || e.is_a?(integer)
@@ -21,13 +17,31 @@ class Addition
         r << e.copy
       end
     end
-    add(new_args)
+    sbt(new_args)
   end
 
-  def evaluate
-    args.inject(0){ |r, arg|
-      arg = arg.is_a?(Numeral) ? arg.value : arg
-      r + arg
-    }
+  def ==(exp)
+    exp.class == self.class && args == exp.args
+  end  
+
+  def minuend
+    args[0]
   end
+
+  def minuend=(value)
+    self.args[0] = value
+  end
+
+  def subend
+    args[1]
+  end
+
+  def subend=(value)
+    self.args[1] = value
+  end
+
+  def evaluate_numeral
+    minuend - subend
+  end
+
 end

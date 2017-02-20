@@ -17,5 +17,16 @@ module Factory
 
   def num(n)
     Numeral.new(n)
+
+  def eqn(ls,rs)
+    Equation.new(ls,rs)
+  end
+
+  def div(*args)
+    Division.new(*args)
+  end
+
+  def sbt(*args)
+    Subtraction.new(*args)
   end
 end
