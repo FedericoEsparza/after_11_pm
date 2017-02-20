@@ -1,4 +1,4 @@
-require './models/arcsine'
+require './models/arc_sine'
 require './models/factory'
 
 include Factory
