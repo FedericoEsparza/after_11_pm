@@ -30,4 +30,22 @@ class Addition
       r + arg
     }
   end
+
+  def evaluate_numeral
+    args.inject(0){|r,e| r + e}
+  end
+
+  def reverse_step(rs)
+    result = {}
+    if args[0].is_a?(integer)
+      result[:ls] = args[1]
+      result[:rs] = sbt(rs,args[0])
+      return result
+    end
+    if args[1].is_a?(integer)
+      result[:ls] = args[0]
+      result[:rs] = sbt(rs,args[1])
+      return result
+    end
+  end
 end

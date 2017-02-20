@@ -38,15 +38,9 @@ class Equation
   end
 
   def reverse_last_step(curr_steps)
-    if ls.is_a?(addition)
-      if ls.args[0].is_a?(integer)
-        value = ls.args[0]
-        self.ls = ls.args[1]
-        self.rs = sbt(rs,value)
-      else
-        # added_val = ls.args[1]
-      end
-    end
+    new_sides = ls.reverse_step(rs)
+    self.ls = new_sides[:ls]
+    self.rs = new_sides[:rs]
     curr_steps << self.copy
   end
 

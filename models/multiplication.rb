@@ -179,6 +179,10 @@ class Multiplication
      }
   end
 
+  def evaluate_numeral
+    args.inject(1){|r,e| r * e}
+  end
+
   def delete_nils
     i = 1
     while i <= args.length do
@@ -189,7 +193,7 @@ class Multiplication
     end
     args
   end
-#
+
   def simplify_product_of_m_forms
     copy = self.copy
     copy.standardize_args(true)
@@ -215,6 +219,20 @@ class Multiplication
     self.args = steps[-1].args
     steps.each {|a| a.delete_nils}
     steps
+  end
+
+  def reverse_step(rs)
+    result = {}
+    if args[0].is_a?(integer)
+      result[:ls] = args[1]
+      result[:rs] = div(rs,args[0])
+      return result
+    end
+    if args[1].is_a?(integer)
+      result[:ls] = args[0]
+      result[:rs] = div(rs,args[1])
+      return result
+    end
   end
 
   def collect_next_variables
@@ -327,4 +345,5 @@ class Multiplication
   #   end
   #   result
   # end
+
 end
