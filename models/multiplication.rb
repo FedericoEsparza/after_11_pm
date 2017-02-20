@@ -113,7 +113,6 @@ class Multiplication
   end
 
   def delete_duplicate_steps(steps)
-    # p steps
     i = 0
     while i < steps.length
       if steps[i] == steps[i+1]
@@ -193,16 +192,17 @@ class Multiplication
 #
   def simplify_product_of_m_forms
     copy = self.copy
+    copy.standardize_args(true)
     copy.separate_variables
     variables_separated = copy
     new_args = []
     i = 0
+    # p variables_separated
     while i < variables_separated.args.length && i <=100 do
       new_args << variables_separated.args[i].combine_powers
       i += 1
     end
     # p "================="
-    # p new_args
     new_args = new_args.equalise_array_lengths
     new_args = new_args.transpose
     i = 0

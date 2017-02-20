@@ -273,6 +273,7 @@ describe Multiplication do
 
     it 'simplifies (2x^2yz)(3x^-2z^-1)' do
       exp = mtp(mtp(2,pow('x',2),'y','z'),mtp(3,pow('x',-2),pow('z',-1)))
+      # exp.standardize_args(true)
       result = exp.simplify_product_of_m_forms
       expect(exp).to eq mtp(6,'y')
       expect(result).to eq [
@@ -283,7 +284,6 @@ describe Multiplication do
         mtp(6,'y',pow('z',0)),
         mtp(6,'y')
       ]
-      end
     end
 
     it 'simplifies x3(2x^2) to 6x^3' do
@@ -337,13 +337,13 @@ describe Multiplication do
   end
 
 
-  #
-  # describe '#collect_same_base' do
-  #   it 'collects powers of the same base while deleting them from self' do
-  #     exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
-  #     result = exp.collect_same_base('x')
-  #     expect(exp).to eq mtp(mtp(pow('y',3)),mtp(pow('y',5)))
-  #     expect(result).to eq [pow('x',2),pow('x',4)]
-  #   end
-  # end
+
+  describe '#collect_same_base' do
+    it 'collects powers of the same base while deleting them from self' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      result = exp.collect_next_variables
+      expect(exp).to eq mtp(mtp(pow('y',3)),mtp(pow('y',5)))
+      expect(result).to eq [pow('x',2),pow('x',4)]
+    end
+  end
 end
