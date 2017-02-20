@@ -11,6 +11,14 @@ module Factory
     Power.new(base,index)
   end
 
+  def var(string)
+    Variable.new(string)
+  end
+
+  def num(n)
+    Numeral.new(n)
+  end
+  
   def eqn(ls,rs)
     Equation.new(ls,rs)
   end

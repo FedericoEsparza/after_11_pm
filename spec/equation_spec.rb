@@ -5,7 +5,7 @@ require './models/addition'
 require './models/subtraction'
 require './models/multiplication'
 require './models/division'
-require './models/array'
+require './lib/array'
 
 include Factory
 
