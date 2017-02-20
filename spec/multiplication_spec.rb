@@ -257,6 +257,30 @@ describe Multiplication do
       ]
     end
 
+
+    it 'simplifies (2x^2yz)(3x^-2z^-1)' do
+      exp = mtp(mtp(2,pow('x',2),'y','z'),mtp(3,pow('x',-2),pow('z',-1)))
+      result = exp.simplify_product_of_m_forms
+      expect(exp).to eq mtp(6,'y')
+      expect(result).to eq [
+        mtp(mtp(2,pow('x',2),'y','z'),mtp(3,pow('x',-2),pow('z',-1))),
+        mtp(mtp(2,3),mtp(pow('x',2),pow('x',-2)),'y',mtp('z',pow('z',-1))),
+        mtp(6,pow('x',add(2,-2)),'y',mtp(pow('z',1),pow('z',-1))),
+        mtp(6,pow('x',0),'y',pow('z',add(1,-1))),
+        mtp(6,'y',pow('z',0)),
+        mtp(6,'y')
+      ]
+      end
+    end
+
+
+  describe '#delete nils' do
+
+    it 'deletes nils' do
+      exp = mtp(5,nil,'y')
+      result = exp.delete_nils
+      expect(exp).to eq mtp(5,'y')
+    end
   end
 
 
@@ -271,5 +295,4 @@ describe Multiplication do
   #     expect(result).to eq [pow('x',2),pow('x',4)]
   #   end
   # end
-
 end

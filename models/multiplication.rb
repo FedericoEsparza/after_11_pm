@@ -63,10 +63,17 @@ class Multiplication
       evaled_pow = copy.eval_num_pow
       evaled_nums = evaled_pow.eval_numerics
       steps = [self,evaled_pow,evaled_nums]
+      if evaled_nums == 1
+        steps << nil
+      end
     end
     result = delete_duplicate_steps(steps)
-    if result[-1].is_a?(power) && result[-1].index == 1
-      result << result[-1].base
+    if result[-1].is_a?(power)
+      if result[-1].index == 1
+        result << result[-1].base
+      elsif result[-1].index == 0
+        result << nil
+      end
     end
     result
   end
@@ -174,6 +181,17 @@ class Multiplication
     args.inject(1){|r,e| r * e}
   end
 
+  def delete_nils
+    i = 1
+    while i <= args.length do
+      if args[i-1]==nil
+        delete_arg(i)
+      end
+      i += 1
+    end
+    args
+  end
+#
   def simplify_product_of_m_forms
     copy = self.copy
     copy.separate_variables
@@ -194,6 +212,7 @@ class Multiplication
     end
     steps.insert(0,self.copy)
     self.args = steps[-1].args
+    steps.each {|a| a.delete_nils}
     steps
   end
 
