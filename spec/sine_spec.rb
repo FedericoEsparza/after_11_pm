@@ -23,4 +23,14 @@ describe Sine do
       expect(exp.angle).to eq 70
     end
   end
+
+  describe '#evaluate_numeral' do
+    it 'evaluates sin(30)' do
+      expect(sin(30).evaluate_numeral).to eq 0.5
+    end
+
+    it 'evaluates sin(60) to 0.86603 (we make surds later!)' do
+      expect(sin(60).evaluate_numeral).to eq 0.86603
+    end
+  end
 end

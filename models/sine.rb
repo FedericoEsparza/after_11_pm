@@ -32,4 +32,8 @@ class Sine
     sin(new_args)
   end
 
+  def evaluate_numeral
+    rad = angle.to_f / 180 * (Math::PI)
+    Math.sin(rad).round(5)
+  end
 end
