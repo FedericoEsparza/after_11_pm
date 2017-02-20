@@ -1,4 +1,6 @@
 class Numeral
+  attr_accessor :args
+
   def initialize(*args)
     @args = args
   end
@@ -8,7 +10,11 @@ class Numeral
   end
 
   def ==(arg)
-    @args.first == arg.args.first
+    if arg.respond_to?(:args)
+      @args.first == arg.args.first
+    else
+      @args.first == arg
+    end
   end
 
   def empty?
@@ -19,4 +25,11 @@ class Numeral
     args.length != 0
   end
 
+  def value
+    @args.first
+  end
+
+  def sort
+    2
+  end
 end

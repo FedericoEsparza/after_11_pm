@@ -1,4 +1,6 @@
 class Variable
+  attr_accessor :args
+
   def initialize(*args)
     @args = args
   end
@@ -8,7 +10,15 @@ class Variable
   end
 
   def ==(arg)
-    @args.first == arg.args.first
+    if arg.respond_to?(:args)
+      @args.first == arg.args.first
+    else
+      @args.first == arg
+    end
+  end
+
+  def name
+    @args.first
   end
 
   def empty?
@@ -19,4 +29,7 @@ class Variable
     args.length != 0
   end
 
+  def sort
+    1
+  end
 end

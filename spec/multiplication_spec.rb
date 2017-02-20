@@ -57,6 +57,7 @@ describe Multiplication do
   describe '#convert_to_power' do
     it 'converts string arguments to power of one' do
       exp = mtp(2,'x','y')
+      exp.standardize_args
       exp.convert_to_power
       expect(exp.args).to eq [2,pow('x',1),pow('y',1)]
     end
@@ -73,7 +74,7 @@ describe Multiplication do
     end
 
     it 'leaves x alone' do
-      exp = mtp('x')
+      exp = mtp(var('x'))
       expect(exp.combine_powers).to eq [
         'x'
       ]
@@ -89,9 +90,8 @@ describe Multiplication do
       ]
     end
 
-
     it 'combines x times x^2' do
-      exp = mtp('x',pow('x',2))
+      exp = mtp(var('x'),pow(var('x'),num(2)))
       expect(exp.combine_powers).to eq [
         mtp('x',pow('x',2)),
         mtp(pow('x',1),pow('x',2)),
@@ -102,6 +102,7 @@ describe Multiplication do
 
     it 'combine y times y^3 times y^-2' do
       exp = mtp('y',pow('y',3),pow('y',-2))
+      exp.standardize_args
       expect(exp.combine_powers).to eq [
         mtp('y',pow('y',3),pow('y',-2)),
         mtp(pow('y',1),pow('y',3),pow('y',-2)),
@@ -112,6 +113,7 @@ describe Multiplication do
 
     it 'combines 3 times 4 times 5' do
       exp = mtp(3,4,5)
+      exp.standardize_args
       expect(exp.combine_powers).to eq [
         mtp(3,4,5),
         60
@@ -120,6 +122,7 @@ describe Multiplication do
 
     it 'combines 3 times 2^2 times 5' do
       exp = mtp(3,pow(2,2),5)
+      exp.standardize_args
       expect(exp.combine_powers).to eq [
         mtp(3,pow(2,2),5),
         mtp(3,4,5),
@@ -164,6 +167,7 @@ describe Multiplication do
 
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
       exp = mtp(mtp(3,pow('x',2)),mtp(4,pow('x',3),pow('y',2)))
+      exp.standardize_args
       result = exp.separate_variables
       expect(exp).to eq mtp(mtp(3,4),mtp(pow('x',2),pow('x',3)),mtp(pow('y',2)))
       expect(result).to eq [
@@ -174,6 +178,7 @@ describe Multiplication do
 
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
       exp = mtp(mtp(3,pow('x',2)),mtp(4,'x',pow('y',2)))
+      exp.standardize_args
       result = exp.separate_variables
       expect(exp).to eq mtp(mtp(3,4),mtp(pow('x',2),'x'),mtp(pow('y',2)))
       expect(result).to eq [
@@ -184,6 +189,7 @@ describe Multiplication do
 
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
       exp = mtp(mtp(3,'x'),mtp(4,pow('x', 2),pow('y',2)))
+      exp.standardize_args
       result = exp.separate_variables
       expect(exp).to eq mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
       expect(result).to eq [
@@ -191,8 +197,10 @@ describe Multiplication do
         mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
       ]
     end
+
     it 'separates (3^2x^2)(4x) as (3^2 4)(x^2x)' do
       exp = mtp(mtp(pow(3,2),pow('x',2)),mtp(4,'x'))
+      exp.standardize_args
       result = exp.separate_variables
       expect(exp).to eq mtp(mtp(pow(3,2),4),mtp(pow('x', 2),'x'))
       expect(result).to eq [
@@ -224,6 +232,7 @@ describe Multiplication do
   describe '#simplify_product_of_m_forms' do
     it 'simplifies (3x^2y3)(3xy^4) to 9x^3y^7' do
       exp = mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4)))
+      exp.standardize_args
       result = exp.simplify_product_of_m_forms
       expect(exp).to eq mtp(9,pow('x',3),pow('y',7))
       expect(result).to eq [
@@ -234,10 +243,12 @@ describe Multiplication do
         mtp(9,pow('x',3),pow('y',7))
       ]
     end
-      it 'simplifies (3x)(4y)(5z) to 60xyz' do
-        exp = mtp(mtp(3,'x'),mtp(4,'y'),mtp(5,'z'))
-        result = exp.simplify_product_of_m_forms
-        expect(exp).to eq mtp(60,'x','y','z')
+
+    it 'simplifies (3x)(4y)(5z) to 60xyz' do
+      exp = mtp(mtp(3,'x'),mtp(4,'y'),mtp(5,'z'))
+      exp.standardize_args
+      result = exp.simplify_product_of_m_forms
+      expect(exp).to eq mtp(60,'x','y','z')
       expect(result).to eq [
         mtp(mtp(3,'x'),mtp(4,'y'),mtp(5,'z')),
         mtp(mtp(3,4,5),'x','y','z'),
@@ -248,6 +259,7 @@ describe Multiplication do
 
     it 'simplifies (3y^3z)(2^2y^-2) to 12yz' do
       exp = mtp(mtp(3,pow('y',3),'z'),mtp(pow(2,2),pow('y',-2)))
+      exp.standardize_args
       result = exp.simplify_product_of_m_forms
       expect(exp).to eq mtp(12,'y','z')
       expect(result).to eq [
@@ -261,14 +273,31 @@ describe Multiplication do
 
     it 'simplifies x3(2x^2) to 6x^3' do
       exp = mtp('x', 3, mtp(2,pow('x',2)))
-      exp.standardize_args
+      exp.standardize_args(true)
       result = exp.simplify_product_of_m_forms
+      result.each { |l| l.standardize_args }
       expect(exp).to eq mtp(6,pow('x', 3))
       expect(result).to eq [
-        mtp(mtp('x', 3, mtp(2,pow('x',2)))),
-        mtp(mtp(3,2),mtp(pow('x',1),pow('x',2))),
-        mtp(mtp(6 ,pow('x',add(1,2)))),
-        mtp(6,pow('x', 3))
+        mtp(mtp(num(3), var('x')), mtp(num(2),pow(var('x'),num(2)))),
+        mtp(mtp(num(3),num(2)),mtp(var('x'),pow(var('x'),num(2)))),
+        mtp(num(6), mtp(pow('x', 1), pow('x', 2))),
+        mtp(num(6) ,pow(var('x'),add(num(1),num(2)))),
+        mtp(num(6),pow(var('x'), num(3)))
+      ]
+    end
+
+    it 'simplifies 3x(2x^2) to 6x^3' do
+      exp = mtp(3, 'x', mtp(2,pow('x',2)))
+      exp.standardize_args(true)
+      result = exp.simplify_product_of_m_forms
+      result.each { |l| l.standardize_args }
+      expect(exp).to eq mtp(6,pow('x', 3))
+      expect(result).to eq [
+        mtp(mtp(num(3), var('x')), mtp(num(2),pow(var('x'),num(2)))),
+        mtp(mtp(num(3),num(2)),mtp(var('x'),pow(var('x'),num(2)))),
+        mtp(num(6), mtp(pow('x', 1), pow('x', 2))),
+        mtp(num(6) ,pow(var('x'),add(num(1),num(2)))),
+        mtp(num(6),pow(var('x'), num(3)))
       ]
     end
 

@@ -44,6 +44,10 @@ class Power
   end
 
   def evaluate
-    base ** index
+    if base.is_a?(Numeral) && index.is_a?(Numeral)
+      base.value ** index.value
+    else
+      base ** index
+    end
   end
 end
