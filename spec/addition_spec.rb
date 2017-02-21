@@ -1,4 +1,11 @@
+require './models/expression'
+require './models/power'
 require './models/addition'
+
+# require './models/variables'
+# require './models/numerals'
+# require './models/factory'
+# require './models/multiplication'
 
 describe Addition do
   describe '#initialize/new' do
@@ -23,4 +30,44 @@ describe Addition do
       expect(addition.evaluate).to eq 2
     end
   end
+
+  describe '#remove_exp' do
+    it 'removes xy from 3xy' do
+      addition = add(mtp(3,'x','y',4),mtp('x','y','z'))
+      result = addition.args[0].remove_exp
+      expect(result).to eq 12
+    end
+  end
+
+  # describe '#remove_coef' do
+  #   it 'removes 3 from 3xy' do
+  #   addition = mtp(3,'x','y',4)
+  #   result = addition.remove_coef
+  #   expect(result).to eq mtp('x','y')
+  # end
+  # end
+
+  describe '#simplify_add_m_forms' do
+
+    it '#simplifies 3xy+2xy+xyz'do
+    addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
+    result = addition.simplify_add_m_forms
+    expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
+    end
+
+    it '#simplifies 3xy+yx+x^2' do
+    addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
+    result = addition.simplify_add_m_forms
+    expect(result).to eq add(mtp(4,'x','y'),mtp(pow('x',2)))
+    end
+
+    it '#simplifies x^2 + xy + yx + y^2' do
+    addition = add(mtp(pow('x',2)),mtp('x','y'),mtp('y','x'),mtp(pow('y',2)))
+    result = addition.simplify_add_m_forms
+    expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
+    end
+
+
+  end
+
 end
