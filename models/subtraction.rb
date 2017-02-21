@@ -63,4 +63,21 @@ class Subtraction
     end
   end
 
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+
+    args.each do |arg|
+      if arg.is_a?(Multiplication)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
+  end
+
 end

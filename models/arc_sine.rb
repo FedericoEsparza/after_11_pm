@@ -38,8 +38,7 @@ class ArcSine
 
   def evaluate_numeral
     rad = Math.asin(value)
-    rad / (Math::PI) * 180
+    degree = rad / (Math::PI) * 180
+    degree.round(5)
   end
 end
-
-p arcsin(12)
