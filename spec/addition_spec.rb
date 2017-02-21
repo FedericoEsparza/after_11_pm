@@ -1,10 +1,11 @@
 require './models/expression'
 require './models/power'
 require './models/addition'
-require './models/variables'
-require './models/numerals'
-require './models/factory'
-require './models/multiplication'
+
+# require './models/variables'
+# require './models/numerals'
+# require './models/factory'
+# require './models/multiplication'
 
 describe Addition do
   describe '#initialize/new' do
@@ -30,13 +31,13 @@ describe Addition do
     end
   end
 
-  describe '#remove_exp' do
-    it 'removes xy from 3xy' do
-      addition = add(mtp(3,'x','y',4),mtp('x','y','z'))
-      result = addition.args[0].remove_exp
-      expect(result).to eq 12
-    end
-  end
+  # describe '#remove_exp' do
+  #   it 'removes xy from 3xy' do
+  #     addition = add(mtp(3,'x','y',4),mtp('x','y','z'))
+  #     result = addition.args[0].remove_exp
+  #     expect(result).to eq 12
+  #   end
+  # end
 
   # describe '#remove_coef' do
   #   it 'removes 3 from 3xy' do
@@ -46,16 +47,6 @@ describe Addition do
   # end
   # end
 
-  # describe '#same_elements' do
-  #
-  #   it 'does powers'do
-  #     a1 = [pow('x',2)]
-  #     a2 = [pow('x',2)]
-  #     result = same_elements?(a1,a2)
-  #     expect(result).to eq true
-  #   end
-  #
-  # end
 
   describe '#simplify_add_m_forms' do
 
@@ -82,7 +73,6 @@ describe Addition do
       result = addition.simplify_add_m_forms
       expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
     end
-
   end
 
 end

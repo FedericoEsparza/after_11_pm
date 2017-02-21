@@ -1,6 +1,11 @@
-require './models/expression'
+require './models/factory'
+require './models/multiplication'
+require './models/subtraction'
+require './models/division'
 
-class Equation < Expression
+include Factory
+
+class Equation
   attr_accessor :ls, :rs
 
   def initialize(ls,rs)
@@ -9,12 +14,12 @@ class Equation < Expression
   end
 
   def copy
-    if ls.is_a?(string) || ls.is_a?(integer)
+    if ls.is_a?(string) || numerical?(ls)
       left_side = ls
     else
       left_side = ls.copy
     end
-    if rs.is_a?(string) || rs.is_a?(integer)
+    if rs.is_a?(string) || numerical?(rs)
       right_side = rs
     else
       right_side = rs.copy
@@ -31,7 +36,7 @@ class Equation < Expression
     #reverse the outer most expression until 'x' is left
     curr_steps = [self.copy]
     i = 1
-    while (ls.is_a?(string) && rs.is_a?(integer)) == false && i < 100 do
+    while (ls.is_a?(string) && numerical?(rs)) == false && i < 100 do
       reverse_last_step(curr_steps)
       evaluate_right_side(curr_steps)
       i += 1
@@ -40,15 +45,9 @@ class Equation < Expression
   end
 
   def reverse_last_step(curr_steps)
-    if ls.is_a?(addition)
-      if ls.args[0].is_a?(integer)
-        value = ls.args[0]
-        self.ls = ls.args[1]
-        self.rs = sbt(rs,value)
-      else
-        # added_val = ls.args[1]
-      end
-    end
+    new_sides = ls.reverse_step(rs)
+    self.ls = new_sides[:ls]
+    self.rs = new_sides[:rs]
     curr_steps << self.copy
   end
 

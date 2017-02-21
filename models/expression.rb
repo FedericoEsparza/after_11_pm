@@ -2,7 +2,7 @@ require 'deep_clone'
 require './models/class_names'
 require './lib/array'
 # require './models/multiplication'
-# require './models/power'
+require './models/power'
 # require './models/addition'
 # require './models/variables'
 # require './models/numerals'
@@ -23,7 +23,23 @@ class Expression
   end
 
   def same_elements?(a1,a2)
-    a1.to_set === a2.to_set
+    b1 = []
+    a1.each do |a|
+      if a.is_a?(Power)
+        b1 << [a.base,a.index]
+      else
+        b1 << a
+      end
+    end
+    b2 = []
+    a2.each do |a|
+      if a.is_a?(Power)
+        b2 << [a.base,a.index]
+      else
+        b2 << a
+      end
+    end
+    b1.to_set == b2.to_set
   end
 
   def select_variables
