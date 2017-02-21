@@ -119,16 +119,14 @@ class Addition < Expression
   end
 
   def latex
-    args.inject("") do |r,e|
-      if r == ""
-        r + e.latex
+    result = args.first.latex
+    for i in 1..args.length - 1
+      if args[i].is_a?(subtraction) || args[i].is_a?(addition)
+        result += '+' + brackets(args[i].latex)
       else
-        if e.is_a?(subtraction) || e.is_a?(addition)
-          r + '+' + brackets(e.latex)
-        else
-          r + '+' + e.latex
-        end
+        result += '+' + args[i].latex
       end
     end
+    result
   end
 end
