@@ -2,7 +2,9 @@ require './models/expression'
 require './models/multiplication'
 require './models/factory'
 require './models/numerals'
+require './models/latex_utilities'
 
+include LatexUtilities
 include Factory
 
 class Addition < Expression
@@ -121,7 +123,11 @@ class Addition < Expression
       if r == ""
         r + e.latex
       else
-        r + '+' + e.latex
+        if e.is_a?(subtraction)
+          r + '+' + brackets(e.latex)
+        else
+          r + '+' + e.latex
+        end
       end
     end
   end

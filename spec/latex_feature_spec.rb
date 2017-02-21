@@ -68,4 +68,26 @@ feature '#latex' do
       end
     end
   end
+
+  context 'two_steps' do
+    scenario 'x+2-3' do
+      exp = sbt(add('x',2),3)
+      expect(exp.latex).to eq 'x+2-3'
+    end
+
+    scenario '2+(x-3)' do
+      exp = add(2,sbt('x',3))
+      expect(exp.latex).to eq '2+\left(x-3\right)'
+    end
+
+    scenario '2x+3' do
+      exp = add(mtp(2,'x'),3)
+      expect(exp.latex).to eq '2x+3'
+    end
+
+    scenario '3+2x' do
+      exp = add(3,mtp(2,'x'))
+      expect(exp.latex).to eq '3+2x'
+    end
+  end
 end

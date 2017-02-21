@@ -23,6 +23,10 @@ module ClassName
     Addition
   end
 
+  def subtraction
+    Subtraction
+  end
+
   def multiplication
     Multiplication
   end
