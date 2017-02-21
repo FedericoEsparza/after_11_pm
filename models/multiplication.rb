@@ -347,10 +347,10 @@ class Multiplication
     # result = args.first.latex
     result = ''
     for i in 0..args.length - 1
-      if args[i].is_a?(addition)
-        arg_i_latex = brackets(args[i].latex)
-      else
+      if elementary?(args[i])
         arg_i_latex = args[i].latex
+      else
+        arg_i_latex = brackets(args[i].latex)
       end
       if numerical?(args[i-1]) && numerical?(args[i])
         result += '\times' + arg_i_latex

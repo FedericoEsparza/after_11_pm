@@ -124,6 +124,36 @@ feature '#latex' do
         exp = mtp(3,add(2,'x'))
         expect(exp.latex).to eq '3\left(2+x\right)'
       end
+
+      scenario '' do
+        exp = mtp(sbt(2,'x'),3)
+        expect(exp.latex).to eq '\left(2-x\right)3'
+      end
+
+      scenario '' do
+        exp = mtp(3,sbt(2,'x'))
+        expect(exp.latex).to eq '3\left(2-x\right)'
+      end
+
+      scenario '' do
+        exp = mtp(mtp(2,'x'),3)
+        expect(exp.latex).to eq '\left(2x\right)3'
+      end
+
+      scenario '' do
+        exp = mtp(3,mtp(2,'x'))
+        expect(exp.latex).to eq '3\left(2x\right)'
+      end
+
+      scenario '' do
+        exp = mtp(div(2,'x'),3)
+        expect(exp.latex).to eq '\left(\displaystyle\frac{2}{x}\right)3'
+      end
+
+      scenario '' do
+        exp = mtp(3,div(2,'x'))
+        expect(exp.latex).to eq '3\left(\displaystyle\frac{2}{x}\right)'
+      end
     end
   end
 end
