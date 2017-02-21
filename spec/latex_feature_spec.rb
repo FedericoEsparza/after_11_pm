@@ -119,6 +119,11 @@ feature '#latex' do
         exp = mtp(add(2,'x'),3)
         expect(exp.latex).to eq '\left(2+x\right)3'
       end
+
+      scenario '' do
+        exp = mtp(3,add(2,'x'))
+        expect(exp.latex).to eq '3\left(2+x\right)'
+      end
     end
   end
 end

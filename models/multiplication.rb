@@ -330,18 +330,40 @@ class Multiplication
   end
 
   def latex
-    result = args.first.latex
-    for i in 1..args.length - 1
-      if args[i-1].is_a?(addition)
-        result = brackets(result)
+    # result = args.first.latex
+    # for i in 1..args.length - 1
+    #   if args[i-1].is_a?(addition)
+    #     result = brackets(result)
+    #   end
+    #   if numerical?(args[i-1]) && numerical?(args[i])
+    #     result += '\times' + args[i].latex
+    #   else
+    #     result += + args[i].latex
+    #   end
+    # end
+    # result
+
+
+    # result = args.first.latex
+    result = ''
+    for i in 0..args.length - 1
+      if args[i].is_a?(addition)
+        arg_i_latex = brackets(args[i].latex)
+      else
+        arg_i_latex = args[i].latex
       end
       if numerical?(args[i-1]) && numerical?(args[i])
-        result += '\times' + args[i].latex
+        result += '\times' + arg_i_latex
       else
-        result += + args[i].latex
+        result += + arg_i_latex
       end
     end
-    result
+    first_part =  result.slice!(0..5)
+    if first_part == '\times'
+      result
+    else
+      first_part + result
+    end
   end
 
 end
