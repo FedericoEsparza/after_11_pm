@@ -326,4 +326,17 @@ class Multiplication
       end
     end
   end
+
+  def latex
+    result = args.first.latex
+    for i in 1..args.length - 1
+      if numerical?(args[i])
+        result += '\times' + args[i].latex
+      else
+        result += + args[i].latex
+      end
+    end
+    result
+  end
+
 end

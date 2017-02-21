@@ -115,4 +115,14 @@ class Addition < Expression
       return result
     end
   end
+
+  def latex
+    args.inject("") do |r,e|
+      if r == ""
+        r + e.latex
+      else
+        r + '+' + e.latex
+      end
+    end
+  end
 end
