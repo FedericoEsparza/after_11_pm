@@ -4,6 +4,7 @@ require './models/addition'
 require './models/variables'
 require './models/numerals'
 require './models/factory'
+
 require './models/multiplication'
 
 describe Multiplication do
@@ -533,4 +534,54 @@ describe Multiplication do
 
 
 
+  describe '#delete nils' do
+    it 'deletes nils' do
+      exp = mtp(5, nil, 'y')
+      result = exp.delete_nils
+      expect(exp).to eq mtp(5, 'y')
+    end
+  end
+
+  describe '#collect_same_base' do
+    it 'collects powers of the same base while deleting them from self' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      result = exp.collect_next_variables
+      expect(exp).to eq mtp(mtp(pow('y',3)),mtp(pow('y',5)))
+      expect(result).to eq [pow('x',2),pow('x',4)]
+    end
+  end
+
+  describe '#fetch' do
+    it 'retuns first object that matches class name String' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      expect(exp.fetch(object: :string)).to eq 'x'
+    end
+
+    it 'retuns first object that matches class name Numeric' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      expect(exp.fetch(object: :numeric)).to eq 2
+    end
+  end
+
+  describe '#includes?' do
+    it 'checks if mtp args contain String true' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      expect(exp.includes?(String)).to be true
+    end
+
+    it 'checks if String exists in arguments false' do
+      exp = mtp(mtp(pow(3,3)),mtp(pow(4,4),pow(5,5)))
+      expect(exp.includes?(String)).to be false
+    end
+
+    it 'checks if Numeric exists in arguments true' do
+      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
+      expect(exp.includes?(Numeric)).to be true
+    end
+
+    it 'checks if Numeric exists in arguments false' do
+      exp = mtp(mtp(pow('x','x'),pow('y','x')),mtp(pow('x','x'),pow('y','x')))
+      expect(exp.includes?(Numeric)).to be false
+    end
+  end
 end

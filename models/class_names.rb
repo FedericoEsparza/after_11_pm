@@ -7,11 +7,27 @@ module ClassName
     Fixnum
   end
 
+  def float
+    Float
+  end
+
+  def rational
+    Rational
+  end
+
   def power
     Power
   end
 
   def addition
     Addition
+  end
+
+  def multiplication
+    Multiplication
+  end
+
+  def sine
+    Sine
   end
 end

@@ -1,10 +1,11 @@
 require './models/expression'
 require './models/power'
 require './models/addition'
-require './models/variables'
-require './models/numerals'
-require './models/factory'
-require './models/multiplication'
+
+# require './models/variables'
+# require './models/numerals'
+# require './models/factory'
+# require './models/multiplication'
 
 describe Addition do
   describe '#initialize/new' do

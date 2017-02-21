@@ -405,6 +405,16 @@ require './models/expression'
 
 
 
+require 'deep_clone'
+require './lib/array'
+require './models/variables'
+require './models/factory'
+require './models/numerals'
+require './models/power'
+require './models/addition'
+
+include Factory
+include Types
 
 class Multiplication
   attr_accessor :args
@@ -605,6 +615,21 @@ class Multiplication
     args.inject(1){|r,e| r * e}
   end
 
+  def evaluate_numeral
+    args.inject(1) { |r,e| r * e }
+  end
+
+  def delete_nils
+    i = 1
+    while i <= args.length do
+      if args[i-1]==nil
+        delete_arg(i)
+      end
+      i += 1
+    end
+    args
+  end
+
   def simplify_product_of_m_forms
     copy = self.copy
     copy.separate_variables
@@ -630,12 +655,26 @@ class Multiplication
     steps
   end
 
+  def reverse_step(rs)
+    result = {}
+    if numerical?(args[0])
+      result[:ls] = args[1]
+      result[:rs] = div(rs,args[0])
+      return result
+    end
+    if numerical?(args[1])
+      result[:ls] = args[0]
+      result[:rs] = div(rs,args[1])
+      return result
+    end
+  end
+  
   def remove_coef
     result = []
     args.each {|a| result << a if !(a.is_a?(Numeric))}
     result
   end
-
+  
   def remove_exp
     result = []
     args.each {|a| result << a if a.is_a?(Numeric)}
@@ -667,6 +706,33 @@ class Multiplication
     result = result.simplify_add_m_forms
     result
   end
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
 
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
+  end
 
+  # RECURSION
+  def includes?(object_class)
+    args.any? do |arg|
+      if arg.is_a?(Power)
+        arg.args.any? { |e| e.is_a?(object_class) }
+      elsif arg.is_a?(self.class)
+        arg.includes?(object_class)
+      else
+        arg.is_a?(object_class)
+      end
+    end
+  end
 end
