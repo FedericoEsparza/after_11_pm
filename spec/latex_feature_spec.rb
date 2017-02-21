@@ -264,4 +264,20 @@ feature '#latex' do
     end
   end
 
+  context 'four+steps' do
+    scenario 'random crazy expression' do
+      exp = add(3,mtp(2,sbt(3,div(3,'x')),'a'),div(mtp('x',add(4,div('a',sbt(2,'x')),'b')),sbt(11,mtp('y','z'))),sbt('x',5))
+      expect(exp.latex).to eq "3+2\\left(3-\\displaystyle\\frac{3}{x}\\right)"\
+        "a+\\displaystyle\\frac{x\\left(4+\\displaystyle\\frac{a}{2-x}+b\\right)}{11-yz}+\\left(x-5\\right)"
+    end
+
+    scenario 'repeated fractions' do
+      exp = div(3,add(7,'h',div(mtp(2,'x'),sbt(div(add(4,div('a',2)),sbt(div(11,'x'),'b')),'y'))))
+      # puts exp.latex
+      expect(exp.latex).to eq "\\displaystyle\\frac{3}{7+h+\\displaystyle\\fra"\
+        "c{2x}{\\displaystyle\\frac{4+\\displaystyle\\frac{a}{2}}{\\displaysty"\
+        "le\\frac{11}{x}-b}-y}}"
+    end
+  end
+
 end
