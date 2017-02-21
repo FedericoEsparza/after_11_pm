@@ -1,3 +1,8 @@
+require './models/factory'
+require './models/numerals'
+
+include Factory
+
 class Subtraction
   attr_accessor :args
 
@@ -11,7 +16,7 @@ class Subtraction
 
   def copy
     new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || e.is_a?(integer)
+      if e.is_a?(string) || numerical?(e)
         r << e
       else
         r << e.copy
@@ -55,6 +60,23 @@ class Subtraction
       result[:ls] = args[0]
       result[:rs] = add(rs,args[1])
       return result
+    end
+  end
+
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+
+    args.each do |arg|
+      if arg.is_a?(Multiplication)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
     end
   end
 

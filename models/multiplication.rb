@@ -1,10 +1,13 @@
 require 'deep_clone'
-require './models/class_names'
 require './lib/array'
 require './models/variables'
+require './models/factory'
 require './models/numerals'
+require './models/power'
+require './models/addition'
 
-include ClassName
+include Factory
+include Types
 
 class Multiplication
   attr_accessor :args
@@ -180,7 +183,7 @@ class Multiplication
   end
 
   def evaluate_numeral
-    args.inject(1){|r,e| r * e}
+    args.inject(1) { |r,e| r * e }
   end
 
   def delete_nils
@@ -223,12 +226,12 @@ class Multiplication
 
   def reverse_step(rs)
     result = {}
-    if args[0].is_a?(integer)
+    if numerical?(args[0])
       result[:ls] = args[1]
       result[:rs] = div(rs,args[0])
       return result
     end
-    if args[1].is_a?(integer)
+    if numerical?(args[1])
       result[:ls] = args[0]
       result[:rs] = div(rs,args[1])
       return result
@@ -290,60 +293,33 @@ class Multiplication
     mtp_arg.is_a?(Numeral))
   end
 
-  # def equalise_array_lengths(arrays)
-  #   max_length = arrays.inject(0) { |curr_max,arr| [arr.length,curr_max].max }
-  #   arrays.each{ |arr| (max_length - arr.length).times{ arr << arr.last } }
-  #   arrays
-  # end
-  #
-  # def simplify
-  #   mtp_1 = args[0]
-  #   mtp_2 = args[1]
-  #   combined_args = mtp_1.args + mtp_2.args
-  #   result_args = []
-  #   prod = combined_args.inject(1) { |r,e| e.class == Fixnum ? r * e : r }
-  #   result_args << prod
-  #   combined_args.each do |a|
-  #     result_args << a if a.class == String
-  #   end
-  #   mtp(result_args)
-  # end
-  #
-  # def all_numerical?
-  #   args.each do |a|
-  #     return false unless a.is_a?(integer)
-  #   end
-  #   return true
-  # end
-  #
-  # def collect_same_base(base)
-  #   result = []
-  #   args.each do |m|
-  #     i = 1
-  #     while i <= m.args.length do
-  #       if m.args[i-1] == base || m.args[i-1].base == base
-  #         result << m.delete_arg(i)
-  #       else
-  #         i = i + 1
-  #       end
-  #     end
-  #   end
-  #   result
-  # end
-  #
-  # def collect_fixnums
-  #   result = []
-  #   args.each do |m|
-  #     i = 1
-  #     while i <= m.args.length do
-  #       if m.args[i-1].is_a?(Fixnum)
-  #         result << m.delete_arg(i)
-  #       else
-  #         i = i + 1
-  #       end
-  #     end
-  #   end
-  #   result
-  # end
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
 
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
+  end
+
+  # RECURSION
+  def includes?(object_class)
+    args.any? do |arg|
+      if arg.is_a?(Power)
+        arg.args.any? { |e| e.is_a?(object_class) }
+      elsif arg.is_a?(self.class)
+        arg.includes?(object_class)
+      else
+        arg.is_a?(object_class)
+      end
+    end
+  end
 end

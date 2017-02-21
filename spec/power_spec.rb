@@ -1,7 +1,4 @@
 require './models/power'
-require './models/factory'
-
-include Factory
 
 describe Power do
   describe '#initialize/new' do

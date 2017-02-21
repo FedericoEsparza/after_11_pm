@@ -1,9 +1,8 @@
 require './models/factory'
-require './models/numerals'
 
 include Factory
 
-class Addition
+class Sine
   attr_accessor :args
 
   def initialize(*args)
@@ -12,6 +11,14 @@ class Addition
     else
       @args = args
     end
+  end
+
+  def angle
+    args[0]
+  end
+
+  def angle=(value)
+    self.args[0] = value
   end
 
   def ==(exp)
@@ -26,31 +33,18 @@ class Addition
         r << e.copy
       end
     end
-    add(new_args)
-  end
-
-  def evaluate
-    args.inject(0){ |r, arg|
-      arg = arg.is_a?(Numeral) ? arg.value : arg
-      r + arg
-    }
+    sin(new_args)
   end
 
   def evaluate_numeral
-    args.inject(0){|r,e| r + e}
+    rad = angle.to_f / 180 * (Math::PI)
+    Math.sin(rad).round(5)
   end
 
   def reverse_step(rs)
     result = {}
-    if args[0].is_a?(integer)
-      result[:ls] = args[1]
-      result[:rs] = sbt(rs,args[0])
-      return result
-    end
-    if args[1].is_a?(integer)
-      result[:ls] = args[0]
-      result[:rs] = sbt(rs,args[1])
-      return result
-    end
+    result[:ls] = args[0]
+    result[:rs] = arcsin(rs)
+    result
   end
 end

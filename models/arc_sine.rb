@@ -2,7 +2,7 @@ require './models/factory'
 
 include Factory
 
-class Division
+class ArcSine
   attr_accessor :args
 
   def initialize(*args)
@@ -13,20 +13,12 @@ class Division
     end
   end
 
-  def top
+  def value
     args[0]
   end
 
-  def top=(value)
-    self.args[0] = value
-  end
-
-  def bot
-    args[1]
-  end
-
-  def bot=(value)
-    self.args[1] = value
+  def value=(val)
+    self.args[0] = val
   end
 
   def ==(exp)
@@ -41,25 +33,12 @@ class Division
         r << e.copy
       end
     end
-    div(new_args)
+    arcsin(new_args)
   end
 
   def evaluate_numeral
-    args[0]/args[1]
+    rad = Math.asin(value)
+    degree = rad / (Math::PI) * 180
+    degree.round(5)
   end
-
-  def reverse_step(rs)
-    result = {}
-    if args[0].is_a?(integer)
-      result[:ls] = args[1]
-      result[:rs] = div(args[0],rs)
-      return result
-    end
-    if args[1].is_a?(integer)
-      result[:ls] = args[0]
-      result[:rs] = mtp(rs,args[1])
-      return result
-    end
-  end
-
 end

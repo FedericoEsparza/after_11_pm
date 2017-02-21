@@ -1,3 +1,10 @@
+require './models/factory'
+require './models/multiplication'
+require './models/subtraction'
+require './models/division'
+
+include Factory
+
 class Equation
   attr_accessor :ls, :rs
 
@@ -7,12 +14,12 @@ class Equation
   end
 
   def copy
-    if ls.is_a?(string) || ls.is_a?(integer)
+    if ls.is_a?(string) || numerical?(ls)
       left_side = ls
     else
       left_side = ls.copy
     end
-    if rs.is_a?(string) || rs.is_a?(integer)
+    if rs.is_a?(string) || numerical?(rs)
       right_side = rs
     else
       right_side = rs.copy
@@ -29,7 +36,7 @@ class Equation
     #reverse the outer most expression until 'x' is left
     curr_steps = [self.copy]
     i = 1
-    while (ls.is_a?(string) && rs.is_a?(integer)) == false && i < 100 do
+    while (ls.is_a?(string) && numerical?(rs)) == false && i < 100 do
       reverse_last_step(curr_steps)
       evaluate_right_side(curr_steps)
       i += 1

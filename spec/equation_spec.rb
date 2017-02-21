@@ -1,13 +1,4 @@
 require './models/equation'
-require './models/factory'
-require './models/class_names'
-require './models/addition'
-require './models/subtraction'
-require './models/multiplication'
-require './models/division'
-require './lib/array'
-
-include Factory
 
 describe Equation do
   describe '#initialize' do

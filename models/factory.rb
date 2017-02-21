@@ -1,3 +1,9 @@
+require './models/types'
+require './models/class_names'
+
+include ClassName
+include Types
+
 module Factory
   def add(*args)
     Addition.new(*args)
@@ -18,7 +24,7 @@ module Factory
   def num(n)
     Numeral.new(n)
   end
-  
+
   def eqn(ls,rs)
     Equation.new(ls,rs)
   end
@@ -29,5 +35,17 @@ module Factory
 
   def sbt(*args)
     Subtraction.new(*args)
+  end
+
+  def sin(*args)
+    Sine.new(*args)
+  end
+
+  def arcsin(*args)
+    ArcSine.new(*args)
+  end
+
+  def sin_eqn(ls,rs,options={ans_min:0,ans_max:360})
+    SineEquation.new(ls,rs,options)
   end
 end
