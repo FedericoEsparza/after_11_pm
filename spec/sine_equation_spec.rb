@@ -30,6 +30,9 @@ describe SineEquation do
         eqn('x',sbt(180,30)),
         eqn('x',150)
       ]
+      expect(result[:set_1_period]).to eq 180
+      expect(result[:set_2_period]).to eq 180
+      expect(result[:solutions]).to eq [30,210,150,330]
     end
 
     it 'solves sin(2x-10) = 0.5 for values between 0 and 360 degrees' do
