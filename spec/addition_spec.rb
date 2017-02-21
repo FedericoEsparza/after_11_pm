@@ -46,26 +46,42 @@ describe Addition do
   # end
   # end
 
+  # describe '#same_elements' do
+  #
+  #   it 'does powers'do
+  #     a1 = [pow('x',2)]
+  #     a2 = [pow('x',2)]
+  #     result = same_elements?(a1,a2)
+  #     expect(result).to eq true
+  #   end
+  #
+  # end
+
   describe '#simplify_add_m_forms' do
 
-    it '#simplifies 3xy+2xy+xyz'do
-    addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
-    result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
-    end
+    # it '#simplifies 3xy+2xy+xyz'do
+    # addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
+    # result = addition.simplify_add_m_forms
+    # expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
+    # end
+    #
+    # it '#simplifies 3xy+yx+x^2' do
+    # addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
+    # result = addition.simplify_add_m_forms
+    # expect(result).to eq add(mtp(4,'x','y'),mtp(pow('x',2)))
+    # end
+    #
+    # it '#simplifies x^2 + xy + yx + y^2' do
+    # addition = add(mtp(pow('x',2)),mtp('x','y'),mtp('y','x'),mtp(pow('y',2)))
+    # result = addition.simplify_add_m_forms
+    # expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
+    # end
 
-    it '#simplifies 3xy+yx+x^2' do
-    addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
-    result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(4,'x','y'),mtp(pow('x',2)))
+    it '#simplifies x^2 + x^2 + y^2' do
+      addition = add(mtp(pow('x',2)),mtp(pow('x',2)),mtp(pow('y',2)))
+      result = addition.simplify_add_m_forms
+      expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
     end
-
-    it '#simplifies x^2 + xy + yx + y^2' do
-    addition = add(mtp(pow('x',2)),mtp('x','y'),mtp('y','x'),mtp(pow('y',2)))
-    result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
-    end
-
 
   end
 

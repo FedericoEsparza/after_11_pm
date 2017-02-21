@@ -53,6 +53,7 @@ class Addition < Expression
         result << a
       end
     end
+    puts result
     result
   end
 
