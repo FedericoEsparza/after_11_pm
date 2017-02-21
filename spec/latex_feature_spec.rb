@@ -72,7 +72,7 @@ feature '#latex' do
   end
 
   context 'two_steps' do
-    context 'add first' do
+    context 'addition first' do
       scenario '' do
         exp = add(add(2,'x'),3)
         expect(exp.latex).to eq '2+x+3'
@@ -111,6 +111,48 @@ feature '#latex' do
       scenario '' do
         exp = add(3,div(2,'x'))
         expect(exp.latex).to eq '3+\displaystyle\frac{2}{x}'
+      end
+    end
+
+    context 'subtraction first' do
+      scenario '' do
+        exp = sbt(add(2,'x'),3)
+        expect(exp.latex).to eq '2+x-3'
+      end
+
+      scenario '' do
+        exp = sbt(2,add('x',3))
+        expect(exp.latex).to eq '2-\left(x+3\right)'
+      end
+
+      scenario '' do
+        exp = sbt(sbt('x',2),3)
+        expect(exp.latex).to eq 'x-2-3'
+      end
+
+      scenario '' do
+        exp = sbt(2,sbt('x',3))
+        expect(exp.latex).to eq '2-\left(x-3\right)'
+      end
+
+      scenario '' do
+        exp = sbt(mtp(2,'x'),3)
+        expect(exp.latex).to eq '2x-3'
+      end
+
+      scenario '' do
+        exp = sbt(3,mtp(2,'x'))
+        expect(exp.latex).to eq '3-2x'
+      end
+
+      scenario '' do
+        exp = sbt(div('x',2),3)
+        expect(exp.latex).to eq '\displaystyle\frac{x}{2}-3'
+      end
+
+      scenario '' do
+        exp = sbt(3,div(2,'x'))
+        expect(exp.latex).to eq '3-\displaystyle\frac{2}{x}'
       end
     end
 
