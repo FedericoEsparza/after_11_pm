@@ -30,4 +30,8 @@ module ClassName
   def sine
     Sine
   end
+
+  def cosine
+    Cosine
+  end
 end

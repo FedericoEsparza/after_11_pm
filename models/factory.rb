@@ -41,6 +41,10 @@ module Factory
     Sine.new(*args)
   end
 
+  def cos(*args)
+    Cosine.new(*args)
+  end
+
   def arcsin(*args)
     ArcSine.new(*args)
   end
