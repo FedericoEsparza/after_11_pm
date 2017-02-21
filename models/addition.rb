@@ -21,6 +21,11 @@ class Addition < Expression
     args.length != 0
   end
 
+  def same_coef?
+
+  end
+
+
   def collect_next_exp
     first_factor = args.first.args
     count = 0
@@ -40,32 +45,61 @@ class Addition < Expression
   end
 
   def select_variables
-    args.select { |arg| arg.is_a?(Variable) }
+    result = []
+    args.each do |a|
+      result << a.remove_coef.sort
+    end
+    result.uniq
   end
 
-  def select_numerals
-    args.select { |arg| arg.is_a?(Numearl) }
-  end
+  # def select_numerals
+  #   args.select { |arg| is_number?(arg) }
+  # end
 
   def simplify_add_m_forms
     copy = self.copy
-    first_factor = copy.args.first
-    variables = first_factor.select_variables
-    factors = copy.uniq
-
-    matched_obj = copy.args.select do |f|
-                    f.args.select_variables == variables
-                  end
-
-    coeffients = []
-    matched_obj.each do |obj|
-      numerals = obj.args.select { |arg| arg.is_a?(Numeral) }
-      numerals = 1 if numerals.empty?
-      coeffients << numerals
+    factors = copy.select_variables
+    results = []
+    factors.each do |factor|
+      count = 0
+      for i in 0..copy.args.length-1
+        if copy.args[i].remove_coef.sort == factor.sort
+          count = count + copy.args[i].remove_exp
+        end
+      end
+      if count != 0
+        if count == 1
+          new_mtp_args = []
+        else
+          new_mtp_args = [count]
+        end
+        factor.each{|a| new_mtp_args << a}
+        new_mtp = mtp(new_mtp_args)
+        results << new_mtp
+      end
     end
-    coeffients = coeffients.flatten
-    mtp_options = [add(coeffients), variables].flatten
-    mtp(mtp_options)
+    add(results)
   end
+
+  # def simplify_add_m_forms
+  #   copy = self.copy
+  #   first_factor = copy.args.first
+  #   variables = first_factor.select_variables
+  #   factors = copy.uniq
+  #
+  #   matched_obj = copy.args.select do |f|
+  #                   f.args.select_variables == variables
+  #                 end
+  #
+  #   coeffients = []
+  #   matched_obj.each do |obj|
+  #     numerals = obj.args.select { |arg| arg.is_a?(Numeral) }
+  #     numerals = 1 if numerals.empty?
+  #     coeffients << numerals
+  #   end
+  #   coeffients = coeffients.flatten
+  #   mtp_options = [add(coeffients), variables].flatten
+  #   mtp(mtp_options)
+  # end
 
 end

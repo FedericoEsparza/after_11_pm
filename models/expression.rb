@@ -26,6 +26,10 @@ class Expression
     args.select { |arg| arg.is_a?(Variable) }
   end
 
+  def is_number?(num)
+    num.is_a?(Numeral) || num.is_a?(Numeric)
+  end
+
   def select_numerals
     args.select { |arg| arg.is_a?(Numearl) }
   end

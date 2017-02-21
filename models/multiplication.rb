@@ -154,6 +154,26 @@ class Multiplication < Expression
     args.length != 0
   end
 
+  def remove_coef
+    result = []
+    args.each do |a|
+      if !(is_number?(a))
+        if a.is_a?(Variable)
+          result << a.name
+        else
+          result << a
+        end
+      end
+    end
+    result
+  end
+
+  def remove_exp
+    result = []
+    args.each {|a| result << a if is_number?(a)}
+    result.inject(1, :*)
+  end
+
   def delete_empty_args
     i = 1
     while i <= args.length do
@@ -184,33 +204,57 @@ class Multiplication < Expression
     args
   end
 #
+  # def simplify_product_of_m_forms
+  #   copy = self.copy
+  #   copy.standardize_args(true)
+  #   copy.separate_variables
+  #   variables_separated = copy
+  #   new_args = []
+  #   i = 0
+  #   # p variables_separated
+  #   while i < variables_separated.args.length && i <=100 do
+  #     new_args << variables_separated.args[i].combine_powers
+  #     i += 1
+  #   end
+  #   # p "================="
+  #   new_args = new_args.equalise_array_lengths
+  #   new_args = new_args.transpose
+  #   i = 0
+  #   steps = []
+  #   while i < new_args.length
+  #     steps << mtp(new_args[i])
+  #     i += 1
+  #   end
+  #   steps.insert(0,self.copy)
+  #   steps = delete_duplicate_steps(steps)
+  #   self.args = steps[-1].args
+  #   steps.each {|a| a.delete_nils}
+  #   steps
+  # end
+
   def simplify_product_of_m_forms
-    copy = self.copy
-    copy.standardize_args(true)
-    copy.separate_variables
-    variables_separated = copy
-    new_args = []
-    i = 0
-    # p variables_separated
-    while i < variables_separated.args.length && i <=100 do
-      new_args << variables_separated.args[i].combine_powers
-      i += 1
-    end
-    # p "================="
-    new_args = new_args.equalise_array_lengths
-    new_args = new_args.transpose
-    i = 0
-    steps = []
-    while i < new_args.length
-      steps << mtp(new_args[i])
-      i += 1
-    end
-    steps.insert(0,self.copy)
-    steps = delete_duplicate_steps(steps)
-    self.args = steps[-1].args
-    steps.each {|a| a.delete_nils}
-    steps
-  end
+   copy = self.copy
+   copy.separate_variables
+   variables_separated = copy
+   new_args = []
+   i = 0
+   while i < variables_separated.args.length && i <=100 do
+     new_args << variables_separated.args[i].combine_powers
+     i += 1
+   end
+   new_args = new_args.equalise_array_lengths
+   new_args = new_args.transpose
+   i = 0
+   steps = []
+   while i < new_args.length
+     steps << mtp(new_args[i])
+     i += 1
+   end
+   steps.insert(0,self.copy)
+   self.args = steps[-1].args
+   steps
+ end
+
 
   def collect_next_variables
     if args.first.is_a?(Variable)
