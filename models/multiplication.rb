@@ -5,7 +5,9 @@ require './models/factory'
 require './models/numerals'
 require './models/power'
 require './models/addition'
+require './models/latex_utilities'
 
+include LatexUtilities
 include Factory
 include Types
 
@@ -330,7 +332,10 @@ class Multiplication
   def latex
     result = args.first.latex
     for i in 1..args.length - 1
-      if numerical?(args[i])
+      if args[i-1].is_a?(addition)
+        result = brackets(result)
+      end
+      if numerical?(args[i-1]) && numerical?(args[i])
         result += '\times' + args[i].latex
       else
         result += + args[i].latex

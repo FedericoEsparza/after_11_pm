@@ -123,7 +123,7 @@ class Addition < Expression
       if r == ""
         r + e.latex
       else
-        if e.is_a?(subtraction)
+        if e.is_a?(subtraction) || e.is_a?(addition)
           r + '+' + brackets(e.latex)
         else
           r + '+' + e.latex
