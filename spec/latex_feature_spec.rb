@@ -239,6 +239,29 @@ feature '#latex' do
         expect(exp.latex).to eq '\displaystyle\frac{3}{\displaystyle\frac{2}{x}}'
       end
     end
-
   end
+
+  context 'three_step' do
+    scenario '' do
+      exp = add(3,div(2,'x'),mtp(4,sbt('y',5)))
+      expect(exp.latex).to eq '3+\displaystyle\frac{2}{x}+4\left(y-5\right)'
+    end
+
+    scenario '' do
+      exp = sbt(div(mtp(2,'a'),'x'),mtp(add('x',7),5))
+      expect(exp.latex).to eq '\displaystyle\frac{2a}{x}-\left(x+7\right)5'
+    end
+
+    scenario '' do
+      exp = mtp(add(3,sbt(2,'a'),'x'),mtp(mtp('x',7),'y'))
+      expect(exp.latex).to eq '\left(3+\left(2-a\right)+x\right)\left(\left(x7\right)y\right)'
+    end
+
+    scenario '' do
+      exp = div(mtp('x',add(4,'a','b')),sbt(11,mtp('y','z')))
+      expect(exp.latex).to eq "\\displaystyle\\frac{x\\left(4+a+b\\right)}{11-"\
+        "yz}"
+    end
+  end
+
 end
