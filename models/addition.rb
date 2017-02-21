@@ -2,7 +2,9 @@ require './models/expression'
 require './models/multiplication'
 require './models/factory'
 require './models/numerals'
+require './models/latex_utilities'
 
+include LatexUtilities
 include Factory
 
 class Addition < Expression
@@ -114,5 +116,17 @@ class Addition < Expression
       result[:rs] = sbt(rs,args[1])
       return result
     end
+  end
+
+  def latex
+    result = args.first.latex
+    for i in 1..args.length - 1
+      if args[i].is_a?(subtraction) || args[i].is_a?(addition)
+        result += '+' + brackets(args[i].latex)
+      else
+        result += '+' + args[i].latex
+      end
+    end
+    result
   end
 end

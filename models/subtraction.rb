@@ -1,6 +1,8 @@
 require './models/factory'
 require './models/numerals'
+require './models/latex_utilities'
 
+include LatexUtilities
 include Factory
 
 class Subtraction
@@ -77,6 +79,14 @@ class Subtraction
       else
         return arg if arg.is_a?(object_class)
       end
+    end
+  end
+
+  def latex
+    if subend.is_a?(addition) || subend.is_a?(subtraction)
+      minuend.latex + '-' + brackets(subend.latex)
+    else
+      minuend.latex + '-' + subend.latex
     end
   end
 
