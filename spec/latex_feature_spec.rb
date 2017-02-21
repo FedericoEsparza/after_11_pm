@@ -155,5 +155,48 @@ feature '#latex' do
         expect(exp.latex).to eq '3\left(\displaystyle\frac{2}{x}\right)'
       end
     end
+
+    context 'division first' do
+      scenario '' do
+        exp = div(add(2,'x'),3)
+        expect(exp.latex).to eq '\displaystyle\frac{2+x}{3}'
+      end
+
+      scenario '' do
+        exp = div(3,add(2,'x'))
+        expect(exp.latex).to eq '\displaystyle\frac{3}{2+x}'
+      end
+
+      scenario '' do
+        exp = div(sbt(2,'x'),3)
+        expect(exp.latex).to eq '\displaystyle\frac{2-x}{3}'
+      end
+
+      scenario '' do
+        exp = div(3,sbt(2,'x'))
+        expect(exp.latex).to eq '\displaystyle\frac{3}{2-x}'
+      end
+
+      scenario '' do
+        exp = div(mtp(2,'x'),3)
+        expect(exp.latex).to eq '\displaystyle\frac{2x}{3}'
+      end
+
+      scenario '' do
+        exp = div(3,mtp(2,'x'))
+        expect(exp.latex).to eq '\displaystyle\frac{3}{2x}'
+      end
+
+      scenario '' do
+        exp = div(div(2,'x'),3)
+        expect(exp.latex).to eq '\displaystyle\frac{\displaystyle\frac{2}{x}}{3}'
+      end
+
+      scenario '' do
+        exp = div(3,div(2,'x'))
+        expect(exp.latex).to eq '\displaystyle\frac{3}{\displaystyle\frac{2}{x}}'
+      end
+    end
+
   end
 end
