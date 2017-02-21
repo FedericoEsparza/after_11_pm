@@ -1,3 +1,7 @@
+require './models/factory'
+
+include Factory
+
 class Division
   attr_accessor :args
 

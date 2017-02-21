@@ -1,7 +1,4 @@
 require './models/sine_equation'
-require './models/factory'
-
-include Factory
 
 describe SineEquation do
   describe '#initialize' do

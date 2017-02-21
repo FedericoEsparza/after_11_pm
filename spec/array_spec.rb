@@ -1,4 +1,3 @@
-require './models/class_names'
 require './lib/array'
 
 describe Array do
@@ -16,24 +15,4 @@ describe Array do
       expect(test_a.transpose).to eq [[1,4,7],[2,5,8],[3,6,9]]
     end
   end
-
-
-  #
-  # describe '#simplify' do
-  #   it 'simplifies 2x * 3x' do
-  #     exp = mtp(mtp(2,'x'),mtp(3,'x'))
-  #     # expect(exp.simplify).to eq mtp(6,mtp('x','x'))
-  #     expect(exp.simplify).to eq mtp(6,'x','x')
-  #   end
-  # end
-  #
-  # describe '#collect_same_base' do
-  #   it 'collects powers of the same base while deleting them from self' do
-  #     exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
-  #     result = exp.collect_same_base('x')
-  #     expect(exp).to eq mtp(mtp(pow('y',3)),mtp(pow('y',5)))
-  #     expect(result).to eq [pow('x',2),pow('x',4)]
-  #   end
-  # end
-
 end

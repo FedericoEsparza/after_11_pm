@@ -1,6 +1,6 @@
-# require './models/factory'
-#
-# include Factory
+require './models/factory'
+
+include Factory
 
 class ArcSine
   attr_accessor :args
@@ -41,3 +41,5 @@ class ArcSine
     rad / (Math::PI) * 180
   end
 end
+
+p arcsin(12)

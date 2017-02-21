@@ -1,5 +1,4 @@
 require './models/subtraction'
-require './models/factory'
 
 describe Subtraction do
   describe '#initialize' do

@@ -1,10 +1,12 @@
 require 'deep_clone'
-require './models/class_names'
 require './lib/array'
 require './models/variables'
+require './models/factory'
 require './models/numerals'
+require './models/power'
+require './models/addition'
 
-include ClassName
+include Factory
 
 class Multiplication
   attr_accessor :args

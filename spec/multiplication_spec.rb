@@ -1,11 +1,4 @@
 require './models/multiplication'
-require './models/power'
-require './models/addition'
-require './models/variables'
-require './models/numerals'
-require './models/factory'
-
-include Factory
 
 describe Multiplication do
   describe '#initialize/new' do

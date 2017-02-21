@@ -1,7 +1,4 @@
 require './models/sine'
-require './models/factory'
-
-include Factory
 
 describe Sine do
   describe '#initialize' do

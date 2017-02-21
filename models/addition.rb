@@ -1,4 +1,5 @@
 require './models/factory'
+require './models/numerals'
 
 include Factory
 

@@ -1,3 +1,8 @@
+require './models/factory'
+require './models/numerals'
+
+include Factory
+
 class Power
   attr_accessor :args
 

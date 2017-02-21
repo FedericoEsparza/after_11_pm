@@ -1,7 +1,4 @@
 require './models/arc_sine'
-require './models/factory'
-
-include Factory
 
 describe ArcSine do
   describe '#initialize' do

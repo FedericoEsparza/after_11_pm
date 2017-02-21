@@ -1,6 +1,9 @@
-# require './models/factory'
-#
-# include Factory
+require './models/factory'
+require './models/multiplication'
+require './models/subtraction'
+require './models/division'
+
+include Factory
 
 class Equation
   attr_accessor :ls, :rs

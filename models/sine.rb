@@ -1,3 +1,7 @@
+require './models/factory'
+
+include Factory
+
 class Sine
   attr_accessor :args
 

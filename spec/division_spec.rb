@@ -1,5 +1,4 @@
 require './models/division'
-require './models/factory'
 
 describe Division do
   describe '#initialize' do
