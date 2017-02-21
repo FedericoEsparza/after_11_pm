@@ -1,3 +1,5 @@
+require './models/sine'
+require './models/arc_sine'
 require './models/equation'
 require './models/factory'
 

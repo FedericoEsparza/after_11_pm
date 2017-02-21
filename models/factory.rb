@@ -1,14 +1,5 @@
 require './models/types'
 require './models/class_names'
-# require './lib/array'
-# require './models/addition'
-# require './models/subtraction'
-# require './models/division'
-# require './models/multiplication'
-# require './models/sine'
-# require './models/arc_sine'
-# require './models/numerals'
-# require './models/variables'
 
 include ClassName
 include Types
