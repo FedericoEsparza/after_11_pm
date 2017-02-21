@@ -80,4 +80,8 @@ class Subtraction
     end
   end
 
+  def latex
+    minuend.latex + '-' + subend.latex
+  end
+
 end

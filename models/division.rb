@@ -62,4 +62,8 @@ class Division
     end
   end
 
+  def latex
+    '\displaystyle\frac{' + top.latex + '}{' + bot.latex + '}'
+  end
+
 end
