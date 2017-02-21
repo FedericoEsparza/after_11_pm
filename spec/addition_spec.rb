@@ -38,6 +38,14 @@ describe Addition do
     end
   end
 
+  # describe '#remove_coef' do
+  #   it 'removes 3 from 3xy' do
+  #   addition = mtp(3,'x','y',4)
+  #   result = addition.remove_coef
+  #   expect(result).to eq mtp('x','y')
+  # end
+  # end
+
   describe '#simplify_add_m_forms' do
 
     it '#simplifies 3xy+2xy+xyz'do

@@ -22,6 +22,10 @@ class Expression
     end
   end
 
+  def same_elements?(a1,a2)
+    a1.to_set === a2.to_set
+  end
+
   def select_variables
     args.select { |arg| arg.is_a?(Variable) }
   end

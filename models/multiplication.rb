@@ -409,6 +409,18 @@ require './models/expression'
 class Multiplication
   attr_accessor :args
 
+  def standardize_m_form
+    new_args = []
+    args.each do |m|
+      if m.is_a?(Multiplication)
+        new_args << m
+      else
+        new_args << mtp(m)
+      end
+    end
+    mtp(new_args)
+  end
+
   def initialize(*args)
     if args.length == 1 && args[0].class == Array
       @args = args.first
@@ -617,4 +629,44 @@ class Multiplication
     steps.each {|a| a.delete_nils}
     steps
   end
+
+  def remove_coef
+    result = []
+    args.each {|a| result << a if !(a.is_a?(Numeric))}
+    result
+  end
+
+  def remove_exp
+    result = []
+    args.each {|a| result << a if a.is_a?(Numeric)}
+    result.inject(1, :*)
+  end
+
+  def combine_two_brackets
+    copy = self.copy
+    new_args = []
+    copy.args.first.args.each_with_index do |a|
+      copy.args.last.args.each_with_index do |b|
+        c = mtp(a,b)
+        new_args << c
+        end
+    end
+    new_args
+    new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+    new_args.equalise_array_lengths
+    new_add = []
+    new_args.first.each_with_index do |a,i|
+      c = []
+      new_args.each_with_index do |b,j|
+        c << new_args[j][i]
+      end
+      new_add << add(c)
+    end
+    new_add
+    result = new_add.last
+    result = result.simplify_add_m_forms
+    result
+  end
+
+
 end

@@ -210,6 +210,12 @@ describe Multiplication do
       #  ]
      end
 
+     it 'separates (x^2)(3x)(4xy)' do
+       exp = mtp(mtp(pow('x',2)),mtp(3,'x'),mtp(4,'x','y'))
+       result = exp.separate_variables
+       expect(exp).to eq mtp(mtp(pow('x',2),'x','x'),mtp(3,4),mtp('y'))
+     end
+
    end
 
    describe '#eval_numerics' do
@@ -271,6 +277,44 @@ describe Multiplication do
          mtp(6,'y')
        ]
      end
+   end
+
+   describe '#standardize m form' do
+     it 'turns m(x,m(xy)) to m(m(x)m(xy))' do
+       exp = mtp('x',mtp('x','y'))
+       result = exp.standardize_m_form
+       expect(result).to eq mtp(mtp('x'),mtp('x','y'))
+     end
+
+     it 'turns m(x^2,y^3,m(x^2y))' do
+       exp = mtp(pow('x',2),pow('y',3),mtp(pow('x',2),'y'))
+       result = exp.standardize_m_form
+        expect(result).to eq mtp(mtp(pow('x',2)),mtp(pow('y',3)),mtp(pow('x',2),'y'))
+     end
+
+   end
+
+
+   describe '#combine_two_brackets' do
+
+     it 'combines (x+y)(x+y)' do
+       exp = mtp(add('x','y'),add('x','y'))
+       result = exp.combine_two_brackets
+       expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
+     end
+
+     it 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
+      exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
+      result = exp.combine_two_brackets
+      expect(result).to eq add(mtp(15,pow('x',3),pow('y',7)),mtp(18,pow('x',5),'y'),mtp(-20,pow('x',4),pow('y',9)),mtp(-24,pow('x',6),pow('y',3)))
+     end
+
+     it 'combines (x^2 + 2xy + y^2)(x+y)' do
+       exp = mtp(add(pow('x',2),mtp(2,'x','y'),pow('y',2)),add('x','y'))
+       result = exp.combine_two_brackets
+       expect(result).to eq add(mtp(pow('x',3)),mtp(3,pow('x',2),'y'),mtp(3,'x',pow('y',2)),mtp(pow('y',3)))
+     end
+
    end
 
 

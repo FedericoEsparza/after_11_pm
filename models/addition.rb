@@ -12,7 +12,6 @@ class Addition < Expression
 
   def evaluate
     args.inject(0){ |r, arg|
-      arg = arg.is_a?(Numeral) ? arg.value : arg
       r + arg
     }
   end
@@ -47,9 +46,14 @@ class Addition < Expression
   def select_variables
     result = []
     args.each do |a|
-      result << a.remove_coef.sort
+      a = a.remove_coef
+      unique = 1
+      result.each {|b| unique = 0 if same_elements?(a,b)}
+      if unique == 1
+        result << a
+      end
     end
-    result.uniq
+    result
   end
 
   # def select_numerals
@@ -63,7 +67,7 @@ class Addition < Expression
     factors.each do |factor|
       count = 0
       for i in 0..copy.args.length-1
-        if copy.args[i].remove_coef.sort == factor.sort
+        if same_elements?(copy.args[i].remove_coef,factor)
           count = count + copy.args[i].remove_exp
         end
       end
