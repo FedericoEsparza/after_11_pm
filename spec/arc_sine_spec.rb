@@ -31,7 +31,7 @@ describe ArcSine do
     end
 
     it 'evaluates arcsin(0.7)' do
-      expect(arcsin(0.7).evaluate_numeral).to eq 44.4270040008057
+      expect(arcsin(0.7).evaluate_numeral).to eq 44.427
     end
   end
 end

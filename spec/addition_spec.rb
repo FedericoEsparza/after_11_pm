@@ -31,13 +31,13 @@ describe Addition do
     end
   end
 
-  describe '#remove_exp' do
-    it 'removes xy from 3xy' do
-      addition = add(mtp(3,'x','y',4),mtp('x','y','z'))
-      result = addition.args[0].remove_exp
-      expect(result).to eq 12
-    end
-  end
+  # describe '#remove_exp' do
+  #   it 'removes xy from 3xy' do
+  #     addition = add(mtp(3,'x','y',4),mtp('x','y','z'))
+  #     result = addition.args[0].remove_exp
+  #     expect(result).to eq 12
+  #   end
+  # end
 
   # describe '#remove_coef' do
   #   it 'removes 3 from 3xy' do
@@ -48,11 +48,10 @@ describe Addition do
   # end
 
   describe '#simplify_add_m_forms' do
-
-    it '#simplifies 3xy+2xy+xyz'do
-    addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
-    result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
+    it '#simplifies 3xy+2xy+xyz' do
+      addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
+      result = addition.simplify_add_m_forms
+      expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
     end
 
     it '#simplifies 3xy+yx+x^2' do
@@ -66,8 +65,6 @@ describe Addition do
     result = addition.simplify_add_m_forms
     expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
     end
-
-
   end
 
 end

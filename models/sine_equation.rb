@@ -50,8 +50,8 @@ class SineEquation
   def equation_solutions(set_1:, set_2:, period:)
     result_1 = []
     result_2 = []
-    upper_limit = options[:ans_max].dup
-    lower_limit = options[:ans_min].dup
+    upper_limit = options[:ans_max]
+    lower_limit = options[:ans_min]
     range = upper_limit - lower_limit
     max = (range / period).abs + 1
     i = 0

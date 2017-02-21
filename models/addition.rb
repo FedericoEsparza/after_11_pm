@@ -1,10 +1,11 @@
-
+require './models/expression'
+require './models/multiplication'
 require './models/factory'
 require './models/numerals'
 
 include Factory
 
-class Addition
+class Addition < Expression
   attr_accessor :args
 
   def initialize(*args)
@@ -41,11 +42,6 @@ class Addition
     args.length != 0
   end
 
-  def same_coef?
-
-  end
-
-
   def collect_next_exp
     first_factor = args.first.args
     count = 0
@@ -77,10 +73,6 @@ class Addition
     result
   end
 
-  # def select_numerals
-  #   args.select { |arg| is_number?(arg) }
-  # end
-
   def simplify_add_m_forms
     copy = self.copy
     factors = copy.select_variables
@@ -105,27 +97,6 @@ class Addition
     end
     add(results)
   end
-
-  # def simplify_add_m_forms
-  #   copy = self.copy
-  #   first_factor = copy.args.first
-  #   variables = first_factor.select_variables
-  #   factors = copy.uniq
-  #
-  #   matched_obj = copy.args.select do |f|
-  #                   f.args.select_variables == variables
-  #                 end
-  #
-  #   coeffients = []
-  #   matched_obj.each do |obj|
-  #     numerals = obj.args.select { |arg| arg.is_a?(Numeral) }
-  #     numerals = 1 if numerals.empty?
-  #     coeffients << numerals
-  #   end
-  #   coeffients = coeffients.flatten
-  #   mtp_options = [add(coeffients), variables].flatten
-  #   mtp(mtp_options)
-  # end
 
   def evaluate_numeral
     args.inject(0){|r,e| r + e}
