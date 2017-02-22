@@ -61,27 +61,29 @@ class TangentEquation
   end
 
   def equation_solutions(set_1:, period:)
-    result_1 = []
-    upper_limit = options[:ans_max].dup
-    lower_limit = options[:ans_min].dup
-    range = upper_limit - lower_limit
-    max = (range / period).abs + 1
-    i = 0
+    solution = set_1.rs
+    upper_limit = options[:ans_max]
+    lower_limit = options[:ans_min]
+    range = upper_limit.abs + lower_limit.abs
+    max = (range / period).abs.floor + 1
+    response = []
 
-    while i < max
-      if upper_limit.negative?
-        sol_1 = (-period * i) + set_1.rs
+    if max == 1
+      response << solution
+    else
+      i = 0
+      while i < max
+        sol = (upper_limit - (period * i)) + solution
 
-        result_1 << sol_1 unless sol_1 < upper_limit || sol_1.positive?
-      else
-        sol_1 = (period * i) + set_1.rs
-
-        result_1 << sol_1 unless sol_1 > upper_limit || sol_1.negative?
+        response << sol if within_limits?(sol)
+        i += 1
       end
-
-      i += 1
     end
 
-    solution = result_1
+    response.sort
+  end
+
+  def within_limits?(solution)
+    solution <= options[:ans_max] && solution >= options[:ans_min]
   end
 end

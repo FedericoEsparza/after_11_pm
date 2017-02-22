@@ -48,33 +48,32 @@ class SineEquation
   end
 
   def equation_solutions(set_1:, set_2:, period:)
-    result_1 = []
-    result_2 = []
+    solutions_array = [set_1.rs, set_2.rs]
     upper_limit = options[:ans_max]
     lower_limit = options[:ans_min]
     range = upper_limit.abs + lower_limit.abs
-    max = (range / period).abs + 1
-    i = 0
+    max = (range / period).abs.floor + 1
+    response = []
 
-    while i < max
-      if range.negative?
-        sol_1 = (-period * i) + set_1.rs
-        sol_2 = (-period * i) + set_2.rs
+    solutions_array.each do |solution|
+      result = []
 
-        result_1 << sol_1 if within_limits?(sol_1) && sol_1.negative?
-        result_2 << sol_2 if within_limits?(sol_2) && sol_2.negative?
+      if max == 1
+        result << solution
       else
-        sol_1 = (period * i) + set_1.rs
-        sol_2 = (period * i) + set_2.rs
+        i = 0
+        while i < max
+          sol = (upper_limit - (period * i)) + solution
 
-        result_1 << sol_1 if within_limits?(sol_1) && sol_1.positive?
-        result_2 << sol_2 if within_limits?(sol_2) && sol_2.positive?
+          result << sol if within_limits?(sol)
+          i += 1
+        end
       end
 
-      i += 1
+      response += result.sort
     end
 
-    solution = result_1 + result_2
+    response
   end
 
   def within_limits?(solution)

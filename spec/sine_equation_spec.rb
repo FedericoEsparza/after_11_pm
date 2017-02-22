@@ -187,7 +187,7 @@ describe SineEquation do
       result = eqn.equation_solutions(set_1: eqn('x', 15),
                                       set_2: eqn('x', 75),
                                       period: 180 )
-      response = [-165, -345, -105, -285]
+      response = [-345, -165, -285, -105]
       expect(result).to eq response
     end
 
@@ -196,7 +196,7 @@ describe SineEquation do
       result = eqn.equation_solutions(set_1: eqn('x', 15),
                                       set_2: eqn('x', 75),
                                       period: 180 )
-      response = [-165, -345, -105, -285]
+      response = [-345, -165, 15, 195, -285, -105, 75, 255]
       expect(result).to eq response
     end
   end
