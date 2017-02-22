@@ -76,4 +76,8 @@ module Factory
   def frac(numerator, denominator, sign: :+)
     Fraction.new(numerator: numerator, denominator: denominator, sign: sign)
   end
+
+  def sqrt(value, sign: :+)
+    SquareRoot.new(value: value, sign: sign)
+  end
 end
