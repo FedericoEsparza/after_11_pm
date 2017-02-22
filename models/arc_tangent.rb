@@ -38,7 +38,8 @@ class ArcTangent
   end
 
   def evaluate_numeral
-    rad = Math.atan(value)
+    val = value.respond_to?(:evaluate_numeral) ? value.evaluate_numeral : value
+    rad = Math.atan(val)
     (rad / (Math::PI) * 180).round(5)
   end
 end

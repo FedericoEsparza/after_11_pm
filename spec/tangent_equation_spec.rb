@@ -1,4 +1,6 @@
 require './models/tangent_equation'
+require './models/square_root'
+require './models/fraction'
 require './models/factory'
 
 include Factory
@@ -6,12 +8,12 @@ include Factory
 describe TangentEquation do
   describe '#solve' do
     it 'solves tan(x) = sqrt(3)/3 for values between 0 and 360 degrees' do
-      eqn = tan_eqn('x',Math.sqrt(3)/3)
+      eqn = tan_eqn('x', frac(sqrt(3), 3))
       result = eqn.solve
       expect(result[:set_1][:steps]).to eq [
-        eqn(tan('x'),Math.sqrt(3)/3),
-        eqn('x',arctan(Math.sqrt(3)/3)),
-        eqn('x',30)
+        eqn(tan('x'),frac(sqrt(3), 3)),
+        eqn('x',arctan(frac(sqrt(3), 3))),
+        eqn('x', 30)
       ]
 
       expect(result[:set_1][:period]).to eq 180
