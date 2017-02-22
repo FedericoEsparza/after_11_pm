@@ -72,4 +72,8 @@ module Factory
   def tan_eqn(ls, rs, options: { ans_min: 0, ans_max: 360 } )
     TangentEquation.new(ls, rs, options: options)
   end
+
+  def frac(numerator, denominator, sign: :+)
+    Fraction.new(numerator: numerator, denominator: denominator, sign: sign)
+  end
 end
