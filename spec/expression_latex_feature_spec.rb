@@ -7,6 +7,8 @@ require './models/fixnum'
 require './models/subtraction'
 require './models/division'
 require './models/multiplication'
+require './models/sine'
+require './models/equation'
 
 #no order switching is allowed!!  so x2 stays x2...for now and a long while
 
@@ -277,6 +279,28 @@ feature '#latex' do
       expect(exp.latex).to eq "\\displaystyle\\frac{3}{7+h+\\displaystyle\\fra"\
         "c{2x}{\\displaystyle\\frac{4+\\displaystyle\\frac{a}{2}}{\\displaysty"\
         "le\\frac{11}{x}-b}-y}}"
+    end
+  end
+
+  context 'sine' do
+    scenario '' do
+      exp = sin('x')
+      expect(exp.latex).to eq '\sin x'
+    end
+
+    scenario '' do
+      exp = sin(mtp(2,'x'))
+      expect(exp.latex).to eq '\sin 2x'
+    end
+
+    scenario '' do
+      exp = sin(sbt(mtp(2,'x'),10))
+      expect(exp.latex).to eq '\sin \left(2x-10\right)'
+    end
+
+    scenario '' do
+      exp = sin(add(mtp(2,'x'),10))
+      expect(exp.latex).to eq '\sin \left(2x+10\right)'
     end
   end
 

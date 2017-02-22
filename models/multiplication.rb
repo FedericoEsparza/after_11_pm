@@ -340,7 +340,7 @@ class Multiplication
       if numerical?(args[i-1]) && numerical?(args[i])
         result += '\times' + arg_i_latex
       else
-        result += + arg_i_latex
+        result += arg_i_latex
       end
     end
     first_part =  result.slice!(0..5)

@@ -22,7 +22,7 @@ describe Factory do
 
     it 'evaluate 2/3 to 0.66667' do
       exp = frac(2, 3)
-      expect(exp.evaluate_numeral).to eq 0.66667
+      expect(exp.evaluate_numeral).to eq 0.6666666666666666
     end
 
     xit 'evaluate sqrt(3)/3 to 0.57735' do
@@ -32,12 +32,12 @@ describe Factory do
 
     it 'evaluate -2/3 to -0.66667' do
       exp = frac(2, 3, sign: :-)
-      expect(exp.evaluate_numeral).to eq -0.66667
+      expect(exp.evaluate_numeral).to eq -0.6666666666666666
     end
 
     it 'evaluate -(-2/3) to 0.66667' do
       exp = frac(-2, 3, sign: :-)
-      expect(exp.evaluate_numeral).to eq 0.66667
+      expect(exp.evaluate_numeral).to eq 0.6666666666666666
     end
   end
 

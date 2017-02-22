@@ -56,4 +56,8 @@ class Equation
     curr_steps << self.copy
   end
 
+  def latex
+    ls.latex + '&=' + rs.latex + '\\\\'
+  end
+
 end
