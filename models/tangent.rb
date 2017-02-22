@@ -2,7 +2,7 @@ require './models/factory'
 
 include Factory
 
-class Cosine
+class Tangent
   attr_accessor :args
 
   def initialize(*args)
@@ -26,25 +26,26 @@ class Cosine
   end
 
   def copy
-    new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || numerical?(e)
-        r << e
-      else
-        r << e.copy
-      end
-    end
-    cos(new_args)
+    DeepClone.clone self
+    # new_args = args.inject([]) do |r,e|
+    #   if e.is_a?(string) || numerical?(e)
+    #     r << e
+    #   else
+    #     r << e.copy
+    #   end
+    # end
+    # tan(new_args)
   end
 
   def evaluate_numeral
     rad = angle.to_f / 180 * (Math::PI)
-    Math.cos(rad).round(5)
+    Math.tan(rad).round(5)
   end
 
   def reverse_step(rs)
     result = {}
     result[:ls] = args[0]
-    result[:rs] = arccos(rs)
+    result[:rs] = arctan(rs)
     result
   end
 end

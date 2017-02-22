@@ -2,7 +2,7 @@ require './models/factory'
 
 include Factory
 
-class Cosine
+class ArcCosine
   attr_accessor :args
 
   def initialize(*args)
@@ -13,12 +13,12 @@ class Cosine
     end
   end
 
-  def angle
+  def value
     args[0]
   end
 
-  def angle=(angle)
-    self.args[0] = angle
+  def value=(val)
+    self.args[0] = val
   end
 
   def ==(exp)
@@ -33,18 +33,11 @@ class Cosine
         r << e.copy
       end
     end
-    cos(new_args)
+    arccos(new_args)
   end
 
   def evaluate_numeral
-    rad = angle.to_f / 180 * (Math::PI)
-    Math.cos(rad).round(5)
-  end
-
-  def reverse_step(rs)
-    result = {}
-    result[:ls] = args[0]
-    result[:rs] = arccos(rs)
-    result
+    rad = Math.acos(value)
+    (rad / (Math::PI) * 180).round(5)
   end
 end

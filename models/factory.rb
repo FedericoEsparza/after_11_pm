@@ -52,4 +52,24 @@ module Factory
   def sin_eqn(ls,rs,options={ans_min:0,ans_max:360})
     SineEquation.new(ls,rs,options)
   end
+
+  def arccos(*args)
+    ArcCosine.new(*args)
+  end
+
+  def cos_eqn(ls, rs, options: { ans_min: 0, ans_max: 360 })
+    CosineEquation.new(ls, rs, options: options)
+  end
+
+  def tan(*args)
+    Tangent.new(*args)
+  end
+
+  def arctan(*args)
+    ArcTangent.new(*args)
+  end
+
+  def tan_eqn(ls, rs, options: { ans_min: 0, ans_max: 360 } )
+    TangentEquation.new(ls, rs, options: options)
+  end
 end

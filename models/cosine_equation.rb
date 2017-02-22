@@ -1,35 +1,53 @@
-require './models/sine'
-require './models/arc_sine'
+require './models/cosine'
+require './models/arc_cosine'
 require './models/equation'
 require './models/factory'
 
 include Factory
 
-class SineEquation
+class CosineEquation
   attr_accessor :ls, :rs, :options
 
-  def initialize(ls,rs,options={ans_min:0, ans_max:360})
+  def initialize(ls, rs, options: {ans_min:0, ans_max:360})
     @ls = ls
     @rs = rs
     @options = options
   end
 
   def copy
-    if ls.is_a?(string) || ls.is_a?(integer)
-      left_side = ls
-    else
-      left_side = ls.copy
-    end
-    if rs.is_a?(string) || rs.is_a?(integer)
-      right_side = rs
-    else
-      right_side = rs.copy
-    end
-    sin_eqn(left_side,right_side,options)
+    DeepClone.clone self
+    # if ls.is_a?(string) || ls.is_a?(integer)
+    #   left_side = ls
+    # else
+    #   left_side = ls.copy
+    # end
+    # if rs.is_a?(string) || rs.is_a?(integer)
+    #   right_side = rs
+    # else
+    #   right_side = rs.copy
+    # end
+    # cos_eqn(left_side,right_side,options)
   end
 
   def ==(eqn)
     eqn.class == self.class && ls == eqn.ls && rs == eqn.rs && options = eqn.options
+  end
+
+  def solve
+    set_1_eqn = eqn(cos(ls),rs)
+    set_1_steps = set_1_eqn.solve_one_var_eqn
+    set_1_period = evaluate_period
+
+    set_2_eqn = eqn(cos(mtp(-1, ls)),rs)
+    set_2_steps = set_2_eqn.solve_one_var_eqn
+    set_2_period = evaluate_period
+
+    solutions = equation_solutions(set_1: set_1_steps.last, set_2: set_2_steps.last, period: set_1_period)
+
+    { set_1: { steps: set_1_steps, period: set_1_period },
+      set_2: { steps: set_2_steps, period: set_2_period },
+      solutions: solutions
+    }
   end
 
   def evaluate_period
@@ -52,7 +70,7 @@ class SineEquation
     result_2 = []
     upper_limit = options[:ans_max]
     lower_limit = options[:ans_min]
-    range = upper_limit.abs + lower_limit.abs
+    range = upper_limit + lower_limit
     max = (range / period).abs + 1
     i = 0
 
@@ -80,22 +98,4 @@ class SineEquation
   def within_limits?(solution)
     solution <= options[:ans_max] && solution >= options[:ans_min]
   end
-
-  def solve
-    set_1_eqn = eqn(sin(ls),rs)
-    set_1_steps = set_1_eqn.solve_one_var_eqn
-    set_1_period = evaluate_period
-
-    set_2_eqn = eqn(sin(sbt(180,ls)),rs)
-    set_2_steps = set_2_eqn.solve_one_var_eqn
-    set_2_period = evaluate_period
-
-    solutions = equation_solutions(set_1: set_1_steps.last, set_2: set_2_steps.last, period: set_1_period)
-
-    { set_1: { steps: set_1_steps, period: set_1_period },
-      set_2: { steps: set_2_steps, period: set_2_period },
-      solutions: solutions
-    }
-  end
-
 end
