@@ -4,6 +4,7 @@ require './models/equation'
 require './models/factory'
 
 include Factory
+include LatexUtilities
 
 class SineEquation
   attr_accessor :ls, :rs, :options
@@ -97,4 +98,19 @@ class SineEquation
     }
   end
 
+  def latex_solution
+    solution = self.solve
+    response = []
+
+    solution.each do |k, v|
+      next if k == :solutions
+      num_steps = v[:steps].length - 1
+      v[:steps].each_with_index do |step, index|
+        latex_step = num_steps == index ? step.latex(no_new_line: true) + period(v[:period]) : step.latex
+        response << latex_step
+      end
+    end
+
+    response.join('\\\\')
+  end
 end

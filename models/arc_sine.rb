@@ -41,4 +41,9 @@ class ArcSine
     degree = rad / (Math::PI) * 180
     degree.round(5)
   end
+
+  def latex
+    value_latex = value.latex
+    '\arcsin ' + value_latex
+  end
 end

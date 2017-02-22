@@ -56,8 +56,8 @@ class Equation
     curr_steps << self.copy
   end
 
-  def latex
-    ls.latex + '&=' + rs.latex + '\\\\'
+  def latex(no_new_line: false)
+    response = ls.latex + '&=' + rs.latex
+    no_new_line ? response : response + '\\\\'
   end
-
 end
