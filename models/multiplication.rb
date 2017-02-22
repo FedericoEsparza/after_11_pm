@@ -1,5 +1,7 @@
 require 'deep_clone'
 require './lib/array'
+require './lib/string'
+require './lib/numeric'
 require './models/variables'
 require './models/factory'
 require './models/numerals'
@@ -34,6 +36,16 @@ class Multiplication
 
   def ==(exp)
     exp.class == self.class && args == exp.args
+  end
+
+  def >(exp)
+    if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power)
+      (self.args.first > exp) || (self.args.first == exp)
+    elsif exp.is_a?(Addition)
+      self > exp.args.first
+    else
+      self.args > exp.args
+    end
   end
 
   def copy
@@ -274,6 +286,11 @@ class Multiplication
     result.inject(1, :*)
   end
 
+  def sort_elements
+    array = self.copy
+    mtp(array.args.sort_elements)
+  end
+
   def combine_two_brackets
     copy = self.copy
     new_args = []
@@ -294,10 +311,13 @@ class Multiplication
       end
       new_add << add(c)
     end
+    new_add << new_add.last.sort_elements
     new_add << new_add.last.simplify_add_m_forms
     self.args = new_add[-1].args
     new_add
   end
+
+
   # RECURSION
   def fetch(object:)
     object_class = Kernel.const_get(object.to_s.capitalize)

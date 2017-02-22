@@ -36,6 +36,36 @@ describe Multiplication do
     end
   end
 
+  describe '#>' do
+    it 'checks y > z' do
+      mtp_1 = 'y'
+      mtp_2 = 'z'
+      result = mtp_1 > mtp_2
+      expect(result).to eq true
+    end
+
+    it 'checks x^2(y+x) > x^2(y+x^2)' do
+      mtp_1 = mtp(pow('x',2),add('y','x'))
+      mtp_2 = mtp(pow('x',2),add('y',pow('x',2)))
+      result = mtp_1 > mtp_2
+      expect(result).to eq false
+    end
+
+    it 'checks x^3(y+x) > x^2(y+x^2)' do
+      mtp_1 = mtp(pow('x',3),add('y','x'))
+      mtp_2 = mtp(pow('x',2),add('y',pow('x',2)))
+      result = mtp_1 > mtp_2
+      expect(result).to eq true
+    end
+
+    it 'checks 4x > 4y' do
+      mtp_1 = mtp(4,'x')
+      mtp_2 = mtp(4,'y')
+      result = mtp_1 > mtp_2
+      expect(result).to eq true
+    end
+  end
+
   describe '#copy' do
     it 'copies mtp(x,y)' do
       exp = mtp('x','y')
@@ -302,16 +332,17 @@ describe Multiplication do
        exp = mtp(add('x','y'),add('x','y'))
        result = exp.combine_two_brackets
        expect(exp.args).to eq [mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2))]
-      #  expect(result).to eq [
-      #    mtp(add('x','y'),add('x','y')),
-      #    add(mtp('x','x'),mtp('x','y'),mtp('y','x'),mtp('y','y'))
-      #  ]
+       expect(result).to eq [
+         mtp(add('x','y'),add('x','y')),
+         add(mtp('x','x'),mtp('x','y'),mtp('y','x'),mtp('y','y'))
+         add()
+       ]
      end
 
      it 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
       exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
       result = exp.combine_two_brackets
-      expect(exp.args).to eq [mtp(15,pow('x',3),pow('y',7)),mtp(18,pow('x',5),'y'),mtp(-20,pow('x',4),pow('y',9)),mtp(-24,pow('x',6),pow('y',3))]
+      expect(exp.args).to eq [mtp(-24,pow('x',6),pow('y',3)),mtp(18,pow('x',5),'y'),mtp(-20,pow('x',4),pow('y',9)),mtp(15,pow('x',3),pow('y',7))]
      end
 
      it 'combines (x^2 + 2xy + y^2)(x+y)' do

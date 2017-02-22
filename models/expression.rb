@@ -1,15 +1,15 @@
-require 'deep_clone'
-require './models/class_names'
-require './lib/array'
-# require './models/multiplication'
-require './models/power'
-# require './models/addition'
-# require './models/variables'
-# require './models/numerals'
-require './models/factory'
-
-include ClassName
-include Factory
+# require 'deep_clone'
+# require './models/class_names'
+# # require './lib/array'
+# # require './models/multiplication'
+# require './models/power'
+# # require './models/addition'
+# # require './models/variables'
+# # require './models/numerals'
+# require './models/factory'
+#
+# # include ClassName
+# include Factory
 
 class Expression
   attr_accessor :args
@@ -21,6 +21,7 @@ class Expression
       @args = args
     end
   end
+
 
   def same_elements?(a1,a2)
     b1 = []

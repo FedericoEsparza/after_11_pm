@@ -1,7 +1,11 @@
 require './models/expression'
+require './lib/array'
+require './lib/string'
+require './lib/numeric'
 require './models/multiplication'
 require './models/factory'
 require './models/numerals'
+
 
 include Factory
 
@@ -19,6 +23,15 @@ class Addition < Expression
   def ==(exp)
     exp.class == self.class && args == exp.args
   end
+
+  def >(exp)
+    if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power) || exp.is_a?(Multiplication)
+      (self.args.first > exp) || (self.args.first == exp)
+    else
+      self.args > exp.args
+    end
+  end
+
 
   def copy
 #     DeepClone.clone(self)  #4-brackets
@@ -63,24 +76,30 @@ class Addition < Expression
   def select_variables
     result = []
     args.each do |a|
-      a = a.remove_coef
+      a = a.remove_coef.sort_elements
       unique = 1
-      result.each {|b| unique = 0 if same_elements?(a,b)}
+      result.each {|b| unique = 0 if a==b}
       if unique == 1
         result << a
+
       end
     end
     result
   end
 
+  def sort_elements
+    array = self.copy
+    add(array.args.sort_elements)
+  end
+
   def simplify_add_m_forms
     copy = self.copy
-    factors = copy.select_variables
+    factors = copy.select_variables.sort_elements
     results = []
     factors.each do |factor|
       count = 0
       for i in 0..copy.args.length-1
-        if same_elements?(copy.args[i].remove_coef,factor)
+        if copy.args[i].remove_coef.sort_elements==factor
           count = count + copy.args[i].remove_exp
         end
       end

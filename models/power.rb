@@ -56,6 +56,9 @@
 
 require './models/factory'
 require './models/numerals'
+require './lib/array'
+require './lib/string'
+require './lib/numeric'
 
 include Factory
 
@@ -72,6 +75,16 @@ class Power
 
   def ==(exp)
     exp.class == self.class && base == exp.base && index == exp.index
+  end
+
+  def >(exp)
+    if exp.class == self.class
+      (self.base > exp.base) || (self.base == exp.base && self.index > exp.index)
+    elsif exp.is_a?(Numeric) || exp.is_a?(String)
+      (self.base > exp) || self.base == exp
+    else
+      self > exp.args.first
+    end
   end
 
   def base
