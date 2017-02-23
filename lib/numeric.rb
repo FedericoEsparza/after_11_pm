@@ -11,9 +11,9 @@ require './models/factory'
 
 class Fixnum
 
-  def > (exp)
+  def greater? (exp)
     if exp.is_a?(Fixnum)
-      (self >= exp) && self != exp
+      self > exp
     else
       false
     end

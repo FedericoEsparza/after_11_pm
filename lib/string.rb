@@ -11,13 +11,13 @@ require './models/factory'
 
 class String
 
-  def >(exp)
+  def greater?(exp)
     if exp.is_a?(String)
       self < exp
     elsif exp.is_a?(Numeric)
       true
     else
-      self > exp.args.first
+      self.greater?(exp.args.first)
     end
   end
 

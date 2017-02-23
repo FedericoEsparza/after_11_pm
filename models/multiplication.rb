@@ -7,7 +7,9 @@ require './models/factory'
 require './models/numerals'
 require './models/power'
 require './models/addition'
+require './models/latex_utilities'
 
+include LatexUtilities
 include Factory
 include Types
 
@@ -26,6 +28,8 @@ class Multiplication
     mtp(new_args)
   end
 
+
+
   def initialize(*args)
     if args.length == 1 && args[0].class == Array
       @args = args.first
@@ -38,13 +42,13 @@ class Multiplication
     exp.class == self.class && args == exp.args
   end
 
-  def >(exp)
+  def greater?(exp)
     if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power)
-      (self.args.first > exp) || (self.args.first == exp)
+      (self.args.first.greater?(exp)) || (self.args.first == exp)
     elsif exp.is_a?(Addition)
-      self > exp.args.first
+      self.greater?(exp.args.first)
     else
-      self.args > exp.args
+      self.args.greater?(exp.args)
     end
   end
 
@@ -374,4 +378,77 @@ class Multiplication
       end
     end
   end
+
+  def latex
+    result = ''
+    for i in 0..args.length - 1
+      if elementary?(args[i])
+        arg_i_latex = args[i].latex
+      else
+        arg_i_latex = brackets(args[i].latex)
+      end
+      if numerical?(args[i-1]) && numerical?(args[i])
+        result += '\times' + arg_i_latex
+      else
+        result += arg_i_latex
+      end
+    end
+    first_part =  result.slice!(0..5)
+    if first_part == '\times'
+      result
+    else
+      first_part + result
+    end
+  end
+
+
+  def m_form_sort
+    array = self.args
+    number_of_swaps = 0
+    number_of_items = array.length
+    for x in 0...(number_of_items-1)
+      if array[x].is_a?(Power)
+        a_1 = array[x].base
+      else
+        a_1 = array[x]
+      end
+
+      if array[x+1].is_a?(Power)
+        a_2 = array[x+1].base
+      else
+        a_2 = array[x+1]
+      end
+
+      if  a_1.is_a?(String) && a_2.is_a?(String) && a_2 < a_1
+        array[x+1],array[x] = array[x],array[x+1]
+        number_of_swaps += 1
+      end
+
+      if a_1.is_a?(String) && a_2.is_a?(Numeric)
+        array[x+1],array[x] = array[x],array[x+1]
+        number_of_swaps += 1
+      end
+
+    end
+
+    if number_of_swaps == 0
+      return mtp(array)
+    else
+      mtp(array).m_form_sort
+    end
+  end
+
+  def similar?(m2)
+    copy = self.copy
+    m1 = mtp(copy.remove_coef)
+    m2 = mtp(m2.remove_coef)
+    if m1.m_form_sort == m2.m_form_sort
+      true
+    else
+      false
+    end
+  end
+
+
+
 end

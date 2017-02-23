@@ -183,12 +183,31 @@ describe SineEquation do
     end
 
     it 'sin(2x) = 0.5 for values between 0 and -360 degrees' do
-      eqn = sin_eqn(mtp(2, 'x'), 0.5, { ans_min:0, ans_max: -360 })
+      eqn = sin_eqn(mtp(2, 'x'), 0.5, { ans_min:-360, ans_max: 0 })
       result = eqn.equation_solutions(set_1: eqn('x', 15),
                                       set_2: eqn('x', 75),
                                       period: 180 )
-      response = [-165, -345, -105, -285]
+      response = [-345, -165, -285, -105]
       expect(result).to eq response
     end
+
+    it 'sin(2x) = 0.5 for values between -360 and 360 degrees' do
+      eqn = sin_eqn(mtp(2, 'x'), 0.5, { ans_min:-360, ans_max: 360 })
+      result = eqn.equation_solutions(set_1: eqn('x', 15),
+                                      set_2: eqn('x', 75),
+                                      period: 180 )
+      response = [-345, -165, 15, 195, -285, -105, 75, 255]
+      expect(result).to eq response
+    end
+
+    it 'sin(2x) = 0.5 for values between 180 and 360 degrees' do
+      eqn = sin_eqn(mtp(2, 'x'), 0.5, { ans_min: 180, ans_max: 360 })
+      result = eqn.equation_solutions(set_1: eqn('x', 15),
+                                      set_2: eqn('x', 75),
+                                      period: 180 )
+      response = [195, 255]
+      expect(result).to eq response
+    end
+
   end
 end

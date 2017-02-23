@@ -40,28 +40,28 @@ describe Multiplication do
     it 'checks y > z' do
       mtp_1 = 'y'
       mtp_2 = 'z'
-      result = mtp_1 > mtp_2
+      result = mtp_1.greater?(mtp_2)
       expect(result).to eq true
     end
 
     it 'checks x^2(y+x) > x^2(y+x^2)' do
       mtp_1 = mtp(pow('x',2),add('y','x'))
       mtp_2 = mtp(pow('x',2),add('y',pow('x',2)))
-      result = mtp_1 > mtp_2
+      result = mtp_1.greater?(mtp_2)
       expect(result).to eq false
     end
 
     it 'checks x^3(y+x) > x^2(y+x^2)' do
       mtp_1 = mtp(pow('x',3),add('y','x'))
       mtp_2 = mtp(pow('x',2),add('y',pow('x',2)))
-      result = mtp_1 > mtp_2
+      result = mtp_1.greater?(mtp_2)
       expect(result).to eq true
     end
 
     it 'checks 4x > 4y' do
       mtp_1 = mtp(4,'x')
       mtp_2 = mtp(4,'y')
-      result = mtp_1 > mtp_2
+      result = mtp_1.greater?(mtp_2)
       expect(result).to eq true
     end
   end
@@ -325,6 +325,14 @@ describe Multiplication do
 
    end
 
+  describe '#combine_two_brackets' do
+   it 'combines (x+y)(x+y)' do
+     exp = mtp(add('x','y'),add('x','y'))
+     result = exp.combine_two_brackets
+     expect(result.last).to eq add(mtp(pow('x',2)),mtp('x','y',2),mtp(pow('y',2)))
+   end
+ end
+
 
    describe '#combine_two_brackets' do
 
@@ -582,6 +590,7 @@ describe Multiplication do
             )
      end
 
+
      it 'combines (x+y)(x+z)(y+z)' do
        exp = mtp(add('x','y'),add('x','z'),add('y','z'))
        result = exp.combine_brackets
@@ -607,7 +616,20 @@ describe Multiplication do
         mtp(pow('y',4))
        )
      end
+
+   xit 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
+    exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
+    result = exp.combine_two_brackets
+    expect(result).to eq add(mtp(15,pow('x',3),pow('y',7)),mtp(18,pow('x',5),'y'),mtp(-20,pow('x',4),pow('y',9)),mtp(-24,pow('x',6),pow('y',3)))
    end
+
+   xit 'combines (x^2 + 2xy + y^2)(x+y)' do
+     exp = mtp(add(pow('x',2),mtp(2,'x','y'),pow('y',2)),add('x','y'))
+     result = exp.combine_two_brackets
+     expect(result).to eq add(mtp(pow('x',3)),mtp(3,pow('x',2),'y'),mtp(3,'x',pow('y',2)),mtp(pow('y',3)))
+
+   end
+  end
 
   describe '#delete nils' do
     it 'deletes nils' do
@@ -659,4 +681,36 @@ describe Multiplication do
       expect(exp.includes?(Numeric)).to be false
     end
   end
+
+  describe 'm form sort' do
+
+    it 'swaps 3axba' do
+      exp = mtp(3,'a','x','b','a')
+      result = exp.m_form_sort
+      expect(result).to eq mtp(3,'a','a','b','x')
+    end
+
+    it 'swaps 3x5a^2bx' do
+      exp = mtp(3,'x',5,pow('a',2),'b','x')
+      result = exp.m_form_sort
+      expect(result).to eq mtp(3,5,pow('a',2),'b','x','x')
+    end
+  end
+
+  describe 'similar?' do
+    it 'comapres 3ayb^2a, 5ayb^2a, 5aybba' do
+      m1 = mtp(4,'a','y',pow('b',2),'a')
+      m2 = mtp(5,'a','y',pow('b',2),'a')
+      m3 = mtp(5,'a','y','b','b','a')
+
+      r1 = m1.similar?(m2)
+      r2 = m1.similar?(m3)
+      r3 = m2.similar?(m3)
+
+      expect(r1).to eq true
+      expect(r2).to eq false
+      expect(r3).to eq false
+    end
+  end
+
 end

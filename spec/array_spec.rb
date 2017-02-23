@@ -35,21 +35,21 @@ describe Array do
     it 'checks [x,y,z] > [x,y]' do
       a_1 = ['x','y','z']
       a_2 = ['x','y']
-      result = a_1 > a_2
+      result = a_1.greater?(a_2)
       expect(result).to eq true
     end
 
     it 'checks [x,y] > [x,y,z]' do
       a_1 = ['x','y']
       a_2 = ['x','y','z']
-      result = a_1 > a_2
+      result = a_1.greater?(a_2)
       expect(result).to eq false
     end
 
     it 'checks [x] > [4]' do
       a_1 = ['x']
       a_2 = [4]
-      result = a_1 > a_2
+      result = a_1.greater?(a_2)
       expect(result).to eq true
     end
   end
@@ -80,7 +80,7 @@ describe Array do
       result = exp.sort_elements
       expect(result).to eq [pow('x',3),mtp(pow('x',2),7),mtp('x',5),4]
     end
-    
+
     it 'sorts [xy,x^2,yx,y^2]' do
       exp = [mtp('x','y'),pow('x',2),mtp('y','x'),pow('y',2)]
       result = exp.sort_elements
@@ -107,30 +107,30 @@ describe Array do
   #     a_2 = [1,2]
   #     expect(a_1).to eq a_2
   #   end
-
-    # it 'checks [xy,x,x^3z^2,3y] == [x,xy,x^3z^2,3y]' do
-    #   a_1 = [mtp('x','y'),'x',mtp(pow('x',3),pow('z',2)),mtp(3,'y')]
-    #   a_2 = ['x',mtp('x','y'),mtp(pow('x',3),pow('z',2)),mtp(3,'y')]
-    #   result = a_1.same_elements(a_2)
-    #   expect(result).to eq true
-    # end
-    #
-    # it 'checks [xy,x,x^3z^2,3y] == [xy,x,x^3z^2,4y]' do
-    #   a_1 = [mtp('x','y'),'x',mtp(pow('x',3),pow('z',2)),mtp(3,'y')]
-    #   a_2 = [mtp('x','y'),'x',mtp(pow('x',3),pow('z',2)),mtp(4,'y')]
-    #   result = a_1.same_elements(a_2)
-    #   expect(result).to eq false
-    #   puts a_1
-    # end
-    #
-    # it 'checks [x^(3+y^2),(a+b)^c] = [x^(3+y^2),(a+b)^c]' do
-    #   a_1 = [pow('x',add(3,pow('y',2))),pow(add('a','b'),'c')]
-    #   a_2 = [pow('x',add(3,pow('y',2))),pow(add('a','b'),'c')]
-    #   result = a_1.same_elements(a_2)
-    #   expect(result).to eq true
-    # end
+  #
+  #   it 'checks [xy,x,x^3z^2,3y] == [x,xy,x^3z^2,3y]' do
+  #     a_1 = [mtp('x','y'),'x',mtp(pow('x',3),pow('z',2)),mtp(3,'y')]
+  #     a_2 = ['x',mtp('x','y'),mtp(pow('x',3),pow('z',2)),mtp(3,'y')]
+  #     result = a_1.same_elements(a_2)
+  #     expect(result).to eq true
+  #   end
+  #
+  #   it 'checks [xy,x,x^3z^2,3y] == [xy,x,x^3z^2,4y]' do
+  #     a_1 = [mtp('x','y'),'x',mtp(pow('x',3),pow('z',2)),mtp(3,'y')]
+  #     a_2 = [mtp('x','y'),'x',mtp(pow('x',3),pow('z',2)),mtp(4,'y')]
+  #     result = a_1.same_elements(a_2)
+  #     expect(result).to eq false
+  #     puts a_1
+  #   end
+  #
+  #   it 'checks [x^(3+y^2),(a+b)^c] = [x^(3+y^2),(a+b)^c]' do
+  #     a_1 = [pow('x',add(3,pow('y',2))),pow(add('a','b'),'c')]
+  #     a_2 = [pow('x',add(3,pow('y',2))),pow(add('a','b'),'c')]
+  #     result = a_1.same_elements(a_2)
+  #     expect(result).to eq true
+  #   end
   # end
-
+  #
   # describe '#same_elements' do
   #   it 'checks equality' do
   #     a_1 = [pow('x',2),'y']

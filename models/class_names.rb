@@ -23,11 +23,19 @@ module ClassName
     Addition
   end
 
+  def subtraction
+    Subtraction
+  end
+
   def multiplication
     Multiplication
   end
 
   def sine
     Sine
+  end
+
+  def cosine
+    Cosine
   end
 end
