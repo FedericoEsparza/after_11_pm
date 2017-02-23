@@ -58,6 +58,6 @@ class Equation
 
   def latex(no_new_line: false)
     response = ls.latex + '&=' + rs.latex
-    no_new_line ? response : response + '\\\\'
+    # no_new_line ? response : response + '\\\\'
   end
 end

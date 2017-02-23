@@ -100,17 +100,31 @@ class SineEquation
 
   def latex_solution
     solution = self.solve
+    equation_index = 0
     response = []
 
     solution.each do |k, v|
       next if k == :solutions
+      iteration_array = []
       num_steps = v[:steps].length - 1
       v[:steps].each_with_index do |step, index|
         latex_step = num_steps == index ? step.latex(no_new_line: true) + period(v[:period]) : step.latex
-        response << latex_step
+        latex_step = if index == 0
+                      equation_index += 1
+                      add_eq_index(latex: latex_step, index: equation_index)
+                    else
+                      latex_step
+                    end
+        iteration_array << latex_step
       end
+      response << iteration_array
     end
 
-    response.join('\\\\')
+    response = add_columns(latex_array: response)
+    response = response.map { |e| e.join("\\\\\n") }
+    response.unshift(add_columns(latex_array: solution[:set_1][:steps].first.latex))
+    response = response.flatten.join("\\\\[10pt]\n")
+    response = add_align_env(response)
+    response + '$' + solution[:set_1][:steps].last.ls + '=' + ' ' + solution[:solutions].join(',') + '$'
   end
 end
