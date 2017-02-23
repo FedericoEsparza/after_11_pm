@@ -1,9 +1,3 @@
-require './models/expression'
-require './models/multiplication'
-require './models/factory'
-require './models/numerals'
-require './models/latex_utilities'
-
 include LatexUtilities
 include Factory
 

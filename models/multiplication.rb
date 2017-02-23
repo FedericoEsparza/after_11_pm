@@ -1,12 +1,3 @@
-require 'deep_clone'
-require './lib/array'
-require './models/variables'
-require './models/factory'
-require './models/numerals'
-require './models/power'
-require './models/addition'
-require './models/latex_utilities'
-
 include LatexUtilities
 include Factory
 include Types

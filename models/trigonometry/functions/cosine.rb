@@ -1,6 +1,6 @@
 include Factory
 
-class Division
+class Cosine
   attr_accessor :args
 
   def initialize(*args)
@@ -11,20 +11,12 @@ class Division
     end
   end
 
-  def top
+  def angle
     args[0]
   end
 
-  def top=(value)
-    self.args[0] = value
-  end
-
-  def bot
-    args[1]
-  end
-
-  def bot=(value)
-    self.args[1] = value
+  def angle=(angle)
+    self.args[0] = angle
   end
 
   def ==(exp)
@@ -39,29 +31,26 @@ class Division
         r << e.copy
       end
     end
-    div(new_args)
+    cos(new_args)
   end
 
   def evaluate_numeral
-    args[0]/args[1]
+    rad = angle.to_f / 180 * (Math::PI)
+    Math.cos(rad).round(5)
   end
 
   def reverse_step(rs)
     result = {}
-    if args[0].is_a?(integer)
-      result[:ls] = args[1]
-      result[:rs] = div(args[0],rs)
-      return result
-    end
-    if args[1].is_a?(integer)
-      result[:ls] = args[0]
-      result[:rs] = mtp(rs,args[1])
-      return result
-    end
+    result[:ls] = args[0]
+    result[:rs] = arccos(rs)
+    result
   end
 
   def latex
-    '\displaystyle\frac{' + top.latex + '}{' + bot.latex + '}'
+    angle_latex = angle.latex
+    if angle.is_a?(addition) || angle.is_a?(subtraction)
+      angle_latex = brackets(angle_latex)
+    end
+      '\cos ' + angle_latex
   end
-
 end

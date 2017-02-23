@@ -1,5 +1,3 @@
-require './models/factory'
-
 include Factory
 
 class SquareRoot
