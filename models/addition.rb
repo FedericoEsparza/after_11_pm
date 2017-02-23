@@ -149,9 +149,48 @@ class Addition < Expression
     result
   end
 
-  def collect_like_terms
+  def simplify_brackets
+    copy = self.copy
+    steps = []
+    has_brackets = false
+    copy.args.each do |m|
+      if m.is_a?(Multiplication) && m.is_bracket
+        steps << m.combine_brackets
+        has_brackets = true
+      else
+        steps << [m]
+      end
+    end
+
+    if has_brackets
+      steps.equalise_array_lengths
+      steps = steps.transpose
+      steps = steps.map{|a| add(a)}
+      steps.insert(0,self.copy)
+      ##now remove brackets
+      # last_step_args = []
+      # steps.last.args.each do |a|
+      #   a.args.each{|b| last_step_args << b}
+      # end
+      # steps << add(last_step_args)
+      steps = delete_duplicate_steps(steps)
+      steps
+    else
+      return self
+    end
+
 
   end
 
-
+  def delete_duplicate_steps(steps)
+    i = 0
+    while i < steps.length
+      if steps[i] == steps[i+1]
+        steps.delete_at(i)
+      else
+        i += 1
+      end
+    end
+    steps
+  end
 end

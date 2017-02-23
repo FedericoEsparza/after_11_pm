@@ -75,6 +75,36 @@ describe Addition do
     end
   end
 
-  
+  describe '#simplify_brackets' do
+    it 'simplifies (x+y)(a+b) + (w+z)(c+d)' do
+      exp = add(mtp(add('x','y'),add('a','b')),mtp(add('w','z'),add('c','d')))
+      result = exp.simplify_brackets
+      expect(result.last).to eq add(
+        add(mtp('a','x'),mtp('a','y'),mtp('b','x'),mtp('b','y')),
+        add(mtp('c','w'),mtp('c','z'),mtp('d','w'),mtp('d','z'))
+      )
+    end
+
+    it 'leaves x' do
+      exp = add('x')
+      result = exp.simplify_brackets
+      expect(result).to eq add('x')
+    end
+
+    it 'simplifies x(x+y) + y' do
+      exp = add(mtp('x',add('x','y')),'y')
+      result = exp.simplify_brackets
+      expect(result.last).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
+
+      expect(result[0]).to eq add(mtp('x',add('x','y')),'y')
+      expect(result[1]).to eq add(mtp(add('x'),add('x','y')),'y')
+      expect(result[2]).to eq add(add(mtp(mtp('x'),mtp('x')),mtp(mtp('x'),mtp('y'))),'y')
+      expect(result[3]).to eq add(add(mtp(mtp('x','x')),mtp('x','y')),'y')
+      expect(result[4]).to eq add(add(mtp(mtp(pow('x',1),pow('x',1))),mtp('x','y')),'y')
+      expect(result[5]).to eq add(add(mtp(pow('x',add(1,1))),mtp('x','y')),'y')
+      expect(result[6]).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
+    end
+  end
+
 
 end

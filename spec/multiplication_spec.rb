@@ -591,31 +591,39 @@ describe Multiplication do
      end
 
 
-    #  it 'combines (x+y)(x+z)(y+z)' do
-    #    exp = mtp(add('x','y'),add('x','z'),add('y','z'))
-    #    result = exp.combine_brackets
-    #    expect(result.last).to eq add(
-    #    mtp(pow('x',2),'y'),
-    #    mtp(pow('x',2),'z'),
-    #    mtp('x',pow('y',2)),
-    #    mtp('x','y','z',2),
-    #    mtp('x',pow('z',2)),
-    #    mtp(pow('y',2),'z'),
-    #    mtp('y',pow('z',2))
-    #    )
-    #  end
-     #
-    #  it 'combines (x+y)(x+y)(x+y)(x+y)' do
-    #    exp = mtp(add('x','y'),add('x','y'),add('x','y'),add('x','y'))
-    #    result = exp.combine_brackets
-    #    expect(result.last).to eq add(
-    #     mtp(pow('x',4)),
-    #     mtp(pow('x',3),'y',4),
-    #     mtp(pow('x',2),pow('y',2),6),
-    #     mtp('x',pow('y',3),4),
-    #     mtp(pow('y',4))
-    #    )
-    #  end
+     it 'combines (x+y)(x+z)(y+z)' do
+       exp = mtp(add('x','y'),add('x','z'),add('y','z'))
+       result = exp.combine_brackets
+       expect(result.last).to eq add(
+       mtp(pow('x',2),'y'),
+       mtp(pow('x',2),'z'),
+       mtp('x',pow('y',2)),
+       mtp('x','y','z',2),
+       mtp('x',pow('z',2)),
+       mtp(pow('y',2),'z'),
+       mtp('y',pow('z',2))
+       )
+     end
+
+     it 'combines (x+y)(x+y)(x+y)(x+y)' do
+       exp = mtp(add('x','y'),add('x','y'),add('x','y'),add('x','y'))
+       result = exp.combine_brackets
+       expect(result.last).to eq add(
+        mtp(pow('x',4)),
+        mtp(pow('x',3),'y',4),
+        mtp(pow('x',2),pow('y',2),6),
+        mtp('x',pow('y',3),4),
+        mtp(pow('y',4))
+       )
+     end
+
+     it 'combines x(y+z)' do
+       exp = mtp('x',add('y','z'))
+       result = exp.combine_brackets
+       expect(result[0]).to eq mtp(add('x'),add('y','z'))
+       expect(result[1]).to eq add(mtp(mtp('x'),mtp('y')),mtp(mtp('x'),mtp('z')))
+       expect(result[2]).to eq add(mtp('x','y'),mtp('x','z'))
+     end
 
    xit 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
     exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
