@@ -338,6 +338,8 @@ class Multiplication
       expanded_brackets = expanded_brackets_steps.last
       expanded_brackets = expanded_brackets.combine_brackets
       expanded_brackets.each{|a| expanded_brackets_steps << a}
+      expanded_brackets_steps.insert(0,self)
+      expanded_brackets_steps = delete_duplicate_steps(expanded_brackets_steps)
       expanded_brackets_steps
     end
 

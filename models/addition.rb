@@ -104,12 +104,11 @@ class Addition < Expression
         end
       end
       if count != 0
-        if count == 1
-          new_mtp_args = []
-        else
-          new_mtp_args = [count]
-        end
+        new_mtp_args = []
         factor.each{|a| new_mtp_args << a}
+        if count != 1
+          new_mtp_args << count
+        end
         new_mtp = mtp(new_mtp_args)
         results << new_mtp
       end

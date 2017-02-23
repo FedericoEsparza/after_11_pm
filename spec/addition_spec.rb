@@ -53,25 +53,25 @@ describe Addition do
     it '#simplifies 3xy+2xy+xyz'do
     addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
     result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp('x','y','z'),mtp(5,'x','y'))
+    expect(result).to eq add(mtp('x','y','z'),mtp('x','y',5))
     end
     #
     it '#simplifies 3xy+yx+x^2' do
     addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
     result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(pow('x',2)),mtp(4,'x','y'))
+    expect(result).to eq add(mtp(pow('x',2)),mtp('x','y',4))
     end
 
     it '#simplifies x^2 + xy + yx + y^2' do
     addition = add(mtp(pow('x',2)),mtp('x','y'),mtp('y','x'),mtp(pow('y',2)))
     result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
+    expect(result).to eq add(mtp(pow('x',2)),mtp('x','y',2),mtp(pow('y',2)))
     end
 
     it '#simplifies x^2 + x^2 + y^2' do
       addition = add(mtp(pow('x',2)),mtp(pow('x',2)),mtp(pow('y',2)))
       result = addition.simplify_add_m_forms
-      expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
+      expect(result).to eq add(mtp(pow('x',2),2),mtp(pow('y',2)))
     end
   end
 
