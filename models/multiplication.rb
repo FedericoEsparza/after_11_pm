@@ -323,7 +323,7 @@ class Multiplication
   def latex
     result = ''
     for i in 0..args.length - 1
-      if elementary?(args[i])
+      if elementary?(args[i]) || args[i].is_a?(power)
         arg_i_latex = args[i].latex
       else
         arg_i_latex = brackets(args[i].latex)

@@ -292,4 +292,27 @@ feature '#latex' do
     end
   end
 
+  context 'power' do
+    scenario '' do
+      exp = pow('x',3)
+      expect(exp.latex).to eq 'x^3'
+    end
+
+    scenario '' do
+      exp = pow('x',mtp(3,'a'))
+      expect(exp.latex).to eq 'x^{3a}'
+    end
+
+    scenario '' do
+      exp = pow(add(2,'x'),mtp(3,'a'))
+      expect(exp.latex).to eq '\left(2+x\right)^{3a}'
+    end
+  end
+
+  context 'power and trig' do
+    scenario '' do
+      exp = div(add(mtp(2,'x'),3),sbt(mtp(3,pow('x',2)),mtp(4,pow('x',5))))
+      expect(exp.latex).to eq '\displaystyle\frac{2x+3}{3x^2-4x^5}'
+    end
+  end
 end
