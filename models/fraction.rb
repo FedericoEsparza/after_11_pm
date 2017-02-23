@@ -57,6 +57,10 @@ class Fraction
     (top.to_f / bottom).send(sign)
   end
 
+  def latex
+    '\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+  end
+
   private
 
   def same_class?(object)

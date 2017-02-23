@@ -42,4 +42,9 @@ class ArcTangent
     rad = Math.atan(val)
     (rad / (Math::PI) * 180).round(5)
   end
+
+  def latex
+    value_latex = value.latex
+    '\arctan ' + value_latex
+  end
 end

@@ -40,4 +40,9 @@ class ArcCosine
     rad = Math.acos(value)
     (rad / (Math::PI) * 180).round(5)
   end
+
+  def latex
+    value_latex = value.latex
+    '\arccos ' + value_latex
+  end
 end

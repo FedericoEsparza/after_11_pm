@@ -48,4 +48,12 @@ class Tangent
     result[:rs] = arctan(rs)
     result
   end
+
+  def latex
+    angle_latex = angle.latex
+    if angle.is_a?(addition) || angle.is_a?(subtraction)
+      angle_latex = brackets(angle_latex)
+    end
+    '\tan ' + angle_latex
+  end
 end
