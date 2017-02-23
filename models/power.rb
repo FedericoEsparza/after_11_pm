@@ -53,10 +53,6 @@
 #     end
 #   end
 # end
-
-require './models/factory'
-require './models/numerals'
-
 include Factory
 
 class Power

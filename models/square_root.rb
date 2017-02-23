@@ -1,5 +1,3 @@
-require './models/factory'
-
 include Factory
 
 class SquareRoot
@@ -27,6 +25,10 @@ class SquareRoot
     #   val = value.copy
     # end
     # sqrt(value: val, sign: sign)
+  end
+
+  def latex
+    '\sqrt{' + value.latex + '}'
   end
 
   private

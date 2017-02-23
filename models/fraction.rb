@@ -1,5 +1,3 @@
-require './models/factory'
-
 include Factory
 
 class Fraction
@@ -55,6 +53,10 @@ class Fraction
     bottom = denominator.respond_to?(:evaluate_numeral) ? denominator.evaluate_numeral : denominator
 
     (top.to_f / bottom).send(sign)
+  end
+
+  def latex
+    '\frac{' + numerator.latex + '}{' + denominator.latex + '}'
   end
 
   private
