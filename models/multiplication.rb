@@ -331,7 +331,16 @@ class Multiplication
       end
       new_add << add(c)
     end
-    new_add << new_add.last.sort_elements
+    # new_add << new_add.last.sort_elements
+    new_step = new_add.last.copy
+    new_step.args.each do |m|
+      m.m_form_sort
+    end
+    new_add << new_step
+
+    # 3ax^2 + 4y + 2ax^2 + 5y
+    # 3ax^2 + 2ax^2 + 4y  + 5y
+
     new_add << new_add.last.simplify_add_m_forms
     new_add = delete_duplicate_steps(new_add)
     new_add.insert(0,self.copy)
@@ -453,6 +462,7 @@ class Multiplication
     end
 
     if number_of_swaps == 0
+      self.args = array
       return mtp(array)
     else
       mtp(array).m_form_sort

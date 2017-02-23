@@ -106,5 +106,20 @@ describe Addition do
     end
   end
 
+  describe '#order_similar_terms' do
+    it '2x + 3a + 4x -> 2x + 4x + 3a' do
+      exp = add(mtp(2,'x'),mtp(3,'a'),mtp(4,'x'))
+      result = exp.order_similar_terms
+      expect(result).to eq add(mtp(2,'x'),mtp(4,'x'),mtp(3,'a'))
+    end
+
+    it '2xy^3+3a+b^3+4xy^3 -> ....' do
+      exp = add(mtp(2,'x',pow('y',3)),mtp(3,'a'),mtp(pow('b',3)),mtp(4,'x',pow('y',3)),mtp(4,'a'),mtp(pow('b',5)))
+      result = exp.order_similar_terms
+      expect(result).to eq add(mtp(2,'x',pow('y',3)),mtp(4,'x',pow('y',3)),mtp(3,'a'),mtp(4,'a'),mtp(pow('b',3)),mtp(pow('b',5)))
+    end
+
+  end
+
 
 end

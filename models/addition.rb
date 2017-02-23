@@ -193,4 +193,22 @@ class Addition < Expression
     end
     steps
   end
+
+  def order_similar_terms
+    copy = self.copy
+    result_args = []
+    while copy.args.length != 0 do
+      result_args << copy.args.delete_at(0)
+      i = 0
+      while i < copy.args.length do
+        if copy.args[i].similar?(result_args.last)
+          result_args << copy.args.delete_at(i)
+        else
+          i += 1
+        end
+      end
+    end
+    add(result_args)
+  end
+
 end

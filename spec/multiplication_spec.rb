@@ -690,18 +690,18 @@ describe Multiplication do
     end
   end
 
-  describe 'm form sort' do
+  describe '#m_form_sort' do
 
     it 'swaps 3axba' do
       exp = mtp(3,'a','x','b','a')
       result = exp.m_form_sort
-      expect(result).to eq mtp(3,'a','a','b','x')
+      expect(exp).to eq mtp(3,'a','a','b','x')
     end
 
     it 'swaps 3x5a^2bx' do
       exp = mtp(3,'x',5,pow('a',2),'b','x')
       result = exp.m_form_sort
-      expect(result).to eq mtp(3,5,pow('a',2),'b','x','x')
+      expect(exp).to eq mtp(3,5,pow('a',2),'b','x','x')
     end
   end
 
@@ -710,14 +710,9 @@ describe Multiplication do
       m1 = mtp(4,'a','y',pow('b',2),'a')
       m2 = mtp(5,'a','y',pow('b',2),'a')
       m3 = mtp(5,'a','y','b','b','a')
-
-      r1 = m1.similar?(m2)
-      r2 = m1.similar?(m3)
-      r3 = m2.similar?(m3)
-
-      expect(r1).to eq true
-      expect(r2).to eq false
-      expect(r3).to eq false
+      expect(m1.similar?(m2)).to eq true
+      expect(m1.similar?(m3)).to eq false
+      expect(m2.similar?(m3)).to eq false
     end
   end
 
