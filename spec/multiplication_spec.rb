@@ -551,9 +551,34 @@ describe Multiplication do
               mtp(pow('x',add(2,1))),
               mtp(pow('x',2),'y'),
               mtp(pow('x',add(1,1)),'y',2),
-              mtp('x',mtp(pow('y',add(1,1))),2),
+              mtp('x',pow('y',add(1,1)),2),
               mtp(pow('y',2),'x'),
               mtp(pow('y',add(2,1)))
+            )
+
+            expect(result[13]).to eq add(
+              mtp(pow('x',3)),
+              mtp(pow('x',2),'y'),
+              mtp(pow('x',2),'y',2),
+              mtp('x',pow('y',2),2),
+              mtp(pow('y',2),'x'),
+              mtp(pow('y',3))
+            )
+
+            expect(result[14]).to eq add(
+              mtp(pow('x',3)),
+              mtp(pow('x',2),'y'),
+              mtp(pow('x',2),'y',2),
+              mtp('x',pow('y',2),2),
+              mtp('x',pow('y',2)),
+              mtp(pow('y',3))
+            )
+
+            expect(result[15]).to eq add(
+              mtp(pow('x',3)),
+              mtp(pow('x',2),'y',3),
+              mtp('x',pow('y',2),3),
+              mtp(pow('y',3))
             )
      end
 

@@ -1,5 +1,8 @@
 require './models/factory'
 require './models/numerals'
+require './lib/array'
+require './lib/string'
+require './lib/numeric'
 
 include Factory
 
@@ -27,6 +30,19 @@ class Subtraction
 
   def ==(exp)
     exp.class == self.class && args == exp.args
+  end
+
+  def >(exp)
+    if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power) || exp.is_a?(Multiplication)
+      (self.args.first > exp) || (self.args.first == exp)
+    else
+      self.args > exp.args
+    end
+  end
+
+  def sort_elements
+    array = self.copy.args
+    sbt(array.sort_elements)
   end
 
   def minuend

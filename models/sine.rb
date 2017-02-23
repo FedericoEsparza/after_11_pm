@@ -1,4 +1,7 @@
 require './models/factory'
+require './lib/array'
+require './lib/string'
+require './lib/numeric'
 
 include Factory
 
@@ -23,6 +26,19 @@ class Sine
 
   def ==(exp)
     exp.class == self.class && args == exp.args
+  end
+
+  def >(exp)
+    if self.class == exp.class
+      self.args > exp.args
+    else
+      self.args.first > exp
+    end
+  end
+
+  def sort_elements
+    array = self.copy.args
+    sin(array.sort_elements)
   end
 
   def copy

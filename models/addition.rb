@@ -25,10 +25,10 @@ class Addition < Expression
   end
 
   def >(exp)
-    if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power) || exp.is_a?(Multiplication)
-      (self.args.first > exp) || (self.args.first == exp)
-    else
+    if self.class == exp.class
       self.args > exp.args
+    else
+      (self.args.first > exp) || (self.args.first == exp)
     end
   end
 
@@ -88,8 +88,8 @@ class Addition < Expression
   end
 
   def sort_elements
-    array = self.copy
-    add(array.args.sort_elements)
+    array = self.copy.args
+    add(array.sort_elements)
   end
 
   def simplify_add_m_forms
