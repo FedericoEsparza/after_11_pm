@@ -77,6 +77,11 @@ class Power
     exp.class == self.class && base == exp.base && index == exp.index
   end
 
+  def sort_elements
+    array = self.copy
+    pow(array.base.sort_elements,array.index.sort_elements)
+  end
+
   def >(exp)
     if exp.class == self.class
       (self.base > exp.base) || (self.base == exp.base && self.index > exp.index)

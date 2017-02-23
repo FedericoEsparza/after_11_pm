@@ -19,6 +19,10 @@ class Fixnum
     end
   end
 
+  def sort_elements
+    self
+  end
+
   # def <(exp)
   #   if exp.is_a?(String)
   #     self > exp

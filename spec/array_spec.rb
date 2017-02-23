@@ -46,7 +46,7 @@ describe Array do
       expect(result).to eq false
     end
 
-    it 'checks [4] > [x^3]' do
+    it 'checks [x] > [4]' do
       a_1 = ['x']
       a_2 = [4]
       result = a_1 > a_2
@@ -78,7 +78,25 @@ describe Array do
     it 'sorts [5x,4,x^3,7x^2]' do
       exp = [mtp(5,'x'),4,pow('x',3),mtp(7,pow('x',2))]
       result = exp.sort_elements
-      expect(result).to eq [pow('x',3),mtp(7,pow('x',2)),mtp(5,'x'),4]
+      expect(result).to eq [pow('x',3),mtp(pow('x',2),7),mtp('x',5),4]
+    end
+    
+    it 'sorts [xy,x^2,yx,y^2]' do
+      exp = [mtp('x','y'),pow('x',2),mtp('y','x'),pow('y',2)]
+      result = exp.sort_elements
+      expect(result).to eq [pow('x',2),mtp('x','y'),mtp('x','y'),pow('y',2)]
+    end
+
+    it 'sorts x^x+x^2+y2x+4y^4x^2+x^(y^2)+x^(x^2)' do
+      exp = add(pow('x','x'),pow('x',2),mtp('y',2,'x'),mtp(4,pow('y',4),pow('x',2)),pow('x',pow('y',2)),pow('x',pow('x',2)))
+      result = exp.sort_elements
+      expect(result).to eq add(pow('x',pow('x',2)),pow('x','x'),pow('x',pow('y',2)),mtp(pow('x',2),pow('y',4),4),pow('x',2),mtp('x','y',2))
+    end
+
+    it 'sorts[x^2,y^4x^2]' do
+      exp = [pow('x',2),mtp(4,pow('y',4),pow('x',2))]
+      result = exp.sort_elements
+      expect(result).to eq [mtp(pow('x',2),pow('y',4),4),pow('x',2)]
     end
 
   end

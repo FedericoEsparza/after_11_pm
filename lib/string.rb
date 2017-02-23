@@ -21,5 +21,9 @@ class String
     end
   end
 
+  def sort_elements
+    self
+  end
+
 
 end

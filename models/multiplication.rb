@@ -287,8 +287,8 @@ class Multiplication
   end
 
   def sort_elements
-    array = self.copy
-    mtp(array.args.sort_elements)
+    array = self.copy.args
+    mtp(array.sort_elements)
   end
 
   def combine_two_brackets
@@ -313,9 +313,36 @@ class Multiplication
     end
     new_add << new_add.last.sort_elements
     new_add << new_add.last.simplify_add_m_forms
+    new_add = delete_duplicate_steps(new_add)
+    new_add.insert(0,self.copy)
     self.args = new_add[-1].args
     new_add
   end
+
+  def combine_brackets
+    copy = self.copy
+    no_of_brackets = copy.args.length
+    if no_of_brackets == 2
+      copy = copy.combine_two_brackets
+    else
+      first_two_brackets = mtp(copy.args[0],copy.args[1])
+      copy.args = copy.args.drop(2)
+      expanded_brackets_steps = first_two_brackets.combine_two_brackets
+      new_args = []
+      expanded_brackets_steps.each do |a|
+        new_line = [a]
+        copy.args.each{|b| new_line << b}
+        new_args << mtp(new_line)
+      end
+      expanded_brackets_steps = new_args
+      expanded_brackets = expanded_brackets_steps.last
+      expanded_brackets = expanded_brackets.combine_brackets
+      expanded_brackets.each{|a| expanded_brackets_steps << a}
+      expanded_brackets_steps
+    end
+
+  end
+
 
 
   # RECURSION

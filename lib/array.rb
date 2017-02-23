@@ -59,7 +59,9 @@ class Array
   end
 
   def sort_elements
-      array = self
+      old_array = self
+      array = []
+      old_array.each{|a| array << a.sort_elements}
         number_of_items = array.length
         number_of_swaps = 0
         for x in 0...(number_of_items-1)
@@ -73,8 +75,6 @@ class Array
         else
             array.sort_elements
         end
-
-
   end
 
   # def ==(exp)
