@@ -324,9 +324,29 @@ class Multiplication
   end
 
   def combine_brackets
-    copy = self.copy
+    first_copy = self.copy
+    new_brac_args = []
+
+    first_copy.args.each do |brac|
+      new_args = []
+      puts brac
+      brac.args.each do |a|
+        if a.is_a?(Multiplication)
+          new_args << a.combine_brackets
+        else
+          new_args << a
+        end
+      end
+      new_brac_args << add(new_args)
+    end
+
+    copy = mtp(new_brac_args)
+
+
     no_of_brackets = copy.args.length
-    if no_of_brackets == 2
+    if no_of_brackets == 1
+      copy
+    elsif no_of_brackets == 2
       copy = copy.combine_two_brackets
     else
       first_two_brackets = mtp(copy.args[0],copy.args[1])
