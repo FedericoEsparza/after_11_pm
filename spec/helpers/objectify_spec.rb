@@ -31,6 +31,19 @@ describe Objectify do
     it '\frac{3x+5}{4+5+a}' do
       expect(dummy_class.objectify('\frac{3x+5}{4+5+a}')).to eq div(add(mtp(3,'x'),5),add(4,5,'a'))
     end
+
+    it '(2x)^3' do
+      expect(dummy_class.objectify('(2x)^3)')).to eq pow(mtp(2,'x'),3)
+    end
+
+    it '(2xy)^{3x+4}' do
+      expect(dummy_class.objectify('(2xy)^{3x+4}')).to eq pow(mtp(2,'x','y'),add(mtp(3,'x'),4))
+    end
+
+    xit '(2^3xy)^{3x+4}' do
+      
+    end
+
   end
 
   describe '#matching_brackets' do

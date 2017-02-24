@@ -14,6 +14,13 @@ module Objectify
       object_args = str_args.inject([]){ |r,e| r << objectify(e) }
       return div(object_args)
     end
+    #power
+    if str =~ /\^/
+      str_args = str.split('^')
+      remove_enclosing_bracks(string_array:str_args)
+      object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+      return pow(object_args)
+    end
     #2+x+y
     if str.include?('+')
       str_args = str.split('+')
@@ -194,6 +201,10 @@ module Objectify
   def remove_enclosing_bracks(string_array:)
     string_array.each do |str|
       if str[0] == '(' && str[-1] == ')'
+        str[0] = ''
+        str[-1] = ''
+      end
+      if str[0] == '{' && str[-1] == '}'
         str[0] = ''
         str[-1] = ''
       end
