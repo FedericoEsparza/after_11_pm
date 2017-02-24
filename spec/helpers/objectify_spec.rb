@@ -75,8 +75,8 @@ describe Objectify do
     end
 
     it '' do
-      str = '2x\frac($$$)($)($$$$)($$$)^($$)'
-      expect(dummy_class.split_mtp_args(string:str)).to eq ["2", "x", "\\frac($$$)($)", "($$$$)", "($$$)^($$)"]
+      str = '2x\frac{$$$}{$}($$$$)($$$)^($$)'
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["2", "x", "\\frac{$$$}{$}", "($$$$)", "($$$)^($$)"]
     end
 
     it '' do
@@ -110,11 +110,11 @@ describe Objectify do
     end
   end
 
-  # describe '#reenter_str_content' do
-  #   it '' do
-  #     string_array = ["x","(2-a)",'y','3',"(5z)^4"]
-  #     dummy_class.remove_enclosing_bracks(string_array:string_array)
-  #     expect(dollar_array).to eq ["x","2-a",'y','3',"(5z)^4"]
-  #   end
-  # end
+  describe '#remove_enclosing_bracks' do
+    it '' do
+      string_array = ["x","(2-a)",'y','3',"(5z)^4"]
+      dummy_class.remove_enclosing_bracks(string_array:string_array)
+      expect(string_array).to eq ["x","2-a",'y','3',"(5z)^4"]
+    end
+  end
 end

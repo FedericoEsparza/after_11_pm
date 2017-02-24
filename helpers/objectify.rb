@@ -99,23 +99,6 @@ module Objectify
     end
 
     string
-    # brackets_count = string.count BRACKET_TYPES[0][0]
-    # bracket_ranges_array = []
-    # i = 1
-    #
-    # while i < (brackets_count + 1)
-    #   bracket_ranges_array << matching_brackets(string, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], i)
-    #   i += 1
-    # end
-    #
-    # bracket_ranges_array.each do |brackets_range|
-    #   start_index = brackets_range[0] + 1
-    #   end_index = brackets_range[1] - 1
-    #
-    #   string[start_index..end_index] = '$' * string[start_index..end_index].length
-    # end
-    #
-    # string
   end
 
   def split_mtp_args(string:)
@@ -162,7 +145,8 @@ module Objectify
       end
       #first char is a (
       if first_char =~ /\(/
-        func_end_index = _funciton_end_index(string: string_copy)
+        # func_end_index = _funciton_end_index(string: string_copy)
+        func_end_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 1)[1]
         next_char = string_copy[func_end_index + 1]
         #(   )next char is ^
         if next_char =~ /\^/
@@ -192,7 +176,7 @@ module Objectify
     bracket_num = 1 if string =~ /^\\tan/
     bracket_num = 2 if string =~ /^\\log/
 
-    matching_brackets(string, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], bracket_num)[1]
+    matching_brackets(string, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], bracket_num)[1]
   end
 
   def reenter_str_content(string:,dollar_array:)
@@ -207,8 +191,13 @@ module Objectify
     end
   end
 
-  # def remove_enclosing_bracks(string_array:)
-  #
-  # end
+  def remove_enclosing_bracks(string_array:)
+    string_array.each do |str|
+      if str[0] == '(' && str[-1] == ')'
+        str[0] = ''
+        str[-1] = ''
+      end
+    end
+  end
 
 end
