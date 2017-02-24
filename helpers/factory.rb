@@ -10,8 +10,8 @@ module Factory
     Multiplication.new(*args)
   end
 
-  def pow(base,index)
-    Power.new(base,index)
+  def pow(*args)
+    Power.new(*args)
   end
 
   def var(string)
