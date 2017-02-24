@@ -24,8 +24,12 @@ describe Objectify do
       expect(dummy_class.objectify('3x+5')).to eq add(mtp(3,'x'),5)
     end
 
-    xit '\frac{3}{x}' do
+    it '\frac{3}{x}' do
       expect(dummy_class.objectify('\frac{3}{x}')).to eq div(3,'x')
+    end
+
+    it '\frac{3x+5}{4+5+a}' do
+      expect(dummy_class.objectify('\frac{3x+5}{4+5+a}')).to eq div(add(mtp(3,'x'),5),add(4,5,'a'))
     end
   end
 
@@ -37,6 +41,24 @@ describe Objectify do
     it 'matches 3rd brackets in (a+c(234)de((abc))))' do
       expect(dummy_class.matching_brackets('(a+c(234)de((abc))))','(',')', 3)).to eq [11,17]
     end
+
+    it 'matches 2nd brackets in a+c(234)de((abc)))' do
+      expect(dummy_class.matching_brackets('a+c(234)de((abc))','(',')', 2)).to eq [10,16]
+    end
+
   end
 
+  describe '#empty_brackets' do
+    it 'replace bracket (a+c(234)de((abc))) content with $ to ($$$$$$$$$$$$$$$$$)' do
+      expect(dummy_class.empty_brackets(string: '(a+c(234)de((abc)))')).to eq '($$$$$$$$$$$$$$$$$)'
+    end
+
+    it 'replace bracket a+c(234)de((abc)) content with $ to a+c($$$)de($$$$$)' do
+      expect(dummy_class.empty_brackets(string: 'a+c(234)de((abc))')).to eq 'a+c($$$)de($$$$$)'
+    end
+
+    it 'replace bracket \frac((3(x))^(()4y))(x^2)(234)de((abc)) content with $ to \frac($$$$$$$$$$$$$)($$$)($$$)de($$$$$)' do
+      expect(dummy_class.empty_brackets(string: '\frac((3(x))^(()4y))(x^2)(234)de((abc))')).to eq '\frac($$$$$$$$$$$$$)($$$)($$$)de($$$$$)'
+    end
+  end
 end
