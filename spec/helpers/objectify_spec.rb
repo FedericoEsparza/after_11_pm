@@ -24,25 +24,33 @@ describe Objectify do
       expect(dummy_class.objectify('3x+5')).to eq add(mtp(3,'x'),5)
     end
 
-    it '\frac{3}{x}' do
-      expect(dummy_class.objectify('\frac{3}{x}')).to eq div(3,'x')
+    it '3(x+7)+4' do
+      expect(dummy_class.objectify('3(x+7)+4')).to eq add(mtp(3,add('x',7)),4)
     end
 
-    it '\frac{3x+5}{4+5+a}' do
-      expect(dummy_class.objectify('\frac{3x+5}{4+5+a}')).to eq div(add(mtp(3,'x'),5),add(4,5,'a'))
+    it '3(x+7)(y+(5+(2a+9)))+4' do
+      expect(dummy_class.objectify('3(x+7)(y+5(2a+9))+4')).to eq add(mtp(3,add('x',7),add('y',mtp(5,add(mtp(2,'a'),9)))),4)
     end
-
-    it '(2x)^3' do
-      expect(dummy_class.objectify('(2x)^3)')).to eq pow(mtp(2,'x'),3)
-    end
-
-    it '(2xy)^{3x+4}' do
-      expect(dummy_class.objectify('(2xy)^{3x+4}')).to eq pow(mtp(2,'x','y'),add(mtp(3,'x'),4))
-    end
-
-    xit '(2^3xy)^{3x+4}' do
-      
-    end
+    #
+    # it '\frac{3}{x}' do
+    #   expect(dummy_class.objectify('\frac{3}{x}')).to eq div(3,'x')
+    # end
+    #
+    # it '\frac{3x+5}{4+5+a}' do
+    #   expect(dummy_class.objectify('\frac{3x+5}{4+5+a}')).to eq div(add(mtp(3,'x'),5),add(4,5,'a'))
+    # end
+    #
+    # it '(2x)^3' do
+    #   expect(dummy_class.objectify('(2x)^3)')).to eq pow(mtp(2,'x'),3)
+    # end
+    #
+    # it '(2xy)^{3x+4}' do
+    #   expect(dummy_class.objectify('(2xy)^{3x+4}')).to eq pow(mtp(2,'x','y'),add(mtp(3,'x'),4))
+    # end
+    #
+    # xit '(2^3xy)^{3x+4}' do
+    #
+    # end
 
   end
 
@@ -122,6 +130,16 @@ describe Objectify do
       expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
     end
   end
+
+
+    describe '#reenter_addition_str_content' do
+      it '' do
+        string = 'x+(2-a)+y+3+(5z)^4'
+        dollar_array = ["x","($$$)",'y','3',"($$)^4"]
+        dummy_class.reenter_addition_str_content(string:string,dollar_array:dollar_array)
+        expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
+      end
+    end
 
   describe '#remove_enclosing_bracks' do
     it '' do

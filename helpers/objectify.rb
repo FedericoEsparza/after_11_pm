@@ -2,46 +2,117 @@ module Objectify
   BRACKET_TYPES = [['(',')'], ['{', '}'], ['[', ']']]
 
   def objectify(str)
-    #frac/div
-    if str =~ /^\\frac/
-      str_copy = str.dup
-      top_indices = matching_brackets(str_copy,'{','}')
-      numerator = str_copy.slice(top_indices[0]+1..top_indices[1]-1)
-      str_copy.slice!(0..top_indices[1])
-      bot_indices = matching_brackets(str_copy,'{','}')
-      denominator = str_copy.slice(bot_indices[0]+1..bot_indices[1]-1)
-      str_args = [numerator,denominator]
-      object_args = str_args.inject([]){ |r,e| r << objectify(e) }
-      return div(object_args)
-    end
-    #power
-    if str =~ /\^/
-      str_args = str.split('^')
+    # puts 'start of objectify'
+    # puts 'string to objectify is ' + str
+    original_string = str.dup
+    # str_copy = str.dup
+    str_copy = empty_brackets(string:str.dup)
+
+    if str_copy.include?('+')
+      str_args = str_copy.split('+')
+      # p str_args
+      reenter_addition_str_content(string:original_string,dollar_array:str_args)
       remove_enclosing_bracks(string_array:str_args)
-      object_args = str_args.inject([]){ |r,e| r << objectify(e) }
-      return pow(object_args)
-    end
-    #2+x+y
-    if str.include?('+')
-      str_args = str.split('+')
+      # p str_args
       object_args = str_args.inject([]){ |r,e| r << objectify(e) }
       return add(object_args)
     end
-    #2xyz
-    if str.length > 1 && !(/[^A-Za-z0-9_]/ =~ str)
-      str_args = str.split('')
+
+    mtp_check_str_copy = str_copy.dup
+    mtp_check_str_ary = split_mtp_args(string:mtp_check_str_copy)
+
+    if str_copy.include?('+') == false && mtp_check_str_ary.length > 1 # && not a fraction of legnth 1 or pwer of length 1
+      str_args = split_mtp_args(string:str_copy)
+      reenter_str_content(string:original_string,dollar_array:str_args)
+      remove_enclosing_bracks(string_array:str_args)
       object_args = str_args.inject([]){ |r,e| r << objectify(e) }
       return mtp(object_args)
     end
+
+    #frac/div
+    # if str =~ /^\\frac/
+    #   str_copy = str.dup
+    #   top_indices = matching_brackets(str_copy,'{','}')
+    #   numerator = str_copy.slice(top_indices[0]+1..top_indices[1]-1)
+    #   str_copy.slice!(0..top_indices[1])
+    #   bot_indices = matching_brackets(str_copy,'{','}')
+    #   denominator = str_copy.slice(bot_indices[0]+1..bot_indices[1]-1)
+    #   str_args = [numerator,denominator]
+    #   object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+    #   return div(object_args)
+    # end
+    # #power
+    # if str =~ /\^/
+    #   str_args = str.split('^')
+    #   remove_enclosing_bracks(string_array:str_args)
+    #   object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+    #   return pow(object_args)
+    # end
+    #2+x+y
+    # if str.include?('+')
+    #   str_args = str.split('+')
+    #   object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+    #   return add(object_args)
+    # end
+
+    #2xyz
+    # if str.length > 1 && !(/[^A-Za-z0-9_]/ =~ str)
+    #   str_args = str.split('')
+    #   object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+    #   return mtp(object_args)
+    # end
+
     #string variable
     if str.length == 1 && /[A-Za-z]/ =~ str
       return str
     end
     #number
-    if /[0-9]/ =~ str
+    if str.length == 1 && /[0-9]/ =~ str
       return str.to_i
     end
   end
+
+  # def objectify(str)
+  #   #frac/div
+  #   if str =~ /^\\frac/
+  #     str_copy = str.dup
+  #     top_indices = matching_brackets(str_copy,'{','}')
+  #     numerator = str_copy.slice(top_indices[0]+1..top_indices[1]-1)
+  #     str_copy.slice!(0..top_indices[1])
+  #     bot_indices = matching_brackets(str_copy,'{','}')
+  #     denominator = str_copy.slice(bot_indices[0]+1..bot_indices[1]-1)
+  #     str_args = [numerator,denominator]
+  #     object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+  #     return div(object_args)
+  #   end
+  #   #power
+  #   if str =~ /\^/
+  #     str_args = str.split('^')
+  #     remove_enclosing_bracks(string_array:str_args)
+  #     object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+  #     return pow(object_args)
+  #   end
+  #   #2+x+y
+  #   if str.include?('+')
+  #     str_args = str.split('+')
+  #     object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+  #     return add(object_args)
+  #   end
+  #   #2xyz
+  #   if str.length > 1 && !(/[^A-Za-z0-9_]/ =~ str)
+  #     str_args = str.split('')
+  #     object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+  #     return mtp(object_args)
+  #   end
+  #   #string variable
+  #   if str.length == 1 && /[A-Za-z]/ =~ str
+  #     return str
+  #   end
+  #   #number
+  #   if /[0-9]/ =~ str
+  #     return str.to_i
+  #   end
+  # end
 
   def matching_brackets(str,left_brac,right_brac,brackets_num=1)
     n_th_lbrac_index = _find_bracket_n(str,left_brac,brackets_num)
@@ -198,6 +269,19 @@ module Objectify
     end
   end
 
+  def reenter_addition_str_content(string:,dollar_array:)
+    i = 0
+    dollar_array.each do |str|
+      str.each_char.with_index do |c,c_i|
+        if c != string[i]
+          str[c_i] = string[i]
+        end
+        i += 1
+      end
+      i += 1  #accout for missing +
+    end
+  end
+
   def remove_enclosing_bracks(string_array:)
     string_array.each do |str|
       if str[0] == '(' && str[-1] == ')'
@@ -210,5 +294,6 @@ module Objectify
       end
     end
   end
+
 
 end
