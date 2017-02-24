@@ -1,5 +1,7 @@
 module Objectify
-  BRACKET_TYPES = [['(',')'], ['{', '}'], ['[', ']']]
+  def brac_types
+    [['(',')'], ['{', '}'], ['[', ']']]
+  end
 
   def objectify(str)
     original_string = str.dup
@@ -50,7 +52,7 @@ module Objectify
       if str_copy[0] != '('
         str_args = str_copy.split('^')
       else
-        bracket_indices = matching_brackets(str_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1],1)
+        bracket_indices = matching_brackets(str_copy, brac_types[0][0], brac_types[0][1],1)
         str_args << str_copy[0..bracket_indices[1]]
         str_args << str_copy[bracket_indices[1]+2..-1]
       end
@@ -92,46 +94,28 @@ module Objectify
     i = 0
     num_of_left_bracs = 0
     while i < str.length && num_of_left_bracs < brackets_num
-      if str[i] == left_brac
-        num_of_left_bracs += 1
-      end
+      num_of_left_bracs += 1 if str[i] == left_brac
       i += 1
     end
     n_th_lbrac_index = i - 1
   end
 
+  def _bracket_count(str,bracket,result_array)
+    i = 1
+    while i <= (str.count(bracket[0]))
+      result_array << matching_brackets(str,bracket[0], bracket[1], i)
+      i += 1
+    end
+  end
+
   def empty_brackets(string:)
-    type_1_brac_count = string.count BRACKET_TYPES[0][0]
-    type_2_brac_count = string.count BRACKET_TYPES[1][0]
-    type_3_brac_count = string.count BRACKET_TYPES[2][0]
-
-    bracket_ranges_array = []
-
-    type_1_i = 1
-    while type_1_i < (type_1_brac_count + 1)
-      bracket_ranges_array << matching_brackets(string, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], type_1_i)
-      type_1_i += 1
+    result_array = []
+    (0..2).each { |i| _bracket_count(string,brac_types[i],result_array) }
+    result_array.each do |brackets_range|
+      start_i = brackets_range[0] + 1
+      end_i = brackets_range[1] - 1
+      string[start_i..end_i] = '$' * string[start_i..end_i].length
     end
-
-    type_2_i = 1
-    while type_2_i < (type_2_brac_count + 1)
-      bracket_ranges_array << matching_brackets(string, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], type_2_i)
-      type_2_i += 1
-    end
-
-    type_3_i = 1
-    while type_3_i < (type_3_brac_count + 1)
-      bracket_ranges_array << matching_brackets(string, BRACKET_TYPES[2][0], BRACKET_TYPES[2][1], type_3_i)
-      type_3_i += 1
-    end
-
-    bracket_ranges_array.each do |brackets_range|
-      start_index = brackets_range[0] + 1
-      end_index = brackets_range[1] - 1
-
-      string[start_index..end_index] = '$' * string[start_index..end_index].length
-    end
-
     string
   end
 
@@ -148,10 +132,10 @@ module Objectify
           if string_copy[2] =~ /\w/
             result_array << string_copy.slice!(0..2)
           elsif string_copy[2] =~ /\(/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 1)[1]
+            end_of_second_index = matching_brackets(string_copy, brac_types[0][0], brac_types[0][1], 1)[1]
             result_array << string_copy.slice!(0..end_of_second_index)
           elsif string_copy[2] =~ /\{/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], 1)[1]
+            end_of_second_index = matching_brackets(string_copy, brac_types[1][0], brac_types[1][1], 1)[1]
             result_array << string_copy.slice!(0..end_of_second_index)
           end
         else
@@ -166,10 +150,10 @@ module Objectify
           if string_copy[2] =~ /\w/
             result_array << string_copy.slice!(0..2)
           elsif string_copy[2] =~ /\(/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 1)[1]
+            end_of_second_index = matching_brackets(string_copy, brac_types[0][0], brac_types[0][1], 1)[1]
             result_array << string_copy.slice!(0..end_of_second_index)
           elsif string_copy[2] =~ /\{/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], 1)[1]
+            end_of_second_index = matching_brackets(string_copy, brac_types[1][0], brac_types[1][1], 1)[1]
             result_array << string_copy.slice!(0..end_of_second_index)
           end
         else
@@ -186,18 +170,18 @@ module Objectify
       #first char is a (
       if first_char =~ /\(/
         # func_end_index = _funciton_end_index(string: string_copy)
-        func_end_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 1)[1]
+        func_end_index = matching_brackets(string_copy, brac_types[0][0], brac_types[0][1], 1)[1]
         next_char = string_copy[func_end_index + 1]
         #(   )next char is ^
         if next_char =~ /\^/
           if string_copy[func_end_index + 2] =~ /\w/
             result_array << string_copy.slice!(0..(func_end_index + 2))
           elsif string_copy[func_end_index + 2] =~ /\(/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 2)[1]
+            end_of_second_index = matching_brackets(string_copy, brac_types[0][0], brac_types[0][1], 2)[1]
             # puts "end of second index is #{end_of_second_index}"
             result_array << string_copy.slice!(0..end_of_second_index)
           elsif string_copy[func_end_index + 2] =~ /\{/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], 1)[1]
+            end_of_second_index = matching_brackets(string_copy, brac_types[1][0], brac_types[1][1], 1)[1]
             # puts "end of second index is #{end_of_second_index}"
             result_array << string_copy.slice!(0..end_of_second_index)
           end
@@ -208,7 +192,6 @@ module Objectify
       end
       i += 1
     end
-
     result_array
   end
 
@@ -220,7 +203,7 @@ module Objectify
     bracket_num = 1 if string =~ /^\\tan/
     bracket_num = 2 if string =~ /^\\log/
 
-    matching_brackets(string, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], bracket_num)[1]
+    matching_brackets(string, brac_types[1][0], brac_types[1][1], bracket_num)[1]
   end
 
   def reenter_str_content(string:,dollar_array:)
