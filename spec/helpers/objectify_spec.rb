@@ -124,32 +124,30 @@ describe Objectify do
     end
 
     it '' do
-      expect(dummy_class.split_mtp_args(string: '($$$)^($$)')).to eq ["($$$)^($$)"]
-    end
-
-    it '' do
-      str = '2x\frac{$$$}{$}($$$$)($$$)^($$)'
-      expect(dummy_class.split_mtp_args(string:str)).to eq ["2", "x", "\\frac{$$$}{$}", "($$$$)", "($$$)^($$)"]
-    end
-
-    it '' do
-      str = '($$$$)($$$)^($$)($$$)^4'
+      str = '2x\frac{$$$}{$}($$$$)($$$)^{$$}'
       expect(dummy_class.split_mtp_args(string:str)).to eq [
-        "($$$$)", "($$$)^($$)", "($$$)^4"
+        "2", "x", "\\frac{$$$}{$}", "($$$$)", "($$$)^{$$}"
       ]
     end
 
     it '' do
-      str = '($$$$)($$$)^($$)4^($$$)5'
+      str = '($$$$)($$$)^{$$}($$$)^4'
       expect(dummy_class.split_mtp_args(string:str)).to eq [
-        "($$$$)", "($$$)^($$)", "4^($$$)",'5'
+        "($$$$)", "($$$)^{$$}", "($$$)^4"
       ]
     end
 
     it '' do
-      str = '($$$$)($$$)^($$)4^7x'
+      str = '($$$$)($$$)^{$$}4^{$$$}5'
       expect(dummy_class.split_mtp_args(string:str)).to eq [
-        "($$$$)", "($$$)^($$)", "4^7",'x'
+        "($$$$)", "($$$)^{$$}", "4^{$$$}",'5'
+      ]
+    end
+
+    it '' do
+      str = '($$$$)($$$)^{$$}4^7x'
+      expect(dummy_class.split_mtp_args(string:str)).to eq [
+        "($$$$)", "($$$)^{$$}", "4^7",'x'
       ]
     end
 
@@ -168,31 +166,31 @@ describe Objectify do
       expect(dummy_class.split_mtp_args(string:str)).to eq ["2^{$$$}"]
     end
   end
-  
-  describe '#reenter_str_content' do
-    it '' do
-      string = 'x(2-a)y3(5z)^4'
-      dollar_array = ["x","($$$)",'y','3',"($$)^4"]
-      dummy_class.reenter_str_content(string:string,dollar_array:dollar_array)
-      expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
-    end
-  end
 
-
-    describe '#reenter_addition_str_content' do
-      it '' do
-        string = 'x+(2-a)+y+3+(5z)^4'
-        dollar_array = ["x","($$$)",'y','3',"($$)^4"]
-        dummy_class.reenter_addition_str_content(string:string,dollar_array:dollar_array)
-        expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
-      end
-    end
-
-  describe '#remove_enclosing_bracks' do
-    it '' do
-      string_array = ["x","(2-a)",'y','3',"(5z)^4"]
-      dummy_class.remove_enclosing_bracks(string_array:string_array)
-      expect(string_array).to eq ["x","2-a",'y','3',"(5z)^4"]
-    end
-  end
+  # describe '#reenter_str_content' do
+  #   it '' do
+  #     string = 'x(2-a)y3(5z)^4'
+  #     dollar_array = ["x","($$$)",'y','3',"($$)^4"]
+  #     dummy_class.reenter_str_content(string:string,dollar_array:dollar_array)
+  #     expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
+  #   end
+  # end
+  #
+  #
+  #   describe '#reenter_addition_str_content' do
+  #     it '' do
+  #       string = 'x+(2-a)+y+3+(5z)^4'
+  #       dollar_array = ["x","($$$)",'y','3',"($$)^4"]
+  #       dummy_class.reenter_addition_str_content(string:string,dollar_array:dollar_array)
+  #       expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
+  #     end
+  #   end
+  #
+  # describe '#remove_enclosing_bracks' do
+  #   it '' do
+  #     string_array = ["x","(2-a)",'y','3',"(5z)^4"]
+  #     dummy_class.remove_enclosing_bracks(string_array:string_array)
+  #     expect(string_array).to eq ["x","2-a",'y','3',"(5z)^4"]
+  #   end
+  # end
 end
