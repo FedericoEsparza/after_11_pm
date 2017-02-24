@@ -85,4 +85,61 @@ module Objectify
 
     string
   end
+
+  def split_mtp_args(string:)
+    string_copy = string.dup
+    result_array = []
+    i = 0
+    while string_copy.length != 0 && i < 100
+      first_char = string_copy[0]
+      #first char is numerical
+      if first_char =~ /\d+/
+        result_array << string_copy.slice!(0)
+        next
+      end
+      #first char is letter
+      if first_char =~ /[A-Za-z]/
+        result_array << string_copy.slice!(0)
+        next
+      end
+      #first char is \ for a function
+      if first_char =~ /\\/
+        func_end_index = _funciton_end_index(string: string_copy)
+        result_array << string_copy.slice!(0..func_end_index)
+        next
+      end
+      #first char is a (
+      if first_char =~ /\(/
+        func_end_index = _funciton_end_index(string: string_copy)
+        next_char = string_copy[func_end_index + 1]
+        #(   )next char is ^
+        if next_char =~ /\^/
+          if string_copy[func_end_index + 2] =~ /\w/
+            result_array << string_copy.slice!(0..(func_end_index + 2))
+          elsif string_copy[func_end_index + 2] =~ /\(/
+            end_of_second_index = matching_brackets(string, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 2)[1]
+            result_array << string_copy.slice!(0..end_of_second_index)
+          end
+        else
+          result_array << string_copy.slice!(0..func_end_index)
+        end
+        next
+      end
+
+      i += 1
+    end
+
+    result_array
+  end
+
+  def _funciton_end_index(string:)
+    bracket_num = 1
+    bracket_num = 2 if string =~ /^\\frac/
+    bracket_num = 1 if string =~ /^\\sin/
+    bracket_num = 1 if string =~ /^\\cos/
+    bracket_num = 1 if string =~ /^\\tan/
+    bracket_num = 2 if string =~ /^\\log/
+
+    matching_brackets(string, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], bracket_num)[1]
+  end
 end

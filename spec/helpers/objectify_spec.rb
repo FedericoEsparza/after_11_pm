@@ -61,4 +61,13 @@ describe Objectify do
       expect(dummy_class.empty_brackets(string: '\frac((3(x))^(()4y))(x^2)(234)de((abc))')).to eq '\frac($$$$$$$$$$$$$)($$$)($$$)de($$$$$)'
     end
   end
+
+  describe '#split_mtp_args' do
+    it 'extract args from ($$) return ["$$"]' do
+      expect(dummy_class.split_mtp_args(string: '($$)')).to eq ["($$)"]
+    end
+    it 'extract args from 2x\frac($$$)($)($$$$)($$$)^($$)($$)^4 return ["$$"]' do
+      expect(dummy_class.split_mtp_args(string: '2x\frac($$$)($)($$$$)($$$)^($$)($$)^4')).to eq ["2", "x", "\\frac($$$)($)", "($$$$)", "($$$)^($$)($$)^", "4"]
+    end
+  end
 end
