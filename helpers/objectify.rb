@@ -1,5 +1,7 @@
 module Objectify
-  BRACKET_TYPES = [['(',')'], ['{', '}'], ['[', ']']]
+  def brac_types
+    [['(',')'], ['{', '}'], ['[', ']']]
+  end
 
   def objectify(str)
     original_string = str.dup
@@ -50,7 +52,7 @@ module Objectify
       if str_copy[0] != '('
         str_args = str_copy.split('^')
       else
-        bracket_indices = matching_brackets(str_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1],1)
+        bracket_indices = matching_brackets(str_copy, brac_types[0][0], brac_types[0][1],1)
         str_args << str_copy[0..bracket_indices[1]]
         str_args << str_copy[bracket_indices[1]+2..-1]
       end
@@ -92,135 +94,113 @@ module Objectify
     i = 0
     num_of_left_bracs = 0
     while i < str.length && num_of_left_bracs < brackets_num
-      if str[i] == left_brac
-        num_of_left_bracs += 1
-      end
+      num_of_left_bracs += 1 if str[i] == left_brac
       i += 1
     end
     n_th_lbrac_index = i - 1
   end
 
   def empty_brackets(string:)
-    type_1_brac_count = string.count BRACKET_TYPES[0][0]
-    type_2_brac_count = string.count BRACKET_TYPES[1][0]
-    type_3_brac_count = string.count BRACKET_TYPES[2][0]
-
-    bracket_ranges_array = []
-
-    type_1_i = 1
-    while type_1_i < (type_1_brac_count + 1)
-      bracket_ranges_array << matching_brackets(string, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], type_1_i)
-      type_1_i += 1
+    result_array = []
+    (0..2).each { |i| _collect_brac_indices(string,brac_types[i],result_array) }
+    result_array.each do |brackets_range|
+      start_i = brackets_range[0] + 1
+      end_i = brackets_range[1] - 1
+      string[start_i..end_i] = '$' * string[start_i..end_i].length
     end
-
-    type_2_i = 1
-    while type_2_i < (type_2_brac_count + 1)
-      bracket_ranges_array << matching_brackets(string, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], type_2_i)
-      type_2_i += 1
-    end
-
-    type_3_i = 1
-    while type_3_i < (type_3_brac_count + 1)
-      bracket_ranges_array << matching_brackets(string, BRACKET_TYPES[2][0], BRACKET_TYPES[2][1], type_3_i)
-      type_3_i += 1
-    end
-
-    bracket_ranges_array.each do |brackets_range|
-      start_index = brackets_range[0] + 1
-      end_index = brackets_range[1] - 1
-
-      string[start_index..end_index] = '$' * string[start_index..end_index].length
-    end
-
     string
+  end
+
+  def _collect_brac_indices(str,bracket,result_array)
+    i = 1
+    while i <= (str.count(bracket[0]))
+      result_array << matching_brackets(str,bracket[0], bracket[1], i)
+      i += 1
+    end
   end
 
   def split_mtp_args(string:)
     string_copy = string.dup
     result_array = []
     i = 0
-    while string_copy.length != 0 && i < 20
-      first_char = string_copy[0]
-      #first char is numerical
-      if first_char =~ /\d+/
-        next_char = string_copy[1]
-        if next_char =~ /\^/
-          if string_copy[2] =~ /\w/
-            result_array << string_copy.slice!(0..2)
-          elsif string_copy[2] =~ /\(/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 1)[1]
-            result_array << string_copy.slice!(0..end_of_second_index)
-          elsif string_copy[2] =~ /\{/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], 1)[1]
-            result_array << string_copy.slice!(0..end_of_second_index)
-          end
-        else
-          result_array << string_copy.slice!(0)
-        end
-        next
-      end
-      #first char is letter
-      if first_char =~ /[A-Za-z]/
-        next_char = string_copy[1]
-        if next_char =~ /\^/
-          if string_copy[2] =~ /\w/
-            result_array << string_copy.slice!(0..2)
-          elsif string_copy[2] =~ /\(/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 1)[1]
-            result_array << string_copy.slice!(0..end_of_second_index)
-          elsif string_copy[2] =~ /\{/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], 1)[1]
-            result_array << string_copy.slice!(0..end_of_second_index)
-          end
-        else
-          result_array << string_copy.slice!(0)
-        end
-        next
-      end
-      #first char is \ for a function
-      if first_char =~ /\\/
-        func_end_index = _funciton_end_index(string: string_copy)
-        result_array << string_copy.slice!(0..func_end_index)
-        next
-      end
-      #first char is a (
-      if first_char =~ /\(/
-        # func_end_index = _funciton_end_index(string: string_copy)
-        func_end_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 1)[1]
-        next_char = string_copy[func_end_index + 1]
-        #(   )next char is ^
-        if next_char =~ /\^/
-          if string_copy[func_end_index + 2] =~ /\w/
-            result_array << string_copy.slice!(0..(func_end_index + 2))
-          elsif string_copy[func_end_index + 2] =~ /\(/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[0][0], BRACKET_TYPES[0][1], 2)[1]
-            # puts "end of second index is #{end_of_second_index}"
-            result_array << string_copy.slice!(0..end_of_second_index)
-          elsif string_copy[func_end_index + 2] =~ /\{/
-            end_of_second_index = matching_brackets(string_copy, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], 1)[1]
-            # puts "end of second index is #{end_of_second_index}"
-            result_array << string_copy.slice!(0..end_of_second_index)
-          end
-        else
-          result_array << string_copy.slice!(0..func_end_index)
-        end
-        next
-      end
+    while string_copy.length != 0 && i < 100
+      _add_next_str_var_arg(result_array,string_copy)
+      _add_next_pow_arg(result_array,string_copy)
+      _add_next_function_arg(result_array,string_copy)
+      _add_next_num_arg(result_array,string_copy)
+      _add_next_brac_arg(result_array,string_copy)
       i += 1
     end
-
     result_array
   end
 
-  def _funciton_end_index(string:)
-    bracket_num = 1
+  def _add_next_function_arg(result_array,string_copy)
+    if string_copy[0] =~ /\\/
+      func_end_index = __funciton_end_index(string: string_copy)
+      result_array << string_copy.slice!(0..func_end_index)
+    end
+  end
+
+  def __funciton_end_index(string:)
     bracket_num = 2 if string =~ /^\\frac/
     bracket_num = 1 if string =~ /^\\sin/
     bracket_num = 1 if string =~ /^\\cos/
     bracket_num = 1 if string =~ /^\\tan/
     bracket_num = 2 if string =~ /^\\log/
 
-    matching_brackets(string, BRACKET_TYPES[1][0], BRACKET_TYPES[1][1], bracket_num)[1]
+    matching_brackets(string, brac_types[1][0], brac_types[1][1], bracket_num)[1]
+  end
+
+  def _add_next_str_var_arg(result_array,string_copy)
+    if string_copy[0] =~ /[A-Za-z]/ && string_copy[1] != '^'
+        result_array << string_copy.slice!(0)
+    end
+  end
+
+  def _add_next_pow_arg(result_array,string_copy)
+    if string_copy =~ /^\d+\^/
+      base_length = string_copy[/^\d+\^/].length
+    end
+
+    if string_copy =~ /^\(\$*\)\^/
+      base_length = string_copy[/^\(\$*\)\^/].length
+    end
+
+    if string_copy =~ /^[A-Za-z]\^/
+      base_length = string_copy[/^[A-Za-z]\^/].length
+    end
+
+    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /[A-Za-z]/
+      result_array << string_copy.slice!(0..(base_length))
+      return
+    end
+
+    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\d/
+      result_array << string_copy.slice!(0..(base_length))
+      return
+    end
+
+    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\{/
+      pow_ind_end_i = matching_brackets(string_copy,brac_types[1][0],brac_types[1][1],1)[1]
+      result_array << string_copy.slice!(0..pow_ind_end_i)
+      return
+    end
+  end
+
+  def __next_arg_is_pow?(string_copy)
+    string_copy =~ /^\d+\^/ || string_copy =~ /^\(\$*\)\^/ || string_copy =~ /^[A-Za-z]\^/
+  end
+
+  def _add_next_num_arg(result_array,string_copy)
+    if string_copy =~ /^\d+(?!\^)/
+       result_array << string_copy.slice!(/^\d+(?!\^)/)
+    end
+  end
+
+  def _add_next_brac_arg(result_array,string_copy)
+    if string_copy =~ /^\(\$*\)(?!\^)/
+      result_array << string_copy.slice!(/^\(\$*\)(?!\^)/)
+    end
   end
 
   def reenter_str_content(string:,dollar_array:)
@@ -260,6 +240,5 @@ module Objectify
       end
     end
   end
-
 
 end
