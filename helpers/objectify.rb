@@ -215,7 +215,6 @@ module Objectify
   end
 
   def _add_next_pow_arg(result_array,string_copy)
-    base_length = 0
     if string_copy =~ /^\d+\^/
       base_length = string_copy[/^\d+\^/].length
     end
@@ -229,15 +228,11 @@ module Objectify
     end
 
     if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /[A-Za-z]/
-      # puts 'here '
       result_array << string_copy.slice!(0..(base_length))
       return
     end
 
     if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\d/
-      # THIS NEEDS TO ACCOUTN FOR MULTI DIGIT NUMBERS!!!!!!!!!!
-      # puts 'tererhere '
-      # p base_length
       result_array << string_copy.slice!(0..(base_length))
       return
     end
@@ -254,8 +249,8 @@ module Objectify
   end
 
   def _add_next_num_arg(result_array,string_copy)
-    if string_copy =~ /^\d+/
-       result_array << string_copy.slice!(/^\d+/)
+    if string_copy =~ /^\d+(?!\^)/# && __next_arg_is_pow?(string_copy)
+       result_array << string_copy.slice!(/^\d+(?!\^)/)
     end
   end
 
