@@ -136,55 +136,65 @@ describe Objectify do
     #     "($$$$)", "($$$)^{$$}", "($$$)^4"
     #   ]
     # end
+
+    it '' do
+      str = '($$$$)($$$)^{$$}4^{$$$}5'
+      expect(dummy_class.split_mtp_args(string:str)).to eq [
+        "($$$$)", "($$$)^{$$}", "4^{$$$}",'5'
+      ]
+    end
     #
     # it '' do
-    #   str = '($$$$)($$$)^{$$}4^{$$$}5'
+    #   str = '($$$$)($$$)^{$$}4x'
     #   expect(dummy_class.split_mtp_args(string:str)).to eq [
-    #     "($$$$)", "($$$)^{$$}", "4^{$$$}",'5'
+    #     "($$$$)", "($$$)^{$$}", "4",'x'
     #   ]
     # end
     #
     # it '' do
-    #   str = '($$$$)($$$)^{$$}4^7x'
-    #   expect(dummy_class.split_mtp_args(string:str)).to eq [
-    #     "($$$$)", "($$$)^{$$}", "4^7",'x'
-    #   ]
+    #   str = "($$$)^{$$$$}"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$)^{$$$$}"]
     # end
     #
-    it '' do
-      str = "($$$)^{$$$$}"
-      expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$)^{$$$$}"]
-    end
-
-    it '' do
-      str = "x^{$$}"
-      expect(dummy_class.split_mtp_args(string:str)).to eq ["x^{$$}"]
-    end
-
-    it '' do
-      str = "12^{$$$}"
-      expect(dummy_class.split_mtp_args(string:str)).to eq ["12^{$$$}"]
-    end
-
-    it '' do
-      str = "($$$$$)^{$$$}"
-      expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$$$)^{$$$}"]
-    end
-
-    it '' do
-      str = "xy"
-      expect(dummy_class.split_mtp_args(string:str)).to eq ['x','y']
-    end
-
-    it '' do
-      str = "x12^{$$$}"
-      expect(dummy_class.split_mtp_args(string:str)).to eq ['x','12^{$$$}']
-    end
-
-    it '' do
-      str = '\frac{$$$}{$$$$$}xy'
-      expect(dummy_class.split_mtp_args(string:str)).to eq ['\frac{$$$}{$$$$$}','x','y']
-    end
+    # it '' do
+    #   str = "3^4x"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ["3^4",'x']
+    # end
+    #
+    # it '' do
+    #   str = "x^{$$}"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ["x^{$$}"]
+    # end
+    #
+    # it '' do
+    #   str = "12^{$$$}"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ["12^{$$$}"]
+    # end
+    #
+    # it '' do
+    #   str = "($$$$$)^{$$$}"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$$$)^{$$$}"]
+    # end
+    #
+    # it '' do
+    #   str = "xy"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ['x','y']
+    # end
+    #
+    # it '' do
+    #   str = "x12^{$$$}"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ['x','12^{$$$}']
+    # end
+    #
+    # it '' do
+    #   str = '\frac{$$$}{$$$$$}xy'
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ['\frac{$$$}{$$$$$}','x','y']
+    # end
+    #
+    # it '' do
+    #   str = "123x"
+    #   expect(dummy_class.split_mtp_args(string:str)).to eq ['123','x']
+    # end
   end
 
   # describe '#reenter_str_content' do

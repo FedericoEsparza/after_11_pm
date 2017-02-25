@@ -127,7 +127,8 @@ module Objectify
       _add_next_str_var_arg(result_array,string_copy)
       _add_next_pow_arg(result_array,string_copy)
       _add_next_function_arg(result_array,string_copy)
-      # _add_next_num_arg(result_array,string_copy)
+      _add_next_num_arg(result_array,string_copy)
+      _add_next_brac_arg(result_array,string_copy)
       # first_char = string_copy[0]
       #first char is numerical
       # if first_char =~ /\d+/
@@ -227,21 +228,43 @@ module Objectify
       base_length = string_copy[/^[A-Za-z]\^/].length
     end
 
-    if string_copy[base_length] =~ /\w/
-      result_array << string_copy.slice!(0..(base_length+1))
+    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /[A-Za-z]/
+      # puts 'here '
+      result_array << string_copy.slice!(0..(base_length))
       return
     end
 
-    if string_copy[base_length] =~ /\{/
+    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\d/
+      # THIS NEEDS TO ACCOUTN FOR MULTI DIGIT NUMBERS!!!!!!!!!!
+      # puts 'tererhere '
+      # p base_length
+      result_array << string_copy.slice!(0..(base_length))
+      return
+    end
+
+    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\{/
       pow_ind_end_i = matching_brackets(string_copy,brac_types[1][0],brac_types[1][1],1)[1]
       result_array << string_copy.slice!(0..pow_ind_end_i)
       return
     end
-    # end
   end
 
   def __next_arg_is_pow?(string_copy)
     string_copy =~ /^\d+\^/ || string_copy =~ /^\(\$*\)\^/ || string_copy =~ /^[A-Za-z]\^/
+  end
+
+  def _add_next_num_arg(result_array,string_copy)
+    if string_copy =~ /^\d+/
+       result_array << string_copy.slice!(/^\d+/)
+    end
+  end
+
+  def _add_next_brac_arg(result_array,string_copy)
+    if string_copy =~ /^\(\$*\)(?!\^)/
+      result_array << string_copy.slice!(/^\(\$*\)(?!\^)/)
+      # brac_end_index = matching_brackets(string_copy, brac_types[0][0], brac_types[0][1], 1)[1]
+      # next_char = string_copy[func_end_index + 1]
+    end
   end
 
   def reenter_str_content(string:,dollar_array:)
