@@ -123,69 +123,12 @@ module Objectify
     string_copy = string.dup
     result_array = []
     i = 0
-    while string_copy.length != 0 && i < 20
+    while string_copy.length != 0 && i < 100
       _add_next_str_var_arg(result_array,string_copy)
       _add_next_pow_arg(result_array,string_copy)
       _add_next_function_arg(result_array,string_copy)
       _add_next_num_arg(result_array,string_copy)
       _add_next_brac_arg(result_array,string_copy)
-      # first_char = string_copy[0]
-      #first char is numerical
-      # if first_char =~ /\d+/
-      #   next_char = string_copy[1]
-      #   if next_char =~ /\^/
-      #     if string_copy[2] =~ /\w/
-      #       result_array << string_copy.slice!(0..2)
-      #       next
-      #     end
-      #     if string_copy[2] =~ /\{/
-      #       end_of_second_index = matching_brackets(string_copy, brac_types[1][0], brac_types[1][1], 1)[1]
-      #       result_array << string_copy.slice!(0..end_of_second_index)
-      #       next
-      #     end
-      #   else
-      #     result_array << string_copy.slice!(0)
-      #     next
-      #   end
-      # end
-      #first char is letter
-
-
-      # if first_char =~ /[A-Za-z]/
-      #   next_char = string_copy[1]
-      #   if next_char =~ /\^/
-      #     if string_copy[2] =~ /\w/
-      #       result_array << string_copy.slice!(0..2)
-      #     elsif string_copy[2] =~ /\{/
-      #       end_of_second_index = matching_brackets(string_copy, brac_types[1][0], brac_types[1][1], 1)[1]
-      #       result_array << string_copy.slice!(0..end_of_second_index)
-      #     end
-      #   # else
-      #   #   result_array << string_copy.slice!(0)
-      #   end
-      #   next
-      # end
-      #first char is \ for a function
-
-      #first char is a (
-      # if first_char =~ /\(/
-      #   # func_end_index = _funciton_end_index(string: string_copy)
-      #   func_end_index = matching_brackets(string_copy, brac_types[0][0], brac_types[0][1], 1)[1]
-      #   next_char = string_copy[func_end_index + 1]
-      #   #(   )next char is ^
-      #   if next_char =~ /\^/
-      #     if string_copy[func_end_index + 2] =~ /\w/
-      #       result_array << string_copy.slice!(0..(func_end_index + 2))
-      #     elsif string_copy[func_end_index + 2] =~ /\{/
-      #       end_of_second_index = matching_brackets(string_copy, brac_types[1][0], brac_types[1][1], 1)[1]
-      #       # puts "end of second index is #{end_of_second_index}"
-      #       result_array << string_copy.slice!(0..end_of_second_index)
-      #     end
-      #   else
-      #     result_array << string_copy.slice!(0..func_end_index)
-      #   end
-      #   next
-      # end
       i += 1
     end
     result_array
@@ -249,7 +192,7 @@ module Objectify
   end
 
   def _add_next_num_arg(result_array,string_copy)
-    if string_copy =~ /^\d+(?!\^)/# && __next_arg_is_pow?(string_copy)
+    if string_copy =~ /^\d+(?!\^)/
        result_array << string_copy.slice!(/^\d+(?!\^)/)
     end
   end
@@ -257,8 +200,6 @@ module Objectify
   def _add_next_brac_arg(result_array,string_copy)
     if string_copy =~ /^\(\$*\)(?!\^)/
       result_array << string_copy.slice!(/^\(\$*\)(?!\^)/)
-      # brac_end_index = matching_brackets(string_copy, brac_types[0][0], brac_types[0][1], 1)[1]
-      # next_char = string_copy[func_end_index + 1]
     end
   end
 
