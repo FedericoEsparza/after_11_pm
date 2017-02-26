@@ -119,6 +119,11 @@ describe Objectify do
   end
 
   describe '#split_mtp_args' do
+    it '' do
+      str = "x^{$$}"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["x^{$$}"]
+    end
+
     it 'extract args from ($$) return ["$$"]' do
       expect(dummy_class.split_mtp_args(string: '($$)')).to eq ["($$)"]
     end
@@ -166,11 +171,6 @@ describe Objectify do
     it '' do
       str = "3^4x"
       expect(dummy_class.split_mtp_args(string:str)).to eq ["3^4",'x']
-    end
-
-    it '' do
-      str = "x^{$$}"
-      expect(dummy_class.split_mtp_args(string:str)).to eq ["x^{$$}"]
     end
 
     it '' do
