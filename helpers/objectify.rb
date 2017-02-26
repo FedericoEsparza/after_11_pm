@@ -152,43 +152,16 @@ module Objectify
   end
 
   def _add_next_str_var_arg(result_array,string_copy)
-    if string_copy[0] =~ /[A-Za-z]/ && string_copy[1] != '^'
-        result_array << string_copy.slice!(0)
+    if string_copy =~ /^[A-Za-z](?!\^)/
+      result_array << string_copy.slice!(0)
     end
   end
 
   def _add_next_pow_arg(result_array,string_copy)
-    if string_copy =~ /^\d+\^/
-      base_length = string_copy[/^\d+\^/].length
-    end
-
-    if string_copy =~ /^\(\$*\)\^/
-      base_length = string_copy[/^\(\$*\)\^/].length
-    end
-
-    if string_copy =~ /^[A-Za-z]\^/
-      base_length = string_copy[/^[A-Za-z]\^/].length
-    end
-
-    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /[A-Za-z]/
-      result_array << string_copy.slice!(0..(base_length))
-      return
-    end
-
-    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\d/
-      result_array << string_copy.slice!(0..(base_length))
-      return
-    end
-
-    if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\{/
-      pow_ind_end_i = matching_brackets(string_copy,brac_types[1][0],brac_types[1][1],1)[1]
-      result_array << string_copy.slice!(0..pow_ind_end_i)
-      return
-    end
-  end
-
-  def __next_arg_is_pow?(string_copy)
-    string_copy =~ /^\d+\^/ || string_copy =~ /^\(\$*\)\^/ || string_copy =~ /^[A-Za-z]\^/
+    # pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\d*)|(\{\$*\}))/
+    pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d*))/
+    sliced = string_copy.slice!(pow_reg)
+    result_array << sliced unless sliced.nil?
   end
 
   def _add_next_num_arg(result_array,string_copy)
@@ -242,3 +215,42 @@ module Objectify
   end
 
 end
+
+
+## Too chicken to delete
+
+
+  # def __next_arg_is_pow?(string_copy)
+  #   string_copy =~ /^\d+\^/ || string_copy =~ /^\(\$*\)\^/ || string_copy =~ /^[A-Za-z]\^/
+  # end
+
+
+# def old_power
+
+# if string_copy =~ /^\d+\^/
+#   base_length = string_copy[/^\d+\^/].length
+# end
+#
+# if string_copy =~ /^\(\$*\)\^/
+#   base_length = string_copy[/^\(\$*\)\^/].length
+# end
+#
+# if string_copy =~ /^[A-Za-z]\^/
+#   base_length = string_copy[/^[A-Za-z]\^/].length
+# end
+#
+# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /[A-Za-z]/
+#   result_array << string_copy.slice!(0..(base_length))
+#   return
+# end
+#
+# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\d*/
+#   result_array << string_copy.slice!(0..(base_length))
+#   return
+# end
+#
+# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\{/
+#   pow_ind_end_i = matching_brackets(string_copy,brac_types[1][0],brac_types[1][1],1)[1]
+#   result_array << string_copy.slice!(0..pow_ind_end_i)
+#   return
+# end
