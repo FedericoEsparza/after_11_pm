@@ -77,13 +77,29 @@ describe Objectify do
       expect(dummy_class.objectify('2^{3xy}')).to eq pow(2,mtp(3,'x','y'))
     end
 
-    it '\frac{c}{d}(2x-4^x)' do
+    it '\frac{c}{d}(2x+4^x)' do
       expect(dummy_class.objectify('\frac{c}{d}(2x+4^x)')).to eq mtp(div('c','d'),add(mtp(2,'x'),pow(4,'x')))
     end
 
     it '\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}' do
       exp = dummy_class.objectify('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}')
       expect(exp).to eq add(div('a','b'),pow(mtp(div('c','d'),add(mtp(2,'x'),pow(4,'x'))),div(5,'y')))
+    end
+  end
+
+  describe 'objectify and olatex back' do
+    it 'objectify and olatex back 2^{3xy}' do
+      expect(dummy_class.objectify('2^{3xy}').latex.shorten).to eq '2^{3xy}'
+    end
+  end
+
+  describe '#correct_latex?' do
+    it 'is \frac{c}{d}(2x+4^x) correct_latex?' do
+      expect('\frac{c}{d}(2x+4^x)'.correct_latex?).to be true
+    end
+
+    it 'is \frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}} correct_latex?' do
+      expect('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'.correct_latex?).to be true
     end
   end
 

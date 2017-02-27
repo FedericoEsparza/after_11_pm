@@ -31,6 +31,10 @@ module ClassName
     Multiplication
   end
 
+  def division
+    Division
+  end
+
   def sine
     Sine
   end

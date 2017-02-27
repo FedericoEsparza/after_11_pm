@@ -43,7 +43,7 @@ module Objectify
       return div(object_args)
     end
 
-    # #power
+    #power
     if mtp_check_str_ary.length == 1 && mtp_check_str_ary[0] =~ /\^/
       str_args = split_mtp_args(string:str_copy)
       reenter_str_content(string:original_string,dollar_array:str_args)
@@ -128,7 +128,6 @@ module Objectify
       _add_next_num_arg(result_array,string_copy)
       _add_next_function_arg(result_array,string_copy)
       _add_next_pow_arg(result_array,string_copy)
-      # _add_next_num_arg(result_array,string_copy)
       _add_next_brac_arg(result_array,string_copy)
       i += 1
     end
@@ -142,7 +141,7 @@ module Objectify
   end
 
   def _add_next_num_arg(result_array,string_copy)
-    # num_reg = /^(\d+)[^\^]/
+    # num_reg = /^(\d+)(?!\^)/
     # sliced = string_copy.slice!(num_reg)
     # result_array << sliced unless sliced.nil?
     next_num_ind = _next_num_index(string_copy)

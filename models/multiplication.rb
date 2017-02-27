@@ -1,6 +1,7 @@
 include LatexUtilities
 include Factory
 include Types
+include Objectify
 
 class Multiplication
   attr_accessor :args
@@ -323,7 +324,7 @@ class Multiplication
   def latex
     result = ''
     for i in 0..args.length - 1
-      if elementary?(args[i]) || args[i].is_a?(power)
+      if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
         arg_i_latex = args[i].latex
       else
         arg_i_latex = brackets(args[i].latex)
