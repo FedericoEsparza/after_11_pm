@@ -54,6 +54,7 @@ describe Objectify do
 
     it '3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4' do
       expect(dummy_class.objectify('3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4')).to eq add(mtp(3,add('x',div(add(mtp(3,div(3,'x')),5),add(4,5,'a')))),4)
+      # puts dummy_class.objectify('3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4').latex
     end
 
     it 'x^{3y}' do
@@ -213,21 +214,38 @@ describe Objectify do
     end
   end
 
-
-    describe '#reenter_addition_str_content' do
-      it '' do
-        string = 'x+(2-a)+y+3+(5z)^4'
-        dollar_array = ["x","($$$)",'y','3',"($$)^4"]
-        dummy_class.reenter_addition_str_content(string:string,dollar_array:dollar_array)
-        expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
-      end
+  describe '#reenter_addition_str_content' do
+    it '' do
+      string = 'x+(2-a)+y+3+(5z)^4'
+      dollar_array = ["x","($$$)",'y','3',"($$)^4"]
+      dummy_class.reenter_addition_str_content(string:string,dollar_array:dollar_array)
+      expect(dollar_array).to eq ["x","(2-a)",'y','3',"(5z)^4"]
     end
+  end
 
   describe '#remove_enclosing_bracks' do
     it '' do
       string_array = ["x","(2-a)",'y','3',"(5z)^4"]
       dummy_class.remove_enclosing_bracks(string_array:string_array)
       expect(string_array).to eq ["x","2-a",'y','3',"(5z)^4"]
+    end
+  end
+
+  describe '#_next_num_index' do
+    it 'returns 2 for 123abc' do
+      expect(dummy_class._next_num_index('123abc')).to eq 2
+    end
+
+    it 'returns nil for 123^abc' do
+      expect(dummy_class._next_num_index('123^abc')).to eq nil
+    end
+
+    it 'returns nil for 123456' do
+      expect(dummy_class._next_num_index('123456')).to eq 5
+    end
+
+    it 'returns nil for ($$$$)123456' do
+      expect(dummy_class._next_num_index('($$$$)123456')).to eq nil
     end
   end
 end

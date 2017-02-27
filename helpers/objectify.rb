@@ -125,36 +125,52 @@ module Objectify
     i = 0
     while string_copy.length != 0 && i < 100
       _add_next_str_var_arg(result_array,string_copy)
-      _add_next_pow_arg(result_array,string_copy)
-      _add_next_function_arg(result_array,string_copy)
       _add_next_num_arg(result_array,string_copy)
+      _add_next_function_arg(result_array,string_copy)
+      _add_next_pow_arg(result_array,string_copy)
+      # _add_next_num_arg(result_array,string_copy)
       _add_next_brac_arg(result_array,string_copy)
       i += 1
     end
     result_array
   end
 
-  def _add_next_function_arg(result_array,string_copy)
-    if string_copy[0] =~ /\\/
-      func_end_index = __funciton_end_index(string: string_copy)
-      result_array << string_copy.slice!(0..func_end_index)
-    end
-  end
-
-  def __funciton_end_index(string:)
-    bracket_num = 2 if string =~ /^\\frac/
-    bracket_num = 1 if string =~ /^\\sin/
-    bracket_num = 1 if string =~ /^\\cos/
-    bracket_num = 1 if string =~ /^\\tan/
-    bracket_num = 2 if string =~ /^\\log/
-
-    matching_brackets(string, brac_types[1][0], brac_types[1][1], bracket_num)[1]
-  end
-
   def _add_next_str_var_arg(result_array,string_copy)
-    if string_copy =~ /^[A-Za-z](?!\^)/
-      result_array << string_copy.slice!(0)
+    str_reg = /^[A-Za-z](?!\^)/
+    sliced = string_copy.slice!(str_reg)
+    result_array << sliced unless sliced.nil?
+  end
+
+  def _add_next_num_arg(result_array,string_copy)
+    # num_reg = /^(\d+)[^\^]/
+    # sliced = string_copy.slice!(num_reg)
+    # result_array << sliced unless sliced.nil?
+    next_num_ind = _next_num_index(string_copy)
+    if next_num_ind
+      result_array << string_copy.slice!(0..next_num_ind)
     end
+  end
+  #this is happening because I suck at regex
+  def _next_num_index(string_copy)
+    for i in 0..string_copy.length
+      unless string_copy[i] =~ /\d/
+        if i == 0
+          return nil
+        end
+        if string_copy[i] =~ /\^/
+          return nil
+        else
+          return i - 1
+        end
+      end
+    end
+    return string_copy.length - 1
+  end
+
+  def _add_next_function_arg(result_array,string_copy)
+    frac_reg = /^\\frac\{\$*\}\{\$*\}/
+    sliced = string_copy.slice!(frac_reg)
+    result_array << sliced unless sliced.nil?
   end
 
   def _add_next_pow_arg(result_array,string_copy)
@@ -164,16 +180,11 @@ module Objectify
     result_array << sliced unless sliced.nil?
   end
 
-  def _add_next_num_arg(result_array,string_copy)
-    if string_copy =~ /^\d+(?!\^)/
-       result_array << string_copy.slice!(/^\d+(?!\^)/)
-    end
-  end
 
   def _add_next_brac_arg(result_array,string_copy)
-    if string_copy =~ /^\(\$*\)(?!\^)/
-      result_array << string_copy.slice!(/^\(\$*\)(?!\^)/)
-    end
+    brac_reg = /^\(\$*\)(?!\^)/
+    sliced = string_copy.slice!(brac_reg)
+    result_array << sliced unless sliced.nil?
   end
 
   def reenter_str_content(string:,dollar_array:)
