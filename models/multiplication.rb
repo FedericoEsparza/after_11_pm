@@ -530,15 +530,20 @@ class Multiplication
 
   #RECURSION
   def expand
-    brackets = []
-    args.each do |exp|
-      brackets << exp.expand
-    end
-    mtp(brackets)
-
-    mtp(results)
     copy = self.copy
-    copy.combine_brackets
+    steps = []
+    copy.args.each do |exp|
+      puts exp
+      steps << exp.expand
+    end
+    steps = steps.equalise_array_lengths.transpose
+    steps = steps.map{|a| mtp(a)}
+
+    brackets = steps.last
+    next_steps = brackets.combine_brackets
+    steps = steps + next_steps
+    steps = delete_duplicate_steps(steps)
+    steps
   end
 
 end

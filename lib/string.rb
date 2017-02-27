@@ -35,4 +35,8 @@ class String
     objectify(self).latex.shorten == self
   end
 
+  def expand
+    [self]
+  end
+
 end

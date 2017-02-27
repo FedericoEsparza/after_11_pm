@@ -696,7 +696,7 @@ describe Multiplication do
     end
   end
 
-  describe 'similar?' do
+  describe '#similar?' do
     it 'comapres 3ayb^2a, 5ayb^2a, 5aybba' do
       m1 = mtp(4,'a','y',pow('b',2),'a')
       m2 = mtp(5,'a','y',pow('b',2),'a')
@@ -704,6 +704,31 @@ describe Multiplication do
       expect(m1.similar?(m2)).to eq true
       expect(m1.similar?(m3)).to eq false
       expect(m2.similar?(m3)).to eq false
+    end
+  end
+
+  describe '#expand' do
+    it 'expands x(x+y)' do
+      exp = mtp('x',add('x','y'))
+      result = exp.expand
+      expect(result[0]).to eq objectify('x(x+y)')
+      expect(result[1]).to eq mtp(add('x'),add('x','y'))
+      expect(result[2]).to eq add(mtp(mtp('x'),mtp('x')),mtp(mtp('x'),mtp('y')))
+      expect(result[3]).to eq add(mtp(mtp('x','x')),mtp('x','y'))
+      expect(result[4]).to eq add(mtp(mtp(pow('x',1),pow('x',1))),mtp('x','y'))
+      expect(result[5]).to eq add(mtp(pow('x',add(1,1))),mtp('x','y'))
+      expect(result[6]).to eq add(mtp(pow('x',2)),mtp('x','y'))
+    end
+
+    it 'expands m1 + m2(m3+m4)' do
+      exp = add('m1',mtp('m2',add('m3','m4')))
+      result = exp.expand
+      expect(result[-1]).to eq add('m1',add(mtp('m2','m3'),mtp('m2','m4')))
+    end
+
+    it 'expands (m1 + m2)(m5+m6)' do
+      exp = mtp(add('m1','m2'),add('m5','m6'))
+      result = exp.expand
     end
   end
 

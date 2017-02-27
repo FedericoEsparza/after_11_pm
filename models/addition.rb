@@ -202,11 +202,16 @@ class Addition < Expression
 
   #RECURSION
   def expand
-    args.each do |exp|
-      exp.expand
+    copy = self.copy
+    steps = []
+    copy.args.each do |exp|
+      puts exp
+      steps << exp.expand
     end
+    steps = steps.equalise_array_lengths.transpose
+    steps = steps.map{|a| add(a)}
+    steps = delete_duplicate_steps(steps)
 
-    add(results)
   end
 
 end
