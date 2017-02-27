@@ -36,6 +36,10 @@ describe Objectify do
       expect(dummy_class.objectify('25+(-13)x')).to eq add(25,mtp(-13,'x'))
     end
 
+    it '\frac{-14x}{25}' do
+      expect(dummy_class.objectify('\frac{-14x}{25}')).to eq div(mtp(-14,'x'),25)
+    end
+
     it '3(x+7)+4' do
       expect(dummy_class.objectify('3(x+7)+4')).to eq add(mtp(3,add('x',7)),4)
     end
