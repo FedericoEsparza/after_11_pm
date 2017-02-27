@@ -60,4 +60,22 @@ class Power
     end
     base_latex + '^' + index_latex
   end
+
+  def sort_elements
+    array = self.copy
+    pow(array.base.sort_elements,array.index.sort_elements)
+  end
+
+  def greater?(exp)
+    if exp.class == self.class
+      (self.base.greater?(exp.base)) || (self.base == exp.base && self.index.greater?(exp.index))
+    elsif exp.is_a?(Numeric) || exp.is_a?(String)
+      (self.base.greater?(exp)) || self.base == exp
+    else
+      self.greater?(exp.args.first)
+    end
+  end
+
+
+
 end
