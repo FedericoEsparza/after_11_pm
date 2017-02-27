@@ -1,4 +1,4 @@
-# require './helpers/objectify'
+require './helpers/objectify'
 
 include Objectify
 
@@ -7,6 +7,16 @@ class String
     self
   end
 
+
+  def greater?(exp)
+    if exp.is_a?(String)
+      self < exp
+    elsif exp.is_a?(Numeric)
+      true
+    else
+      self.greater?(exp.args.first)
+    end
+  end
 
   def sort_elements
     self

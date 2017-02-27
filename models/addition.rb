@@ -200,5 +200,13 @@ class Addition < Expression
     add(result_args)
   end
 
+  #RECURSION
+  def expand
+    args.each do |exp|
+      exp.expand
+    end
+
+    add(results)
+  end
 
 end

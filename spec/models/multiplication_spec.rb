@@ -27,6 +27,36 @@ describe Multiplication do
     end
   end
 
+  describe '#>' do
+    it 'checks y > z' do
+      mtp_1 = 'y'
+      mtp_2 = 'z'
+      result = mtp_1.greater?(mtp_2)
+      expect(result).to eq true
+    end
+
+    it 'checks x^2(y+x) > x^2(y+x^2)' do
+      mtp_1 = mtp(pow('x',2),add('y','x'))
+      mtp_2 = mtp(pow('x',2),add('y',pow('x',2)))
+      result = mtp_1.greater?(mtp_2)
+      expect(result).to eq false
+    end
+
+    it 'checks x^3(y+x) > x^2(y+x^2)' do
+      mtp_1 = mtp(pow('x',3),add('y','x'))
+      mtp_2 = mtp(pow('x',2),add('y',pow('x',2)))
+      result = mtp_1.greater?(mtp_2)
+      expect(result).to eq true
+    end
+
+    it 'checks 4x > 4y' do
+      mtp_1 = mtp(4,'x')
+      mtp_2 = mtp(4,'y')
+      result = mtp_1.greater?(mtp_2)
+      expect(result).to eq true
+    end
+  end
+
   describe '#copy' do
     it 'copies mtp(x,y)' do
       exp = mtp('x','y')
@@ -266,8 +296,7 @@ describe Multiplication do
          mtp(6,pow('x',add(2,-2)),'y',mtp(pow('z',1),pow('z',-1))),
          mtp(6,pow('x',0),'y',pow('z',add(1,-1))),
          mtp(6,'y',pow('z',0)),
-        #  mtp(6,'y')
-        objectify('6y')
+         mtp(6,'y')
        ]
      end
    end
@@ -291,10 +320,303 @@ describe Multiplication do
    it 'combines (x+y)(x+y)' do
      exp = mtp(add('x','y'),add('x','y'))
      result = exp.combine_two_brackets
-     expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
+     expect(result.last).to eq add(mtp(pow('x',2)),mtp('x','y',2),mtp(pow('y',2)))
+   end
+ end
+
+
+   describe '#combine_two_brackets' do
+
+     it 'combines (x+y)(x+y)' do
+       exp = mtp(add('x','y'),add('x','y'))
+       result = exp.combine_two_brackets
+       expect(exp.args).to eq [mtp(pow('x',2)),mtp('x','y',2),mtp(pow('y',2))]
+       expect(result[0]).to eq mtp(add('x','y'),add('x','y'))
+
+       expect(result[1]).to eq add(
+         mtp(mtp('x'),mtp('x')),
+         mtp(mtp('x'),mtp('y')),
+         mtp(mtp('y'),mtp('x')),
+         mtp(mtp('y'),mtp('y'))
+        )
+
+        expect(result[2]).to eq add(
+          mtp(mtp('x','x')),
+          mtp('x','y'),
+          mtp('y','x'),
+          mtp(mtp('y','y'))
+        )
+
+        expect(result[3]).to eq add(
+          mtp(mtp(pow('x',1),pow('x',1))),
+          mtp('x','y'),
+          mtp('y','x'),
+          mtp(mtp(pow('y',1),pow('y',1)))
+        )
+
+        expect(result[4]).to eq add(
+          mtp(pow('x',add(1,1))),
+          mtp('x','y'),
+          mtp('y','x'),
+          mtp(pow('y',add(1,1)))
+        )
+
+        expect(result[5]).to eq add(
+          mtp(pow('x',2)),
+          mtp('x','y'),
+          mtp('y','x'),
+          mtp(pow('y',2))
+        )
+
+        expect(result[6]).to eq add(
+          mtp(pow('x',2)),
+          mtp('x','y'),
+          mtp('x','y'),
+          mtp(pow('y',2))
+        )
+
+        expect(result[7]).to eq add(
+          mtp(pow('x',2)),
+          mtp('x','y',2),
+          mtp(pow('y',2))
+        )
+
+     end
+
+     it 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
+      exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
+      result = exp.combine_two_brackets
+      expect(exp.args).to eq [
+        mtp(pow('x',6),pow('y',3),-24),
+        mtp(pow('x',5),'y',18),
+        mtp(pow('x',4),pow('y',9),-20),
+        mtp(pow('x',3),pow('y',7),15)
+      ]
+
+      expect(result[0]).to eq mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
+
+      expect(result[1]).to eq add(
+        mtp(mtp(3,pow('x',2),pow('y',3)),mtp(5,'x',pow('y',4))),
+        mtp(mtp(3,pow('x',2),pow('y',3)),mtp(6,pow('x',3),pow('y',-2))),
+        mtp(mtp(-4,pow('x',3),pow('y',5)),mtp(5,'x',pow('y',4))),
+        mtp(mtp(-4,pow('x',3),pow('y',5)),mtp(6,pow('x',3),pow('y',-2)))
+      )
+
+      expect(result[2]).to eq add(
+        mtp(mtp(3,5),mtp(pow('x',2),'x'),mtp(pow('y',3),pow('y',4))),
+        mtp(mtp(3,6),mtp(pow('x',2),pow('x',3)),mtp(pow('y',3),pow('y',-2))),
+        mtp(mtp(-4,5),mtp(pow('x',3),'x'),mtp(pow('y',5),pow('y',4))),
+        mtp(mtp(-4,6),mtp(pow('x',3),pow('x',3)),mtp(pow('y',5),pow('y',-2)))
+      )
+
+      expect(result[3]).to eq add(
+        mtp(15,mtp(pow('x',2),pow('x',1)),pow('y',add(3,4))),
+        mtp(18,pow('x',add(2,3)),pow('y',add(3,-2))),
+        mtp(-20,mtp(pow('x',3),pow('x',1)),pow('y',add(5,4))),
+        mtp(-24,pow('x',add(3,3)),pow('y',add(5,-2)))
+      )
+
+      expect(result[4]).to eq add(
+        mtp(15,pow('x',add(2,1)),pow('y',7)),
+        mtp(18,pow('x',5),pow('y',1)),
+        mtp(-20,pow('x',add(3,1)),pow('y',9)),
+        mtp(-24,pow('x',6),pow('y',3))
+      )
+
+      expect(result[5]).to eq add(
+        mtp(15,pow('x',3),pow('y',7)),
+        mtp(18,pow('x',5),'y'),
+        mtp(-20,pow('x',4),pow('y',9)),
+        mtp(-24,pow('x',6),pow('y',3))
+      )
+
+      expect(result[6]).to eq add(
+        mtp(pow('x',6),pow('y',3),-24),
+        mtp(pow('x',5),'y',18),
+        mtp(pow('x',4),pow('y',9),-20),
+        mtp(pow('x',3),pow('y',7),15)
+      )
+     end
+
    end
 
-   it 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
+   describe '#combine n brackets' do
+
+     it 'combines (x+y)(x+y)(x+y)' do
+       exp = mtp(add('x','y'),add('x','y'),add('x','y'))
+       result = exp.combine_brackets
+       expect(result.last).to eq add(mtp(pow('x',3)),mtp(pow('x',2),'y',3),mtp('x',pow('y',2),3),mtp(pow('y',3)))
+
+       expect(result[0]).to eq mtp(add('x','y'),add('x','y'),add('x','y'))
+       expect(result[1]).to eq mtp(mtp(add('x','y'),add('x','y')),add('x','y'))
+
+       expect(result[2]).to eq mtp(
+         add(
+           mtp(mtp('x'),mtp('x')),
+           mtp(mtp('x'),mtp('y')),
+           mtp(mtp('y'),mtp('x')),
+           mtp(mtp('y'),mtp('y'))
+           ),
+          add('x','y')
+        )
+
+        expect(result[3]).to eq mtp(
+          add(
+            mtp(mtp('x','x')),
+            mtp('x','y'),
+            mtp('y','x'),
+            mtp(mtp('y','y'))
+          ),
+          add('x','y')
+         )
+
+         expect(result[4]).to eq mtp(
+           add(
+             mtp(mtp(pow('x',1),pow('x',1))),
+             mtp('x','y'),
+             mtp('y','x'),
+             mtp(mtp(pow('y',1),pow('y',1)))
+           ),
+           add('x','y')
+          )
+
+          expect(result[5]).to eq mtp(
+            add(
+              mtp(pow('x',add(1,1))),
+              mtp('x','y'),
+              mtp('y','x'),
+              mtp(pow('y',add(1,1)))
+            ),
+            add('x','y')
+           )
+
+           expect(result[6]).to eq mtp(
+             add(
+               mtp(pow('x',2)),
+               mtp('x','y'),
+               mtp('y','x'),
+               mtp(pow('y',2))
+             ),
+             add('x','y')
+            )
+
+            expect(result[7]).to eq mtp(
+              add(
+                mtp(pow('x',2)),
+                mtp('x','y'),
+                mtp('x','y'),
+                mtp(pow('y',2))
+              ),
+              add('x','y')
+             )
+
+             expect(result[8]).to eq mtp(
+               add(
+                 mtp(pow('x',2)),
+                 mtp('x','y',2),
+                 mtp(pow('y',2))
+               ),
+               add('x','y')
+              )
+
+            expect(result[9]).to eq add(
+              mtp(mtp(pow('x',2)),mtp('x')),
+              mtp(mtp(pow('x',2)),mtp('y')),
+              mtp(mtp('x','y',2),mtp('x')),
+              mtp(mtp('x','y',2),mtp('y')),
+              mtp(mtp(pow('y',2)),mtp('x')),
+              mtp(mtp(pow('y',2)),mtp('y'))
+            )
+
+            expect(result[10]).to eq add(
+              mtp(mtp(pow('x',2),'x')),
+              mtp(pow('x',2),'y'),
+              mtp(mtp('x','x'),'y',mtp(2)),
+              mtp('x',mtp('y','y'),mtp(2)),
+              mtp(pow('y',2),'x'),
+              mtp(mtp(pow('y',2),'y'))
+            )
+
+            expect(result[11]).to eq add(
+              mtp(mtp(pow('x',2),pow('x',1))),
+              mtp(pow('x',2),'y'),
+              mtp(mtp(pow('x',1),pow('x',1)),'y',2),
+              mtp('x',mtp(pow('y',1),pow('y',1)),2),
+              mtp(pow('y',2),'x'),
+              mtp(mtp(pow('y',2),pow('y',1)))
+            )
+
+            expect(result[12]).to eq add(
+              mtp(pow('x',add(2,1))),
+              mtp(pow('x',2),'y'),
+              mtp(pow('x',add(1,1)),'y',2),
+              mtp('x',pow('y',add(1,1)),2),
+              mtp(pow('y',2),'x'),
+              mtp(pow('y',add(2,1)))
+            )
+
+            expect(result[13]).to eq add(
+              mtp(pow('x',3)),
+              mtp(pow('x',2),'y'),
+              mtp(pow('x',2),'y',2),
+              mtp('x',pow('y',2),2),
+              mtp(pow('y',2),'x'),
+              mtp(pow('y',3))
+            )
+
+            expect(result[14]).to eq add(
+              mtp(pow('x',3)),
+              mtp(pow('x',2),'y'),
+              mtp(2,pow('x',2),'y'),
+              mtp(2,'x',pow('y',2)),
+              mtp('x',pow('y',2)),
+              mtp(pow('y',3))
+            )
+
+            expect(result[15]).to eq add(
+              mtp(pow('x',3)),
+              mtp(pow('x',2),'y',3),
+              mtp('x',pow('y',2),3),
+              mtp(pow('y',3))
+            )
+     end
+
+
+     it 'combines (x+y)(x+z)(y+z)' do
+       exp = mtp(add('x','y'),add('x','z'),add('y','z'))
+       result = exp.combine_brackets
+       expect(result.last).to eq add(
+       mtp(pow('x',2),'y'),
+       mtp(pow('x',2),'z'),
+       mtp('x',pow('y',2)),
+       mtp('x','y','z',2),
+       mtp('x',pow('z',2)),
+       mtp(pow('y',2),'z'),
+       mtp('y',pow('z',2))
+       )
+     end
+
+     it 'combines (x+y)(x+y)(x+y)(x+y)' do
+       exp = mtp(add('x','y'),add('x','y'),add('x','y'),add('x','y'))
+       result = exp.combine_brackets
+       expect(result.last).to eq add(
+        mtp(pow('x',4)),
+        mtp(pow('x',3),'y',4),
+        mtp(pow('x',2),pow('y',2),6),
+        mtp('x',pow('y',3),4),
+        mtp(pow('y',4))
+       )
+     end
+
+     it 'combines x(y+z)' do
+       exp = mtp('x',add('y','z'))
+       result = exp.combine_brackets
+       expect(result[0]).to eq mtp(add('x'),add('y','z'))
+       expect(result[1]).to eq add(mtp(mtp('x'),mtp('y')),mtp(mtp('x'),mtp('z')))
+       expect(result[2]).to eq add(mtp('x','y'),mtp('x','z'))
+     end
+
+   xit 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
     exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
     result = exp.combine_two_brackets
     expect(result).to eq add(mtp(15,pow('x',3),pow('y',7)),mtp(18,pow('x',5),'y'),mtp(-20,pow('x',4),pow('y',9)),mtp(-24,pow('x',6),pow('y',3)))
@@ -304,6 +626,7 @@ describe Multiplication do
      exp = mtp(add(pow('x',2),mtp(2,'x','y'),pow('y',2)),add('x','y'))
      result = exp.combine_two_brackets
      expect(result).to eq add(mtp(pow('x',3)),mtp(3,pow('x',2),'y'),mtp(3,'x',pow('y',2)),mtp(pow('y',3)))
+
    end
   end
 
@@ -357,4 +680,31 @@ describe Multiplication do
       expect(exp.includes?(Numeric)).to be false
     end
   end
+
+  describe '#m_form_sort' do
+
+    it 'swaps 3axba' do
+      exp = mtp(3,'a','x','b','a')
+      result = exp.m_form_sort
+      expect(exp).to eq mtp(3,'a','a','b','x')
+    end
+
+    it 'swaps 3x5a^2bx' do
+      exp = mtp(3,'x',5,pow('a',2),'b','x')
+      result = exp.m_form_sort
+      expect(exp).to eq mtp(3,5,pow('a',2),'b','x','x')
+    end
+  end
+
+  describe 'similar?' do
+    it 'comapres 3ayb^2a, 5ayb^2a, 5aybba' do
+      m1 = mtp(4,'a','y',pow('b',2),'a')
+      m2 = mtp(5,'a','y',pow('b',2),'a')
+      m3 = mtp(5,'a','y','b','b','a')
+      expect(m1.similar?(m2)).to eq true
+      expect(m1.similar?(m3)).to eq false
+      expect(m2.similar?(m3)).to eq false
+    end
+  end
+
 end
