@@ -4,8 +4,8 @@ describe Objectify do
   let(:dummy_class){(Class.new{include Objectify}).new}
 
   describe '#objectify' do
-    it 'x+2' do
-      expect(dummy_class.objectify('x+2')).to eq add('x',2)
+    it 'x+12' do
+      expect(dummy_class.objectify('x+12')).to eq add('x',12)
     end
 
     it 'x+y+2' do
@@ -16,8 +16,12 @@ describe Objectify do
       expect(dummy_class.objectify('x+(y+2)')).to eq add('x',add('y',2))
     end
 
-    it '2x' do
-      expect(dummy_class.objectify('2x')).to eq mtp(2,'x')
+    it '-12x' do
+      expect(dummy_class.objectify('-12x')).to eq mtp(-12,'x')
+    end
+
+    it '(-12)^{-31x}' do
+      expect(dummy_class.objectify('(-12)^{-31x}')).to eq pow(-12,mtp(-31,'x'))
     end
 
     it '3xyz' do
@@ -28,12 +32,20 @@ describe Objectify do
       expect(dummy_class.objectify('3x+5')).to eq add(mtp(3,'x'),5)
     end
 
+    it '25+(-13)x' do
+      expect(dummy_class.objectify('25+(-13)x')).to eq add(25,mtp(-13,'x'))
+    end
+
+    it '\frac{-14x}{25}' do
+      expect(dummy_class.objectify('\frac{-14x}{25}')).to eq div(mtp(-14,'x'),25)
+    end
+
     it '3(x+7)+4' do
       expect(dummy_class.objectify('3(x+7)+4')).to eq add(mtp(3,add('x',7)),4)
     end
 
     it '3(x+7)(y+(5+(2a+9)))+4' do
-      expect(dummy_class.objectify('3(x+7)(y+5(2a+9))+4')).to eq add(mtp(3,add('x',7),add('y',mtp(5,add(mtp(2,'a'),9)))),4)
+      expect(dummy_class.objectify('-13(x+7)(y+5(-12a+9))+4')).to eq add(mtp(-13,add('x',7),add('y',mtp(5,add(mtp(-12,'a'),9)))),4)
     end
 
     it '\frac{3}{x}' do
@@ -139,6 +151,11 @@ describe Objectify do
     it '' do
       str = "x^{$$}"
       expect(dummy_class.split_mtp_args(string:str)).to eq ["x^{$$}"]
+    end
+
+    it '' do
+      str = "-12x"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["-12",'x']
     end
 
     it 'extract args from ($$) return ["$$"]' do
