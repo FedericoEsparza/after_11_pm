@@ -67,7 +67,8 @@ module Objectify
     end
 
     #number
-    if str.length == 1 && /[0-9]/ =~ str
+    # if str.length == 1 && /[0-9]/ =~ str
+    if str =~ /(^(\d|\-)\d*)/
       return str.to_i
     end
   end
@@ -144,6 +145,7 @@ module Objectify
     # num_reg = /^(\d+)(?!\^)/
     # sliced = string_copy.slice!(num_reg)
     # result_array << sliced unless sliced.nil?
+
     next_num_ind = _next_num_index(string_copy)
     if next_num_ind
       result_array << string_copy.slice!(0..next_num_ind)
@@ -151,11 +153,11 @@ module Objectify
   end
   #this is happening because I suck at regex
   def _next_num_index(string_copy)
-    for i in 0..string_copy.length
+    unless string_copy[0] =~ /\d/ || string_copy[0] == '-'
+      return nil
+    end
+    for i in 1..string_copy.length
       unless string_copy[i] =~ /\d/
-        if i == 0
-          return nil
-        end
         if string_copy[i] =~ /\^/
           return nil
         else
