@@ -266,7 +266,8 @@ describe Multiplication do
          mtp(6,pow('x',add(2,-2)),'y',mtp(pow('z',1),pow('z',-1))),
          mtp(6,pow('x',0),'y',pow('z',add(1,-1))),
          mtp(6,'y',pow('z',0)),
-         mtp(6,'y')
+        #  mtp(6,'y')
+        objectify('6y')
        ]
      end
    end

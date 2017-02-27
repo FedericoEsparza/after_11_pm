@@ -179,12 +179,12 @@ feature '#latex' do
 
       scenario '' do
         exp = mtp(div(2,'x'),3)
-        expect(exp.latex).to eq '\left(\displaystyle\frac{2}{x}\right)3'
+        expect(exp.latex).to eq '\displaystyle\frac{2}{x}3'
       end
 
       scenario '' do
         exp = mtp(3,div(2,'x'))
-        expect(exp.latex).to eq '3\left(\displaystyle\frac{2}{x}\right)'
+        expect(exp.latex).to eq '3\displaystyle\frac{2}{x}'
       end
     end
 
@@ -313,6 +313,20 @@ feature '#latex' do
     scenario '' do
       exp = div(add(mtp(2,'x'),3),sbt(mtp(3,pow('x',2)),mtp(4,pow('x',5))))
       expect(exp.latex).to eq '\displaystyle\frac{2x+3}{3x^2-4x^5}'
+    end
+  end
+end
+
+feature '#shorten' do
+  context 'normal brackets' do
+    scenario '' do
+      expect('\left(2+x\right)^{3a}'.shorten).to eq '(2+x)^{3a}'
+    end
+  end
+
+  context 'displaystyle remove' do
+    scenario '' do
+      expect('\left(\displaystyle2+x\right)^{3a}'.shorten).to eq '(2+x)^{3a}'
     end
   end
 end
