@@ -726,10 +726,16 @@ describe Multiplication do
       expect(result[-1]).to eq add('m1',add(mtp('m2','m3'),mtp('m2','m4')))
     end
 
-    it 'expands (m1 + m2)(m5+m6)' do
-      exp = mtp(add('m1','m2'),add('m5','m6'))
+    it 'expands' do
+      exp = add(mtp('m'))
       result = exp.expand
+      expect(result).to eq 'm'
     end
+
+    # it 'expands (m1 + m2)(m5+m6)' do
+    #   exp = mtp(add(mtp('m0')),add('m5'))
+    #   result = exp.expand
+    # end
   end
 
 end

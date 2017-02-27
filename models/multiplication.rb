@@ -347,7 +347,7 @@ class Multiplication
 
       no_of_brackets = copy.args.length
       if no_of_brackets == 1
-        copy
+        [copy]
       elsif no_of_brackets == 2
         copy = copy.combine_two_brackets
       else
