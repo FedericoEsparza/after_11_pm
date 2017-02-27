@@ -316,3 +316,17 @@ feature '#latex' do
     end
   end
 end
+
+feature '#olatex' do
+  context 'normal brackets' do
+    scenario '' do
+      expect('\left(2+x\right)^{3a}'.olatex).to eq '(2+x)^{3a}'
+    end
+  end
+
+  context 'displaystyle remove' do
+    scenario '' do
+      expect('\left(\displaystyle2+x\right)^{3a}'.olatex).to eq '(2+x)^{3a}'
+    end
+  end
+end
