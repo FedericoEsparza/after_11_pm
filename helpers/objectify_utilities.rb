@@ -31,7 +31,7 @@ module ObjectifyUtilities
     n_th_lbrac_index = i - 1
   end
 
-  def empty_brackets(string:)
+  def empty_brackets(string)
     result_array = []
     (0..2).each { |i| _collect_brac_indices(string,brac_types[i],result_array) }
     result_array.each do |brackets_range|
@@ -50,7 +50,7 @@ module ObjectifyUtilities
     end
   end
 
-  def split_mtp_args(string:)
+  def split_mtp_args(string)
     string_copy = string.dup
     result_array = []
     i = 0
@@ -81,12 +81,12 @@ module ObjectifyUtilities
     # num_reg = /^(\d+)(?!\^)/
     # sliced = string_copy.slice!(num_reg)
     # result_array << sliced unless sliced.nil?
-
     next_num_ind = _next_num_index(string_copy)
     if next_num_ind
       result_array << string_copy.slice!(0..next_num_ind)
     end
   end
+
   #this is happening because I suck at regex
   def _next_num_index(string_copy)
     unless string_copy[0] =~ /\d/ || string_copy[0] == '-'
@@ -111,6 +111,7 @@ module ObjectifyUtilities
   end
 
   def _add_next_pow_arg(result_array,string_copy)
+    # why this does not work?
     # pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\d*)|(\{\$*\}))/
     pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d))/
     sliced = string_copy.slice!(pow_reg)
@@ -124,7 +125,7 @@ module ObjectifyUtilities
     result_array << sliced unless sliced.nil?
   end
 
-  def reenter_str_content(string:,dollar_array:)
+  def reenter_str_content(string,dollar_array)
     string_copy = string.dup
     string_copy.gsub!('\\times','')
     i = 0
@@ -138,7 +139,7 @@ module ObjectifyUtilities
     end
   end
 
-  def reenter_addition_str_content(string:,dollar_array:)
+  def reenter_addition_str_content(string,dollar_array) #work same way for subtraction
     i = 0
     dollar_array.each do |str|
       str.each_char.with_index do |c,c_i|
@@ -147,21 +148,33 @@ module ObjectifyUtilities
         end
         i += 1
       end
-      i += 1  #accout for missing +
+      i += 1  #accout for missing + or -
     end
   end
 
-  def remove_enclosing_bracks(string_array:)
+  def remove_enclosing_bracks(string_array)
     string_array.each do |str|
-      if str[0] == '(' && str[-1] == ')'
+      bracket_indices = matching_brackets(str,'(',')',brackets_num=1)
+      if bracket_indices[1] != 0 && bracket_indices[0] == 0 && bracket_indices[1] == (str.length - 1)
         str[0] = ''
         str[-1] = ''
       end
-      if str[0] == '{' && str[-1] == '}'
+      curly_bracket_indices = matching_brackets(str,'{','}',brackets_num=1)
+      if curly_bracket_indices[1] != 0 && curly_bracket_indices[0] == 0 && curly_bracket_indices[1] == (str.length - 1)
         str[0] = ''
         str[-1] = ''
       end
     end
+    # string_array.each do |str|
+    #   if str[0] == '(' && str[-1] == ')'
+    #     str[0] = ''
+    #     str[-1] = ''
+    #   end
+    #   if str[0] == '{' && str[-1] == '}'
+    #     str[0] = ''
+    #     str[-1] = ''
+    #   end
+    # end
   end
 
 end
