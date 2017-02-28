@@ -4,6 +4,22 @@ describe Objectify do
   let(:dummy_class){(Class.new{include Objectify}).new}
 
   describe '#objectify' do
+    it '2\times3' do
+      expect(dummy_class.objectify('2\times3')).to eq mtp(2,3)
+    end
+
+    it '2\times123' do
+      expect(dummy_class.objectify('2\times123')).to eq mtp(2,123)
+    end
+
+    it '2\timesx' do
+      expect(dummy_class.objectify('2\timesx')).to eq mtp(2,'x')
+    end
+
+    it '2\times(-23)' do
+      expect(dummy_class.objectify('2\times(-23)')).to eq mtp(2,-23)
+    end
+
     it '-2+-3' do
       expect(dummy_class.objectify('-2+-3')).to eq add(-2,-3)
     end
@@ -128,6 +144,10 @@ describe Objectify do
       expect(dummy_class.objectify('(2x)^3)')).to eq pow(mtp(2,'x'),3)
     end
 
+    it '(2x)^13' do
+      expect(dummy_class.objectify('(2x)^13)')).to eq mtp(pow(mtp(2,'x'),1),3)
+    end
+
     it '(2xy)^{3x +4}' do
       expect(dummy_class.objectify('(2x  y)^{3 x+ 4}')).to eq pow(mtp(2,'x','y'),add(mtp(3,'x'),4))
     end
@@ -153,146 +173,151 @@ describe Objectify do
       expect(exp).to eq add(div('a','b'),pow(mtp(div('c','d'),add(mtp(2,'x'),pow(4,'x'))),div(5,'y')))
     end
   end
+  
+  describe 'objectify and olatex back' do
+    it 'objectify and olatex back 2^{3xy}' do
+      expect(dummy_class.objectify('2^{3xy}').latex.shorten).to eq '2^{3xy}'
+    end
+  end
 
-  # describe 'objectify and olatex back' do
-  #   it 'objectify and olatex back 2^{3xy}' do
-  #     expect(dummy_class.objectify('2^{3xy}').latex.shorten).to eq '2^{3xy}'
-  #   end
-  # end
-  #
-  # describe '#correct_latex?' do
-  #   it 'is \frac{c}{d}(2x+4^x) correct_latex?' do
-  #     expect('\frac{c}{d}(2x+4^x)'.correct_latex?).to be true
-  #   end
-  #
-  #   it 'is \frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}} correct_latex?' do
-  #     expect('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'.correct_latex?).to be true
-  #   end
-  # end
-  #
-  # describe '#matching_brackets' do
-  #   it 'matches outer brackets in \frac{frac{2}{y}}{x}' do
-  #     expect(dummy_class.matching_brackets('\frac{frac{2}{y}}{x}','{','}')).to eq [5,16]
-  #   end
-  #
-  #   it 'matches 3rd brackets in (a+c(234)de((abc))))' do
-  #     expect(dummy_class.matching_brackets('(a+c(234)de((abc))))','(',')', 3)).to eq [11,17]
-  #   end
-  #
-  #   it 'matches 2nd brackets in a+c(234)de((abc)))' do
-  #     expect(dummy_class.matching_brackets('a+c(234)de((abc))','(',')', 2)).to eq [10,16]
-  #   end
-  #
-  #   it 'matches ($$$)^($$) 2nd brackets' do
-  #     expect(dummy_class.matching_brackets('($$$)^($$)($$$)^4','(',')', 2)).to eq [6,9]
-  #   end
-  # end
-  #
-  # describe '#empty_brackets' do
-  #   it 'replace bracket (a+c{234}de((abc))) content with $ to ($$$$$$$$$$$$$$$$$)' do
-  #     expect(dummy_class.empty_brackets(string: '(a+c(234)de((abc)))')).to eq '($$$$$$$$$$$$$$$$$)'
-  #   end
-  #
-  #   it 'replace bracket a+c{234}de[{abc}] content with $ to a+c{$$$}de[$$$$$]' do
-  #     expect(dummy_class.empty_brackets(string: 'a+c{234}de[{abc}]')).to eq 'a+c{$$$}de[$$$$$]'
-  #   end
-  #
-  #   it 'replace bracket \frac((3(x))^(()4y))(x^2)(234)de((abc)) content with $ to \frac($$$$$$$$$$$$$)($$$)($$$)de($$$$$)' do
-  #     expect(dummy_class.empty_brackets(string: '\frac{(3(x))^(()4y)}{x^2}(234)de((abc))')).to eq '\frac{$$$$$$$$$$$$$}{$$$}($$$)de($$$$$)'
-  #   end
-  # end
-  #
-  # describe '#split_mtp_args' do
-  #   it '' do
-  #     str = "x^{$$}"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ["x^{$$}"]
-  #   end
-  #
-  #   it '' do
-  #     str = "-12x"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ["-12",'x']
-  #   end
-  #
-  #   it 'extract args from ($$) return ["$$"]' do
-  #     expect(dummy_class.split_mtp_args(string: '($$)')).to eq ["($$)"]
-  #   end
-  #
-  #   it '' do
-  #     str = '2x\frac{$$$}{$}($$$$)($$$)^{$$}'
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq [
-  #       "2", "x", "\\frac{$$$}{$}", "($$$$)", "($$$)^{$$}"
-  #     ]
-  #   end
-  #
-  #   it '' do
-  #     str = '($$$$)($$$)^{$$}($$$)^4'
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq [
-  #       "($$$$)", "($$$)^{$$}", "($$$)^4"
-  #     ]
-  #   end
-  #
-  #   it '' do
-  #     str = '($$$$)($$$)^{$$}4^{$$$}5'
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq [
-  #       "($$$$)", "($$$)^{$$}", "4^{$$$}",'5'
-  #     ]
-  #   end
-  #
-  #   it '' do
-  #     str = '($$$)^{$$}4^{$$$}5'
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq [
-  #       '($$$)^{$$}',"4^{$$$}",'5'
-  #     ]
-  #   end
-  #
-  #   it '' do
-  #     str = '($$$$)($$$)^{$$}4x'
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq [
-  #       "($$$$)", "($$$)^{$$}", "4",'x'
-  #     ]
-  #   end
-  #
-  #   it '' do
-  #     str = "($$$)^{$$$$}"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$)^{$$$$}"]
-  #   end
-  #
-  #   it '' do
-  #     str = "3^4x"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ["3^4",'x']
-  #   end
-  #
-  #   it '' do
-  #     str = "12^{$$$}"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ["12^{$$$}"]
-  #   end
-  #
-  #   it '' do
-  #     str = "($$$$$)^{$$$}"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$$$)^{$$$}"]
-  #   end
-  #
-  #   it '' do
-  #     str = "xy"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ['x','y']
-  #   end
-  #
-  #   it '' do
-  #     str = "x12^{$$$}"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ['x','12^{$$$}']
-  #   end
-  #
-  #   it '' do
-  #     str = '\frac{$$$}{$$$$$}xy'
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ['\frac{$$$}{$$$$$}','x','y']
-  #   end
-  #
-  #   it '' do
-  #     str = "123x"
-  #     expect(dummy_class.split_mtp_args(string:str)).to eq ['123','x']
-  #   end
-  # end
-  #
+  describe '#correct_latex?' do
+    it 'is \frac{c}{d}(2x+4^x) correct_latex?' do
+      expect('\frac{c}{d}(2x+4^x)'.correct_latex?).to be true
+    end
+
+    it 'is \frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}} correct_latex?' do
+      expect('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'.correct_latex?).to be true
+    end
+  end
+
+  describe '#matching_brackets' do
+    it 'matches outer brackets in \frac{frac{2}{y}}{x}' do
+      expect(dummy_class.matching_brackets('\frac{frac{2}{y}}{x}','{','}')).to eq [5,16]
+    end
+
+    it 'matches 3rd brackets in (a+c(234)de((abc))))' do
+      expect(dummy_class.matching_brackets('(a+c(234)de((abc))))','(',')', 3)).to eq [11,17]
+    end
+
+    it 'matches 2nd brackets in a+c(234)de((abc)))' do
+      expect(dummy_class.matching_brackets('a+c(234)de((abc))','(',')', 2)).to eq [10,16]
+    end
+
+    it 'matches ($$$)^($$) 2nd brackets' do
+      expect(dummy_class.matching_brackets('($$$)^($$)($$$)^4','(',')', 2)).to eq [6,9]
+    end
+  end
+
+  describe '#empty_brackets' do
+    it 'replace bracket (a+c{234}de((abc))) content with $ to ($$$$$$$$$$$$$$$$$)' do
+      expect(dummy_class.empty_brackets(string: '(a+c(234)de((abc)))')).to eq '($$$$$$$$$$$$$$$$$)'
+    end
+
+    it 'replace bracket a+c{234}de[{abc}] content with $ to a+c{$$$}de[$$$$$]' do
+      expect(dummy_class.empty_brackets(string: 'a+c{234}de[{abc}]')).to eq 'a+c{$$$}de[$$$$$]'
+    end
+
+    it 'replace bracket \frac((3(x))^(()4y))(x^2)(234)de((abc)) content with $ to \frac($$$$$$$$$$$$$)($$$)($$$)de($$$$$)' do
+      expect(dummy_class.empty_brackets(string: '\frac{(3(x))^(()4y)}{x^2}(234)de((abc))')).to eq '\frac{$$$$$$$$$$$$$}{$$$}($$$)de($$$$$)'
+    end
+  end
+
+  describe '#split_mtp_args' do
+    it '' do
+      str = '2\times3'
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["2","3"]
+    end
+
+    it '' do
+      str = "x^{$$}"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["x^{$$}"]
+    end
+
+    it '' do
+      str = "-12x"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["-12",'x']
+    end
+
+    it 'extract args from ($$) return ["$$"]' do
+      expect(dummy_class.split_mtp_args(string: '($$)')).to eq ["($$)"]
+    end
+
+    it '' do
+      str = '2x\frac{$$$}{$}($$$$)($$$)^{$$}'
+      expect(dummy_class.split_mtp_args(string:str)).to eq [
+        "2", "x", "\\frac{$$$}{$}", "($$$$)", "($$$)^{$$}"
+      ]
+    end
+
+    it '' do
+      str = '($$$$)($$$)^{$$}($$$)^4'
+      expect(dummy_class.split_mtp_args(string:str)).to eq [
+        "($$$$)", "($$$)^{$$}", "($$$)^4"
+      ]
+    end
+
+    it '' do
+      str = '($$$$)($$$)^{$$}4^{$$$}5'
+      expect(dummy_class.split_mtp_args(string:str)).to eq [
+        "($$$$)", "($$$)^{$$}", "4^{$$$}",'5'
+      ]
+    end
+
+    it '' do
+      str = '($$$)^{$$}4^{$$$}5'
+      expect(dummy_class.split_mtp_args(string:str)).to eq [
+        '($$$)^{$$}',"4^{$$$}",'5'
+      ]
+    end
+
+    it '' do
+      str = '($$$$)($$$)^{$$}4x'
+      expect(dummy_class.split_mtp_args(string:str)).to eq [
+        "($$$$)", "($$$)^{$$}", "4",'x'
+      ]
+    end
+
+    it '' do
+      str = "($$$)^{$$$$}"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$)^{$$$$}"]
+    end
+
+    it '' do
+      str = "3^4x"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["3^4",'x']
+    end
+
+    it '' do
+      str = "12^{$$$}"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["12^{$$$}"]
+    end
+
+    it '' do
+      str = "($$$$$)^{$$$}"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ["($$$$$)^{$$$}"]
+    end
+
+    it '' do
+      str = "xy"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ['x','y']
+    end
+
+    it '' do
+      str = "x12^{$$$}"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ['x','12^{$$$}']
+    end
+
+    it '' do
+      str = '\frac{$$$}{$$$$$}xy'
+      expect(dummy_class.split_mtp_args(string:str)).to eq ['\frac{$$$}{$$$$$}','x','y']
+    end
+
+    it '' do
+      str = "123x"
+      expect(dummy_class.split_mtp_args(string:str)).to eq ['123','x']
+    end
+  end
+
   # describe '#reenter_str_content' do
   #   it '' do
   #     string = 'x(2-a)y3(5z)^4'
