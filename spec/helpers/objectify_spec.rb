@@ -1,7 +1,7 @@
-require './helpers/objectify'
+require './helpers/objectify_utilities'
 
-describe Objectify do
-  let(:dummy_class){(Class.new{include Objectify}).new}
+describe ObjectifyUtilities do
+  let(:dummy_class){(Class.new{include ObjectifyUtilities}).new}
 
   xdescribe '#objectify' do
     it '2\times3' do

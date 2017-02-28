@@ -1,6 +1,6 @@
-require './helpers/objectify'
+require './helpers/objectify_utilities'
 
-include Objectify
+include ObjectifyUtilities
 
 class String
   def latex
