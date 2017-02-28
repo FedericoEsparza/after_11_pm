@@ -771,6 +771,43 @@ describe Multiplication do
       expect(result[4]).to eq objectify('axy+adex+adxz+bxy+bdex+bdxz+cy+cde+cdz')
 
     end
+
+    it 'expands (2x^2+3x)(3x^3+5x^2)' do
+      exp = objectify('(2x^2+3x)(3x^3+5x^2)')
+      result = exp.expand
+      # result.each_with_index do |a,i|
+      #   string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
+      #   puts string
+      # end
+
+      expect(result[0]).to eq objectify('(2x^2+3x)(3x^3+5x^2)')
+      expect(result[1]).to eq objectify('2x^{2}3x^3+2x^{2}5x^2+3x3x^3+3x5x^2')
+      # expect(result[2]).to eq objectify('2(3x^{2})x^3+2\times5x^{2}x^2+3\times3xx^3+3\times5xx^2')
+      # expect(result[3]).to eq objectify('6x^{2+3}+10x^{2+2}+9x^1x^3+15x^1x^2')
+      # expect(result[4]).to eq objectify('6x^5+10x^4+9x^{1+3}+15x^{1+2}')
+      # expect(result[5]).to eq objectify('6x^5+10x^4+9x^4+15x^3')
+      # expect(result[6]).to eq objectify('6x^5+19x^4+15x^3')
+
+    end
+
+    it 'expands something' do
+      exp = objectify('(2x+3x)(4x+5x)')
+      result = exp.expand
+      # result.each_with_index do |a,i|
+      #   string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
+      #   puts string
+      # end
+
+      #
+      # result[0].latex.shorten
+      # p result[1].latex.shorten
+      # p result[2].latex.shorten
+      # p result[3].latex.shorten
+      # p result[4].latex.shorten
+      # p result[5].latex.shorten
+      # p result[6].latex.shorten
+    end
+
   end
 
   describe '#flatit' do

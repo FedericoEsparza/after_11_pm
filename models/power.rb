@@ -76,6 +76,9 @@ class Power
     end
   end
 
+  def expand
+    [self]
+  end
 
 
 end
