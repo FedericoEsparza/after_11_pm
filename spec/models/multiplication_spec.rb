@@ -356,4 +356,27 @@ describe Multiplication do
       expect(exp.includes?(Numeric)).to be false
     end
   end
+
+  describe '#m_form?' do
+    it 'checks abc' do
+      exp = mtp('a','b','c')
+      expect(exp.m_form?).to eq true
+    end
+
+    it 'checks a^2x^y3^45^a' do
+      exp = mtp(pow('a',2),pow('x','y'),pow(3,4),pow(5,'a'))
+      expect(exp.m_form?).to eq true
+    end
+
+    it 'checks x(y(ab))' do
+      exp = mtp('x',mtp('y',mtp('a','b')))
+      result = exp.m_form?
+      expect(result).to eq true
+    end
+
+    it 'checks xy2^x(a+b)' do
+      exp = mtp('x','y',pow(2,'x'),add('a','b'))
+      expect(exp.m_form?).to eq false
+    end
+  end
 end

@@ -343,10 +343,20 @@ class Multiplication
     end
   end
 
-  def m_form?(exp)
+  def m_form?
     args_copy = self.copy.args
     m_form = true
-    args_copy.each
+    args_copy.each do |m|
+      if m.is_a?(power)
+        m = m.base
+      end
+      if m.is_a?(addition)
+        m_form = false
+      elsif m.is_a?(multiplication) && !(m.m_form?)
+        m_form = false
+      end
+    end
+    m_form
   end
 
 end
