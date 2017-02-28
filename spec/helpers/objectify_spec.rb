@@ -1,9 +1,10 @@
-require './helpers/objectify'
+require './helpers/objectify_utilities'
 
-describe Objectify do
-  let(:dummy_class){(Class.new{include Objectify}).new}
+describe ObjectifyUtilities do
+  let(:dummy_class){(Class.new{include ObjectifyUtilities}).new}
 
-  describe '#objectify' do
+
+  xdescribe '#objectify' do
 
     it '2\times3' do
       expect(dummy_class.objectify('2\times3')).to eq mtp(2,3)
@@ -175,6 +176,7 @@ describe Objectify do
     end
   end
 
+
   describe 'objectify and olatex back' do
     it 'objectify and olatex back 2^{3xy}' do
       expect(dummy_class.objectify('2^{3xy}').latex.shorten).to eq '2^{3xy}'
@@ -190,6 +192,7 @@ describe Objectify do
       expect('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'.correct_latex?).to be true
     end
   end
+
 
   describe '#matching_brackets' do
     it 'matches outer brackets in \frac{frac{2}{y}}{x}' do
