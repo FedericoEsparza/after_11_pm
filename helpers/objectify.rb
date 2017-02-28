@@ -10,14 +10,31 @@ module Objectify
     mtp_check_str_copy = str_copy.dup
     mtp_check_str_ary = split_mtp_args(string:mtp_check_str_copy)
 
-    # addition
-    if str_copy.include?('+')
+    # addition assuming all negatives are in brackets (-13)
+    if str_copy.include?('+') && !str_copy.include?('-')
       str_args = str_copy.split('+')
       reenter_addition_str_content(string:original_string,dollar_array:str_args)
       remove_enclosing_bracks(string_array:str_args)
       object_args = str_args.inject([]){ |r,e| r << objectify(e) }
       return add(object_args)
     end
+
+    #addition with subtraction
+    if str_copy.include?('-')
+      for i in 1..str_copy.length
+        if str_copy[-i] == '-'
+          str_args = []
+          minus_index = str_copy.length - i
+          str_args << str_copy.slice(0..minus_index-1)
+          str_args << str_copy.slice(minus_index+1..-1)
+          break
+        end
+      end
+      remove_enclosing_bracks(string_array:str_args)
+      object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+      return sbt(object_args)
+    end
+
 
     #multiplication
     if str_copy.include?('+') == false && mtp_check_str_ary.length > 1 # && not a fraction of legnth 1 or pwer of length 1
