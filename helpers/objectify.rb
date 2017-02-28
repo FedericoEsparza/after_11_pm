@@ -5,29 +5,38 @@ module Objectify
 
   def objectify(str)
     original_string = str.dup
-    str_copy = empty_brackets(string:str.dup)
+    original_string.gsub!(' ','')
+    str_copy = empty_brackets(string:original_string.dup)
+
+    # original_string = str.dup
+    # space_sanitized = str.dup
+    # space_sanitized.gsub!(' ','')
+    # str_copy = empty_brackets(string:space_sanitized)
+
+    # str_copy = empty_brackets(string:str.dup)
 
     mtp_check_str_copy = str_copy.dup
     mtp_check_str_ary = split_mtp_args(string:mtp_check_str_copy)
 
     # addition assuming all negatives are in brackets (-13)
-    if str_copy.include?('+') && !str_copy.include?('-')
-      str_args = str_copy.split('+')
-      reenter_addition_str_content(string:original_string,dollar_array:str_args)
-      remove_enclosing_bracks(string_array:str_args)
-      object_args = str_args.inject([]){ |r,e| r << objectify(e) }
-      return add(object_args)
-    end
+    # if str_copy.include?('+') && !str_copy.include?('-')
+    #   str_args = str_copy.split('+')
+    #   reenter_addition_str_content(string:original_string,dollar_array:str_args)
+    #   remove_enclosing_bracks(string_array:str_args)
+    #   object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+    #   return add(object_args)
+    # end
 
     #addition with subtraction
-    if str_copy.include?('-')
+    if str_copy.include?('-') || str_copy.include?('+')
       str_args = []
-      for i in 1..str_copy.length
-        if str_copy[-i] == '-'
+      for i in 1..(str_copy.length-1) #do not check the first char for '-'
+        if str_copy[-i] == '-' && (str_copy[-(i+1)] != '+' && str_copy[-(i+1)] != '-')
           minus_index = str_copy.length - i
           str_args << str_copy.slice(0..minus_index-1)
           str_args << str_copy.slice(minus_index+1..-1)
 
+          reenter_addition_str_content(string:original_string,dollar_array:str_args)
           remove_enclosing_bracks(string_array:str_args)
           object_args = str_args.inject([]){ |r,e| r << objectify(e) }
           return sbt(object_args)
@@ -40,14 +49,23 @@ module Objectify
           plus_indices = []
           plus_indices << -1
           for j in i..str_copy.length
-            if str_copy[j] == '+'
-              plus_indices << j
+            if str_copy[-j] == '+'
+              # puts "current string_copy is #{str_copy}"
+              # puts "current j is #{j}"
+              plus_indices.insert(1,str_copy.length - j)
+              # puts '==================='
+              # p plus_indices
+              # puts '==================='
             end
-            if str_copy[j] == '-'
+            if str_copy[-j] == '-'
               break
             end
           end
           plus_indices << str_copy.length
+
+          # puts '==================='
+          # p plus_indices
+          # puts '==================='
 
           slice_indices = []
           for k in 1..plus_indices.length-1
@@ -58,6 +76,12 @@ module Objectify
             str_args << str_copy.slice(a[0]..a[1])
           end
 
+          #
+          # puts "=============="
+          # p str_args
+          # puts "=============="
+
+          reenter_addition_str_content(string:original_string,dollar_array:str_args)
           remove_enclosing_bracks(string_array:str_args)
           object_args = str_args.inject([]){ |r,e| r << objectify(e) }
           return add(object_args)
