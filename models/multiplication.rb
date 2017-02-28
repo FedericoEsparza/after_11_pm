@@ -343,4 +343,10 @@ class Multiplication
     end
   end
 
+  def m_form?(exp)
+    args_copy = self.copy.args
+    m_form = true
+    args_copy.each
+  end
+
 end
