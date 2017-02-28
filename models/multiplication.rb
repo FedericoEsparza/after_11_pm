@@ -316,6 +316,17 @@ class Multiplication
       brac
     end
 
+    def combine_brackets_refactored
+      copy = self.copy
+      new_args = []
+      copy.args.first.args.each do |a|
+        copy.args.last.args.each do |b|
+          c = mtp(a,b)
+          new_args << c
+          end
+      end
+    end
+
     def combine_two_brackets
       copy = self.copy
       new_args = []
