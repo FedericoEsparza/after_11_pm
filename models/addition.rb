@@ -122,5 +122,22 @@ class Addition < Expression
       end
     end
     result
+  end#
+
+  def add_m_form?
+    args_copy = self.copy.args
+    add_m_form = true
+    args_copy.each do |m|
+      if m.is_a?(power)
+        m = m.base
+      end
+      p m
+      if m.is_a?(addition)
+        add_m_form = false
+      elsif m.is_a?(multiplication) && !(m.m_form?)
+        add_m_form = false
+      end
+    end
+    add_m_form
   end
 end

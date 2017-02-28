@@ -58,6 +58,16 @@ describe Addition do
     end
   end
 
+  describe '#add_m_form?' do
+    it 'checks abc+b^2' do
+      exp = add(mtp('a','b','c'),pow('b',2))
+      expect(exp.add_m_form?).to eq true
+    end
 
+    it 'checks a + (b+c)^2' do
+      exp = add('a',pow(add('b','c'),2))
+      expect(exp.add_m_form?).to eq false
+    end
+  end
 
 end
