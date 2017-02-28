@@ -493,10 +493,7 @@ describe Multiplication do
        exp = mtp(add('x','y'),add('x','y'),add('x','y'),add('x','y'))
        result = exp.combine_brackets
 
-        # result.each_with_index do |a,i|
-        #   string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
-        #   puts string
-        # end
+
 
         expect(result[0]).to eq '(x+y)(x+y)(x+y)(x+y)'.objectify
         expect(result[1]).to eq '(xx+xy+yx+yy)(x+y)(x+y)'.objectify
@@ -531,21 +528,24 @@ describe Multiplication do
        expect(result[2]).to eq add(mtp('x','y'),mtp('x','z'))
      end
 
-   xit 'combines (3x^2y^3+4x^3y^5)(5xy^4+6x^3y^-2)'do
+   it 'combines (3x^2y^3+4x^3y^5)(5xy^4+6x^3y^-2)'do
     exp = '(3x^2y^3+4x^3y^5)(5xy^4+6x^3y^{-2})'.objectify
     result = exp.combine_brackets
 
+    # result.each_with_index do |a,i|
+    #   string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
+    #   puts string
+    # end
 
     expect(result[0]).to eq '(3x^2y^3+4x^3y^5)(5xy^4+6x^3y^{-2})'.objectify
-    # expect(result[1]).to eq '(3x^2y^3)(5xy^4)+(3x^2y^3)(6x^3y^{-2})+(4x^3y^5)(5xy^4)+(4x^3y^5)(6x^3y^{-2})'.objectify
-    expect(result[1]).to eq '(3x^2y^3)(5xy^4)+(3x^2y^3)(6x^3y^{-2})'.objectify
-
-    # expect(result[2]).to eq '(3\times5)(x^2x)(y^3y^4)+(3\times6)(x^2x^3)(y^3y^-2)+(4\times5)(x^3x)(y^5y^4)+(4\times6)(x^3x^3)(y^5y^-2)'.objectify
+    expect(result[1]).to eq '(3x^2y^3)(5xy^4)+(3x^2y^3)(6x^3y^{-2})+(4x^3y^5)(5xy^4)+(4x^3y^5)(6x^3y^{-2})'.objectify
+    # expect(result[2]).to eq '(3\times5)(x^2x)(y^3y^4)+(3\times6)(x^2x^3)(y^3y^{-2})+(4\times5)(x^3x)(y^5y^4)+(4\times6)(x^3x^3)(y^5y^{-2})'.objectify
     # expect(result[3]).to eq '15(x^2x^1)y^{3+4}+18x^{2+3}y^{3+-2}+20(x^3x^1)y^{5+4}+24x^{3+3}y^{5+-2}'.objectify
     # expect(result[4]).to eq '15x^{2+1}y^7+18x^5y^1+20x^{3+1}y^9+24x^6y^3'.objectify
     # expect(result[5]).to eq '15x^3y^7+18x^5y+20x^4y^9+24x^6y^3'.objectify
     # expect(result[6]).to eq '24x^6y^3+18x^5y+20x^4y^9+15x^3y^7'.objectify
-    # expect(result[6]).to eq '24x^6y^3+18x^5y+20x^4y^9+15x^3y^7'.objectify
+
+
 
    end
 
