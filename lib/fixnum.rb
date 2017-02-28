@@ -21,4 +21,8 @@ class Fixnum
     [self]
   end
 
+  # def flatit
+  #   self
+  # end
+
 end

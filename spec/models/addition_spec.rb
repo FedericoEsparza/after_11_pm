@@ -112,5 +112,13 @@ describe Addition do
 
   end
 
+  describe '#flatit' do
+    it 'flats x+(x+xy) + ((x+y)+xz)' do
+      exp = add('x',add('x',mtp('x','y')),add(add('x','y'),mtp('x','z')))
+      result = exp.flatit
+      expect(result).to eq add('x','x',mtp('x','y'),'x','y',mtp('x','z'))
+    end
+  end
+
 
 end

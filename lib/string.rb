@@ -39,4 +39,8 @@ class String
     [self]
   end
 
+  # def flatit
+  #   self
+  # end
+
 end

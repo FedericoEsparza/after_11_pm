@@ -4,6 +4,11 @@ describe Objectify do
   let(:dummy_class){(Class.new{include Objectify}).new}
 
   describe '#objectify' do
+
+    it '(xy)(ab)' do
+      expect(dummy_class.objectify('(xy)b)')).to eq mtp(mtp('x','y'),mtp('a','b'))
+    end
+
     it 'x+2' do
       expect(dummy_class.objectify('x+2')).to eq add('x',2)
     end

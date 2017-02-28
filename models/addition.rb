@@ -99,7 +99,7 @@ class Addition < Expression
         new_mtp_args = []
         factor.each{|a| new_mtp_args << a}
         if count != 1
-          new_mtp_args << count
+          new_mtp_args = new_mtp_args.insert(0,count)
         end
         new_mtp = mtp(new_mtp_args)
         results << new_mtp
@@ -205,13 +205,33 @@ class Addition < Expression
     copy = self.copy
     steps = []
     copy.args.each do |exp|
-      puts exp
       steps << exp.expand
     end
     steps = steps.equalise_array_lengths.transpose
     steps = steps.map{|a| add(a)}
+    steps = steps.map{|a| a.flatit}
     steps = delete_duplicate_steps(steps)
+  end
 
+  def flatit
+    copy = self.copy
+    new_args = []
+    copy.args.each do |m|
+      if m.is_a?(Addition)
+        m = m.flatit
+        m.args.each{|a| new_args << a}
+      elsif m.is_a?(Multiplication)
+        m = m.flatit
+        if m.args.length == 1
+          m.args.each{|a| new_args << a}
+        else
+          new_args << m
+        end
+      else
+        new_args << m
+      end
+    end
+    result = add(new_args)
   end
 
 end

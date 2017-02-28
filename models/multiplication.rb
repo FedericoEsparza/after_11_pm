@@ -295,7 +295,18 @@ class Multiplication
 
     def sort_elements
       array = self.copy.args
-      mtp(array.sort_elements)
+      num_array = []
+      string_array = []
+      array.each do |a|
+        if a.is_a?(Numeric)
+          num_array << a
+        else
+          string_array << a
+        end
+      end
+      string_array = string_array.sort_elements
+      array = num_array + string_array
+      mtp(array)
     end
 
     def is_bracket
@@ -533,18 +544,39 @@ class Multiplication
     copy = self.copy
     steps = []
     copy.args.each do |exp|
-      puts exp
       steps << exp.expand
     end
     steps = steps.equalise_array_lengths.transpose
     steps = steps.map{|a| mtp(a)}
-
+    steps = steps.map{|a| a.flatit}
     brackets = steps.last
-    puts brackets
     next_steps = brackets.combine_brackets
     steps = steps + next_steps
+    steps = steps.map{|a| a.flatit}
     steps = delete_duplicate_steps(steps)
     steps
+  end
+
+  def flatit
+    copy = self.copy
+    new_args = []
+    copy.args.each do |m|
+      if m.is_a?(Multiplication)
+        m = m.flatit
+        m.args.each{|a| new_args << a}
+      elsif m.is_a?(Addition)
+        if m.args.length == 1
+          m = m.flatit
+          m.args.each{|a| new_args << a}
+        else
+          m = m.flatit
+          new_args << m
+        end
+      else
+        new_args << m
+      end
+    end
+    result = mtp(new_args)
   end
 
 end
