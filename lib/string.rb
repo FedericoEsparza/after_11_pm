@@ -46,10 +46,10 @@ class String
   def objectify
     original_string = self.dup
     original_string.gsub!(' ','')
-    str_copy = empty_brackets(string:original_string.dup)
+    str_copy = empty_brackets(original_string.dup)
 
     mtp_check_str_copy = str_copy.dup
-    mtp_check_str_ary = split_mtp_args(string:mtp_check_str_copy)
+    mtp_check_str_ary = split_mtp_args(mtp_check_str_copy)
 
     #addition with subtraction
     if str_copy.include?('-') || str_copy.include?('+')
@@ -60,8 +60,8 @@ class String
           str_args << str_copy.slice(0..minus_index-1)
           str_args << str_copy.slice(minus_index+1..-1)
 
-          reenter_addition_str_content(string:original_string,dollar_array:str_args)
-          remove_enclosing_bracks(string_array:str_args)
+          reenter_addition_str_content(original_string,str_args)
+          remove_enclosing_bracks(str_args)
           object_args = str_args.inject([]){ |r,e| r << e.objectify }
           return sbt(object_args)
         end
@@ -91,8 +91,10 @@ class String
             str_args << str_copy.slice(a[0]..a[1])
           end
 
-          reenter_addition_str_content(string:original_string,dollar_array:str_args)
-          remove_enclosing_bracks(string_array:str_args)
+          reenter_addition_str_content(original_string,str_args)
+          remove_enclosing_bracks(str_args)
+
+
           object_args = str_args.inject([]){ |r,e| r << e.objectify }
           return add(object_args)
         end
@@ -103,17 +105,17 @@ class String
 
     #multiplication
     if str_copy.include?('+') == false && mtp_check_str_ary.length > 1 # && not a fraction of legnth 1 or pwer of length 1
-      str_args = split_mtp_args(string:str_copy)
-      reenter_str_content(string:original_string,dollar_array:str_args)
-      remove_enclosing_bracks(string_array:str_args)
+      str_args = split_mtp_args(str_copy)
+      reenter_str_content(original_string,str_args)
+      remove_enclosing_bracks(str_args)
       object_args = str_args.inject([]){ |r,e| r << e.objectify }
       return mtp(object_args)
     end
 
     # frac/div
     if mtp_check_str_ary.length == 1 && mtp_check_str_ary[0] =~ /^\\frac/
-      str_args = split_mtp_args(string:str_copy)
-      reenter_str_content(string:original_string,dollar_array:str_args)
+      str_args = split_mtp_args(str_copy)
+      reenter_str_content(original_string,str_args)
       str_copy = str_args[0]
       top_indices = matching_brackets(str_copy,'{','}')
       numerator = str_copy.slice(top_indices[0]+1..top_indices[1]-1)
@@ -127,8 +129,8 @@ class String
 
     #power
     if mtp_check_str_ary.length == 1 && mtp_check_str_ary[0] =~ /\^/
-      str_args = split_mtp_args(string:str_copy)
-      reenter_str_content(string:original_string,dollar_array:str_args)
+      str_args = split_mtp_args(str_copy)
+      reenter_str_content(original_string,str_args)
       str_copy = str_args[0]
       str_args = []
       if str_copy[0] != '('
@@ -138,7 +140,7 @@ class String
         str_args << str_copy[0..bracket_indices[1]]
         str_args << str_copy[bracket_indices[1]+2..-1]
       end
-      remove_enclosing_bracks(string_array:str_args)
+      remove_enclosing_bracks(str_args)
       object_args = str_args.inject([]){ |r,e| r << e.objectify }
       return pow(object_args)
     end
@@ -153,6 +155,25 @@ class String
       return self.to_i
     end
 
+
+    # return add(obj_args)  if _outer_func_is_add?
+    # return sbt(obj_args)  if _outer_func_is_sbt?
+    # return self.to_i      if _is_numeral?
+    # return self           if _is_string?
+
   end
+
+  def outer_func_is_add?
+    #self is emptied_string {$$$}
+    if include?('+') == false
+      return false
+    end
+
+
+
+  end
+
+
+
 
 end
