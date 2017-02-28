@@ -535,10 +535,7 @@ describe Multiplication do
     exp = '(3x^2y^3+4x^3y^5)(5xy^4+6x^3y^{-2})'.objectify
     result = exp.combine_brackets
 
-    result.each_with_index do |a,i|
-      string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
-      puts string
-    end
+
     expect(result[0]).to eq '(3x^2y^3+4x^3y^5)(5xy^4+6x^3y^{-2})'.objectify
     # expect(result[1]).to eq '(3x^2y^3)(5xy^4)+(3x^2y^3)(6x^3y^{-2})+(4x^3y^5)(5xy^4)+(4x^3y^5)(6x^3y^{-2})'.objectify
     expect(result[1]).to eq '(3x^2y^3)(5xy^4)+(3x^2y^3)(6x^3y^{-2})'.objectify
@@ -720,7 +717,28 @@ describe Multiplication do
 
     end
 
-    # it 'expands ()'
+    it 'expands (a+b)^3' do
+      exp = '(a+b)^3'.objectify
+      result = exp.expand
+
+      result.each_with_index do |a,i|
+        expect(result[0]).to eq '(a+b)(a+b)(a+b)'.objectify
+        expect(result[1]).to eq '(aa+ab+ba+bb)(a+b)'.objectify
+        expect(result[2]).to eq '(a^1a^1+ab+ba+b^1b^1)(a+b)'.objectify
+        expect(result[3]).to eq '(a^{1+1}+ab+ba+b^{1+1})(a+b)'.objectify
+        expect(result[4]).to eq '(a^2+ab+ba+b^2)(a+b)'.objectify
+        expect(result[5]).to eq '(a^2+ab+ab+b^2)(a+b)'.objectify
+        expect(result[6]).to eq '(a^2+2ab+b^2)(a+b)'.objectify
+        expect(result[7]).to eq 'a^2a+a^2b+2aba+2abb+b^2a+b^2b'.objectify
+        expect(result[8]).to eq 'a^2a+a^2b+2aab+2abb+b^2a+b^2b'.objectify
+        expect(result[9]).to eq 'a^2a^1+a^2b+2a^1a^1b+2ab^1b^1+b^2a+b^2b^1'.objectify
+        expect(result[10]).to eq 'a^{2+1}+a^2b+2a^{1+1}b+2ab^{1+1}+b^2a+b^{2+1}'.objectify
+        expect(result[11]).to eq 'a^3+a^2b+2a^2b+2ab^2+b^2a+b^3'.objectify
+        expect(result[12]).to eq 'a^3+a^2b+2a^2b+2ab^2+ab^2+b^3'.objectify
+        expect(result[13]).to eq 'a^3+3a^2b+3ab^2+b^3'.objectify
+
+      end
+    end
 
   end
 
