@@ -68,6 +68,8 @@ class String
 
           reenter_addition_str_content(original_string,str_args)
           remove_enclosing_bracks(str_args)
+
+
           object_args = str_args.inject([]){ |r,e| r << e.objectify }
           return add(object_args)
         end
@@ -128,6 +130,25 @@ class String
       return self.to_i
     end
 
+
+    # return add(obj_args)  if _outer_func_is_add?
+    # return sbt(obj_args)  if _outer_func_is_sbt?
+    # return self.to_i      if _is_numeral?
+    # return self           if _is_string?
+
   end
+
+  def outer_func_is_add?
+    #self is emptied_string {$$$}
+    if include?('+') == false
+      return false
+    end
+
+
+
+  end
+
+
+
 
 end

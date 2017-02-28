@@ -154,15 +154,27 @@ module ObjectifyUtilities
 
   def remove_enclosing_bracks(string_array)
     string_array.each do |str|
-      if str[0] == '(' && str[-1] == ')'
+      bracket_indices = matching_brackets(str,'(',')',brackets_num=1)
+      if bracket_indices[1] != 0 && bracket_indices[0] == 0 && bracket_indices[1] == (str.length - 1)
         str[0] = ''
         str[-1] = ''
       end
-      if str[0] == '{' && str[-1] == '}'
+      curly_bracket_indices = matching_brackets(str,'{','}',brackets_num=1)
+      if curly_bracket_indices[1] != 0 && curly_bracket_indices[0] == 0 && curly_bracket_indices[1] == (str.length - 1)
         str[0] = ''
         str[-1] = ''
       end
     end
+    # string_array.each do |str|
+    #   if str[0] == '(' && str[-1] == ')'
+    #     str[0] = ''
+    #     str[-1] = ''
+    #   end
+    #   if str[0] == '{' && str[-1] == '}'
+    #     str[0] = ''
+    #     str[-1] = ''
+    #   end
+    # end
   end
 
 end
