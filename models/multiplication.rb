@@ -540,6 +540,7 @@ class Multiplication
     steps = steps.map{|a| mtp(a)}
 
     brackets = steps.last
+    puts brackets
     next_steps = brackets.combine_brackets
     steps = steps + next_steps
     steps = delete_duplicate_steps(steps)

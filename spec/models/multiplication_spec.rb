@@ -708,34 +708,34 @@ describe Multiplication do
   end
 
   describe '#expand' do
-    it 'expands x(x+y)' do
-      exp = mtp('x',add('x','y'))
-      result = exp.expand
-      expect(result[0]).to eq objectify('x(x+y)')
-      expect(result[1]).to eq mtp(add('x'),add('x','y'))
-      expect(result[2]).to eq add(mtp(mtp('x'),mtp('x')),mtp(mtp('x'),mtp('y')))
-      expect(result[3]).to eq add(mtp(mtp('x','x')),mtp('x','y'))
-      expect(result[4]).to eq add(mtp(mtp(pow('x',1),pow('x',1))),mtp('x','y'))
-      expect(result[5]).to eq add(mtp(pow('x',add(1,1))),mtp('x','y'))
-      expect(result[6]).to eq add(mtp(pow('x',2)),mtp('x','y'))
-    end
-
-    it 'expands m1 + m2(m3+m4)' do
-      exp = add('m1',mtp('m2',add('m3','m4')))
-      result = exp.expand
-      expect(result[-1]).to eq add('m1',add(mtp('m2','m3'),mtp('m2','m4')))
-    end
+    # it 'expands x(x+y)' do
+    #   exp = mtp('x',add('x','y'))
+    #   result = exp.expand
+    #   expect(result[0]).to eq objectify('x(x+y)')
+    #   expect(result[1]).to eq mtp(add('x'),add('x','y'))
+    #   expect(result[2]).to eq add(mtp(mtp('x'),mtp('x')),mtp(mtp('x'),mtp('y')))
+    #   expect(result[3]).to eq add(mtp(mtp('x','x')),mtp('x','y'))
+    #   expect(result[4]).to eq add(mtp(mtp(pow('x',1),pow('x',1))),mtp('x','y'))
+    #   expect(result[5]).to eq add(mtp(pow('x',add(1,1))),mtp('x','y'))
+    #   expect(result[6]).to eq add(mtp(pow('x',2)),mtp('x','y'))
+    # end
+    #
+    # it 'expands m1 + m2(m3+m4)' do
+    #   exp = add('m1',mtp('m2',add('m3','m4')))
+    #   result = exp.expand
+    #   expect(result[-1]).to eq add('m1',add(mtp('m2','m3'),mtp('m2','m4')))
+    # end
 
     it 'expands' do
-      exp = add(mtp('m'))
+      exp = mtp('m1','m2')
       result = exp.expand
-      expect(result).to eq 'm'
+      expect(result.last).to eq 'm'
     end
 
-    # it 'expands (m1 + m2)(m5+m6)' do
-    #   exp = mtp(add(mtp('m0')),add('m5'))
-    #   result = exp.expand
-    # end
+    it 'expands (m1m2 + m3)(m5+m6)' do
+      exp = mtp(add(add(mtp('m1','m2')),'m3'),add('m5','m6'))
+      result = exp.combine_two_brackets
+    end
   end
 
 end
