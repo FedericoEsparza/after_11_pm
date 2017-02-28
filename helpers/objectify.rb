@@ -8,24 +8,8 @@ module Objectify
     original_string.gsub!(' ','')
     str_copy = empty_brackets(string:original_string.dup)
 
-    # original_string = str.dup
-    # space_sanitized = str.dup
-    # space_sanitized.gsub!(' ','')
-    # str_copy = empty_brackets(string:space_sanitized)
-
-    # str_copy = empty_brackets(string:str.dup)
-
     mtp_check_str_copy = str_copy.dup
     mtp_check_str_ary = split_mtp_args(string:mtp_check_str_copy)
-
-    # addition assuming all negatives are in brackets (-13)
-    # if str_copy.include?('+') && !str_copy.include?('-')
-    #   str_args = str_copy.split('+')
-    #   reenter_addition_str_content(string:original_string,dollar_array:str_args)
-    #   remove_enclosing_bracks(string_array:str_args)
-    #   object_args = str_args.inject([]){ |r,e| r << objectify(e) }
-    #   return add(object_args)
-    # end
 
     #addition with subtraction
     if str_copy.include?('-') || str_copy.include?('+')
@@ -50,22 +34,13 @@ module Objectify
           plus_indices << -1
           for j in i..str_copy.length
             if str_copy[-j] == '+'
-              # puts "current string_copy is #{str_copy}"
-              # puts "current j is #{j}"
               plus_indices.insert(1,str_copy.length - j)
-              # puts '==================='
-              # p plus_indices
-              # puts '==================='
             end
             if str_copy[-j] == '-'
               break
             end
           end
           plus_indices << str_copy.length
-
-          # puts '==================='
-          # p plus_indices
-          # puts '==================='
 
           slice_indices = []
           for k in 1..plus_indices.length-1
@@ -75,11 +50,6 @@ module Objectify
           slice_indices.each do |a|
             str_args << str_copy.slice(a[0]..a[1])
           end
-
-          #
-          # puts "=============="
-          # p str_args
-          # puts "=============="
 
           reenter_addition_str_content(string:original_string,dollar_array:str_args)
           remove_enclosing_bracks(string_array:str_args)
@@ -203,9 +173,15 @@ module Objectify
       _add_next_function_arg(result_array,string_copy)
       _add_next_pow_arg(result_array,string_copy)
       _add_next_brac_arg(result_array,string_copy)
+      _delete_next_times_arg(string_copy)
       i += 1
     end
     result_array
+  end
+
+  def _delete_next_times_arg(string_copy)
+    str_reg = /^\\times/
+    sliced = string_copy.slice!(str_reg)
   end
 
   def _add_next_str_var_arg(result_array,string_copy)
@@ -249,7 +225,7 @@ module Objectify
 
   def _add_next_pow_arg(result_array,string_copy)
     # pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\d*)|(\{\$*\}))/
-    pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d*))/
+    pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d))/
     sliced = string_copy.slice!(pow_reg)
     result_array << sliced unless sliced.nil?
   end
@@ -262,11 +238,13 @@ module Objectify
   end
 
   def reenter_str_content(string:,dollar_array:)
+    string_copy = string.dup
+    string_copy.gsub!('\\times','')
     i = 0
     dollar_array.each do |str|
       str.each_char.with_index do |c,c_i|
-        if c != string[i]
-          str[c_i] = string[i]
+        if c != string_copy[i]
+          str[c_i] = string_copy[i]
         end
         i += 1
       end
@@ -300,42 +278,3 @@ module Objectify
   end
 
 end
-
-
-## Too chicken to delete
-
-
-  # def __next_arg_is_pow?(string_copy)
-  #   string_copy =~ /^\d+\^/ || string_copy =~ /^\(\$*\)\^/ || string_copy =~ /^[A-Za-z]\^/
-  # end
-
-
-# def old_power
-
-# if string_copy =~ /^\d+\^/
-#   base_length = string_copy[/^\d+\^/].length
-# end
-#
-# if string_copy =~ /^\(\$*\)\^/
-#   base_length = string_copy[/^\(\$*\)\^/].length
-# end
-#
-# if string_copy =~ /^[A-Za-z]\^/
-#   base_length = string_copy[/^[A-Za-z]\^/].length
-# end
-#
-# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /[A-Za-z]/
-#   result_array << string_copy.slice!(0..(base_length))
-#   return
-# end
-#
-# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\d*/
-#   result_array << string_copy.slice!(0..(base_length))
-#   return
-# end
-#
-# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\{/
-#   pow_ind_end_i = matching_brackets(string_copy,brac_types[1][0],brac_types[1][1],1)[1]
-#   result_array << string_copy.slice!(0..pow_ind_end_i)
-#   return
-# end
