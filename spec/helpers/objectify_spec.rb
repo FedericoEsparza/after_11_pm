@@ -3,7 +3,7 @@ require './helpers/objectify'
 describe Objectify do
   let(:dummy_class){(Class.new{include Objectify}).new}
 
-  describe '#objectify' do
+  xdescribe '#objectify' do
     it '2\times3' do
       expect(dummy_class.objectify('2\times3')).to eq mtp(2,3)
     end
@@ -171,22 +171,6 @@ describe Objectify do
     it '\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}' do
       exp = dummy_class.objectify('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}')
       expect(exp).to eq add(div('a','b'),pow(mtp(div('c','d'),add(mtp(2,'x'),pow(4,'x'))),div(5,'y')))
-    end
-  end
-  
-  describe 'objectify and olatex back' do
-    it 'objectify and olatex back 2^{3xy}' do
-      expect(dummy_class.objectify('2^{3xy}').latex.shorten).to eq '2^{3xy}'
-    end
-  end
-
-  describe '#correct_latex?' do
-    it 'is \frac{c}{d}(2x+4^x) correct_latex?' do
-      expect('\frac{c}{d}(2x+4^x)'.correct_latex?).to be true
-    end
-
-    it 'is \frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}} correct_latex?' do
-      expect('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'.correct_latex?).to be true
     end
   end
 

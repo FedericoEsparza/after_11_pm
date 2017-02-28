@@ -3,7 +3,7 @@ module Objectify
     [['(',')'], ['{', '}'], ['[', ']']]
   end
 
-  def objectify(str)
+  def objectifyf(str)
     original_string = str.dup
     original_string.gsub!(' ','')
     str_copy = empty_brackets(string:original_string.dup)
