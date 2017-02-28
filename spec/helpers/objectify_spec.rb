@@ -16,7 +16,7 @@ describe Objectify do
       expect(dummy_class.objectify('a+b-c-d')).to eq sbt(sbt(add('a','b'),'c'),'d')
     end
 
-    xit 'a-b+c+d' do
+    it 'a-b+c+d' do
       expect(dummy_class.objectify('a-b+c+d')).to eq add(sbt('a','b'),'c','d')
     end
 

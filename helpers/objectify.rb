@@ -21,18 +21,50 @@ module Objectify
 
     #addition with subtraction
     if str_copy.include?('-')
+      str_args = []
       for i in 1..str_copy.length
         if str_copy[-i] == '-'
-          str_args = []
           minus_index = str_copy.length - i
           str_args << str_copy.slice(0..minus_index-1)
           str_args << str_copy.slice(minus_index+1..-1)
-          break
+
+          remove_enclosing_bracks(string_array:str_args)
+          object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+          return sbt(object_args)
         end
+
+        if str_copy[-i] == '+'
+          # eg:   found + at indices [7,10] for a strength of length 15
+          # extend to [-1,7,10,15] in order to build slice_indices of
+          # [[0,6],[8,9],[11,14]]
+          plus_indices = []
+          plus_indices << -1
+          for j in i..str_copy.length
+            if str_copy[j] == '+'
+              plus_indices << j
+            end
+            if str_copy[j] == '-'
+              break
+            end
+          end
+          plus_indices << str_copy.length
+
+          slice_indices = []
+          for k in 1..plus_indices.length-1
+            slice_indices << [plus_indices[k-1]+1,plus_indices[k]-1]
+          end
+
+          slice_indices.each do |a|
+            str_args << str_copy.slice(a[0]..a[1])
+          end
+
+          remove_enclosing_bracks(string_array:str_args)
+          object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+          return add(object_args)
+        end
+
       end
-      remove_enclosing_bracks(string_array:str_args)
-      object_args = str_args.inject([]){ |r,e| r << objectify(e) }
-      return sbt(object_args)
+
     end
 
 
