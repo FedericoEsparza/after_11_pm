@@ -55,9 +55,12 @@ class Power
       base_latex = brackets(base_latex)
     end
     index_latex = index.latex
-    unless elementary?(index)
+    if elementary?(index) == false || index.to_s.length > 1
       index_latex = '{' + index_latex +  '}'
     end
+    # unless elementary?(index)
+    #   index_latex = '{' + index_latex +  '}'
+    # end
     base_latex + '^' + index_latex
   end
 

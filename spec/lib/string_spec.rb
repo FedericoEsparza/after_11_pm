@@ -182,23 +182,38 @@ describe String do
       exp = '\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'
       expect(exp.objectify).to eq add(div('a','b'),pow(mtp(div('c','d'),add(mtp(2,'x'),pow(4,'x'))),div(5,'y')))
     end
+
+    it '(3x^2y^3)(5xy^4)+(3x^2y^3)(6x^3y^{-2})' do
+      str = '\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'
+      expect(str.objectify.latex.shorten).to eq str
+    end
   end
 
-  # describe 'objectify and olatex back' do
-  #   it 'objectify and olatex back 2^{3xy}' do
-  #     expect(dummy_class.objectify('2^{3xy}').latex.shorten).to eq '2^{3xy}'
-  #   end
-  # end
-  #
-  # describe '#correct_latex?' do
-  #   it 'is \frac{c}{d}(2x+4^x) correct_latex?' do
-  #     expect('\frac{c}{d}(2x+4^x)'.correct_latex?).to be true
-  #   end
-  #
-  #   it 'is \frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}} correct_latex?' do
-  #     expect('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'.correct_latex?).to be true
-  #   end
-  # end
+  xdescribe 'objectify and olatex back' do
+    it 'objectify and olatex back 2^{3xy}' do
+      expect(dummy_class.objectify('2^{3xy}').latex.shorten).to eq '2^{3xy}'
+    end
+  end
+
+  xdescribe '#correct_latex?' do
+    it 'is \frac{c}{d}(2x+4^x) correct_latex?' do
+      expect('\frac{c}{d}(2x+4^x)'.correct_latex?).to be true
+    end
+
+    it 'is \frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}} correct_latex?' do
+      expect('\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'.correct_latex?).to be true
+    end
+  end
+
+  xdescribe '#outer_func_is_add?' do
+    it '3-x-4 to false' do
+      expect('3-x-4'.outer_func_is_add?).to be false
+    end
+
+    it '3+x+4 to true' do
+      expect('3+x+4'.outer_func_is_add?).to be true
+    end
+  end
 
 
 end
