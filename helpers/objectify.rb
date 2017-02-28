@@ -5,19 +5,62 @@ module Objectify
 
   def objectify(str)
     original_string = str.dup
-    str_copy = empty_brackets(string:str.dup)
+    original_string.gsub!(' ','')
+    str_copy = empty_brackets(string:original_string.dup)
 
     mtp_check_str_copy = str_copy.dup
     mtp_check_str_ary = split_mtp_args(string:mtp_check_str_copy)
 
-    # addition
-    if str_copy.include?('+')
-      str_args = str_copy.split('+')
-      reenter_addition_str_content(string:original_string,dollar_array:str_args)
-      remove_enclosing_bracks(string_array:str_args)
-      object_args = str_args.inject([]){ |r,e| r << objectify(e) }
-      return add(object_args)
+    #addition with subtraction
+    if str_copy.include?('-') || str_copy.include?('+')
+      str_args = []
+      for i in 1..(str_copy.length-1) #do not check the first char for '-'
+        if str_copy[-i] == '-' && (str_copy[-(i+1)] != '+' && str_copy[-(i+1)] != '-')
+          minus_index = str_copy.length - i
+          str_args << str_copy.slice(0..minus_index-1)
+          str_args << str_copy.slice(minus_index+1..-1)
+
+          reenter_addition_str_content(string:original_string,dollar_array:str_args)
+          remove_enclosing_bracks(string_array:str_args)
+          object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+          return sbt(object_args)
+        end
+
+        if str_copy[-i] == '+'
+          # eg:   found + at indices [7,10] for a strength of length 15
+          # extend to [-1,7,10,15] in order to build slice_indices of
+          # [[0,6],[8,9],[11,14]]
+          plus_indices = []
+          plus_indices << -1
+          for j in i..str_copy.length
+            if str_copy[-j] == '+'
+              plus_indices.insert(1,str_copy.length - j)
+            end
+            if str_copy[-j] == '-'
+              break
+            end
+          end
+          plus_indices << str_copy.length
+
+          slice_indices = []
+          for k in 1..plus_indices.length-1
+            slice_indices << [plus_indices[k-1]+1,plus_indices[k]-1]
+          end
+
+          slice_indices.each do |a|
+            str_args << str_copy.slice(a[0]..a[1])
+          end
+
+          reenter_addition_str_content(string:original_string,dollar_array:str_args)
+          remove_enclosing_bracks(string_array:str_args)
+          object_args = str_args.inject([]){ |r,e| r << objectify(e) }
+          return add(object_args)
+        end
+
+      end
+
     end
+
 
     #multiplication
     if str_copy.include?('+') == false && mtp_check_str_ary.length > 1 # && not a fraction of legnth 1 or pwer of length 1
@@ -67,7 +110,8 @@ module Objectify
     end
 
     #number
-    if str.length == 1 && /[0-9]/ =~ str
+    # if str.length == 1 && /[0-9]/ =~ str
+    if str =~ /(^(\d|\-)\d*)/
       return str.to_i
     end
   end
@@ -129,9 +173,15 @@ module Objectify
       _add_next_function_arg(result_array,string_copy)
       _add_next_pow_arg(result_array,string_copy)
       _add_next_brac_arg(result_array,string_copy)
+      _delete_next_times_arg(string_copy)
       i += 1
     end
     result_array
+  end
+
+  def _delete_next_times_arg(string_copy)
+    str_reg = /^\\times/
+    sliced = string_copy.slice!(str_reg)
   end
 
   def _add_next_str_var_arg(result_array,string_copy)
@@ -144,6 +194,7 @@ module Objectify
     # num_reg = /^(\d+)(?!\^)/
     # sliced = string_copy.slice!(num_reg)
     # result_array << sliced unless sliced.nil?
+
     next_num_ind = _next_num_index(string_copy)
     if next_num_ind
       result_array << string_copy.slice!(0..next_num_ind)
@@ -151,11 +202,11 @@ module Objectify
   end
   #this is happening because I suck at regex
   def _next_num_index(string_copy)
-    for i in 0..string_copy.length
+    unless string_copy[0] =~ /\d/ || string_copy[0] == '-'
+      return nil
+    end
+    for i in 1..string_copy.length
       unless string_copy[i] =~ /\d/
-        if i == 0
-          return nil
-        end
         if string_copy[i] =~ /\^/
           return nil
         else
@@ -174,7 +225,7 @@ module Objectify
 
   def _add_next_pow_arg(result_array,string_copy)
     # pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\d*)|(\{\$*\}))/
-    pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d*))/
+    pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d))/
     sliced = string_copy.slice!(pow_reg)
     result_array << sliced unless sliced.nil?
   end
@@ -187,11 +238,13 @@ module Objectify
   end
 
   def reenter_str_content(string:,dollar_array:)
+    string_copy = string.dup
+    string_copy.gsub!('\\times','')
     i = 0
     dollar_array.each do |str|
       str.each_char.with_index do |c,c_i|
-        if c != string[i]
-          str[c_i] = string[i]
+        if c != string_copy[i]
+          str[c_i] = string_copy[i]
         end
         i += 1
       end
@@ -225,42 +278,3 @@ module Objectify
   end
 
 end
-
-
-## Too chicken to delete
-
-
-  # def __next_arg_is_pow?(string_copy)
-  #   string_copy =~ /^\d+\^/ || string_copy =~ /^\(\$*\)\^/ || string_copy =~ /^[A-Za-z]\^/
-  # end
-
-
-# def old_power
-
-# if string_copy =~ /^\d+\^/
-#   base_length = string_copy[/^\d+\^/].length
-# end
-#
-# if string_copy =~ /^\(\$*\)\^/
-#   base_length = string_copy[/^\(\$*\)\^/].length
-# end
-#
-# if string_copy =~ /^[A-Za-z]\^/
-#   base_length = string_copy[/^[A-Za-z]\^/].length
-# end
-#
-# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /[A-Za-z]/
-#   result_array << string_copy.slice!(0..(base_length))
-#   return
-# end
-#
-# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\d*/
-#   result_array << string_copy.slice!(0..(base_length))
-#   return
-# end
-#
-# if __next_arg_is_pow?(string_copy) && string_copy[base_length] =~ /\{/
-#   pow_ind_end_i = matching_brackets(string_copy,brac_types[1][0],brac_types[1][1],1)[1]
-#   result_array << string_copy.slice!(0..pow_ind_end_i)
-#   return
-# end

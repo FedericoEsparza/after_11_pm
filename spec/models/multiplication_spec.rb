@@ -440,172 +440,91 @@ describe Multiplication do
 
    end
 
-   xdescribe '#combine n brackets' do
+   describe '#combine n brackets' do
 
      it 'combines (x+y)(x+y)(x+y)' do
        exp = mtp(add('x','y'),add('x','y'),add('x','y'))
        result = exp.combine_brackets
-       expect(result.last).to eq add(mtp(pow('x',3)),mtp(pow('x',2),'y',3),mtp('x',pow('y',2),3),mtp(pow('y',3)))
+       expect(result.last).to eq objectify('x^3+3x^2y+3xy^2+y^3')
 
-       expect(result[0]).to eq mtp(add('x','y'),add('x','y'),add('x','y'))
-       expect(result[1]).to eq mtp(mtp(add('x','y'),add('x','y')),add('x','y'))
+      #  result.each_with_index do |a,i|
+      #    string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
+      #    puts string
+      #  end
 
-       expect(result[2]).to eq mtp(
-         add(
-           mtp(mtp('x'),mtp('x')),
-           mtp(mtp('x'),mtp('y')),
-           mtp(mtp('y'),mtp('x')),
-           mtp(mtp('y'),mtp('y'))
-           ),
-          add('x','y')
-        )
+       expect(result[0]).to eq objectify('(x+y)(x+y)(x+y)')
+        expect(result[1]).to eq objectify('(xx+xy+yx+yy)(x+y)')
+        expect(result[2]).to eq objectify('(x^1x^1+xy+yx+y^1y^1)(x+y)')
+        expect(result[3]).to eq objectify('(x^{1+1}+xy+yx+y^{1+1})(x+y)')
+        expect(result[4]).to eq objectify('(x^2+xy+yx+y^2)(x+y)')
+        expect(result[5]).to eq objectify('(x^2+xy+xy+y^2)(x+y)')
+        expect(result[6]).to eq objectify('(x^2+2xy+y^2)(x+y)')
+        expect(result[7]).to eq objectify('x^2x+x^2y+2xyx+2xyy+y^2x+y^2y')
+        expect(result[8]).to eq objectify('x^2x+x^2y+2xxy+2xyy+y^2x+y^2y')
+        expect(result[9]).to eq objectify('x^2x^1+x^2y+2x^1x^1y+2xy^1y^1+y^2x+y^2y^1')
+        expect(result[10]).to eq objectify('x^{2+1}+x^2y+2x^{1+1}y+2xy^{1+1}+y^2x+y^{2+1}')
+        expect(result[11]).to eq objectify('x^3+x^2y+2x^2y+2xy^2+y^2x+y^3')
+        expect(result[12]).to eq objectify('x^3+x^2y+2x^2y+2xy^2+xy^2+y^3')
+        expect(result[13]).to eq objectify('x^3+3x^2y+3xy^2+y^3')
 
-        expect(result[3]).to eq mtp(
-          add(
-            mtp(mtp('x','x')),
-            mtp('x','y'),
-            mtp('y','x'),
-            mtp(mtp('y','y'))
-          ),
-          add('x','y')
-         )
 
-         expect(result[4]).to eq mtp(
-           add(
-             mtp(mtp(pow('x',1),pow('x',1))),
-             mtp('x','y'),
-             mtp('y','x'),
-             mtp(mtp(pow('y',1),pow('y',1)))
-           ),
-           add('x','y')
-          )
-
-          expect(result[5]).to eq mtp(
-            add(
-              mtp(pow('x',add(1,1))),
-              mtp('x','y'),
-              mtp('y','x'),
-              mtp(pow('y',add(1,1)))
-            ),
-            add('x','y')
-           )
-
-           expect(result[6]).to eq mtp(
-             add(
-               mtp(pow('x',2)),
-               mtp('x','y'),
-               mtp('y','x'),
-               mtp(pow('y',2))
-             ),
-             add('x','y')
-            )
-
-            expect(result[7]).to eq mtp(
-              add(
-                mtp(pow('x',2)),
-                mtp('x','y'),
-                mtp('x','y'),
-                mtp(pow('y',2))
-              ),
-              add('x','y')
-             )
-
-             expect(result[8]).to eq mtp(
-               add(
-                 mtp(pow('x',2)),
-                 mtp('x','y',2),
-                 mtp(pow('y',2))
-               ),
-               add('x','y')
-              )
-
-            expect(result[9]).to eq add(
-              mtp(mtp(pow('x',2)),mtp('x')),
-              mtp(mtp(pow('x',2)),mtp('y')),
-              mtp(mtp('x','y',2),mtp('x')),
-              mtp(mtp('x','y',2),mtp('y')),
-              mtp(mtp(pow('y',2)),mtp('x')),
-              mtp(mtp(pow('y',2)),mtp('y'))
-            )
-
-            expect(result[10]).to eq add(
-              mtp(mtp(pow('x',2),'x')),
-              mtp(pow('x',2),'y'),
-              mtp(mtp('x','x'),'y',mtp(2)),
-              mtp('x',mtp('y','y'),mtp(2)),
-              mtp(pow('y',2),'x'),
-              mtp(mtp(pow('y',2),'y'))
-            )
-
-            expect(result[11]).to eq add(
-              mtp(mtp(pow('x',2),pow('x',1))),
-              mtp(pow('x',2),'y'),
-              mtp(mtp(pow('x',1),pow('x',1)),'y',2),
-              mtp('x',mtp(pow('y',1),pow('y',1)),2),
-              mtp(pow('y',2),'x'),
-              mtp(mtp(pow('y',2),pow('y',1)))
-            )
-
-            expect(result[12]).to eq add(
-              mtp(pow('x',add(2,1))),
-              mtp(pow('x',2),'y'),
-              mtp(pow('x',add(1,1)),'y',2),
-              mtp('x',pow('y',add(1,1)),2),
-              mtp(pow('y',2),'x'),
-              mtp(pow('y',add(2,1)))
-            )
-
-            expect(result[13]).to eq add(
-              mtp(pow('x',3)),
-              mtp(pow('x',2),'y'),
-              mtp(pow('x',2),'y',2),
-              mtp('x',pow('y',2),2),
-              mtp(pow('y',2),'x'),
-              mtp(pow('y',3))
-            )
-
-            expect(result[14]).to eq add(
-              mtp(pow('x',3)),
-              mtp(pow('x',2),'y'),
-              mtp(2,pow('x',2),'y'),
-              mtp(2,'x',pow('y',2)),
-              mtp('x',pow('y',2)),
-              mtp(pow('y',3))
-            )
-
-            expect(result[15]).to eq add(
-              mtp(pow('x',3)),
-              mtp(pow('x',2),'y',3),
-              mtp('x',pow('y',2),3),
-              mtp(pow('y',3))
-            )
      end
 
 
      it 'combines (x+y)(x+z)(y+z)' do
        exp = mtp(add('x','y'),add('x','z'),add('y','z'))
        result = exp.combine_brackets
-       expect(result.last).to eq add(
-       mtp(pow('x',2),'y'),
-       mtp(pow('x',2),'z'),
-       mtp('x',pow('y',2)),
-       mtp('x','y','z',2),
-       mtp('x',pow('z',2)),
-       mtp(pow('y',2),'z'),
-       mtp('y',pow('z',2))
-       )
+
+
+        expect(result[0]).to eq objectify('(x+y)(x+z)(y+z)')
+        expect(result[1]).to eq objectify('(xx+xz+yx+yz)(y+z)')
+        expect(result[2]).to eq objectify('(x^1x^1+xz+yx+yz)(y+z)')
+        expect(result[3]).to eq objectify('(x^{1+1}+xz+yx+yz)(y+z)')
+        expect(result[4]).to eq objectify('(x^2+xz+yx+yz)(y+z)')
+        expect(result[5]).to eq objectify('(x^2+xz+xy+yz)(y+z)')
+        expect(result[6]).to eq objectify('(x^2+xy+xz+yz)(y+z)')
+        expect(result[7]).to eq objectify('x^2y+x^2z+xyy+xyz+xzy+xzz+yzy+yzz')
+        expect(result[8]).to eq objectify('x^2y+x^2z+xyy+xyz+xzy+xzz+yyz+yzz')
+        expect(result[9]).to eq objectify('x^2y+x^2z+xy^1y^1+xyz+xzy+xz^1z^1+y^1y^1z+yz^1z^1')
+        expect(result[10]).to eq objectify('x^2y+x^2z+xy^{1+1}+xyz+xzy+xz^{1+1}+y^{1+1}z+yz^{1+1}')
+        expect(result[11]).to eq objectify('x^2y+x^2z+xy^2+xyz+xzy+xz^2+y^2z+yz^2')
+        expect(result[12]).to eq objectify('x^2y+x^2z+xy^2+xyz+xyz+xz^2+y^2z+yz^2')
+        expect(result[13]).to eq objectify('x^2y+x^2z+xy^2+2xyz+xz^2+y^2z+yz^2')
+
      end
 
      it 'combines (x+y)(x+y)(x+y)(x+y)' do
        exp = mtp(add('x','y'),add('x','y'),add('x','y'),add('x','y'))
        result = exp.combine_brackets
-       expect(result.last).to eq add(
-        mtp(pow('x',4)),
-        mtp(pow('x',3),'y',4),
-        mtp(pow('x',2),pow('y',2),6),
-        mtp('x',pow('y',3),4),
-        mtp(pow('y',4))
-       )
+
+        # result.each_with_index do |a,i|
+        #   string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
+        #   puts string
+        # end
+
+        expect(result[0]).to eq objectify('(x+y)(x+y)(x+y)(x+y)')
+        expect(result[1]).to eq objectify('(xx+xy+yx+yy)(x+y)(x+y)')
+        expect(result[2]).to eq objectify('(x^1x^1+xy+yx+y^1y^1)(x+y)(x+y)')
+        expect(result[3]).to eq objectify('(x^{1+1}+xy+yx+y^{1+1})(x+y)(x+y)')
+        expect(result[4]).to eq objectify('(x^2+xy+yx+y^2)(x+y)(x+y)')
+        expect(result[5]).to eq objectify('(x^2+xy+xy+y^2)(x+y)(x+y)')
+        expect(result[6]).to eq objectify('(x^2+2xy+y^2)(x+y)(x+y)')
+        expect(result[7]).to eq objectify('(x^2x+x^2y+2xyx+2xyy+y^2x+y^2y)(x+y)')
+        expect(result[8]).to eq objectify('(x^2x+x^2y+2xxy+2xyy+y^2x+y^2y)(x+y)')
+        expect(result[9]).to eq objectify('(x^2x^1+x^2y+2x^1x^1y+2xy^1y^1+y^2x+y^2y^1)(x+y)')
+        expect(result[10]).to eq objectify('(x^{2+1}+x^2y+2x^{1+1}y+2xy^{1+1}+y^2x+y^{2+1})(x+y)')
+        expect(result[11]).to eq objectify('(x^3+x^2y+2x^2y+2xy^2+y^2x+y^3)(x+y)')
+        expect(result[12]).to eq objectify('(x^3+x^2y+2x^2y+2xy^2+xy^2+y^3)(x+y)')
+        expect(result[13]).to eq objectify('(x^3+3x^2y+3xy^2+y^3)(x+y)')
+        expect(result[14]).to eq objectify('x^3x+x^3y+3x^2yx+3x^2yy+3xy^2x+3xy^2y+y^3x+y^3y')
+        expect(result[15]).to eq objectify('x^3x+x^3y+3x^2xy+3x^2yy+3xxy^2+3xy^2y+y^3x+y^3y')
+        expect(result[16]).to eq objectify('x^3x^1+x^3y+3x^2x^1y+3x^2y^1y^1+3x^1x^1y^2+3xy^2y^1+y^3x+y^3y^1')
+        expect(result[17]).to eq objectify('x^{3+1}+x^3y+3x^{2+1}y+3x^2y^{1+1}+3x^{1+1}y^2+3xy^{2+1}+y^3x+y^{3+1}')
+        expect(result[18]).to eq objectify('x^4+x^3y+3x^3y+3x^2y^2+3x^2y^2+3xy^3+y^3x+y^4')
+        expect(result[19]).to eq objectify('x^4+x^3y+3x^3y+3x^2y^2+3x^2y^2+3xy^3+xy^3+y^4')
+        expect(result[20]).to eq objectify('x^4+4x^3y+6x^2y^2+4xy^3+y^4')
+
+
      end
 
      it 'combines x(y+z)' do
@@ -713,7 +632,7 @@ describe Multiplication do
       result = exp.expand
       expect(result[0]).to eq objectify('x(x+y)')
       expect(result[1]).to eq objectify('xx+xy')
-      expect(result[2]).to eq objectify('(x^{1})(x^{1}) +xy')
+      expect(result[2]).to eq objectify('x^1x^1 +xy')
       expect(result[3]).to eq objectify('x^{1+1} +xy')
       expect(result[4]).to eq objectify('x^2 +xy')
     end
@@ -775,38 +694,23 @@ describe Multiplication do
     it 'expands (2x^2+3x)(3x^3+5x^2)' do
       exp = objectify('(2x^2+3x)(3x^3+5x^2)')
       result = exp.expand
+
       # result.each_with_index do |a,i|
       #   string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
       #   puts string
       # end
 
       expect(result[0]).to eq objectify('(2x^2+3x)(3x^3+5x^2)')
-      expect(result[1]).to eq objectify('2x^{2}3x^3+2x^{2}5x^2+3x3x^3+3x5x^2')
-      # expect(result[2]).to eq objectify('2(3x^{2})x^3+2\times5x^{2}x^2+3\times3xx^3+3\times5xx^2')
-      # expect(result[3]).to eq objectify('6x^{2+3}+10x^{2+2}+9x^1x^3+15x^1x^2')
-      # expect(result[4]).to eq objectify('6x^5+10x^4+9x^{1+3}+15x^{1+2}')
-      # expect(result[5]).to eq objectify('6x^5+10x^4+9x^4+15x^3')
-      # expect(result[6]).to eq objectify('6x^5+19x^4+15x^3')
+      expect(result[1]).to eq objectify('2x^23x^3+2x^25x^2+3x3x^3+3x5x^2')
+      expect(result[2]).to eq objectify('2\times3x^2x^3+2\times5x^2x^2+3\times3xx^3+3\times5xx^2')
+      expect(result[3]).to eq objectify('6x^{2+3}+10x^{2+2}+9x^1x^3+15x^1x^2')
+      expect(result[4]).to eq objectify('6x^5+10x^4+9x^{1+3}+15x^{1+2}')
+      expect(result[5]).to eq objectify('6x^5+10x^4+9x^4+15x^3')
+      expect(result[6]).to eq objectify('6x^5+19x^4+15x^3')
 
     end
 
-    it 'expands something' do
-      exp = objectify('(2x+3x)(4x+5x)')
-      result = exp.expand
-      # result.each_with_index do |a,i|
-      #   string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
-      #   puts string
-      # end
-
-      #
-      # result[0].latex.shorten
-      # p result[1].latex.shorten
-      # p result[2].latex.shorten
-      # p result[3].latex.shorten
-      # p result[4].latex.shorten
-      # p result[5].latex.shorten
-      # p result[6].latex.shorten
-    end
+    # it 'expands ()'
 
   end
 
