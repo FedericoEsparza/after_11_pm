@@ -319,6 +319,7 @@ class Multiplication
     def combine_brackets_refactored
       copy = self.copy
       new_args = []
+      #multiply each combination between brackets
       copy.args.first.args.each do |a|
         copy.args.last.args.each do |b|
           c = mtp(a,b)
