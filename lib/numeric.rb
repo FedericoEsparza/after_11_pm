@@ -23,6 +23,10 @@ class Fixnum
     self
   end
 
+  def prime_factorization(n)
+    Prime.prime_division(n).flat_map { |factor, power| [factor] * power }
+  end
+
   # def <(exp)
   #   if exp.is_a?(String)
   #     self > exp

@@ -44,6 +44,13 @@ class Array
       end
     end
 
-
+    def evaluate_product
+      array = self
+      if array == []
+        1
+      else
+        array.inject(:*)
+      end
+    end
 
 end

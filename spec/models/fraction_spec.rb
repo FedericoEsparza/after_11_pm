@@ -118,4 +118,30 @@ describe Factory do
       expect(exp_1 <= exp_2).to be true
     end
   end
+
+  describe 'prime_factorisation' do
+    it 'simplifies 24/30' do
+      exp = frac(24, 30)
+      result = exp.simplify
+      expect(result).to eq frac(4,5)
+    end
+
+    it 'simplifies 250/1000' do
+      exp = frac(250,1000)
+      result = exp.simplify
+      expect(result).to eq frac(1,4)
+    end
+
+    it 'simplify 125/81' do
+      exp = frac(125,81)
+      result = exp.simplify
+      expect(result).to eq frac(125,81)
+    end
+
+    it 'simplify -50/35' do
+      exp = frac(50,35,sign: :-)
+      result = exp.simplify
+      expect(result).to eq frac(10,7,sign: :-)
+    end
+  end
 end

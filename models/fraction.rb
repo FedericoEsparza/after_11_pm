@@ -1,7 +1,8 @@
 include Factory
+require 'prime'
 
 class Fraction
-  attr_reader :numerator, :denominator, :sign
+  attr_accessor :numerator, :denominator, :sign
 
   def initialize(numerator:, denominator:, sign: :+)
     @numerator = numerator
@@ -32,6 +33,21 @@ class Fraction
 
     self.evaluate_numeral <= fraction.evaluate_numeral
   end
+
+  def simplify
+    top_prime_factors = prime_factorization(numerator)
+    bot_prime_factors = prime_factorization(denominator)
+    common_factors = top_prime_factors & bot_prime_factors
+    product = common_factors.evaluate_product
+    self.numerator = numerator/product
+    self.denominator = denominator/product
+    self
+  end
+
+  def prime_factorization(n)
+    Prime.prime_division(n).flat_map { |factor, power| [factor] * power }
+  end
+
 
   def copy
     DeepClone.clone self
