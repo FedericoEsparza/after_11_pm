@@ -379,4 +379,14 @@ describe String do
     end
   end
 
+  describe '#new_objectify' do
+    it 'ab' do
+      expect('ab'.new_objectify).to eq mtp('a','b')
+    end
+
+    it 'a+b+c' do
+      expect('a+b+c'.new_objectify).to eq add('a','b','c')
+    end
+  end
+
 end

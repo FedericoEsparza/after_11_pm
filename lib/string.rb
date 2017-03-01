@@ -162,6 +162,78 @@ class String
 
   end
 
+  def new_objectify
+    # original_string = self.dup
+    # original_string.gsub!(' ','')
+    # str_copy = empty_brackets(original_string.dup)
+    #
+    # if str_copy.outer_func_is_mtp?
+    #   str_args = split_mtp_args(str_copy)
+    #   reenter_str_content(original_string,str_args)
+    #   remove_enclosing_bracks(str_args)
+    #   object_args = str_args.inject([]){ |r,e| r << e.new_objectify }
+    #   return mtp(object_args)
+    # end
+    #
+    # if str_copy.is_string_var?
+    #   return self
+    # end
+
+    original_string = self.dup
+    original_string.gsub!(' ','')
+    structure_str = empty_brackets(original_string.dup)
+    # gsub!(' ','')
+    # original_string = self.dup
+    # structure_str = empty_brackets(self)
+
+    if structure_str.outer_func_is_mtp?
+      str_args = split_mtp_args(structure_str)
+      reenter_str_content(original_string,str_args)
+      remove_enclosing_bracks(str_args)
+      object_args = str_args.inject([]){ |r,e| r << e.new_objectify }
+      return mtp(object_args)
+    end
+
+    if structure_str.outer_func_is_add?
+
+
+      plus_indices = []
+      plus_indices << -1
+      for j in 0..(structure_str.length-1)
+        plus_indices << j if structure_str[j] == '+'
+      end
+      plus_indices << structure_str.length
+
+
+      slice_indices = []
+      for k in 1..plus_indices.length-1
+        slice_indices << [plus_indices[k-1]+1,plus_indices[k]-1]
+      end
+
+      str_args = []
+
+      slice_indices.each do |a|
+        str_args << structure_str.slice(a[0]..a[1])
+
+      end
+
+      reenter_addition_str_content(original_string,str_args)
+      remove_enclosing_bracks(str_args)
+
+      object_args = str_args.inject([]){ |r,e| r << e.new_objectify }
+      return add(object_args)
+
+
+
+
+    end
+
+    if structure_str.is_string_var?
+      return self
+    end
+
+  end
+
   def outer_func_is_add?
     return false if include?('+') == false
     for i in 1..(length-1)
