@@ -1,5 +1,6 @@
 include ClassName
 include Factory
+require 'prime'
 
 class Expression
   attr_accessor :args

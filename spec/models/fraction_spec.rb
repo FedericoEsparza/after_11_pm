@@ -143,5 +143,17 @@ describe Factory do
       result = exp.simplify
       expect(result).to eq frac(10,7,sign: :-)
     end
+
+    it 'simplify 250/5' do
+      exp = frac(250,5)
+      result = exp.simplify
+      expect(result).to eq 50
+    end
+
+    it 'simplify -50/25' do
+      exp = frac(50,25,sign: :-)
+      result = exp.simplify
+      expect(result).to eq -2
+    end
   end
 end

@@ -35,18 +35,34 @@ class Fraction
   end
 
   def simplify
-    top_prime_factors = prime_factorization(numerator)
-    bot_prime_factors = prime_factorization(denominator)
-    common_factors = top_prime_factors & bot_prime_factors
+    top_primes, top_powers = Prime.prime_division(numerator).transpose
+    bot_primes, bot_powers = Prime.prime_division(denominator).transpose
+
+    # top_primes = top_primes.map{|a| a**top_powers[top_primes.rindex(a)]}
+    # bot_primes = bot_primes.map{|a| a**bot_powers[bot_primes.rindex(a)]}
+    common_factors = top_primes & bot_primes
+    common_powers = []
+    common_factors.each do |factor|
+      common_powers << [
+        top_powers[top_primes.rindex(factor)],
+        bot_powers[bot_primes.rindex(factor)]
+      ].min
+    end
+    common_factors = common_factors.each_with_index.map{|a,i| a**common_powers[i]}
     product = common_factors.evaluate_product
     self.numerator = numerator/product
     self.denominator = denominator/product
-    self
+    if denominator == 1
+      if sign == "+@"
+        numerator
+      else
+        -numerator
+      end
+    else
+      self
+    end
   end
 
-  def prime_factorization(n)
-    Prime.prime_division(n).flat_map { |factor, power| [factor] * power }
-  end
 
 
   def copy
