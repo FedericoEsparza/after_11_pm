@@ -47,23 +47,23 @@ class Addition < Expression
     args.length != 0
   end
 
-  def collect_next_exp
-    first_factor = args.first.args
-    count = 0
-
-    args.each do |m|
-      i = 1
-      while i <= args.length && i<100
-        if m.args == first_factor
-          count += 1
-          args.delete_at(i)
-        end
-        i = i + 1
-      end
-
-  end
-      [first_factor,count]
-  end
+  # def collect_next_exp
+  #   first_factor = args.first.args
+  #   count = 0
+  #
+  #   args.each do |m|
+  #     i = 1
+  #     while i <= args.length && i<100
+  #       if m.args == first_factor
+  #         count += 1
+  #         args.delete_at(i)
+  #       end
+  #       i = i + 1
+  #     end
+  #
+  # end
+  #     [first_factor,count]
+  # end
 
   def select_variables
     result = []
@@ -138,38 +138,6 @@ class Addition < Expression
     result
   end
 
-  def simplify_brackets
-    copy = self.copy
-    steps = []
-    has_brackets = false
-    copy.args.each do |m|
-      if m.is_a?(Multiplication) && m.is_bracket
-        steps << m.combine_brackets
-        has_brackets = true
-      else
-        steps << [m]
-      end
-    end
-
-    if has_brackets
-      steps.equalise_array_lengths
-      steps = steps.transpose
-      steps = steps.map{|a| add(a)}
-      steps.insert(0,self.copy)
-      ##now remove brackets
-      # last_step_args = []
-      # steps.last.args.each do |a|
-      #   a.args.each{|b| last_step_args << b}
-      # end
-      # steps << add(last_step_args)
-      steps = delete_duplicate_steps(steps)
-      steps
-    else
-      return self
-    end
-
-
-  end
 
   def delete_duplicate_steps(steps)
     i = 0

@@ -125,15 +125,39 @@ class Multiplication
 
   def collect_next_variables
     first_factor = args.first.args.first
+
+    first_factor = first_factor.base if first_factor.is_a?(power)
     result = []
     args.each do |m|
-      i = 1
+      i = 0
       while i <= m.args.length do
-        same_base?(first_factor,m.args[i-1]) ? result << m.delete_arg(i) : i+=1
+        factor = m.args[i]
+        factor = factor.base if factor.is_a?(power)
+        if factor.is_a?(Numeric) && first_factor.is_a?(Numeric)
+          result << m.delete_arg(i+1)
+        elsif factor == first_factor
+          result << m.delete_arg(i+1)
+        else
+          i+=1
+        end
+
       end
     end
     result
+
   end
+
+  # def collect_next_variables
+  #   first_factor = args.first.args.first
+  #   result = []
+  #   args.each do |m|
+  #     i = 1
+  #     while i <= m.args.length do
+  #       same_base?(first_factor,m.args[i-1]) ? result << m.delete_arg(i) : i+=1
+  #     end
+  #   end
+  #   result
+  # end
 
   def same_base?(first_factor,mtp_arg)
     same_pow_base?(first_factor,mtp_arg) ||
@@ -316,53 +340,63 @@ class Multiplication
       brac
     end
 
-    def combine_brackets_refactored
-      copy = self.copy
-      new_args = []
-      #multiply each combination between brackets
-      copy.args.first.args.each do |a|
-        copy.args.last.args.each do |b|
-          c = mtp(a,b)
-          new_args << c
-          end
-      end
-    end
 
     def combine_two_brackets
       copy = self.copy
       new_args = []
-      copy.args.first.args.each_with_index do |a|
-        copy.args.last.args.each_with_index do |b|
-          c = mtp(a,b)
-          new_args << c
-          end
+      #mutliply each combination of factors
+      copy.args.first.args.each do |left_factor|
+        copy.args.last.args.each do |right_factor|
+          combo = mtp(left_factor,right_factor)
+          new_args << combo
+        end
       end
       new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
-      new_args.equalise_array_lengths
-      new_add = []
-      new_args.first.each_with_index do |a,i|
-        c = []
-        new_args.each_with_index do |b,j|
-          c << new_args[j][i]
-        end
-        new_add << add(c)
-      end
-      # new_add << new_add.last.sort_elements
-      new_step = new_add.last.copy
-      new_step.args.each do |m|
-        m.m_form_sort
-      end
-      new_add << new_step
+      new_args = new_args.create_steps
+      new_args << new_args.last.map{|a| a.m_form_sort}
+      new_args = new_args.map{|a| add(a)}
+      new_args << new_args.last.simplify_add_m_forms
 
-      # 3ax^2 + 4y + 2ax^2 + 5y
-      # 3ax^2 + 2ax^2 + 4y  + 5y
+      new_args.insert(0,self.copy)
+      new_args = delete_duplicate_steps(new_args)
 
-      new_add << new_add.last.simplify_add_m_forms
-      new_add = delete_duplicate_steps(new_add)
-      new_add.insert(0,self.copy)
-      self.args = new_add[-1].args
-      new_add
     end
+
+    # def combine_two_brackets
+    #   copy = self.copy
+    #   new_args = []
+    #   copy.args.first.args.each_with_index do |a|
+    #     copy.args.last.args.each_with_index do |b|
+    #       c = mtp(a,b)
+    #       new_args << c
+    #       end
+    #   end
+    #   new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+    #   new_args.equalise_array_lengths
+    #   new_add = []
+    #   new_args.first.each_with_index do |a,i|
+    #     c = []
+    #     new_args.each_with_index do |b,j|
+    #       c << new_args[j][i]
+    #     end
+    #     new_add << add(c)
+    #   end
+    #   # new_add << new_add.last.sort_elements
+    #   new_step = new_add.last.copy
+    #   new_step.args.each do |m|
+    #     m.m_form_sort
+    #   end
+    #   new_add << new_step
+    #
+    #   # 3ax^2 + 4y + 2ax^2 + 5y
+    #   # 3ax^2 + 2ax^2 + 4y  + 5y
+    #
+    #   new_add << new_add.last.simplify_add_m_forms
+    #   new_add = delete_duplicate_steps(new_add)
+    #   new_add.insert(0,self.copy)
+    #   self.args = new_add[-1].args
+    #   new_add
+    # end
 
     def combine_brackets
       copy = self.copy

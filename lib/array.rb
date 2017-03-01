@@ -44,6 +44,13 @@ class Array
       end
     end
 
+    #takes steps and equalises and transposes
+    def create_steps
+      copy = self
+      copy = copy.equalise_array_lengths
+      copy = copy.transpose
+      copy
+    end
 
 
 end
