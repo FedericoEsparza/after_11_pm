@@ -39,8 +39,8 @@ class QuadraticEquation
 
   def get_method
     method = {
-      "P" => [mtp(quad_term,constant_term),mtp(quad_term,constant_term).evaluate_numeral],
-      "S" => linear_term
+      product:[mtp(quad_term,constant_term),mtp(quad_term,constant_term).evaluate_numeral],
+      sum:linear_term
     }
   end
 
@@ -103,7 +103,13 @@ class QuadraticEquation
   end
 
   def write_whole_solution
-    solution = {"method" =>get_method, "factors"=>get_factors, "steps" =>write_factorisation_solution}
+    {method:get_method, factors:get_factors, steps:write_factorisation_solution}
+  end
+
+  def latex
+    solution = write_whole_solution
+    solution[:steps][0].latex
+    
   end
 
 end
