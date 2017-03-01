@@ -155,7 +155,6 @@ class String
       return self.to_i
     end
 
-
     # return add(obj_args)  if _outer_func_is_add?
     # return sbt(obj_args)  if _outer_func_is_sbt?
     # return self.to_i      if _is_numeral?
@@ -164,16 +163,20 @@ class String
   end
 
   def outer_func_is_add?
-    #self is emptied_string {$$$}
-    if include?('+') == false
-      return false
+    return false if include?('+') == false
+    for i in 1..(length-1)
+      return false if self[-i] == '-' && self[-(i+1)] != '+'
+      return true if self[-i] == '+'
     end
-
-
-
   end
 
-
+  def outer_func_is_sbt?
+    return false if include?('-') == false
+    for i in 1..(length-1)
+      return true if self[-i] == '-' && self[-(i+1)] != '+'
+    end
+    return false
+  end
 
 
 end

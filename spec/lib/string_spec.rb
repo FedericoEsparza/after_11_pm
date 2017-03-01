@@ -205,7 +205,7 @@ describe String do
     end
   end
 
-  xdescribe '#outer_func_is_add?' do
+  describe '#outer_func_is_add?' do
     it '3-x-4 to false' do
       expect('3-x-4'.outer_func_is_add?).to be false
     end
@@ -213,7 +213,40 @@ describe String do
     it '3+x+4 to true' do
       expect('3+x+4'.outer_func_is_add?).to be true
     end
+
+    it '3+x-4 to false' do
+      expect('3+x-4'.outer_func_is_add?).to be false
+    end
+
+    it '3+x+-4 to true' do
+      expect('3+x+-4'.outer_func_is_add?).to be true
+    end
+
+    it '-3+x+-4 to true' do
+      expect('-3+x+-4'.outer_func_is_add?).to be true
+    end
   end
 
+  describe '#outer_func_is_sbt?' do
+    it '3-x-4 to true' do
+      expect('3-x-4'.outer_func_is_sbt?).to be true
+    end
+
+    it '3+x+4 to false' do
+      expect('3+x+4'.outer_func_is_sbt?).to be false
+    end
+
+    it '3+x-4 to true' do
+      expect('3+x-4'.outer_func_is_sbt?).to be true
+    end
+
+    it '3+x+-4 to false' do
+      expect('3+x+-4'.outer_func_is_sbt?).to be false
+    end
+
+    it '-3+-4 to false' do
+      expect('-3+-4'.outer_func_is_sbt?).to be false
+    end
+  end
 
 end
