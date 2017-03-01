@@ -249,4 +249,58 @@ describe String do
     end
   end
 
+  describe '#outer_func_is_mtp?' do
+    it '3x to true' do
+      expect('3x'.outer_func_is_mtp?).to be true
+    end
+
+    it '3+x to false' do
+      expect('3+x'.outer_func_is_mtp?).to be false
+    end
+
+    it '3-x to false' do
+      expect('3-x'.outer_func_is_mtp?).to be false
+    end
+
+    it '-3x to true' do
+      expect('-3x'.outer_func_is_mtp?).to be true
+    end
+
+    it '\frac{$$$}{$$}($$$$$) to true' do
+      expect('\frac{$$$}{$$}($$$$$)'.outer_func_is_mtp?).to be true
+    end
+
+    it '\frac{$$$}{$$} to false' do
+      expect('\frac{$$$}{$$}'.outer_func_is_mtp?).to be false
+    end
+
+    it '-12 to false' do
+      expect('-12'.outer_func_is_mtp?).to be false
+    end
+
+    it 'x to false' do
+      expect('x'.outer_func_is_mtp?).to be false
+    end
+
+    it 'xy to true' do
+      expect('xy'.outer_func_is_mtp?).to be true
+    end
+
+    it 'x^3 to false' do
+      expect('x^3'.outer_func_is_mtp?).to be false
+    end
+
+    it '($$$)^{$$$$} to false' do
+      expect('($$$)^{$$$$}'.outer_func_is_mtp?).to be false
+    end
+
+    it '($$$)^{$$$$}3 to true' do
+      expect('($$$)^{$$$$}3'.outer_func_is_mtp?).to be true
+    end
+
+    it '($$$)^3\frac{$}{$} to true' do
+      expect('($$$)^3\frac{$}{$}'.outer_func_is_mtp?).to be true
+    end
+  end
+
 end

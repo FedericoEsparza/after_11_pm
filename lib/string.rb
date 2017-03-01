@@ -168,6 +168,7 @@ class String
       return false if self[-i] == '-' && self[-(i+1)] != '+'
       return true if self[-i] == '+'
     end
+    return false
   end
 
   def outer_func_is_sbt?
@@ -176,6 +177,12 @@ class String
       return true if self[-i] == '-' && self[-(i+1)] != '+'
     end
     return false
+  end
+
+  def outer_func_is_mtp?
+    return false if self[1..(length-1)] =~ /\+|\-/
+    return false if split_mtp_args(dup).length == 1
+    return true
   end
 
 
