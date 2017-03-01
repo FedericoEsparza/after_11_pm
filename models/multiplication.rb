@@ -140,7 +140,6 @@ class Multiplication
         else
           i+=1
         end
-
       end
     end
     result

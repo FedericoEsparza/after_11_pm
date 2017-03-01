@@ -185,10 +185,10 @@ class Addition < Expression
     copy = self.copy
     new_args = []
     copy.args.each do |m|
-      if m.is_a?(Addition)
+      if m.is_a?(addition)
         m = m.flatit
         m.args.each{|a| new_args << a}
-      elsif m.is_a?(Multiplication)
+      elsif m.is_a?(multiplication)
         m = m.flatit
         if m.args.length == 1
           m.args.each{|a| new_args << a}
