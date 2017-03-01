@@ -405,41 +405,76 @@ describe String do
     end
 
     it 'c+d-e+f+g' do
-      expect('c+d-e+f+g'.objectify).to eq add(sbt(add('c','d'),'e'),'f','g')
+      expect('c+d-e+f+g'.new_objectify).to eq add(sbt(add('c','d'),'e'),'f','g')
+    end
+
+    it 'a-b-c' do
+      expect('a-b-c'.new_objectify).to eq sbt(sbt('a','b'),'c')
     end
 
     it 'z+a+b-c+d-e+f+g' do
-      expect('z+a+b-c+d-e+f+g'.objectify).to eq add(sbt(add(sbt(add('z','a','b'),'c'),'d'),'e'),'f','g')
+      expect('z+a+b-c+d-e+f+g'.new_objectify).to eq add(sbt(add(sbt(add('z','a','b'),'c'),'d'),'e'),'f','g')
     end
 
     it 'x+-12' do
-      expect('x+(-12)'.objectify).to eq add('x',-12)
+      expect('x+(-12)'.new_objectify).to eq add('x',-12)
     end
 
     it 'x+y+2' do
-      expect('x+y+2'.objectify).to eq add('x','y',2)
+      expect('x+y+2'.new_objectify).to eq add('x','y',2)
     end
 
     it 'x+(y+2)' do
-      expect('x+(y+2)'.objectify).to eq add('x',add('y',2))
+      expect('x+(y+2)'.new_objectify).to eq add('x',add('y',2))
     end
 
     it '-12x' do
-      expect('-12x'.objectify).to eq mtp(-12,'x')
+      expect('-12x'.new_objectify).to eq mtp(-12,'x')
     end
 
     it '3xyz' do
-      expect('3xyz'.objectify).to eq mtp(3,'x','y','z')
+      expect('3xyz'.new_objectify).to eq mtp(3,'x','y','z')
     end
 
     it '-3x+-5' do
-      expect('(-3)x+(-5)'.objectify).to eq add(mtp(-3,'x'),-5)
+      expect('(-3)x+(-5)'.new_objectify).to eq add(mtp(-3,'x'),-5)
     end
 
     it '25+(-13)x' do
-      expect('25+(-13)x'.objectify).to eq add(25,mtp(-13,'x'))
+      expect('25+(-13)x'.new_objectify).to eq add(25,mtp(-13,'x'))
     end
 
+    it 'x^2' do
+      expect('x^2'.new_objectify).to eq pow('x',2)
+    end
+
+    it 'x^{3y}' do
+      expect('x^{3y}'.new_objectify).to eq pow('x',mtp(3,'y'))
+    end
+
+    it '(2x)^3' do
+      expect('(2x)^3'.new_objectify).to eq pow(mtp(2,'x'),3)
+    end
+
+    it '(2x)^13' do
+      expect('(2x)^13)'.new_objectify).to eq mtp(pow(mtp(2,'x'),1),3)
+    end
+
+    it '(2xy)^{3x +4}' do
+      expect('(2x  y)^{3 x+ 4}'.new_objectify).to eq pow(mtp(2,'x','y'),add(mtp(3,'x'),4))
+    end
+
+    it '(2^{3xy})^{5x+4}' do
+      expect('(2^{3xy})^{5x+4}'.new_objectify).to eq pow(pow(2,mtp(3,'x','y')),add(mtp(5,'x'),4))
+    end
+
+    it '2^{3xy}' do
+      expect('2^{3xy}'.new_objectify).to eq pow(2,mtp(3,'x','y'))
+    end
+
+    it 'x^{1^1}' do
+      expect('x^{1^1}'.new_objectify).to eq pow('x',pow(1,1))
+    end
   end
 
 end

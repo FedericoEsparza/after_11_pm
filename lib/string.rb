@@ -163,7 +163,6 @@ class String
   end
 
   def new_objectify
-
     original_string = self.dup
     original_string.gsub!(' ','')
     structure_str = empty_brackets(original_string.dup)
@@ -192,6 +191,12 @@ class String
       return div(object_args)
     end
 
+    if structure_str.outer_func_is_pow?
+      args = structure_str.pow_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.new_objectify }
+      return pow(object_args)
+    end
+
     if structure_str.is_string_var?
       return self
     end
@@ -205,8 +210,13 @@ class String
   def add_args(original_string)
     plus_indices = []
     plus_indices << -1
-    for j in 0..(length-1)
-      plus_indices << j if self[j] == '+'
+    for j in 1..length
+      if self[-j] == '+'
+        plus_indices.insert(1,length - j)
+      end
+      if self[-j] == '-'
+        break
+      end
     end
     plus_indices << length
 
@@ -232,6 +242,7 @@ class String
     for i in 1..(length-1)
       if self[-i] == '-' && self[-(i+1)] != '-' && (self[-(i+1)] != '+' || i+1 == length)
         sbt_index = length - i
+        break
       end
     end
     args = [slice(0..sbt_index-1),slice(sbt_index+1..-1)]
@@ -255,6 +266,18 @@ class String
     bot_indices = matching_brackets(original_string,'{','}')
     denominator = original_string.slice(bot_indices[0]+1..bot_indices[1]-1)
     [numerator,denominator]
+  end
+
+  def pow_args(original_string)
+    pow_index = 0
+    each_char.with_index do |c,i|
+      if c == '^'
+        pow_index = i
+      end
+    end
+    args = [original_string[0..pow_index-1],original_string[pow_index+1..-1]]
+    remove_enclosing_bracks(args)
+    args
   end
 
   def outer_func_is_add?
