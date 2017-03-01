@@ -762,4 +762,16 @@ describe Multiplication do
     end
   end
 
+  describe '#refactored combine brackets' do
+    it 'combine (x+y)(x+z)' do
+      exp = mtp(add('x','y'),add('x','z'))
+      result = exp.combine_two_brackets_refactored
+
+      expect(result[0]).to eq '(x+y)(x+z)'.objectify
+      expect(result[1]).to eq 'xx+xz+yx+yz'.objectify
+      expect(result[2]).to eq 'xx+xz+xy+yz'.objectify
+
+    end
+  end
+
 end

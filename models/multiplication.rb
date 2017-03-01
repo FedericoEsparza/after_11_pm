@@ -316,15 +316,28 @@ class Multiplication
       brac
     end
 
-    def combine_brackets_refactored
+
+    def combine_two_brackets_refactored
       copy = self.copy
       new_args = []
-      copy.args.first.args.each do |a|
-        copy.args.last.args.each do |b|
-          c = mtp(a,b)
-          new_args << c
-          end
+      #mutliply each combination of factors
+      copy.args.first.args.each do |left_factor|
+        copy.args.last.args.each do |right_factor|
+          combo = mtp(left_factor,right_factor)
+          new_args << combo
+        end
       end
+      new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+      new_args = new_args.create_steps
+      new_args << new_args.last.map{|a| a.m_form_sort}
+      new_args = new_args.map{|a| add(a)}
+
+      new_args.insert(0,self.copy)
+      new_args = delete_duplicate_steps(new_args)
+
+      #delete after
+      new_args = new_args.map{|a| a.flatit}
+      new_args = delete_duplicate_steps(new_args)
     end
 
     def combine_two_brackets
