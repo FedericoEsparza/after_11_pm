@@ -170,20 +170,20 @@ class String
 
     if structure_str.outer_func_is_add?
       args = structure_str.add_args(original_string)
-      # puts 'addition'
-      # p args
-      # puts 'addition'
       object_args = args.inject([]){ |r,e| r << e.new_objectify }
       return add(object_args)
     end
 
     if structure_str.outer_func_is_mtp?
       args = structure_str.mtp_args(original_string)
-      # puts 'multiplication'
-      # p args
-      # puts 'multiplication'
       object_args = args.inject([]){ |r,e| r << e.new_objectify }
       return mtp(object_args)
+    end
+
+    if structure_str.outer_func_is_div?
+      args = structure_str.div_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.objectify }
+      return div(object_args)
     end
 
     if structure_str.is_string_var?
@@ -226,6 +226,15 @@ class String
     reenter_str_content(original_string,str_args)
     remove_enclosing_bracks(str_args)
     str_args
+  end
+
+  def div_args(original_string)
+    top_indices = matching_brackets(original_string,'{','}')
+    numerator = original_string.slice(top_indices[0]+1..top_indices[1]-1)
+    original_string.slice!(0..top_indices[1])
+    bot_indices = matching_brackets(original_string,'{','}')
+    denominator = original_string.slice(bot_indices[0]+1..bot_indices[1]-1)
+    [numerator,denominator]
   end
 
   def outer_func_is_add?

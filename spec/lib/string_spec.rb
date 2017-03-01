@@ -391,6 +391,15 @@ describe String do
     it '(-4(13+b)+c)5' do
       expect('(-4(13+b)+c)5'.new_objectify).to eq mtp(add(mtp(-4,add(13,'b')),'c'),5)
     end
+
+    it '\frac{3}{4}' do
+      expect('\frac{3}{4}'.new_objectify).to eq div(3,4)
+    end
+
+    it '3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4' do
+      expect('3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4'.new_objectify).to eq add(mtp(3,add('x',div(add(mtp(3,div(3,'x')),5),add(4,5,'a')))),4)
+    end
+    
   end
 
 end
