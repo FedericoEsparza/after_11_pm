@@ -317,6 +317,30 @@ describe String do
     end
   end
 
+  describe '#outer_func_is_pow' do
+    it 'x^3 to true' do
+      expect('x^3'.outer_func_is_pow?).to be true
+    end
 
+    it 'x^3y to false' do
+      expect('x^3y'.outer_func_is_pow?).to be false
+    end
+
+    it '12^3 to true' do
+      expect('12^3'.outer_func_is_pow?).to be true
+    end
+
+    it 'x^3+4 to false' do
+      expect('x^3+4'.outer_func_is_pow?).to be false
+    end
+
+    it '-4^3 to true' do
+      expect('-4^3'.outer_func_is_pow?).to be true
+    end
+
+    it '-4^3-5 to false' do
+      expect('-4^3-5'.outer_func_is_pow?).to be false
+    end
+  end
 
 end

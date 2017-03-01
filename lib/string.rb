@@ -186,11 +186,18 @@ class String
   end
 
   def outer_func_is_div?
+    return false if self[1..(length-1)] =~ /\+|\-/
     return false if split_mtp_args(dup).length > 1
     return true if self =~ /^\\frac/
     return false
   end
 
+  def outer_func_is_pow?
+    return false if self[1..(length-1)] =~ /\+|\-/
+    return false if split_mtp_args(dup).length > 1
+    return true if self =~ /\^/
+    return false
+  end
 
 
 end
