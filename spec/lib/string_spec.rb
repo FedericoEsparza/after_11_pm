@@ -387,6 +387,10 @@ describe String do
     it 'a+b+c' do
       expect('a+b+c'.new_objectify).to eq add('a','b','c')
     end
+
+    it '(-4(13+b)+c)5' do
+      expect('(-4(13+b)+c)5'.new_objectify).to eq mtp(add(mtp(-4,add(13,'b')),'c'),5)
+    end
   end
 
 end
