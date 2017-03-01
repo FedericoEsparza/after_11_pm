@@ -185,5 +185,12 @@ class String
     return true
   end
 
+  def outer_func_is_div?
+    return false if split_mtp_args(dup).length > 1
+    return true if self =~ /^\\frac/
+    return false
+  end
+
+
 
 end

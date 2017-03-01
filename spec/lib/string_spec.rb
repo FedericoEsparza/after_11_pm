@@ -303,4 +303,20 @@ describe String do
     end
   end
 
+  describe '#outer_func_is_div?' do
+    it 'x^3 to false' do
+      expect('x^3'.outer_func_is_div?).to be false
+    end
+
+    it '\frac{$$}{$}' do
+      expect('\frac{$$}{$}'.outer_func_is_div?).to be true
+    end
+
+    it '\frac{$$}{$}x' do
+      expect('\frac{$$}{$}x'.outer_func_is_div?).to be false
+    end
+  end
+
+
+
 end
