@@ -63,6 +63,11 @@ class Fraction
     end
   end
 
+  def change_sign
+    self.numerator = -numerator
+    self
+  end
+
 
 
   def copy

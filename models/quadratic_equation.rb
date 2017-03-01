@@ -17,7 +17,7 @@ class QuadraticEquation
 
 
   ##make this work later, don't get distracted
-  
+
 
   # def simplify
   #   quad_factors = prime_factorisation(quad_term)
@@ -70,15 +70,18 @@ class QuadraticEquation
     steps
   end
 
-  def factorisation(n)
-    prime_factors, powers = Prime.prime_division(n).transpose
-    exponents = powers.map{|i| (0..i).to_a}
-
-    factors = exponents.shift.product(*exponents).map do |powers|
-      primes.zip(powers).map{|prime, power| prime ** power}.inject(:*)
-    end
-    factors.sort.map{|div| [div, number / div]}
+  def factors_used
+    [write_factors.last[0],write_factors.last[1]]
   end
+
+  def brackets_used
+    mtp(
+      add(variable,factors_used[0]),
+      add(variable,factors_used[1])
+    )
+  end
+
+
 
   def write_factorisation_solution
     equa = [mtp(quad_term,pow(variable,2))]
@@ -95,10 +98,12 @@ class QuadraticEquation
     equa = add(equa)
     steps = [equa]
 
-    if quad_term == 1
-      next_step = mtp(add(variable,frac))
-    end
+    steps << brackets_used
+    steps << factors_used.map{|a| a.change_sign}
   end
 
+  def write_whole_solution
+    solution = {"method" =>get_method, "factors"=>get_factors, "steps" =>write_factorisation_solution}
+  end
 
 end

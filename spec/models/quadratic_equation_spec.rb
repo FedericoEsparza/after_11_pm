@@ -1,13 +1,13 @@
 describe QuadraticEquation do
 
-  describe '#simplify' do
-
-    it 'simplifies 2x^2+10x+20' do
-      exp = quad(2,10,20)
-      result = exp.simplify
-      expect(result).to eq quad(1,5,10)
-    end
-  end
+  # describe '#simplify' do
+  #
+  #   it 'simplifies 2x^2+10x+20' do
+  #     exp = quad(2,10,20)
+  #     result = exp.simplify
+  #     expect(result).to eq quad(1,5,10)
+  #   end
+  # end
 
   describe '#get_method' do
     it 'gets 12x^2+17x-7' do
@@ -37,8 +37,34 @@ describe QuadraticEquation do
     it 'writes factors for 12x^2+17x-7' do
       exp = quad(12,17,-7)
       result = exp.write_factors
-      expect(result).to eq [[-4,21],[frac(-4,12),frac()]]
+      expect(result).to eq [[-4,21],[frac(-4,12),frac(21,12)],[frac(-1,3),frac(7,4)]]
+
     end
+  end
+
+  describe '#write_factorisation_solution' do
+    it 'writes solution for 12x^2+17x-7' do
+      exp = quad(12,17,-7)
+      result = exp.write_factorisation_solution
+
+      expect(result).to eq [
+        '12x^2+17x+-7'.objectify,
+        mtp(add('x',frac(-1,3)),add('x',frac(7,4))),
+        [frac(1,3),frac(-7,4)]
+      ]
+    end
+
+    it 'write solutin for 8x^2+10x-7' do
+      exp = quad(8,10,-7)
+      result = exp.write_factorisation_solution
+
+      expect(result).to eq [
+        '8x^2+10x+-7'.objectify,
+        mtp(add('x',frac(-1,2)),add('x',frac(7,4))),
+        [frac(1,2),frac(-7,4)]
+      ]
+    end
+
   end
 
 end
