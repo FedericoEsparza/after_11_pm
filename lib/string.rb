@@ -199,5 +199,12 @@ class String
     return false
   end
 
+  def is_numeral?
+    self.to_i.to_s == self
+  end
+
+  def is_string_var?
+    !!(self =~ /[A-Za-z]/) && length == 1
+  end
 
 end

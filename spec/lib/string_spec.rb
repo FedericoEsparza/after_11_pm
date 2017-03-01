@@ -343,4 +343,40 @@ describe String do
     end
   end
 
+  describe '#is_numeral' do
+    it '123 to true' do
+      expect('123'.is_numeral?).to be true
+    end
+
+    it '-123 to true' do
+      expect('-123'.is_numeral?).to be true
+    end
+
+    it '-1x3 to false' do
+      expect('-1x3'.is_numeral?).to be false
+    end
+
+    it '- to false' do
+      expect('-'.is_numeral?).to be false
+    end
+  end
+
+  describe '#is_string_var' do
+    it 'x to true' do
+      expect('x'.is_string_var?).to be true
+    end
+
+    it '3 to false' do
+      expect('3'.is_string_var?).to be false
+    end
+
+    it 'xy to false' do
+      expect('xy'.is_string_var?).to be false
+    end
+
+    it '\ to false' do
+      expect('\\'.is_string_var?).to be false
+    end
+  end
+
 end
