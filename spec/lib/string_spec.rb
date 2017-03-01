@@ -399,7 +399,47 @@ describe String do
     it '3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4' do
       expect('3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4'.new_objectify).to eq add(mtp(3,add('x',div(add(mtp(3,div(3,'x')),5),add(4,5,'a')))),4)
     end
-    
+
+    it '3-5' do
+      expect('3-5'.new_objectify).to eq sbt(3,5)
+    end
+
+    it 'c+d-e+f+g' do
+      expect('c+d-e+f+g'.objectify).to eq add(sbt(add('c','d'),'e'),'f','g')
+    end
+
+    it 'z+a+b-c+d-e+f+g' do
+      expect('z+a+b-c+d-e+f+g'.objectify).to eq add(sbt(add(sbt(add('z','a','b'),'c'),'d'),'e'),'f','g')
+    end
+
+    it 'x+-12' do
+      expect('x+(-12)'.objectify).to eq add('x',-12)
+    end
+
+    it 'x+y+2' do
+      expect('x+y+2'.objectify).to eq add('x','y',2)
+    end
+
+    it 'x+(y+2)' do
+      expect('x+(y+2)'.objectify).to eq add('x',add('y',2))
+    end
+
+    it '-12x' do
+      expect('-12x'.objectify).to eq mtp(-12,'x')
+    end
+
+    it '3xyz' do
+      expect('3xyz'.objectify).to eq mtp(3,'x','y','z')
+    end
+
+    it '-3x+-5' do
+      expect('(-3)x+(-5)'.objectify).to eq add(mtp(-3,'x'),-5)
+    end
+
+    it '25+(-13)x' do
+      expect('25+(-13)x'.objectify).to eq add(25,mtp(-13,'x'))
+    end
+
   end
 
 end

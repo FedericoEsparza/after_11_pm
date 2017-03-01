@@ -174,6 +174,12 @@ class String
       return add(object_args)
     end
 
+    if structure_str.outer_func_is_sbt?
+      args = structure_str.sbt_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.new_objectify }
+      return sbt(object_args)
+    end
+
     if structure_str.outer_func_is_mtp?
       args = structure_str.mtp_args(original_string)
       object_args = args.inject([]){ |r,e| r << e.new_objectify }
@@ -182,7 +188,7 @@ class String
 
     if structure_str.outer_func_is_div?
       args = structure_str.div_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.new_objectify }
       return div(object_args)
     end
 
@@ -220,6 +226,20 @@ class String
 
     str_args
   end
+
+  def sbt_args(original_string)
+    sbt_index = 0
+    for i in 1..(length-1)
+      if self[-i] == '-' && self[-(i+1)] != '-' && (self[-(i+1)] != '+' || i+1 == length)
+        sbt_index = length - i
+      end
+    end
+    args = [slice(0..sbt_index-1),slice(sbt_index+1..-1)]
+    reenter_addition_str_content(original_string,args)
+    remove_enclosing_bracks(args)
+    args
+  end
+
 
   def mtp_args(original_string)
     str_args = split_mtp_args(self)
