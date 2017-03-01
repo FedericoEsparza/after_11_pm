@@ -87,7 +87,21 @@ module ObjectifyUtilities
     end
   end
 
-  #this is happening because I suck at regex
+  # this is happening because I suck at regex
+  # must start with - or a digit
+  # followed by one or more digits if start with -, zero or more digits if start with digit
+  # digits not followed by ^, and the chars after the digits are not returned on slice
+  # examples:
+  # will match 2abc and return 2 (string.slice(regex) as argument)
+  # will match -2abc and return -2 (string.slice(regex) as argument)
+  # will match -123abc and return -123 (string.slice(regex) as argument)
+  # will match 123a12bc and return 123 (string.slice(regex) as argument)
+  # will match 123a^12bc and return 123 (string.slice(regex) as argument)
+  # will not match a-123abc and return nil (string.slice(regex) as argument)
+  # will not match a123abc and return nil (string.slice(regex) as argument)
+  # will not match 123^abc and return nil (string.slice(regex) as argument)
+  # will not match -123^abc and return nil (string.slice(regex) as argument)
+
   def _next_num_index(string_copy)
     unless string_copy[0] =~ /\d/ || string_copy[0] == '-'
       return nil
@@ -165,16 +179,6 @@ module ObjectifyUtilities
         str[-1] = ''
       end
     end
-    # string_array.each do |str|
-    #   if str[0] == '(' && str[-1] == ')'
-    #     str[0] = ''
-    #     str[-1] = ''
-    #   end
-    #   if str[0] == '{' && str[-1] == '}'
-    #     str[0] = ''
-    #     str[-1] = ''
-    #   end
-    # end
   end
 
 end
