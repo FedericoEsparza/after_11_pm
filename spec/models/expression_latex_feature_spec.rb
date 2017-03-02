@@ -314,6 +314,11 @@ feature '#latex' do
       exp = div(add(mtp(2,'x'),3),sbt(mtp(3,pow('x',2)),mtp(4,pow('x',5))))
       expect(exp.latex).to eq '\displaystyle\frac{2x+3}{3x^2-4x^5}'
     end
+
+    scenario '' do
+      exp = add(10,mtp(-3,'x'))
+      expect(exp.latex).to eq "10+-3x"
+    end
   end
 end
 

@@ -136,7 +136,15 @@ class Addition < Expression
       end
     end
     result
+    #
+    # result.gsub!(/\+\-1(?![0-9])/,'-')
+    # result.gsub!(/\+\-/,'-')
   end
+  #
+  # def new_latex
+  #   latex.original_objectify.latex
+  # end
+
 
   def simplify_brackets
     copy = self.copy

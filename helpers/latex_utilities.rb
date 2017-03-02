@@ -41,4 +41,27 @@ module LatexUtilities
       start + latex + align_end
     end
   end
+
+  def conventionalise(exp)
+    if exp.is_a?(addition)
+      for i in 1..(exp.args.length-1)
+        if numerical?(exp.args[-i]) && exp.args[-i] < 0
+          minus_arg_i = exp.args.length  - i
+          new_args = []
+          for j in i..(exp.args.length-1)
+            new_args << exp.args[j]  #check this it needs to be a new copy
+          end
+          front_add_args = []
+          for k in 0..((exp.args.length - i)-1)
+            front_add_args << exp.args[k]
+          end
+          front_sbt = sbt(add(front_add_args),exp.args[-i].abs)
+          new_args.insert(0,front_sbt)
+          break
+        end
+      end
+      return add(new_args)
+    end
+  end
+
 end
