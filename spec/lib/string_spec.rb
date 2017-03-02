@@ -21,7 +21,7 @@ describe String do
     end
 
     it 'a-b' do
-      expect('a-b'.objectify).to eq sbt('a','b')
+      expect('a-b'.objectify).to eq add('a',mtp(-1,'b'))
     end
 
     it '-2+a' do
@@ -29,27 +29,27 @@ describe String do
     end
 
     it 'a+b-c' do
-      expect('a+b-c'.objectify).to eq sbt(add('a','b'),'c')
+      expect('a+b-c'.objectify).to eq add('a','b',mtp(-1,'c'))
     end
 
     it 'a+b-c-d' do
-      expect('a+b-c-d'.objectify).to eq sbt(sbt(add('a','b'),'c'),'d')
+      expect('a+b-c-d'.objectify).to eq add('a','b',mtp(-1,'c'),mtp(-1,'d'))
     end
 
     it 'a-b+c+d' do
-      expect('a-b+c+d'.objectify).to eq add(sbt('a','b'),'c','d')
+      expect('a-b+c+d'.objectify).to eq add('a',mtp(-1,'b'),'c','d')
     end
 
     it 'c+d-e+f+g' do
-      expect('c+d-e+f+g'.objectify).to eq add(sbt(add('c','d'),'e'),'f','g')
+      expect('c+d-e+f+g'.objectify).to eq add('c','d',mtp(-1,'e'),'f','g')
     end
 
     it 'z+a+b-c+d-e+f+g' do
-      expect('z+a+b-c+d-e+f+g'.objectify).to eq add(sbt(add(sbt(add('z','a','b'),'c'),'d'),'e'),'f','g')
+      expect('z+a+b-c+d-e+f+g'.objectify).to eq add('z','a','b',mtp(-1,'c'),'d',mtp(-1,'e'),'f','g')
     end
 
     it 'x+-12' do
-      expect('x+(-12)'.objectify).to eq add('x',-12)
+      expect('x+-12'.objectify).to eq add('x',-12)
     end
 
     it 'x+y+2' do
@@ -70,6 +70,10 @@ describe String do
 
     it '3xyz' do
       expect('3xyz'.objectify).to eq mtp(3,'x','y','z')
+    end
+
+    it '-3x+-5' do
+      expect('-3x+-5'.objectify).to eq add(mtp(-3,'x'),-5)
     end
 
     it '-3x+-5' do
@@ -101,7 +105,7 @@ describe String do
     end
 
     it '-13(x+7)-4' do
-      expect('-13(x+7)-4'.objectify).to eq sbt(mtp(-13,add('x',7)),4)
+      expect('-13(x+7)-4'.objectify).to eq add(mtp(-13,add('x',7)),-4)
     end
     it '\frac{3}{x}' do
       expect('\frac{3}{x}'.objectify).to eq div(3,'x')
@@ -123,9 +127,9 @@ describe String do
       expect('3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4'.objectify).to eq add(mtp(3,add('x',div(add(mtp(3,div(3,'x')),5),add(4,5,'a')))),4)
     end
 
-    it 'objectifies x+2' do
-      str = 'x+2'
-      expect(str.objectify).to eq add('x',2)
+    it 'objectifies -x+2' do
+      str = '-x+2'
+      expect(str.objectify).to eq add(mtp(-1,'x'),2)
     end
 
     it 'objectifies 2xy' do
@@ -146,8 +150,8 @@ describe String do
       expect('(2x)^13)'.objectify).to eq mtp(pow(mtp(2,'x'),1),3)
     end
 
-    it '(2xy)^{3x +4}' do
-      expect('(2x  y)^{3 x+ 4}'.objectify).to eq pow(mtp(2,'x','y'),add(mtp(3,'x'),4))
+    it '(2xy)^{-3x-4}' do
+      expect('(2xy)^{-3x-4}'.objectify).to eq pow(mtp(2,'x','y'),add(mtp(-3,'x'),-4))
     end
 
     it '(2^{3xy})^{5x+4}' do
@@ -180,16 +184,32 @@ describe String do
       expect('(2x)^3'.objectify).to eq pow(mtp(2,'x'),3)
     end
 
-    it '-2+-3' do
-      expect('-2+-3'.objectify).to eq add(-2,-3)
+    it '-2-3' do
+      expect('-2-3'.objectify).to eq add(-2,-3)
     end
 
-    it '-2x+-3' do
-      expect('-2x+-3'.objectify).to eq add(mtp(-2,'x'),-3)
+    it '-2x-3' do
+      expect('-2x-3'.objectify).to eq add(mtp(-2,'x'),-3)
     end
 
     it 'x^{1^1}' do
       expect('x^{1^1}'.objectify).to eq pow('x',pow(1,1))
+    end
+
+    it '-xy' do
+      expect('-xy'.objectify).to eq mtp(-1,'x','y')
+    end
+
+    it '-12^y' do
+      expect('-12^y'.objectify).to eq mtp(-1,pow(12,'y'))
+    end
+
+    it '-\frac{a}{12+x}' do
+      expect('-\frac{a}{b}'.objectify).to eq mtp(-1,div('a','b'))
+    end
+
+    it 'x+-3' do
+      expect('x-3'.objectify).to eq add('x',-3)
     end
   end
 
@@ -305,6 +325,10 @@ describe String do
     it '($$$)^3\frac{$}{$} to true' do
       expect('($$$)^3\frac{$}{$}'._outer_func_is_mtp?).to be true
     end
+
+    it '-' do
+      expect('-'._outer_func_is_mtp?).to be false
+    end
   end
 
   describe '#_outer_func_is_div?' do
@@ -338,8 +362,8 @@ describe String do
       expect('x^3+4'._outer_func_is_pow?).to be false
     end
 
-    it '-4^3 to true' do
-      expect('-4^3'._outer_func_is_pow?).to be true
+    it '-4^3 to false' do
+      expect('-4^3'._outer_func_is_pow?).to be false
     end
 
     it '-4^3-5 to false' do

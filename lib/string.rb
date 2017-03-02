@@ -7,7 +7,6 @@ class String
     self
   end
 
-
   def greater?(exp)
     if exp.is_a?(String)
       self < exp
@@ -40,35 +39,56 @@ class String
   def objectify
     original_string = self.dup
     original_string.gsub!(' ','')
+    i = 1
+    while i < original_string.length
+      if insert_plus?(original_string,i)
+        original_string.insert(i,'+')
+        i += 1
+      end
+      i += 1
+    end
+    original_string.original_objectify
+  end
+
+  def insert_plus?(original_string,i)
+    #regex would be nice...
+    original_string[i] == '-' && original_string[i-1] != '{' &&
+    original_string[i-1] != '(' && original_string[i-1] != '+' &&
+    original_string[i-1] != '-' && original_string[i+1] != '-'
+  end
+
+  def original_objectify
+    original_string = self.dup
+    original_string.gsub!(' ','')
     structure_str = empty_brackets(original_string.dup)
 
     if structure_str._outer_func_is_add?
       args = structure_str._add_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return add(object_args)
     end
 
     if structure_str._outer_func_is_sbt?
       args = structure_str._sbt_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return sbt(object_args)
     end
 
     if structure_str._outer_func_is_mtp?
       args = structure_str._mtp_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return mtp(object_args)
     end
 
     if structure_str._outer_func_is_div?
       args = structure_str._div_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return div(object_args)
     end
 
     if structure_str._outer_func_is_pow?
       args = structure_str._pow_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return pow(object_args)
     end
 
@@ -78,6 +98,10 @@ class String
 
     if structure_str._is_numeral?
       return self.to_i
+    end
+
+    if structure_str == '-'
+      return -1
     end
   end
 
@@ -131,11 +155,7 @@ class String
 
   def _pow_args(original_string)
     pow_index = 0
-    each_char.with_index do |c,i|
-      if c == '^'
-        pow_index = i
-      end
-    end
+    each_char.with_index { |c,i| pow_index = i if c == '^' }
     args = [original_string[0..pow_index-1],original_string[pow_index+1..-1]]
     remove_enclosing_bracks(args)
     args
@@ -159,6 +179,7 @@ class String
   end
 
   def _outer_func_is_mtp?
+    return false if self == '-'
     return false if self[1..(length-1)] =~ /\+|\-/
     return false if split_mtp_args(dup).length == 1
     return true
