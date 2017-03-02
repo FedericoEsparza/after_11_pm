@@ -155,5 +155,23 @@ describe Factory do
       result = exp.simplify
       expect(result).to eq -2
     end
+
+    it 'simplify 1/3' do
+      exp = frac(1,3)
+      result = exp.simplify
+      expect(result).to eq frac(1,3)
+    end
+
+    it 'simplify 3/1' do
+      exp = frac(3,1)
+      result = exp.simplify
+      expect(result).to eq 3
+    end
+
+    it 'simplify frac(-9/3)' do
+      exp = frac(-9,3)
+      result = exp.simplify
+      expect(result).to eq -3
+    end
   end
 end

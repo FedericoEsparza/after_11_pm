@@ -56,6 +56,11 @@ class QuadraticEquation
     product = get_method[:Product][1]
     sum = get_method[:Sum]
     attempts = product.factorisation
+    if product > 0
+      new_attempts = []
+      attempts.each{|factor| new_attempts << factor.map{|a| -a}}
+      attempts += new_attempts
+    end
     done = 0
     i = 1
     while done == 0
@@ -107,7 +112,13 @@ class QuadraticEquation
     steps = [equa]
 
     steps << brackets_used
-    steps << factors_used.map{|a| a.negative}
+    steps << factors_used.map do |a|
+      if a.is_a?(Fraction)
+        a.negative
+      else
+        -a
+      end
+    end
   end
 
   def latex_factors
@@ -127,10 +138,11 @@ class QuadraticEquation
 
   def latex
 
-    result = ''
+    latex_steps = '\begin{align*}
+    '
     solution = write_whole_solution
     solution_steps = solution[:steps]
-    latex_steps = '0&=' + solution_steps[0].latex +
+    latex_steps += '0&=' + solution_steps[0].latex +
     '& && &' + solution[:method] + '&\\\[5pt]
     '
 
@@ -144,7 +156,7 @@ class QuadraticEquation
     '
 
     latex_steps += answer
-    puts latex_steps
+    latex_steps += '\end{align*}'
 
 
   end

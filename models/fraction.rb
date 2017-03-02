@@ -35,11 +35,14 @@ class Fraction
   end
 
   def simplify
+      num = numerator
+      denom = denominator
     top_primes, top_powers = Prime.prime_division(numerator).transpose
     bot_primes, bot_powers = Prime.prime_division(denominator).transpose
 
-    # top_primes = top_primes.map{|a| a**top_powers[top_primes.rindex(a)]}
-    # bot_primes = bot_primes.map{|a| a**bot_powers[bot_primes.rindex(a)]}
+    top_primes = [] if top_primes == nil
+    bot_primes = [] if bot_primes == nil
+
     common_factors = top_primes & bot_primes
     common_powers = []
     common_factors.each do |factor|
@@ -50,22 +53,45 @@ class Fraction
     end
     common_factors = common_factors.each_with_index.map{|a,i| a**common_powers[i]}
     product = common_factors.evaluate_product
-    self.numerator = numerator/product
-    self.denominator = denominator/product
-    if denominator == 1
+    num = num/product
+    denom = denom/product
+    if denom == 1 || denom == -1
       if sign == "+@"
-        numerator
+        num*denom
       else
-        -numerator
+        -num*denom
       end
     else
-      self
+      frac(num,denom,sign: sign).check_sign
     end
   end
 
+  def check_sign
+    if (numerator<=>0)*(denominator<=>0) < 0
+      if sign == "+@"
+        if numerator < 0
+          frac(-numerator,denominator,sign: :-)
+        else
+          frac(numerator,-denominator,sign: :-)
+        end
+      else
+        if numerator < 0
+          frac(-numerator,denominator)
+        else
+          frac(numerator,-denominator)
+        end
+      end
+    elsif (numerator<=>0)*(denominator<=>0) == 0
+      0
+    else
+      self
+    end
+
+  end
+
   def negative
-    self.numerator = -numerator
-    self
+    num = -numerator
+    frac(num,denominator, sign: sign).check_sign
   end
 
 
@@ -93,7 +119,11 @@ class Fraction
   end
 
   def latex
-    '\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+    if sign == '+@'
+      '\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+    else
+      '-\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+    end
   end
 
   private
