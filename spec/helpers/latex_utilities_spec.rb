@@ -32,7 +32,17 @@ describe LatexUtilities do
 
     it '' do
       exp = add('x',-2)
-        expect(dummy_class.conventionalise(exp)).to eq sbt('x',2)
+      expect(dummy_class.conventionalise(exp)).to eq sbt('x',2)
+    end
+
+    it '' do
+      exp = add('x',mtp(-2,'y'))
+      expect(dummy_class.conventionalise(exp)).to eq sbt('x',mtp(2,'y'))
+    end
+
+    it '' do
+      exp = add('x',mtp(3,'y'),mtp(-2,'y'))
+      expect(dummy_class.conventionalise(exp)).to eq sbt(add('x',mtp(3,'y')),mtp(2,'y'))
     end
 
   end
