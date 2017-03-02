@@ -132,7 +132,20 @@ module LatexUtilities
   end
 
   def conventionalise_one_times(exp)
+    if exp.is_a?(multiplication) && exp.args.length > 1 && exp.args[0] == 1
+      exp.args.delete_at(0)
+      for i in 0..exp.args.length-1
+        conventionalise_one_times(exp.args[i])
+      end
+      return exp
+    end
 
+    if exp.is_a?(addition) || exp.is_a?(subtraction) || exp.is_a?(division) || exp.is_a?(power)
+      for i in 0..exp.args.length-1
+        conventionalise_one_times(exp.args[i])
+      end
+      return exp
+    end
 
   end
 

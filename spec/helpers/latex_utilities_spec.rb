@@ -65,4 +65,31 @@ describe LatexUtilities do
       expect(dummy_class.conventionalise_plus_minus(exp)).to eq pow(sbt(add(3,4),5),2)
     end
   end
+
+  describe '#conventionalise_one_times' do
+    it '' do
+      exp = mtp(1,'x')
+      expect(dummy_class.conventionalise_one_times(exp)).to eq mtp('x')
+    end
+
+    it '' do
+      exp = mtp(1,'x','y')
+      expect(dummy_class.conventionalise_one_times(exp)).to eq mtp('x','y')
+    end
+
+    it '' do
+      exp = mtp(1,'x',mtp(1,'a','b'))
+      expect(dummy_class.conventionalise_one_times(exp)).to eq mtp('x',mtp('a','b'))
+    end
+
+    it '' do
+      exp = add(2,'x',mtp(1,'a','b'))
+      expect(dummy_class.conventionalise_one_times(exp)).to eq add(2,'x',mtp('a','b'))
+    end
+
+    it '' do
+      exp = add(2,3,4,sbt(3,div(2,'x',mtp(1,'a','b'))))
+      expect(dummy_class.conventionalise_one_times(exp)).to eq add(2,3,4,sbt(3,div(2,'x',mtp('a','b'))))
+    end
+  end
 end
