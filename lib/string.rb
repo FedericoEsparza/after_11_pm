@@ -114,9 +114,18 @@ class String
   end
 
   def _mtp_args(original_string)
+    # puts '================'
+    # p self
+    # puts '================'
     str_args = split_mtp_args(self)
+    # puts '================'
+    # p str_args
+    # puts '================'
     reenter_str_content(original_string,str_args)
     remove_enclosing_bracks(str_args)
+    # puts '================'
+    # p str_args
+    # puts '================'
     str_args
   end
 

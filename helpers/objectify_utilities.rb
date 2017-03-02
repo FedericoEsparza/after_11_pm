@@ -61,9 +61,31 @@ module ObjectifyUtilities
       _add_next_pow_arg(result_array,string_copy)
       _add_next_brac_arg(result_array,string_copy)
       _delete_next_times_arg(string_copy)
+      _add_next_minus_one_arg(result_array,string_copy)
       i += 1
     end
     result_array
+  end
+
+  def _add_next_minus_one_arg(result_array,string_copy)
+    # this will need stronger regex
+    # slice off the first - if
+    # 1.  its  - followed by a non-digit
+    # 2.  its minus followed by digits followed by ^ which means its minus one
+    #     times a power
+    if string_copy[0] == '-' && string_copy[1] =~ /[A-Za-z]/
+      result_array << string_copy.slice!(0)
+      return
+    end
+    if string_copy[0] == '-'
+      check_copy = string_copy.dup
+      check_copy.slice!(0)
+      args = split_mtp_args(check_copy)
+      if args[0] =~ /\^/
+        result_array << string_copy.slice!(0)
+        return
+      end
+    end
   end
 
   def _delete_next_times_arg(string_copy)

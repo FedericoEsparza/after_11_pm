@@ -129,6 +129,21 @@ describe ObjectifyUtilities do
       str = "123x"
       expect(dummy_class.split_mtp_args(str)).to eq ['123','x']
     end
+
+    it '' do
+      str = "-xy"
+      expect(dummy_class.split_mtp_args(str)).to eq ['-','x','y']
+    end
+
+    it '' do
+      str = "-12xy"
+      expect(dummy_class.split_mtp_args(str)).to eq ['-12','x','y']
+    end
+
+    it '' do
+      str = "-12^xy"
+      expect(dummy_class.split_mtp_args(str)).to eq ['-','12^x','y']
+    end
   end
 
   # describe '#reenter_str_content' do
