@@ -37,9 +37,35 @@ class String
     [self]
   end
 
+  def new_objectify
+    original_string = self.dup
+    original_string.gsub!(' ','')
+
+    i = 1
+    while i < original_string.length && i < 200
+      if original_string[i] == '-' && original_string[i-1] != '{' && original_string[i-1] != '(' && original_string[i-1] != '+' && original_string[i-1] != '-' && original_string[i+1] != '-'
+        original_string.insert(i,'+')
+        i += 2
+      end
+      i += 1
+    end
+
+
+    # original_string.gsub!('-','+-')
+    # if original_string[0] == '+'
+    #   original_string.slice!(0)
+    # end
+    # puts '=========='
+    # p original_string
+    # puts '=========='
+    original_string.objectify
+  end
+
+
   def objectify
     original_string = self.dup
     original_string.gsub!(' ','')
+    # original_string.gsub!('-','+-')
     structure_str = empty_brackets(original_string.dup)
 
     if structure_str._outer_func_is_add?

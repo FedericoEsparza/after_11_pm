@@ -192,19 +192,225 @@ describe String do
     #   expect('x^{1^1}'.objectify).to eq pow('x',pow(1,1))
     # end
 
-    it '-xy' do
-      expect('-xy'.objectify).to eq mtp(-1,'x','y')
+
+
+
+
+
+
+
+    it '2\times3' do
+      expect('2\times3'.new_objectify).to eq mtp(2,3)
     end
 
-    it '-12^y' do
-      expect('-12^y'.objectify).to eq mtp(-1,pow(12,'y'))
+    it '2\times123' do
+      expect('2\times123'.new_objectify).to eq mtp(2,123)
     end
 
-    it '-\frac{a}{12+x}' do
-      expect('-\frac{a}{b}'.objectify).to eq mtp(-1,div('a','b'))
+    it '2\timesx' do
+      expect('2\timesx'.new_objectify).to eq mtp(2,'x')
     end
 
+    it '2\times(-23)' do
+      expect('2\times(-23)'.new_objectify).to eq mtp(2,-23)
+    end
 
+    it '-2x--3' do
+      expect('-2x--3'.new_objectify).to eq sbt(mtp(-2,'x'),-3)
+    end
+
+    it 'a-b' do
+      expect('a-b'.new_objectify).to eq add('a',mtp(-1,'b'))
+    end
+
+    it '-2+a' do
+      expect('-2+a'.new_objectify).to eq add(-2,'a')
+    end
+
+    it 'a+b-c' do
+      expect('a+b-c'.new_objectify).to eq add('a','b',mtp(-1,'c'))
+    end
+
+    it 'a+b-c-d' do
+      expect('a+b-c-d'.new_objectify).to eq add('a','b',mtp(-1,'c'),mtp(-1,'d'))
+    end
+
+    it 'a-b+c+d' do
+      expect('a-b+c+d'.new_objectify).to eq add('a',mtp(-1,'b'),'c','d')
+    end
+
+    it 'c+d-e+f+g' do
+      expect('c+d-e+f+g'.new_objectify).to eq add('c','d',mtp(-1,'e'),'f','g')
+    end
+
+    it 'z+a+b-c+d-e+f+g' do
+      # expect('z+a+b-c+d-e+f+g'.objectify).to eq add(sbt(add(sbt(add('z','a','b'),'c'),'d'),'e'),'f','g')
+      expect('z+a+b-c+d-e+f+g'.new_objectify).to eq add('z','a','b',mtp(-1,'c'),'d',mtp(-1,'e'),'f','g')
+    end
+
+    it 'x+-12' do
+      expect('x+-12'.new_objectify).to eq add('x',-12)
+    end
+
+    it 'x+y+2' do
+      expect('x+y+2'.new_objectify).to eq add('x','y',2)
+    end
+
+    it 'x+(y+2)' do
+      expect('x+(y+2)'.new_objectify).to eq add('x',add('y',2))
+    end
+
+    it '-12x' do
+      expect('-12x'.new_objectify).to eq mtp(-12,'x')
+    end
+
+    it '(-12)^{-31x}' do
+      expect('(-12)^{-31x}'.new_objectify).to eq pow(-12,mtp(-31,'x'))
+    end
+
+    it '3xyz' do
+      expect('3xyz'.new_objectify).to eq mtp(3,'x','y','z')
+    end
+
+    it '-3x+-5' do
+      expect('-3x+-5'.new_objectify).to eq add(mtp(-3,'x'),-5)
+    end
+
+    # it '-3x+-5' do
+    #   expect('(-3)x+(-5)'.new_objectify).to eq add(mtp(-3,'x'),-5)
+    # end
+    #
+    # it '25+(-13)x' do
+    #   expect('25+(-13)x'.new_objectify).to eq add(25,mtp(-13,'x'))
+    # end
+#
+    # it '\frac{-14x}{25}' do
+    #   expect('\frac{-14x}{25}'.new_objectify).to eq div(mtp(-14,'x'),25)
+    # end
+    #
+    # it '3(x+7)+4' do
+    #   expect('3(x+7)+4'.objectify).to eq add(mtp(3,add('x',7)),4)
+    # end
+    #
+    # it '-13(x+7)(y+(5+(2a+9)))' do
+    #   expect('-13(x+7)(y+5(-12a+9))'.new_objectify).to eq mtp(-13,add('x',7),add('y',mtp(5,add(mtp(-12,'a'),9))))
+    # end
+    #
+    # it '-13(x+7)(y+2)+4' do
+    #   expect('13(x+7)+4'.new_objectify).to eq add(mtp(13,add('x',7)),4)
+    # end
+    #
+    # it '-13(x+7)+4' do
+    #   expect('-13(x+7)+4'.new_objectify).to eq add(mtp(-13,add('x',7)),4)
+    # end
+    #
+    # it '-13(x+7)-4' do
+    #   expect('-13(x+7)-4'.new_objectify).to eq add(mtp(-13,add('x',7)),-4)
+    # end
+    # it '\frac{3}{x}' do
+    #   expect('\frac{3}{x}'.new_objectify).to eq div(3,'x')
+    # end
+    #
+    # it '\frac{3x+5}{4+5+a}' do
+    #   expect('\frac{3x+5}{4+5+a}'.new_objectify).to eq div(add(mtp(3,'x'),5),add(4,5,'a'))
+    # end
+    #
+    # it '3(x+\frac{3x+5}{4+5+a})+4' do
+    #   expect('3(x+\frac{3x+5}{4+5+a})+4'.new_objectify).to eq add(mtp(3,add('x',div(add(mtp(3,'x'),5),add(4,5,'a')))),4)
+    # end
+    #
+    # it '\frac{3x+5}{4+5+a}' do
+    #   expect('\frac{3x+3xyz}{4+5+a}'.new_objectify).to eq div(add(mtp(3,'x'),mtp(3,'x','y','z')),add(4,5,'a'))
+    # end
+    #
+    # it '3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4' do
+    #   expect('3(x+\frac{3\frac{3}{x}+5}{4+5+a})+4'.new_objectify).to eq add(mtp(3,add('x',div(add(mtp(3,div(3,'x')),5),add(4,5,'a')))),4)
+    # end
+    #
+    # it 'objectifies -x+2' do
+    #   str = '-x+2'
+    #   expect(str.new_objectify).to eq add(mtp(-1,'x'),2)
+    # end
+    #
+    # it 'objectifies 2xy' do
+    #   str = '2xy'
+    #   expect(str.new_objectify).to eq mtp(2,'x','y')
+    # end
+    #
+    # it 'objectifies 3(x+\frac{3x+5}{4+5+a})+4' do
+    #   str = '3(x+\frac{3x+5}{4+5+a})+4'
+    #   expect(str.new_objectify).to eq add(mtp(3,add('x',div(add(mtp(3,'x'),5),add(4,5,'a')))),4)
+    # end
+    #
+    # it 'x^{ 3y}' do
+    #   expect('x^{ 3y}'.new_objectify).to eq pow('x',mtp(3,'y'))
+    # end
+    #
+    # it '(2x)^13' do
+    #   expect('(2x)^13)'.new_objectify).to eq mtp(pow(mtp(2,'x'),1),3)
+    # end
+    #
+    # it '(2xy)^{-3x-4}' do
+    #   expect('(2xy)^{-3x-4}'.new_objectify).to eq pow(mtp(2,'x','y'),add(mtp(-3,'x'),-4))
+    # end
+    #
+    # it '(2^{3xy})^{5x+4}' do
+    #   expect('(2^{3xy})^{5x+4}'.new_objectify).to eq pow(pow(2,mtp(3,'x','y')),add(mtp(5,'x'),4))
+    # end
+    #
+    # it '2^{3xy}' do
+    #   expect('2^{3xy}'.new_objectify).to eq pow(2,mtp(3,'x','y'))
+    # end
+    #
+    # it 'x^{1+1}' do
+    #   expect('x^{1+1}'.new_objectify).to eq pow('x',add(1,1))
+    # end
+    #
+    # it '\frac{c}{d}(2x+4^x)' do
+    #   expect('\frac{c}{d}(2x+4^x)'.new_objectify).to eq mtp(div('c','d'),add(mtp(2,'x'),pow(4,'x')))
+    # end
+    #
+    # it '\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}' do
+    #   exp = '\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'
+    #   expect(exp.new_objectify).to eq add(div('a','b'),pow(mtp(div('c','d'),add(mtp(2,'x'),pow(4,'x'))),div(5,'y')))
+    # end
+    #
+    # it '(3x^2y^3)(5xy^4)+(3x^2y^3)(6x^3y^{-2})' do
+    #   str = '\frac{a}{b}+(\frac{c}{d}(2x+4^x))^{\frac{5}{y}}'
+    #   expect(str.new_objectify.latex.shorten).to eq str
+    # end
+    #
+    # it '(2x)^3' do
+    #   expect('(2x)^3'.new_objectify).to eq pow(mtp(2,'x'),3)
+    # end
+    #
+    # it '-2-3' do
+    #   expect('-2-3'.new_objectify).to eq add(-2,-3)
+    # end
+    #
+    # it '-2x-3' do
+    #   expect('-2x-3'.new_objectify).to eq add(mtp(-2,'x'),-3)
+    # end
+    #
+    # it 'x^{1^1}' do
+    #   expect('x^{1^1}'.new_objectify).to eq pow('x',pow(1,1))
+    # end
+    #
+    # it '-xy' do
+    #   expect('-xy'.new_objectify).to eq mtp(-1,'x','y')
+    # end
+    #
+    # it '-12^y' do
+    #   expect('-12^y'.new_objectify).to eq mtp(-1,pow(12,'y'))
+    # end
+    #
+    # it '-\frac{a}{12+x}' do
+    #   expect('-\frac{a}{b}'.new_objectify).to eq mtp(-1,div('a','b'))
+    # end
+    #
+    # it 'x+-3' do
+    #   expect('x-3'.new_objectify).to eq add('x',-3)
+    # end
   end
 
   # xdescribe 'objectify and olatex back' do
