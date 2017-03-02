@@ -135,7 +135,7 @@ module LatexUtilities
       return pow(conventionalised_args)
     end
 
-    if numerical?(exp) || exp.is_a?(string)
+    if numerical?(exp) || exp.is_a?(string) || exp.nil?
       return exp
     end
   end

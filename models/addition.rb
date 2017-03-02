@@ -126,23 +126,21 @@ class Addition < Expression
     end
   end
 
-  def latex
-    result = args.first.latex
+  def base_latex
+    result = args.first.base_latex
     for i in 1..args.length - 1
       if args[i].is_a?(subtraction) || args[i].is_a?(addition)
-        result += '+' + brackets(args[i].latex)
+        result += '+' + brackets(args[i].base_latex)
       else
-        result += '+' + args[i].latex
+        result += '+' + args[i].base_latex
       end
     end
     result
-    #
-    # result.gsub!(/\+\-1(?![0-9])/,'-')
-    # result.gsub!(/\+\-/,'-')
   end
+
   #
-  # def new_latex
-  #   latex.original_objectify.latex
+  # def new_base_latex
+  #   base_latex.original_objectify.base_latex
   # end
 
 

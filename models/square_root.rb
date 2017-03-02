@@ -27,8 +27,8 @@ class SquareRoot
     # sqrt(value: val, sign: sign)
   end
 
-  def latex
-    '\sqrt{' + value.latex + '}'
+  def base_latex
+    '\sqrt{' + value.base_latex + '}'
   end
 
   private

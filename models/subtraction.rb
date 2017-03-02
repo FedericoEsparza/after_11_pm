@@ -78,11 +78,11 @@ class Subtraction
     end
   end
 
-  def latex
+  def base_latex
     if subend.is_a?(addition) || subend.is_a?(subtraction)
-      minuend.latex + '-' + brackets(subend.latex)
+      minuend.base_latex + '-' + brackets(subend.base_latex)
     else
-      minuend.latex + '-' + subend.latex
+      minuend.base_latex + '-' + subend.base_latex
     end
   end
 

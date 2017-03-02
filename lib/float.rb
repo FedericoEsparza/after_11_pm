@@ -1,5 +1,5 @@
 class Float
-  def latex
+  def base_latex
     self.to_s
   end
 end

@@ -3,7 +3,7 @@ require './helpers/objectify_utilities'
 include ObjectifyUtilities
 
 class String
-  def latex
+  def base_latex
     self
   end
 

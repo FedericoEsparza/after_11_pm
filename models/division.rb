@@ -60,8 +60,8 @@ class Division
     end
   end
 
-  def latex
-    '\displaystyle\frac{' + top.latex + '}{' + bot.latex + '}'
+  def base_latex
+    '\displaystyle\frac{' + top.base_latex + '}{' + bot.base_latex + '}'
   end
 
 end

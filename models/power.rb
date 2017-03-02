@@ -49,19 +49,19 @@ class Power
     base ** index
   end
 
-  def latex
-    base_latex = base.latex
+  def base_latex
+    latex_of_base = base.base_latex
     unless elementary?(base)
-      base_latex = brackets(base_latex)
+      latex_of_base = brackets(latex_of_base)
     end
-    index_latex = index.latex
+    index_latex = index.base_latex
     if elementary?(index) == false || index.to_s.length > 1
       index_latex = '{' + index_latex +  '}'
     end
     # unless elementary?(index)
     #   index_latex = '{' + index_latex +  '}'
     # end
-    base_latex + '^' + index_latex
+    latex_of_base + '^' + index_latex
   end
 
   def sort_elements

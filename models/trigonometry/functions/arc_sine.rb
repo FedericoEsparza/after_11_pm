@@ -41,7 +41,7 @@ class ArcSine
   end
 
   def latex
-    value_latex = value.latex
+    value_latex = value.base_latex
     '\arcsin ' + value_latex
   end
 end

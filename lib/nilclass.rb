@@ -1,5 +1,5 @@
 class NilClass
-  def latex
+  def base_latex
     ''
   end
 end

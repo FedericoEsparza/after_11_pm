@@ -42,7 +42,7 @@ class ArcTangent
   end
 
   def latex
-    value_latex = value.latex
+    value_latex = value.base_latex
     '\arctan ' + value_latex
   end
 end
