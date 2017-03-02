@@ -144,6 +144,11 @@ describe ObjectifyUtilities do
       str = "-12^xy"
       expect(dummy_class.split_mtp_args(str)).to eq ['-','12^x','y']
     end
+
+    it '' do
+      str = '-\frac{$}{$}'
+      expect(dummy_class.split_mtp_args(str)).to eq ['-','\frac{$}{$}']
+    end
   end
 
   # describe '#reenter_str_content' do

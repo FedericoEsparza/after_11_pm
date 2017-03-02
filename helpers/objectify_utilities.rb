@@ -73,7 +73,7 @@ module ObjectifyUtilities
     # 1.  its  - followed by a non-digit
     # 2.  its minus followed by digits followed by ^ which means its minus one
     #     times a power
-    if string_copy[0] == '-' && string_copy[1] =~ /[A-Za-z]/
+    if string_copy[0] == '-' && string_copy[1] =~ /[^0-9]/
       result_array << string_copy.slice!(0)
       return
     end

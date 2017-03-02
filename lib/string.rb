@@ -79,6 +79,10 @@ class String
     if structure_str._is_numeral?
       return self.to_i
     end
+
+    if structure_str == '-'
+      return -1
+    end
   end
 
   def _add_args(original_string)
@@ -168,6 +172,7 @@ class String
   end
 
   def _outer_func_is_mtp?
+    return false if self == '-'
     return false if self[1..(length-1)] =~ /\+|\-/
     return false if split_mtp_args(dup).length == 1
     return true

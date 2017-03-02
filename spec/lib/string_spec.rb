@@ -193,8 +193,18 @@ describe String do
     # end
 
     it '-xy' do
-      expect('-xy'.objectify).to eq nil
+      expect('-xy'.objectify).to eq mtp(-1,'x','y')
     end
+
+    it '-12^y' do
+      expect('-12^y'.objectify).to eq mtp(-1,pow(12,'y'))
+    end
+
+    it '-\frac{a}{12+x}' do
+      expect('-\frac{a}{b}'.objectify).to eq mtp(-1,div('a','b'))
+    end
+
+
   end
 
   # xdescribe 'objectify and olatex back' do
@@ -257,59 +267,63 @@ describe String do
   #   end
   # end
   #
-  # describe '#_outer_func_is_mtp?' do
-  #   it '3x to true' do
-  #     expect('3x'._outer_func_is_mtp?).to be true
-  #   end
-  #
-  #   it '3+x to false' do
-  #     expect('3+x'._outer_func_is_mtp?).to be false
-  #   end
-  #
-  #   it '3-x to false' do
-  #     expect('3-x'._outer_func_is_mtp?).to be false
-  #   end
-  #
-  #   it '-3x to true' do
-  #     expect('-3x'._outer_func_is_mtp?).to be true
-  #   end
-  #
-  #   it '\frac{$$$}{$$}($$$$$) to true' do
-  #     expect('\frac{$$$}{$$}($$$$$)'._outer_func_is_mtp?).to be true
-  #   end
-  #
-  #   it '\frac{$$$}{$$} to false' do
-  #     expect('\frac{$$$}{$$}'._outer_func_is_mtp?).to be false
-  #   end
-  #
-  #   it '-12 to false' do
-  #     expect('-12'._outer_func_is_mtp?).to be false
-  #   end
-  #
-  #   it 'x to false' do
-  #     expect('x'._outer_func_is_mtp?).to be false
-  #   end
-  #
-  #   it 'xy to true' do
-  #     expect('xy'._outer_func_is_mtp?).to be true
-  #   end
-  #
-  #   it 'x^3 to false' do
-  #     expect('x^3'._outer_func_is_mtp?).to be false
-  #   end
-  #
-  #   it '($$$)^{$$$$} to false' do
-  #     expect('($$$)^{$$$$}'._outer_func_is_mtp?).to be false
-  #   end
-  #
-  #   it '($$$)^{$$$$}3 to true' do
-  #     expect('($$$)^{$$$$}3'._outer_func_is_mtp?).to be true
-  #   end
-  #
-  #   it '($$$)^3\frac{$}{$} to true' do
-  #     expect('($$$)^3\frac{$}{$}'._outer_func_is_mtp?).to be true
-  #   end
-  # end
+  describe '#_outer_func_is_mtp?' do
+    it '3x to true' do
+      expect('3x'._outer_func_is_mtp?).to be true
+    end
+
+    it '3+x to false' do
+      expect('3+x'._outer_func_is_mtp?).to be false
+    end
+
+    it '3-x to false' do
+      expect('3-x'._outer_func_is_mtp?).to be false
+    end
+
+    it '-3x to true' do
+      expect('-3x'._outer_func_is_mtp?).to be true
+    end
+
+    it '\frac{$$$}{$$}($$$$$) to true' do
+      expect('\frac{$$$}{$$}($$$$$)'._outer_func_is_mtp?).to be true
+    end
+
+    it '\frac{$$$}{$$} to false' do
+      expect('\frac{$$$}{$$}'._outer_func_is_mtp?).to be false
+    end
+
+    it '-12 to false' do
+      expect('-12'._outer_func_is_mtp?).to be false
+    end
+
+    it 'x to false' do
+      expect('x'._outer_func_is_mtp?).to be false
+    end
+
+    it 'xy to true' do
+      expect('xy'._outer_func_is_mtp?).to be true
+    end
+
+    it 'x^3 to false' do
+      expect('x^3'._outer_func_is_mtp?).to be false
+    end
+
+    it '($$$)^{$$$$} to false' do
+      expect('($$$)^{$$$$}'._outer_func_is_mtp?).to be false
+    end
+
+    it '($$$)^{$$$$}3 to true' do
+      expect('($$$)^{$$$$}3'._outer_func_is_mtp?).to be true
+    end
+
+    it '($$$)^3\frac{$}{$} to true' do
+      expect('($$$)^3\frac{$}{$}'._outer_func_is_mtp?).to be true
+    end
+
+    it '-' do
+      expect('-'._outer_func_is_mtp?).to be false
+    end
+  end
   #
   # describe '#_outer_func_is_div?' do
   #   it 'x^3 to false' do
