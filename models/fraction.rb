@@ -1,8 +1,9 @@
 include Factory
+require 'prime'
 include Latex
 
 class Fraction
-  attr_reader :numerator, :denominator, :sign
+  attr_accessor :numerator, :denominator, :sign
 
   def initialize(numerator:, denominator:, sign: :+)
     @numerator = numerator
@@ -34,6 +35,68 @@ class Fraction
     self.evaluate_numeral <= fraction.evaluate_numeral
   end
 
+  def simplify
+      num = numerator
+      denom = denominator
+    top_primes, top_powers = Prime.prime_division(numerator).transpose
+    bot_primes, bot_powers = Prime.prime_division(denominator).transpose
+
+    top_primes = [] if top_primes == nil
+    bot_primes = [] if bot_primes == nil
+
+    common_factors = top_primes & bot_primes
+    common_powers = []
+    common_factors.each do |factor|
+      common_powers << [
+        top_powers[top_primes.rindex(factor)],
+        bot_powers[bot_primes.rindex(factor)]
+      ].min
+    end
+    common_factors = common_factors.each_with_index.map{|a,i| a**common_powers[i]}
+    product = common_factors.evaluate_product
+    num = num/product
+    denom = denom/product
+    if denom == 1 || denom == -1
+      if sign == "+@"
+        num*denom
+      else
+        -num*denom
+      end
+    else
+      frac(num,denom,sign: sign).check_sign
+    end
+  end
+
+  def check_sign
+    if (numerator<=>0)*(denominator<=>0) < 0
+      if sign == "+@"
+        if numerator < 0
+          frac(-numerator,denominator,sign: :-)
+        else
+          frac(numerator,-denominator,sign: :-)
+        end
+      else
+        if numerator < 0
+          frac(-numerator,denominator)
+        else
+          frac(numerator,-denominator)
+        end
+      end
+    elsif (numerator<=>0)*(denominator<=>0) == 0
+      0
+    else
+      self
+    end
+
+  end
+
+  def negative
+    num = -numerator
+    frac(num,denominator, sign: sign).check_sign
+  end
+
+
+
   def copy
     DeepClone.clone self
     # if numerator.is_a?(string) || numerator.is_a?(integer)
@@ -57,7 +120,11 @@ class Fraction
   end
 
   def base_latex
-    '\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
+    if sign == '+@'
+      '\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
+    else
+      '-\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
+    end
   end
 
   private

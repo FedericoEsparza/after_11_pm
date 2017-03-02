@@ -42,8 +42,46 @@ class Array
       else
           array.sort_elements
       end
+  end
+
+    def evaluate_product
+      array = self
+      if array == []
+        1
+      else
+        array.inject(:*)
+      end
+    end
+
+    def evaluate_sum
+      array = self
+      if array == []
+        0
+      else
+        array.inject(0){|sum,x| sum + x }
+      end
     end
 
 
+
+    ##is no longer needed, will keep if wanted later
+
+    # def find_common(array_2)
+    #   array_1 = self
+    #   result = []
+    #   done = 0
+    #   while done ==0
+    #     common = array_1 & array_2
+    #     p common
+    #     if common == []
+    #       done = 1
+    #     else
+    #       result = result + common
+    #       array_1 = array_1 - common
+    #       array_2 = array_2 - common
+    #     end
+    #   end
+    #   result
+    # end
 
 end

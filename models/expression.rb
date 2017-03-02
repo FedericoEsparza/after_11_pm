@@ -1,5 +1,6 @@
 include ClassName
 include Factory
+require 'prime'
 include Latex
 
 class Expression
