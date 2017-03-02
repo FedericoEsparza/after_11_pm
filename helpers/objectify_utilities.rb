@@ -78,13 +78,14 @@ module ObjectifyUtilities
   end
 
   def _add_next_num_arg(result_array,string_copy)
-    # num_reg = /^(\d+)(?!\^)/
-    # sliced = string_copy.slice!(num_reg)
-    # result_array << sliced unless sliced.nil?
-    next_num_ind = _next_num_index(string_copy)
-    if next_num_ind
-      result_array << string_copy.slice!(0..next_num_ind)
-    end
+    num_reg = /^(?!-?\d+\^)-?\d+/
+    sliced = string_copy.slice!(num_reg)
+    result_array << sliced unless sliced.nil?
+
+    # next_num_ind = _next_num_index(string_copy)
+    # if next_num_ind
+    #   result_array << string_copy.slice!(0..next_num_ind)
+    # end
   end
 
   # this is happening because I suck at regex
