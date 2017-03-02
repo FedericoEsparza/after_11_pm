@@ -39,14 +39,22 @@ class QuadraticEquation
 
   def get_method
     method = {
-      product:[mtp(quad_term,constant_term),mtp(quad_term,constant_term).evaluate_numeral],
-      sum:linear_term
+      Product:[mtp(quad_term,constant_term),mtp(quad_term,constant_term).evaluate_numeral],
+      Sum:linear_term
     }
   end
 
+  def latex_method
+    method = get_method
+    result = 'P=' + method[:Product][0].latex +
+    + '=' + method[:Product][1].latex +
+    ' \hspace{30pt}S=' + method[:Sum].latex
+    result
+  end
+
   def get_factors
-    product = get_method["P"][1]
-    sum = get_method["S"]
+    product = get_method[:Product][1]
+    sum = get_method[:Sum]
     attempts = product.factorisation
     done = 0
     i = 1
@@ -99,17 +107,46 @@ class QuadraticEquation
     steps = [equa]
 
     steps << brackets_used
-    steps << factors_used.map{|a| a.change_sign}
+    steps << factors_used.map{|a| a.negative}
+  end
+
+  def latex_factors
+    factors = write_factors
+    result = ''
+    factors.each do |factor|
+      brackets = '\left(' + factor[0].latex + ',\,\,' +
+      factor[1].latex + '\right)\hspace{10pt}'
+      result += brackets
+    end
+    result
   end
 
   def write_whole_solution
-    {method:get_method, factors:get_factors, steps:write_factorisation_solution}
+    {method:latex_method, factors:latex_factors, steps:write_factorisation_solution}
   end
 
   def latex
+
+    result = ''
     solution = write_whole_solution
-    solution[:steps][0].latex
-    
+    solution_steps = solution[:steps]
+    latex_steps = '0&=' + solution_steps[0].latex +
+    '& && &' + solution[:method] + '&\\\[5pt]
+    '
+
+
+    latex_steps += '0&=' + solution_steps[1].latex  +
+    '& && &' + solution[:factors] + '&\\\[5pt]
+    '
+
+    answer = variable + '&=' + solution_steps[2][0].latex +
+    ' ,\,\, ' + solution_steps[2][1].latex + '\\\[5pt]
+    '
+
+    latex_steps += answer
+    puts latex_steps
+
+
   end
 
 end

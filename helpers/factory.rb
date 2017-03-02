@@ -78,7 +78,7 @@ module Factory
     SquareRoot.new(value: value, sign: sign)
   end
 
-  def quad(quad_term,linear_term,constant_term,variable: 'x')
+  def quad(quad_term,linear_term,constant_term,variable)
     QuadraticEquation.new(quad_term: quad_term, linear_term: linear_term, constant_term: constant_term, variable: variable)
   end
 end

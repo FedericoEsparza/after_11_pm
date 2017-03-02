@@ -63,7 +63,7 @@ class Fraction
     end
   end
 
-  def change_sign
+  def negative
     self.numerator = -numerator
     self
   end

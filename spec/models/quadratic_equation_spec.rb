@@ -11,9 +11,9 @@ describe QuadraticEquation do
 
   describe '#get_method' do
     it 'gets 12x^2+17x-7' do
-      exp = quad(12,17,-7)
+      exp = quad(12,17,-7,'x')
       result = exp.get_method
-      expect(result["P"]).to eq [mtp(12,-7),-84]
+      expect(result[:Product]).to eq [mtp(12,-7),-84]
     end
   end
 
@@ -27,7 +27,7 @@ describe QuadraticEquation do
 
   describe '#get_factors' do
     it 'calculates factors for 12x^2+17x-7' do
-      exp = quad(12,17,-7)
+      exp = quad(12,17,-7,'x')
       result = exp.get_factors
       expect(result).to eq [-4,21]
     end
@@ -35,7 +35,7 @@ describe QuadraticEquation do
 
   describe '#write_factors' do
     it 'writes factors for 12x^2+17x-7' do
-      exp = quad(12,17,-7)
+      exp = quad(12,17,-7,'x')
       result = exp.write_factors
       expect(result).to eq [[-4,21],[frac(-4,12),frac(21,12)],[frac(-1,3),frac(7,4)]]
 
@@ -44,7 +44,7 @@ describe QuadraticEquation do
 
   describe '#write_factorisation_solution' do
     it 'writes solution for 12x^2+17x-7' do
-      exp = quad(12,17,-7)
+      exp = quad(12,17,-7,'x')
       result = exp.write_factorisation_solution
 
       expect(result).to eq [
@@ -55,7 +55,7 @@ describe QuadraticEquation do
     end
 
     it 'write solutin for 8x^2+10x-7' do
-      exp = quad(8,10,-7)
+      exp = quad(8,10,-7,'x')
       result = exp.write_factorisation_solution
 
       expect(result).to eq [
@@ -66,5 +66,27 @@ describe QuadraticEquation do
     end
 
   end
+
+  # describe '#latex_method' do
+  #   exp = quad(8,10,-7,'x')
+  #   result = exp.latex_method
+  #   puts result
+  # end
+
+  # describe '#latex_factors' do
+  #   exp = quad(8,10,-7,'x')
+  #   result = exp.latex_factors
+  #   puts result
+  # end
+
+
+  describe '#latex' do
+    it 'latexes' do
+      exp = quad(8,10,-7,'y')
+      result = exp.latex
+      p result
+    end
+  end
+
 
 end
