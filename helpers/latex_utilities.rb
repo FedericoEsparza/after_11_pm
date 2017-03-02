@@ -74,6 +74,10 @@ module LatexUtilities
         end
       end
 
+      if numerical?(exp.args[0]) && exp.args[0] < 0
+        exp.args[0] = sbt(nil,exp.args[0].abs)
+      end
+
       for i in 2..(exp.args.length-1)
         if numerical?(exp.args[-i]) && exp.args[-i] < 0
           minus_arg_i = exp.args.length  - i
@@ -103,6 +107,11 @@ module LatexUtilities
     end
 
     if exp.is_a?(multiplication)
+      if numerical?(exp.args[0]) && exp.args[0] < 0
+        exp.args[0] = exp.args[0].abs
+        return sbt(nil,exp)
+      end
+
       conventionalised_args = []
       exp.args.each do |arg|
         conventionalised_args << conventionalise_plus_minus(arg)
@@ -146,7 +155,10 @@ module LatexUtilities
       end
       return exp
     end
+  end
 
+  def conventionalise(exp)
+    conventionalise_one_times(conventionalise_plus_minus(exp))
   end
 
 end

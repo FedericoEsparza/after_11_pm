@@ -1,5 +1,9 @@
 describe String do
   describe '#objectify' do
+    it '-x' do
+      expect('-x'.objectify).to eq mtp(-1,'x')
+    end
+
     it '2\times3' do
       expect('2\times3'.objectify).to eq mtp(2,3)
     end

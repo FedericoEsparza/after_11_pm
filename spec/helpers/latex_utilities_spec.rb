@@ -64,6 +64,16 @@ describe LatexUtilities do
       exp = pow(add(3,4,-5),2)
       expect(dummy_class.conventionalise_plus_minus(exp)).to eq pow(sbt(add(3,4),5),2)
     end
+
+    it '' do
+      exp = add(-3,4,5)
+      expect(dummy_class.conventionalise_plus_minus(exp)).to eq add(sbt(nil,3),4,5)
+    end
+
+    it '' do
+      exp = mtp(-2,'y')
+      expect(dummy_class.conventionalise_plus_minus(exp)).to eq sbt(nil,mtp(2,'y'))
+    end
   end
 
   describe '#conventionalise_one_times' do
@@ -90,6 +100,23 @@ describe LatexUtilities do
     it '' do
       exp = add(2,3,4,sbt(3,div(2,'x',mtp(1,'a','b'))))
       expect(dummy_class.conventionalise_one_times(exp)).to eq add(2,3,4,sbt(3,div(2,'x',mtp('a','b'))))
+    end
+  end
+
+  describe 'conventionalise' do
+    it '' do
+      exp = mtp(-1,'x','y')
+      expect(dummy_class.conventionalise(exp)).to eq sbt(nil,mtp('x','y'))
+    end
+
+    it '' do
+      exp = add(mtp(1,pow('x',2)),mtp(-3,'x'),-4)
+      expect(dummy_class.conventionalise(exp)).to eq sbt(sbt(mtp(pow('x',2)),mtp(3,'x')),4)
+    end
+
+    it '' do
+      exp = mtp(-1,'x')
+      expect(dummy_class.conventionalise(exp)).to eq sbt(nil,mtp('x'))
     end
   end
 end
