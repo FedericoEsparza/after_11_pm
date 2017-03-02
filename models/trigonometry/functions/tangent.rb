@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Tangent
   attr_accessor :args
@@ -47,8 +48,8 @@ class Tangent
     result
   end
 
-  def latex
-    angle_latex = angle.latex
+  def base_latex
+    angle_latex = angle.base_latex
     if angle.is_a?(addition) || angle.is_a?(subtraction)
       angle_latex = brackets(angle_latex)
     end

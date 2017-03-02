@@ -1,9 +1,11 @@
 require './helpers/objectify_utilities'
+require './helpers/latex'
 
 include ObjectifyUtilities
+include Latex
 
 class String
-  def latex
+  def base_latex
     self
   end
 

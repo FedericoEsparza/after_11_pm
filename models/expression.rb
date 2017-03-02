@@ -1,5 +1,6 @@
 include ClassName
 include Factory
+include Latex
 
 class Expression
   attr_accessor :args

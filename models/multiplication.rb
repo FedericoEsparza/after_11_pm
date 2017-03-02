@@ -2,6 +2,7 @@ include LatexUtilities
 include Factory
 include Types
 include ObjectifyUtilities
+include Latex
 
 class Multiplication
   attr_accessor :args
@@ -414,18 +415,18 @@ class Multiplication
       end
     end
 
-    def latex
+    def base_latex
       result = ''
       for i in 0..args.length - 1
         if elementary?(args[i]) || args[i].is_a?(power)
-          arg_i_latex = args[i].latex
+          arg_i_base_latex = args[i].base_latex
         else
-          arg_i_latex = brackets(args[i].latex)
+          arg_i_base_latex = brackets(args[i].base_latex)
         end
         if numerical?(args[i-1]) && numerical?(args[i])
-          result += '\times' + arg_i_latex
+          result += '\times' + arg_i_base_latex
         else
-          result += arg_i_latex
+          result += arg_i_base_latex
         end
       end
       first_part =  result.slice!(0..5)
@@ -517,18 +518,18 @@ class Multiplication
     end
   end
 
-  def latex
+  def base_latex
     result = ''
     for i in 0..args.length - 1
       if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
-        arg_i_latex = args[i].latex
+        arg_i_base_latex = args[i].base_latex
       else
-        arg_i_latex = brackets(args[i].latex)
+        arg_i_base_latex = brackets(args[i].base_latex)
       end
       if numerical?(args[i-1]) && numerical?(args[i])
-        result += '\times' + arg_i_latex
+        result += '\times' + arg_i_base_latex
       else
-        result += arg_i_latex
+        result += arg_i_base_latex
       end
     end
     first_part =  result.slice!(0..5)

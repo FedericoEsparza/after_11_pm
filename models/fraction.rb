@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Fraction
   attr_reader :numerator, :denominator, :sign
@@ -55,8 +56,8 @@ class Fraction
     (top.to_f / bottom).send(sign)
   end
 
-  def latex
-    '\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+  def base_latex
+    '\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
   end
 
   private

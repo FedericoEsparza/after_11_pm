@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class SquareRoot
   attr_reader :value, :sign
@@ -27,8 +28,8 @@ class SquareRoot
     # sqrt(value: val, sign: sign)
   end
 
-  def latex
-    '\sqrt{' + value.latex + '}'
+  def base_latex
+    '\sqrt{' + value.base_latex + '}'
   end
 
   private

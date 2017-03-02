@@ -1,6 +1,10 @@
+require './helpers/latex'
+
+include Latex
+
 class Fixnum
 
-  def latex
+  def base_latex
     self.to_s
   end
 
