@@ -1,5 +1,6 @@
 include Factory
 require 'prime'
+include Latex
 
 class Fraction
   attr_accessor :numerator, :denominator, :sign
@@ -118,11 +119,11 @@ class Fraction
     (top.to_f / bottom).send(sign)
   end
 
-  def latex
+  def base_latex
     if sign == '+@'
-      '\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+      '\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
     else
-      '-\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+      '-\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
     end
   end
 

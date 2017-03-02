@@ -14,12 +14,12 @@ describe Array do
     end
   end
 
-  describe '#find_common' do
-    it 'finds common with [1,2,2,3] and [2,2,1,4]' do
-      array_1 = [1,2,3]
-      array_2 = [2,1,4]
-      result = array_1.find_common(array_2)
-      expect(result).to eq [1,2,2]
-    end
-  end
+  # describe '#find_common' do
+  #   it 'finds common with [1,2,2,3] and [2,2,1,4]' do
+  #     array_1 = [1,2,3]
+  #     array_2 = [2,1,4]
+  #     result = array_1.find_common(array_2)
+  #     expect(result).to eq [1,2,2]
+  #   end
+  # end
 end

@@ -1,7 +1,11 @@
+require './helpers/latex'
+
+include Latex
+
 class Fixnum
 require "prime"
 
-  def latex
+  def base_latex
     self.to_s
   end
 

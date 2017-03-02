@@ -2,6 +2,7 @@ include LatexUtilities
 include Factory
 include Types
 include ObjectifyUtilities
+include Latex
 
 class Multiplication
   attr_accessor :args
@@ -414,6 +415,7 @@ class Multiplication
       end
     end
 
+
     # def latex
     #   result = ''
     #   for i in 0..args.length - 1
@@ -436,27 +438,34 @@ class Multiplication
     #   end
     # end
 
-    def latex
-      result = ''
-      for i in 0..args.length - 1
-        if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
-          arg_i_latex = args[i].latex
-        else
-          arg_i_latex = brackets(args[i].latex)
-        end
-        if numerical?(args[i-1]) && numerical?(args[i])
-          result += '\times' + arg_i_latex
-        else
-          result += arg_i_latex
-        end
-      end
-      first_part =  result.slice!(0..5)
-      if first_part == '\times'
-        result
-      else
-        first_part + result
-      end
-    end
+#     def latex
+#       result = ''
+#       for i in 0..args.length - 1
+#         if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
+#           arg_i_latex = args[i].latex
+# =======
+#     def base_latex
+#       result = ''
+#       for i in 0..args.length - 1
+#         if elementary?(args[i]) || args[i].is_a?(power)
+#           arg_i_base_latex = args[i].base_latex
+# >>>>>>> master
+#         else
+#           arg_i_base_latex = brackets(args[i].base_latex)
+#         end
+#         if numerical?(args[i-1]) && numerical?(args[i])
+#           result += '\times' + arg_i_base_latex
+#         else
+#           result += arg_i_base_latex
+#         end
+#       end
+#       first_part =  result.slice!(0..5)
+#       if first_part == '\times'
+#         result
+#       else
+#         first_part + result
+#       end
+#     end
 
 
 
@@ -539,6 +548,28 @@ class Multiplication
     end
   end
 
+
+  def base_latex
+    result = ''
+    for i in 0..args.length - 1
+      if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
+        arg_i_base_latex = args[i].base_latex
+      else
+        arg_i_base_latex = brackets(args[i].base_latex)
+      end
+      if numerical?(args[i-1]) && numerical?(args[i])
+        result += '\times' + arg_i_base_latex
+      else
+        result += arg_i_base_latex
+      end
+    end
+    first_part =  result.slice!(0..5)
+    if first_part == '\times'
+      result
+    else
+      first_part + result
+    end
+  end
 
 
 

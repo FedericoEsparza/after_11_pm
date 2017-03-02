@@ -2,8 +2,8 @@ require './helpers/latex'
 
 include Latex
 
-class Float
+class NilClass
   def base_latex
-    self.to_s
+    ''
   end
 end

@@ -17,7 +17,7 @@ feature '#latex' do
     context 'multiplication' do
       scenario '' do
         exp = mtp(2,3)
-        expect(exp.latex).to eq '2\times3'
+        expect(exp.base_latex).to eq '2\times3'
       end
 
       scenario '' do
@@ -314,19 +314,31 @@ feature '#latex' do
       exp = div(add(mtp(2,'x'),3),sbt(mtp(3,pow('x',2)),mtp(4,pow('x',5))))
       expect(exp.latex).to eq '\displaystyle\frac{2x+3}{3x^2-4x^5}'
     end
-  end
-end
 
-feature '#shorten' do
-  context 'normal brackets' do
     scenario '' do
-      expect('\left(2+x\right)^{3a}'.shorten).to eq '(2+x)^{3a}'
+      exp = add(10,mtp(-3,'x'))
+      expect(exp.latex).to eq "10-3x"
     end
   end
 
-  context 'displaystyle remove' do
+  context 'conventionalised' do
     scenario '' do
-      expect('\left(\displaystyle2+x\right)^{3a}'.shorten).to eq '(2+x)^{3a}'
+      exp = add(mtp(1,pow('x',2)),mtp(-3,'x'),-4)
+      expect(exp.latex).to eq "x^2-3x-4"
     end
   end
 end
+
+# feature '#shorten' do
+#   context 'normal brackets' do
+#     scenario '' do
+#       expect('\left(2+x\right)^{3a}'.shorten).to eq '(2+x)^{3a}'
+#     end
+#   end
+#
+#   context 'displaystyle remove' do
+#     scenario '' do
+#       expect('\left(\displaystyle2+x\right)^{3a}'.shorten).to eq '(2+x)^{3a}'
+#     end
+#   end
+# end

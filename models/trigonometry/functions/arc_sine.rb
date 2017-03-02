@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class ArcSine
   attr_accessor :args
@@ -40,8 +41,8 @@ class ArcSine
     degree.round
   end
 
-  def latex
-    value_latex = value.latex
+  def base_latex
+    value_latex = value.base_latex
     '\arcsin ' + value_latex
   end
 end

@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Equation
   attr_accessor :ls, :rs
