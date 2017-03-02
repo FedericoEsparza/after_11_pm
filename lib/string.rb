@@ -7,7 +7,6 @@ class String
     self
   end
 
-
   def greater?(exp)
     if exp.is_a?(String)
       self < exp
@@ -37,7 +36,7 @@ class String
     [self]
   end
 
-  def new_objectify
+  def objectify
     original_string = self.dup
     original_string.gsub!(' ','')
     i = 1
@@ -48,7 +47,7 @@ class String
       end
       i += 1
     end
-    original_string.objectify
+    original_string.original_objectify
   end
 
   def insert_plus?(original_string,i)
@@ -58,38 +57,38 @@ class String
     original_string[i-1] != '-' && original_string[i+1] != '-'
   end
 
-  def objectify
+  def original_objectify
     original_string = self.dup
     original_string.gsub!(' ','')
     structure_str = empty_brackets(original_string.dup)
 
     if structure_str._outer_func_is_add?
       args = structure_str._add_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return add(object_args)
     end
 
     if structure_str._outer_func_is_sbt?
       args = structure_str._sbt_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return sbt(object_args)
     end
 
     if structure_str._outer_func_is_mtp?
       args = structure_str._mtp_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return mtp(object_args)
     end
 
     if structure_str._outer_func_is_div?
       args = structure_str._div_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return div(object_args)
     end
 
     if structure_str._outer_func_is_pow?
       args = structure_str._pow_args(original_string)
-      object_args = args.inject([]){ |r,e| r << e.objectify }
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return pow(object_args)
     end
 
@@ -139,18 +138,9 @@ class String
   end
 
   def _mtp_args(original_string)
-    # puts '================'
-    # p self
-    # puts '================'
     str_args = split_mtp_args(self)
-    # puts '================'
-    # p str_args
-    # puts '================'
     reenter_str_content(original_string,str_args)
     remove_enclosing_bracks(str_args)
-    # puts '================'
-    # p str_args
-    # puts '================'
     str_args
   end
 
@@ -165,11 +155,7 @@ class String
 
   def _pow_args(original_string)
     pow_index = 0
-    each_char.with_index do |c,i|
-      if c == '^'
-        pow_index = i
-      end
-    end
+    each_char.with_index { |c,i| pow_index = i if c == '^' }
     args = [original_string[0..pow_index-1],original_string[pow_index+1..-1]]
     remove_enclosing_bracks(args)
     args
