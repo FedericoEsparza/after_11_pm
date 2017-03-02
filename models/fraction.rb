@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Fraction
   attr_reader :numerator, :denominator, :sign

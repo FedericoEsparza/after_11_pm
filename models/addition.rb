@@ -1,5 +1,5 @@
-
 include Factory
+include Latex
 
 class Addition < Expression
   attr_accessor :args
@@ -137,12 +137,6 @@ class Addition < Expression
     end
     result
   end
-
-  #
-  # def new_base_latex
-  #   base_latex.original_objectify.base_latex
-  # end
-
 
   def simplify_brackets
     copy = self.copy

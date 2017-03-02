@@ -1,5 +1,6 @@
 include LatexUtilities
 include Factory
+include Latex
 
 class Subtraction
   attr_accessor :args

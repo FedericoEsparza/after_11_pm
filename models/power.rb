@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Power
   attr_accessor :args

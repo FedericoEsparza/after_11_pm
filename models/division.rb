@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Division
   attr_accessor :args

@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Tangent
   attr_accessor :args

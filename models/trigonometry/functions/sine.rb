@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Sine
   attr_accessor :args

@@ -135,9 +135,8 @@ module LatexUtilities
       return pow(conventionalised_args)
     end
 
-    if numerical?(exp) || exp.is_a?(string) || exp.nil?
-      return exp
-    end
+    # if numerical?(exp) || exp.is_a?(string) || exp.nil?
+    return exp
   end
 
   def conventionalise_one_times(exp)
@@ -155,6 +154,8 @@ module LatexUtilities
       end
       return exp
     end
+
+    return exp
   end
 
   def conventionalise(exp)

@@ -2,6 +2,7 @@ include LatexUtilities
 include Factory
 include Types
 include ObjectifyUtilities
+include Latex
 
 class Multiplication
   attr_accessor :args

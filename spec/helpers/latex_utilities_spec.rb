@@ -110,6 +110,11 @@ describe LatexUtilities do
     end
 
     it '' do
+      exp = add('x',2)
+      expect(dummy_class.conventionalise(exp)).to eq add('x',2)
+    end
+
+    it '' do
       exp = add(mtp(1,pow('x',2)),mtp(-3,'x'),-4)
       expect(dummy_class.conventionalise(exp)).to eq sbt(sbt(mtp(pow('x',2)),mtp(3,'x')),4)
     end

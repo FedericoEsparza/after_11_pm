@@ -1,3 +1,7 @@
+require './helpers/latex'
+
+include Latex
+
 class Fixnum
 
   def base_latex

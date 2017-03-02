@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class SquareRoot
   attr_reader :value, :sign

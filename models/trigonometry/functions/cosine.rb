@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Cosine
   attr_accessor :args

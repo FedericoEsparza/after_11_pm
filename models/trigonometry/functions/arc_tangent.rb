@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class ArcTangent
   attr_accessor :args
@@ -41,7 +42,7 @@ class ArcTangent
     (rad / (Math::PI) * 180).round
   end
 
-  def latex
+  def base_latex
     value_latex = value.base_latex
     '\arctan ' + value_latex
   end
