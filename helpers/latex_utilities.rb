@@ -42,7 +42,7 @@ module LatexUtilities
     end
   end
 
-  def conventionalise(exp)
+  def conventionalise_plus_minus(exp)
     if exp.is_a?(addition)
       if numerical?(exp.args[-1]) && exp.args[-1] < 0
         front_add_args = []
@@ -53,16 +53,14 @@ module LatexUtilities
           return sbt(front_add_args[0],exp.args[-1].abs)
         end
         if front_add_args.length > 1
-          minus_end = conventionalise(add(front_add_args))
+          minus_end = conventionalise_plus_minus(add(front_add_args))
           return sbt(minus_end,exp.args[-1].abs)
         end
       end
 
       if exp.args[-1].is_a?(multiplication) && numerical?(exp.args[-1].args[0]) && exp.args[-1].args[0] < 0
-
         sub_end = exp.args[-1].copy
         sub_end.args[0] = sub_end.args[0].abs
-
         front_add_args = []
         for k in 0..(exp.args.length-2)
           front_add_args << exp.args[k]
@@ -71,7 +69,7 @@ module LatexUtilities
           return sbt(front_add_args[0],sub_end)
         end
         if front_add_args.length > 1
-          minus_end = conventionalise(add(front_add_args))
+          minus_end = conventionalise_plus_minus(add(front_add_args))
           return sbt(minus_end,sub_end)
         end
       end
@@ -87,7 +85,7 @@ module LatexUtilities
           for k in 0..((exp.args.length - i)-1)
             front_add_args << exp.args[k]
           end
-          minus_end = conventionalise(add(front_add_args))
+          minus_end = conventionalise_plus_minus(add(front_add_args))
           front_sbt = sbt(minus_end,exp.args[-i].abs)
           new_args.insert(0,front_sbt)
           return add(new_args)
@@ -95,6 +93,47 @@ module LatexUtilities
       end
       return exp
     end
+
+    if exp.is_a?(subtraction)
+      conventionalised_args = []
+      exp.args.each do |arg|
+        conventionalised_args << conventionalise_plus_minus(arg)
+      end
+      return sbt(conventionalised_args)
+    end
+
+    if exp.is_a?(multiplication)
+      conventionalised_args = []
+      exp.args.each do |arg|
+        conventionalised_args << conventionalise_plus_minus(arg)
+      end
+      return mtp(conventionalised_args)
+    end
+
+    if exp.is_a?(division)
+      conventionalised_args = []
+      exp.args.each do |arg|
+        conventionalised_args << conventionalise_plus_minus(arg)
+      end
+      return div(conventionalised_args)
+    end
+
+    if exp.is_a?(power)
+      conventionalised_args = []
+      exp.args.each do |arg|
+        conventionalised_args << conventionalise_plus_minus(arg)
+      end
+      return pow(conventionalised_args)
+    end
+
+    if numerical?(exp) || exp.is_a?(string)
+      return exp
+    end
+  end
+
+  def conventionalise_one_times(exp)
+
+
   end
 
 end
