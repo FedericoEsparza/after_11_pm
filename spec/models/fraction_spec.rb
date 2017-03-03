@@ -63,6 +63,16 @@ describe Factory do
       exp_1, exp_2 = frac(3, 6, sign: :-), frac(3, 6, sign: :-)
       expect(exp_1 < exp_2).to be false
     end
+
+    it 'compares -1/2 and 1 to true' do
+      exp_1, exp_2 = frac(1, 2, sign: :-), 1
+      expect(exp_1 < exp_2).to be true
+    end
+
+    it 'compares -3/2 and -2.1 to false' do
+      exp_1, exp_2 = frac(3, 2, sign: :-), -2.1
+      expect(exp_1 < exp_2).to be false
+    end
   end
 
   context '#>' do
@@ -90,32 +100,15 @@ describe Factory do
       exp_1, exp_2 = frac(3, 6, sign: :-), frac(3, 6, sign: :-)
       expect(exp_1 > exp_2).to be false
     end
-  end
 
-  context '#<' do
-    it 'compare 2/3 and 1/3 to false' do
-      exp_1, exp_2 = frac(2, 3), frac(1, 3)
-      expect(exp_1 < exp_2).to be false
+    it 'compares -1/2 and 1 to false' do
+      exp_1, exp_2 = frac(1, 2, sign: :-), 1
+      expect(exp_1 > exp_2).to be false
     end
 
-    it 'compare 2/3 and 2/2 to true' do
-      exp_1, exp_2 = frac(2, 3), frac(2, 2)
-      expect(exp_1 < exp_2).to be true
-    end
-
-    it 'compare 1/2 and 1/2 to true' do
-      exp_1, exp_2 = frac(1, 2), frac(1, 2)
-      expect(exp_1 <= exp_2).to be true
-    end
-
-    it 'compare -3/6 and 3/6 to false' do
-      exp_1, exp_2 = frac(3, 6, sign: :-), frac(3, 6)
-      expect(exp_1 < exp_2).to be true
-    end
-
-    it 'compare -3/6 and -3/6 to true' do
-      exp_1, exp_2 = frac(3, 6, sign: :-), frac(3, 6, sign: :-)
-      expect(exp_1 <= exp_2).to be true
+    it 'compares -3/2 and -2.1 to true' do
+      exp_1, exp_2 = frac(3, 2, sign: :-), -2.1
+      expect(exp_1 > exp_2).to be true
     end
   end
 
