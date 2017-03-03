@@ -11,8 +11,8 @@ module ClassName
     Float
   end
 
-  def rational
-    Rational
+  def fraction
+    Fraction
   end
 
   def power
