@@ -210,22 +210,20 @@ describe Equation do
     it 'latexes (x+2)^2= -x-2' do
       eqn = eqn(pow(add('x',2),2),add(mtp(-1,'x'),-2))
       result = eqn.latex_quad_solution
-      puts result
-      p '============='
+      expect(result).to eq "\\begin{align*}\n    \\left(x+2\\right)^2&=-1x-2&\\\\[5pt]\n      \\left(x+2\\right)\\left(x+2\\right)&=-1x-2&\\\\[5pt]\n      xx+x2+2x+2\\times2&=-1x-2&\\\\[5pt]\n      x^1x^1+x2+2x+4&=-1x-2&\\\\[5pt]\n      x^{1+1}+x2+2x+4&=-1x-2&\\\\[5pt]\n      x^2+x2+2x+4&=-1x-2&\\\\[5pt]\n      x^2+2x+2x+4&=-1x-2&\\\\[5pt]\n      x^2+4x+4&=-1x-2&\\\\[5pt]\n      x^2+4x+4-\\left(-1x+-2\\right)&=0&\\\\[5pt]\n      x^2+5x+6&=0&\\\\[5pt]\n      0&=x^2+5x+6& && &P=6 \\hspace{30pt}S=5&\\\\[5pt]\n    0&=\\left(x+2\\right)\\left(x+3\\right)& && &\\left(2,\\,\\,3\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-2 ,\\,\\, -3\\\\[5pt]\n    \\end{align*}"
+
     end
 
     it 'latexes (x-4)(x+2)=2x+4' do
       eqn = '(x-4)(x+2)=2x+4'.objectify
       result = eqn.latex_quad_solution
-      puts result
-      p '==========='
+      expect(result).to eq "\\begin{align*}\n    \\left(x-4\\right)\\left(x+2\\right)&=2x+4&\\\\[5pt]\n      \\left(x-4\\right)\\left(x+2\\right)&=2x+4&\\\\[5pt]\n      xx+x2-4x-4\\times2&=2x+4&\\\\[5pt]\n      x^1x^1+x2-4x-8&=2x+4&\\\\[5pt]\n      x^{1+1}+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+2x-4x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8-\\left(2x+4\\right)&=0&\\\\[5pt]\n      x^2-4x-12&=0&\\\\[5pt]\n      0&=x^2-4x-12& && &P=-12 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-6\\right)\\left(x+2\\right)& && &\\left(-6,\\,\\,2\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=6 ,\\,\\, -2\\\\[5pt]\n    \\end{align*}"
     end
 
     it 'latexes (x+1)(2x-4)=2x-6' do
       eqn = '(x+1)(2x-4)=2x-6'.objectify
       result = eqn.latex_quad_solution
-      puts result
-      p '==============='
+      expect(result).to eq "\\begin{align*}\n    \\left(x+1\\right)\\left(2x-4\\right)&=2x-6&\\\\[5pt]\n      \\left(x+1\\right)\\left(2x-4\\right)&=2x-6&\\\\[5pt]\n      x2x+x-4+2x+-4&=2x-6&\\\\[5pt]\n      xx2+x-4+2x+-4&=2x-6&\\\\[5pt]\n      x^1x^12+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^{1+1}2+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^22+x-4+2x-4&=2x-6&\\\\[5pt]\n      2x^2+-4x+2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4-\\left(2x+-6\\right)&=0&\\\\[5pt]\n      2x^2+-4x+2&=0&\\\\[5pt]\n      0&=2x^2+-4x+2& && &P=2\\times2=4 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-1\\right)\\left(x-1\\right)& && &\\left(-2,\\,\\,-2\\right)\\hspace{10pt}\\left(\\frac{-2}{2},\\,\\,\\frac{-2}{2}\\right)\\hspace{10pt}\\left(-1,\\,\\,-1\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=1 ,\\,\\, 1\\\\[5pt]\n    \\end{align*}"
     end
   end
 
