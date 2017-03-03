@@ -17,6 +17,11 @@ class Fraction
     self.evaluate_numeral == frc.evaluate_numeral
   end
 
+  def abs
+    self.sign = '+@'
+    self
+  end
+
   def <(numeral)
     return false unless numerical?(numeral)
     if numeral.is_a?(fraction)
@@ -34,12 +39,6 @@ class Fraction
       evaluate_numeral > numeral
     end
   end
-
-  # def >(frc)
-  #   return false unless same_class?(frc)
-  #
-  #   self.evaluate_numeral > frc.evaluate_numeral
-  # end
 
   def <=(frc)
     return false unless same_class?(frc)

@@ -84,6 +84,16 @@ describe LatexUtilities do
       exp = add(2,frac(3,4,sign: :-))
       expect(dummy_class.conventionalise_plus_minus(exp)).to eq sbt(2,frac(3,4))
     end
+
+    it '' do
+      exp = mtp(frac(3,4,sign: :-),'x')
+      expect(dummy_class.conventionalise_plus_minus(exp)).to eq sbt(nil,mtp(frac(3,4),'x'))
+    end
+
+    it '' do
+      exp = add('x',mtp(frac(2,3),'y'),mtp(frac(4,5,sign: :-),'y'))
+      expect(dummy_class.conventionalise_plus_minus(exp)).to eq sbt(add('x',mtp(frac(2,3),'y')),mtp(frac(4,5),'y'))
+    end
   end
 
   describe '#conventionalise_one_times' do
