@@ -326,6 +326,11 @@ feature '#latex' do
       exp = add(mtp(1,pow('x',2)),mtp(-3,'x'),-4)
       expect(exp.latex).to eq "x^2-3x-4"
     end
+
+    scenario '' do
+      exp = add(mtp(-1,'x'),-2)
+      expect(exp.latex).to eq "-x-2"
+    end
   end
 end
 
