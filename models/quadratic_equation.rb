@@ -158,7 +158,6 @@ class QuadraticEquation
     latex_steps += answer
     latex_steps += '\end{align*}'
 
-
   end
 
 end
