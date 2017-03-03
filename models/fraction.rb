@@ -11,28 +11,40 @@ class Fraction
     @sign = sign.is_a?(String) ? sign : sign.to_s + '@'
   end
 
-  def ==(fraction)
-    return false unless same_class?(fraction)
+  def ==(frc)
+    return false unless same_class?(frc)
 
-    self.evaluate_numeral == fraction.evaluate_numeral
+    self.evaluate_numeral == frc.evaluate_numeral
   end
 
-  def <(fraction)
-    return false unless same_class?(fraction)
-
-    self.evaluate_numeral < fraction.evaluate_numeral
+  def <(numeral)
+    return false unless numerical?(numeral)
+    if numeral.is_a?(fraction)
+      evaluate_numeral < numeral.evaluate_numeral
+    else
+      evaluate_numeral < numeral
+    end
   end
 
-  def >(fraction)
-    return false unless same_class?(fraction)
-
-    self.evaluate_numeral > fraction.evaluate_numeral
+  def >(numeral)
+    return false unless numerical?(numeral)
+    if numeral.is_a?(fraction)
+      evaluate_numeral > numeral.evaluate_numeral
+    else
+      evaluate_numeral > numeral
+    end
   end
 
-  def <=(fraction)
-    return false unless same_class?(fraction)
+  # def >(frc)
+  #   return false unless same_class?(frc)
+  #
+  #   self.evaluate_numeral > frc.evaluate_numeral
+  # end
 
-    self.evaluate_numeral <= fraction.evaluate_numeral
+  def <=(frc)
+    return false unless same_class?(frc)
+
+    self.evaluate_numeral <= frc.evaluate_numeral
   end
 
   def simplify
