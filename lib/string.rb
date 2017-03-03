@@ -105,6 +105,13 @@ class String
     if structure_str == '-'
       return -1
     end
+
+    if structure_str._outer_func_is_eqn?
+      args = structure_str._eqn_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return eqn(object_args[0],object_args[1])
+    end
+
   end
 
   def _add_args(original_string)
@@ -163,8 +170,16 @@ class String
     args
   end
 
+  def _eqn_args(original_string)
+    equal_i = original_string.index('=')
+    args = []
+    args << original_string.slice(0..equal_i-1)
+    args << original_string.slice(equal_i+1..-1)
+    args
+  end
+
   def _outer_func_is_add?
-    return false if include?('+') == false
+    return false if include?('+') == false || include?('=')
     for i in 1..(length-1)
       return false if self[-i] == '-' && self[-(i+1)] != '+'
       return true if self[-i] == '+'
@@ -173,7 +188,7 @@ class String
   end
 
   def _outer_func_is_sbt?
-    return false if include?('-') == false
+    return false if include?('-') == false || include?('=')
     for i in 1..(length-1)
       return true if self[-i] == '-' && self[-(i+1)] != '+'
     end
@@ -182,12 +197,13 @@ class String
 
   def _outer_func_is_mtp?
     return false if self == '-'
-    return false if self[1..(length-1)] =~ /\+|\-/
+    return false if self[1..(length-1)] =~ /\+|\-|\=/
     return false if split_mtp_args(dup).length == 1
     return true
   end
 
   def _outer_func_is_div?
+    return false if self =~ /\=/
     return false if self[1..(length-1)] =~ /\+|\-/
     return false if split_mtp_args(dup).length > 1
     return true if self =~ /^\\frac/
@@ -195,10 +211,15 @@ class String
   end
 
   def _outer_func_is_pow?
+    return false if self =~ /\=/
     return false if self[1..(length-1)] =~ /\+|\-/
     return false if split_mtp_args(dup).length > 1
     return true if self =~ /\^/
     return false
+  end
+
+  def _outer_func_is_eqn?
+    !!(self =~ /\=/)
   end
 
   def _is_numeral?
