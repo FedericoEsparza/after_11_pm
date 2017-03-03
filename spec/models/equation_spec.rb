@@ -210,7 +210,8 @@ describe Equation do
     it 'latexes (x+2)^2= -x-2' do
       eqn = eqn(pow(add('x',2),2),add(mtp(-1,'x'),-2))
       result = eqn.latex_quad_solution
-      expect(result).to eq "\\begin{align*}\n    \\left(x+2\\right)^2&=-1x-2&\\\\[5pt]\n      \\left(x+2\\right)\\left(x+2\\right)&=-1x-2&\\\\[5pt]\n      xx+x2+2x+2\\times2&=-1x-2&\\\\[5pt]\n      x^1x^1+x2+2x+4&=-1x-2&\\\\[5pt]\n      x^{1+1}+x2+2x+4&=-1x-2&\\\\[5pt]\n      x^2+x2+2x+4&=-1x-2&\\\\[5pt]\n      x^2+2x+2x+4&=-1x-2&\\\\[5pt]\n      x^2+4x+4&=-1x-2&\\\\[5pt]\n      x^2+4x+4-\\left(-1x+-2\\right)&=0&\\\\[5pt]\n      x^2+5x+6&=0&\\\\[5pt]\n      0&=x^2+5x+6& && &P=6 \\hspace{30pt}S=5&\\\\[5pt]\n    0&=\\left(x+2\\right)\\left(x+3\\right)& && &\\left(2,\\,\\,3\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-2 ,\\,\\, -3\\\\[5pt]\n    \\end{align*}"
+
+      expect(result).to eq "\\begin{align*}\n    \\left(x+2\\right)^2&=-x-2&\\\\[5pt]\n      \\left(x+2\\right)\\left(x+2\\right)&=-x-2&\\\\[5pt]\n      xx+x2+2x+2\\times2&=x-2&\\\\[5pt]\n      x^1x^1+x2+2x+4&=x-2&\\\\[5pt]\n      x^{1+1}+x2+2x+4&=x-2&\\\\[5pt]\n      x^2+x2+2x+4&=x-2&\\\\[5pt]\n      x^2+2x+2x+4&=x-2&\\\\[5pt]\n      x^2+4x+4&=x-2&\\\\[5pt]\n      x^2+4x+4-\\left(-1x+-2\\right)&=0&\\\\[5pt]\n      x^2+5x+6&=0&\\\\[5pt]\n      0&=x^2+5x+6& && &P=6 \\hspace{30pt}S=5&\\\\[5pt]\n    0&=\\left(x+2\\right)\\left(x+3\\right)& && &\\left(2,\\,\\,3\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-2 ,\\,\\, -3\\\\[5pt]\n    \\end{align*}"
 
     end
 
