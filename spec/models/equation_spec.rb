@@ -151,12 +151,34 @@ describe Equation do
   #   end
   # end
 
-  describe '#solve_quad_eqn' do
-    it 'something' do
-      equa = eqn(pow(add('x',2),2),add('x',-2))
-      p equa.rs
-      result = equa.solve_quad_eqn
-      p result
+  describe '#expand_quad_eqn' do
+    it 'expands (x+2)^2= x-2 ' do
+      eqn = eqn(pow(add('x',2),2),add('x',-2))
+      result = eqn.expand_quad_eqn
+
+      # result.each_with_index do |a,i|
+      #   string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
+      #   puts string
+      # end
+
+      expect(result[0]).to eq eqn('(x+2)^2'.objectify,'x-2'.objectify)
+      expect(result[1]).to eq eqn('(x+2)(x+2)'.objectify,'x-2'.objectify)
+      expect(result[2]).to eq eqn('xx+x2+2x+2\times2'.objectify,'x-2'.objectify)
+      expect(result[3]).to eq eqn('x^1x^1+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[4]).to eq eqn('x^{1+1}+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[5]).to eq eqn('x^2+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[6]).to eq eqn('x^2+2x+2x+4'.objectify,'x-2'.objectify)
+      expect(result[7]).to eq eqn('x^2+4x+4'.objectify,'x-2'.objectify)
+
+
+    end
+  end
+
+  describe '#simplify_quad_eqn' do
+    it 'simplifies x^2+4x+4=x-2' do
+      eqn = eqn('x^2+4x+4'.objectify,'x-2'.objectify)
+      result = eqn.simplify_quad_eqn
+
     end
   end
 

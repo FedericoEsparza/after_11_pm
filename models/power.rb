@@ -81,7 +81,21 @@ class Power
   end
 
   def expand
-    [self]
+    if index.is_a?(integer) && index >= 0 && !(base.is_a?(string))
+      if index == 0
+        return 1
+      else
+        i = index
+        factors = []
+        while i > 0
+          factors << base
+          i = i-1
+        end
+        mtp(factors).expand
+      end
+    else
+      [self]
+    end
   end
 
 

@@ -40,10 +40,25 @@ class Equation
     curr_steps
   end
 
-  def solve_quad_eqn
-    self.rs = rs.expand
-    self.ls = ls.expand
-    self
+  def expand_quad_eqn
+    right_steps = rs.expand
+    left_steps = ls.expand
+
+    steps = [left_steps,right_steps].equalise_array_lengths.transpose
+    curr_steps = [self.copy]
+    steps.each{|step| curr_steps << eqn(step[0],step[1])}
+    curr_steps
+  end
+
+#for now, birng everything to the LHS
+  def simplify_quad_eqn
+    rhs = rs
+    lhs = ls
+
+    lhs = add(lhs,mtp(-1,rhs)).flatit
+    rhs = 0
+    steps = [eqn(lhs,rhs)]
+    # steps << [eqn(lhs.simplify_add_m_forms,rhs)]
   end
 
   def reverse_last_step(curr_steps)

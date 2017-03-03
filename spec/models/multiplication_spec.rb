@@ -720,7 +720,24 @@ describe Multiplication do
 
     end
 
-    # it 'expands ()'
+    it 'expands (x+2)^2' do
+      exp = '(x+2)^2'.objectify
+      result = exp.expand
+
+      # result.each_with_index do |a,i|
+      #   string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
+      #   puts string
+      # end
+
+      expect(result[0]).to eq '(x+2)(x+2)'.objectify
+      expect(result[1]).to eq 'xx+x2+2x+2\times2'.objectify
+      expect(result[2]).to eq 'x^1x^1+x2+2x+4'.objectify
+      expect(result[3]).to eq 'x^{1+1}+x2+2x+4'.objectify
+      expect(result[4]).to eq 'x^2+x2+2x+4'.objectify
+      expect(result[5]).to eq 'x^2+2x+2x+4'.objectify
+      expect(result[6]).to eq 'x^2+4x+4'.objectify
+
+    end
 
   end
 
