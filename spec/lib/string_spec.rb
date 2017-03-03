@@ -215,6 +215,22 @@ describe String do
     it 'x+-3' do
       expect('x-3'.objectify).to eq add('x',-3)
     end
+
+    context 'equation' do
+      it 'x+3=2' do
+        expect('x+3=2'.objectify).to eq eqn(add('x',3),2)
+      end
+
+      it 'x-3=2' do
+        expect('x-3=2'.objectify).to eq eqn(add('x',-3),2)
+      end
+
+      it '3x=2' do
+        expect('3x=2'.objectify).to eq eqn(mtp(3,'x'),2)
+      end
+    end
+
+
   end
 
   xdescribe 'objectify and olatex back' do
