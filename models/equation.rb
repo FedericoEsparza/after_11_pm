@@ -40,6 +40,10 @@ class Equation
     curr_steps
   end
 
+  def solve_one_quad_eqn
+    
+  end
+
   def reverse_last_step(curr_steps)
     new_sides = ls.reverse_step(rs)
     self.ls = new_sides[:ls]
