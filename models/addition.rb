@@ -234,4 +234,47 @@ class Addition < Expression
     result = add(new_args)
   end
 
+  def standardize_add_m_form
+    new_args = []
+    args.each do |m|
+      if m.is_a?(multiplication)
+        new_args << m
+      else
+        new_args << mtp(m)
+      end
+    end
+    add(new_args)
+  end
+
+  def get_quad
+    eqn = self.copy
+
+    square = 0
+    lin = 0
+    const = 0
+
+    eqn.args.each do |a|
+      if a.is_a?(multiplication)
+        coef = a.args.first
+        type = a.args.last
+        if type.is_a?(power)
+          square = coef
+        elsif type.is_a?(string)
+          lin = coef
+        else
+          const = coef
+        end
+      elsif a.is_a?(power)
+        square =1
+      elsif a.is_a?(string)
+        lin =1
+      else
+        const = a
+      end
+    end
+
+    quadractic = quad(square,lin,const,'x')
+    quadractic
+  end
+
 end

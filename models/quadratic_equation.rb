@@ -46,9 +46,11 @@ class QuadraticEquation
 
   def latex_method
     method = get_method
-    result = 'P=' + method[:Product][0].latex +
-    + '=' + method[:Product][1].latex +
-    ' \hspace{30pt}S=' + method[:Sum].latex
+    result = 'P=' + method[:Product][0].latex
+    if quad_term != 1
+      result += '=' + method[:Product][1].latex
+    end
+    result += ' \hspace{30pt}S=' + method[:Sum].latex
     result
   end
 

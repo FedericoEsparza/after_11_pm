@@ -64,6 +64,12 @@ describe Addition do
       result = addition.simplify_add_m_forms
       expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
     end
+
+    it '#simplifies x^2 + 4x + 4 + (x-2)' do
+      addition = 'x^2 + 4x + 4 + x-2'.objectify.standardize_add_m_form
+      result = addition.simplify_add_m_forms.flatit
+      expect(result).to eq 'x^2 + 5x + 2'.objectify
+    end
   end
 
   describe '#simplify_brackets' do

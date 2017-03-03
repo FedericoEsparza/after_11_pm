@@ -179,6 +179,53 @@ describe Equation do
       eqn = eqn('x^2+4x+4'.objectify,'x-2'.objectify)
       result = eqn.simplify_quad_eqn
 
+      expect(result).to eq [
+        'x^2+4x+4-(x+-2)=0'.objectify,
+        'x^2+3x+6=0'.objectify
+        ]
+
+    end
+  end
+
+  describe '#solve_quad_eqn' do
+    it 'solves (x+2)^2= x-2' do
+      eqn = eqn(pow(add('x',2),2),add('x',-2))
+      result = eqn.solve_quad_eqn
+
+      expect(result[0]).to eq eqn('(x+2)^2'.objectify,'x-2'.objectify)
+      expect(result[1]).to eq eqn('(x+2)(x+2)'.objectify,'x-2'.objectify)
+      expect(result[2]).to eq eqn('xx+x2+2x+2\times2'.objectify,'x-2'.objectify)
+      expect(result[3]).to eq eqn('x^1x^1+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[4]).to eq eqn('x^{1+1}+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[5]).to eq eqn('x^2+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[6]).to eq eqn('x^2+2x+2x+4'.objectify,'x-2'.objectify)
+      expect(result[7]).to eq eqn('x^2+4x+4'.objectify,'x-2'.objectify)
+      expect(result[8]).to eq 'x^2+4x+4-(x-2)=0'.objectify
+      expect(result[9]).to eq 'x^2+3x+6=0'.objectify
+
+    end
+  end
+
+  describe '#latex_quad_solution' do
+    it 'latexes (x+2)^2= -x-2' do
+      eqn = eqn(pow(add('x',2),2),add(mtp(-1,'x'),-2))
+      result = eqn.latex_quad_solution
+      puts result
+      p '============='
+    end
+
+    it 'latexes (x-4)(x+2)=2x+4' do
+      eqn = '(x-4)(x+2)=2x+4'.objectify
+      result = eqn.latex_quad_solution
+      puts result
+      p '==========='
+    end
+
+    it 'latexes (x+1)(2x-4)=2x-6' do
+      eqn = '(x+1)(2x-4)=2x-6'.objectify
+      result = eqn.latex_quad_solution
+      puts result
+      p '==============='
     end
   end
 

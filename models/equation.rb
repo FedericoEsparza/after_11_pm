@@ -58,8 +58,42 @@ class Equation
     lhs = add(lhs,mtp(-1,rhs)).flatit
     rhs = 0
     steps = [eqn(lhs,rhs)]
-    # steps << [eqn(lhs.simplify_add_m_forms,rhs)]
+    steps << eqn(lhs.expand.last.flatit.standardize_add_m_form.simplify_add_m_forms.flatit,rhs)
+    steps
   end
+
+  def solve_quad_eqn
+    copy = self.copy
+
+    curr_steps = copy.expand_quad_eqn
+    next_steps = curr_steps.last.simplify_quad_eqn
+    curr_steps += next_steps
+
+    eqn = curr_steps.last.ls
+
+
+    curr_steps
+  end
+
+  def latex_quad_solution
+    copy =self.copy
+    result = '\begin{align*}
+    '
+    steps = copy.solve_quad_eqn
+    latex_steps = steps.map{|a| a.latex}
+
+    latex_steps.each do |step|
+      result += step + '&\\\[5pt]
+      '
+    end
+
+    quadractic = steps.last.ls.get_quad
+    next_latex = quadractic.latex
+    next_latex.slice!'\\begin{align*}
+    '
+    result += next_latex
+  end
+
 
   def reverse_last_step(curr_steps)
     new_sides = ls.reverse_step(rs)
