@@ -40,8 +40,10 @@ class Equation
     curr_steps
   end
 
-  def solve_one_quad_eqn
-    
+  def solve_quad_eqn
+    self.rs = rs.expand
+    self.ls = ls.expand
+    self
   end
 
   def reverse_last_step(curr_steps)
