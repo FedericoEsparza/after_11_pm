@@ -196,10 +196,12 @@ class String
   end
 
   def _outer_func_is_mtp?
-    return false if self == '-'
-    return false if self[1..(length-1)] =~ /\+|\-|\=/
-    return false if split_mtp_args(dup).length == 1
-    return true
+    # return false if self == '-'
+    # return false if self[1..(length-1)] =~ /\+|\-|\=/
+    # return false if split_mtp_args(dup).length == 1
+    # return true
+    !((self == '-') || (self[1..(length-1)] =~ /\+|\-|\=/) ||
+      (split_mtp_args(dup).length == 1))
   end
 
   def _outer_func_is_div?
