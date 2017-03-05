@@ -210,10 +210,7 @@ class String
     # return false if split_mtp_args(dup).length > 1
     # return true if self =~ /^\\frac/
     # return false
-
-    return false if ((self =~ /\=/) || (self[1..(length-1)] =~ /\+|\-/) || (split_mtp_args(dup).length > 1))
-    return true if (self =~ /^\\frac/)
-    return false
+    !!((!(self =~ /\=/) && !(self[1..(length-1)] =~ /\+|\-/) && !(split_mtp_args(dup).length > 1)) && (self =~ /^\\frac/))
   end
 
   def _outer_func_is_pow?
