@@ -210,7 +210,28 @@ class String
     # return false if split_mtp_args(dup).length > 1
     # return true if self =~ /^\\frac/
     # return false
-    !!((!(self =~ /\=/) && !(self[1..(length-1)] =~ /\+|\-/) && !(split_mtp_args(dup).length > 1)) && (self =~ /^\\frac/))
+
+    # !!((!(self =~ /\=/) && !(self[1..(length-1)] =~ /\+|\-/) && !(split_mtp_args(dup).length > 1)) && (self =~ /^\\frac/))
+
+    __not_eqn? && __not_plus_or_minus? &&
+     __not_more_than_one_mtp_args? && __starts_with_frac?
+
+  end
+
+  def __not_eqn?
+    !(self =~ /\=/)
+  end
+
+  def __not_plus_or_minus?
+    !(self[1..(length-1)] =~ /\+|\-/)
+  end
+
+  def __not_more_than_one_mtp_args?
+    !(split_mtp_args(dup).length > 1)
+  end
+
+  def __starts_with_frac?
+    !!(self =~ /^\\frac/)
   end
 
   def _outer_func_is_pow?
