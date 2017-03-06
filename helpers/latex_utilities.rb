@@ -58,7 +58,6 @@ module LatexUtilities
         end
       end
 
-
       if exp.args[-1].is_a?(multiplication) && numerical?(exp.args[-1].args[0]) && exp.args[-1].args[0] < 0
         sub_end = exp.args[-1].copy
         sub_end.args[0] = sub_end.args[0].abs
@@ -79,8 +78,6 @@ module LatexUtilities
         exp.args[0] = sbt(nil,exp.args[0].abs)
       end
 
-      # puts '============'
-
       for i in 2..(exp.args.length-1)
         if numerical?(exp.args[-i]) && exp.args[-i] < 0
           minus_arg_i = exp.args.length  - i
@@ -99,6 +96,10 @@ module LatexUtilities
         end
       end
       return exp
+    end
+
+    if exp.is_a?(cosine)
+      return cos(conventionalise(exp.args[0]))
     end
 
     if exp.is_a?(subtraction)

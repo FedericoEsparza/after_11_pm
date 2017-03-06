@@ -42,4 +42,8 @@ module ClassName
   def cosine
     Cosine
   end
+
+  def tangent
+    Tangent
+  end
 end
