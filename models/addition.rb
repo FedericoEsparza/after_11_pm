@@ -115,14 +115,29 @@ class Addition < Expression
   def reverse_step(rs)
     result = {}
     if args[0].is_a?(integer)
-      result[:ls] = args[1]
-      result[:rs] = sbt(rs,args[0])
-      return result
+
+      if args[1].is_a?(multiplication) && args[1].args[0] == -1
+        result[:ls] = args[1].args[1]
+        result[:rs] = sbt(args[0],rs)
+        return result
+
+      else
+        result[:ls] = args[1]
+        result[:rs] = sbt(rs,args[0])
+        return result
+
+      end
     end
     if args[1].is_a?(integer)
-      result[:ls] = args[0]
-      result[:rs] = sbt(rs,args[1])
-      return result
+      if args[1] > 0
+        result[:ls] = args[0]
+        result[:rs] = sbt(rs,args[1])
+        return result
+      else
+        result[:ls] = args[0]
+        result[:rs] = add(rs,args[1].abs)
+        return result
+      end
     end
   end
 

@@ -46,6 +46,17 @@ describe LatexUtilities do
     end
 
     it '' do
+      exp = add(["x"])
+      expect(dummy_class.conventionalise_plus_minus(exp)).to eq add('x')
+    end
+
+    it '' do
+      exp = add('x',mtp(-3,'y'),mtp(2,'y'))
+      result = dummy_class.conventionalise_plus_minus(exp)
+      expect(result).to eq add(sbt('x',mtp(3,'y')),mtp(2,'y'))
+    end
+
+    it '' do
       exp = mtp(2,'x',add(3,4,-5))
       expect(dummy_class.conventionalise_plus_minus(exp)).to eq mtp(2,'x',sbt(add(3,4),5))
     end
@@ -153,5 +164,26 @@ describe LatexUtilities do
       exp = mtp(-1,'x')
       expect(dummy_class.conventionalise(exp)).to eq sbt(nil,mtp('x'))
     end
+
+    it '' do
+      exp = cos(mtp(-1,'x'))
+      expect(dummy_class.conventionalise(exp)).to eq cos(sbt(nil,mtp('x')))
+    end
+
+    it '' do
+      exp = add(9,div(36,add(mtp(7,'x'),-2)))
+      expect(dummy_class.conventionalise(exp)).to eq add(9,div(36,sbt(mtp(7,'x'),2)))
+    end
+
+    it '' do
+      exp = add(mtp(2,pow('x',2)),mtp(-3,'x'),-4)
+      expect(dummy_class.conventionalise(exp)).to eq sbt(sbt(mtp(2,pow('x',2)),mtp(3,'x')),4)
+    end
+
+    it '' do
+      exp = add(mtp(2,pow('x',2)),mtp(-9,'x'),7)
+      expect(dummy_class.conventionalise(exp)).to eq add(sbt(mtp(2,pow('x',2)),mtp(9,'x')),7)
+    end
+
   end
 end

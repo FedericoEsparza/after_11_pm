@@ -59,6 +59,16 @@ describe Equation do
         ]
       end
 
+      it 'reverse conventionalised right subtraction' do
+        equation = eqn(add('x',-3),5)
+        result = equation.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add('x',-3),5),
+          eqn('x',add(5,3)),
+          eqn('x',8)
+        ]
+      end
+
       it 'reverses one step left subtraction' do
         eqn = eqn(sbt(5,'x'),3)
         result = eqn.solve_one_var_eqn
@@ -66,6 +76,16 @@ describe Equation do
           eqn(sbt(5,'x'),3),
           eqn('x',sbt(5,3)),
           eqn('x',2)
+        ]
+      end
+
+      it 'reverses conventionalised one step left subtraction' do
+        equation = eqn(add(9,mtp(-1,'x')),3)
+        result = equation.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add(9,mtp(-1,'x')),3),
+          eqn('x',sbt(9,3)),
+          eqn('x',6)
         ]
       end
 
@@ -142,6 +162,22 @@ describe Equation do
           eqn(div(36,sbt(mtp(7,'x'),2)),3),
           eqn(sbt(mtp(7,'x'),2),div(36,3)),
           eqn(sbt(mtp(7,'x'),2),12),
+          eqn(mtp(7,'x'),add(12,2)),
+          eqn(mtp(7,'x'),14),
+          eqn('x',div(14,7)),
+          eqn('x',2)
+        ]
+      end
+
+      it 'solves conventionalised 9 + 36 / (7x - 2) = 12' do
+        eqn = eqn(add(9,div(36,add(mtp(7,'x'),-2))),12)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add(9,div(36,add(mtp(7,'x'),-2))),12),
+          eqn(div(36,add(mtp(7,'x'),-2)),sbt(12,9)),
+          eqn(div(36,add(mtp(7,'x'),-2)),3),
+          eqn(add(mtp(7,'x'),-2),div(36,3)),
+          eqn(add(mtp(7,'x'),-2),12),
           eqn(mtp(7,'x'),add(12,2)),
           eqn(mtp(7,'x'),14),
           eqn('x',div(14,7)),
