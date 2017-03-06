@@ -168,6 +168,22 @@ describe Equation do
           eqn('x',2)
         ]
       end
+
+      it 'solves conventionalised 9 + 36 / (7x - 2) = 12' do
+        eqn = eqn(add(9,div(36,add(mtp(7,'x'),-2))),12)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add(9,div(36,add(mtp(7,'x'),-2))),12),
+          eqn(div(36,add(mtp(7,'x'),-2)),sbt(12,9)),
+          eqn(div(36,add(mtp(7,'x'),-2)),3),
+          eqn(add(mtp(7,'x'),-2),div(36,3)),
+          eqn(add(mtp(7,'x'),-2),12),
+          eqn(mtp(7,'x'),add(12,2)),
+          eqn(mtp(7,'x'),14),
+          eqn('x',div(14,7)),
+          eqn('x',2)
+        ]
+      end
     end
   end
 end

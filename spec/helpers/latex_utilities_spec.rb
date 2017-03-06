@@ -158,5 +158,11 @@ describe LatexUtilities do
       exp = cos(mtp(-1,'x'))
       expect(dummy_class.conventionalise(exp)).to eq cos(sbt(nil,mtp('x')))
     end
+
+    it '' do
+      exp = add(9,div(36,add(mtp(7,'x'),-2)))
+      expect(dummy_class.conventionalise(exp)).to eq cos(sbt(nil,mtp('x')))
+    end
+
   end
 end
