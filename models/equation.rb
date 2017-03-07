@@ -9,17 +9,18 @@ class Equation
   end
 
   def copy
-    if ls.is_a?(string) || numerical?(ls)
-      left_side = ls
-    else
-      left_side = ls.copy
-    end
-    if rs.is_a?(string) || numerical?(rs)
-      right_side = rs
-    else
-      right_side = rs.copy
-    end
-    eqn(left_side,right_side)
+    DeepClone.clone self
+    # if ls.is_a?(string) || numerical?(ls)
+    #   left_side = ls
+    # else
+    #   left_side = ls.copy
+    # end
+    # if rs.is_a?(string) || numerical?(rs)
+    #   right_side = rs
+    # else
+    #   right_side = rs.copy
+    # end
+    # eqn(left_side,right_side)
   end
 
   def ==(eqn)
@@ -40,6 +41,7 @@ class Equation
   end
 
   def reverse_last_step(curr_steps)
+    p ls.reverse_step(rs)
     new_sides = ls.reverse_step(rs)
     self.ls = new_sides[:ls]
     self.rs = new_sides[:rs]

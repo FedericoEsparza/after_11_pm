@@ -37,13 +37,16 @@ describe SineEquationGenerator do
   end
 
   context '#select_variables' do
-    
+
   end
 
   context 'generates sine equation in the form of sin(ax+b) = c' do
     it "equation srand 100" do
       srand(100)
-
+      exp = described_class.new
+      gen_eq = exp.generate_equation
+      puts gen_eq.latex_solution
+      # expect(gen_eq.latex_solution).to eq 1
     end
   end
 end

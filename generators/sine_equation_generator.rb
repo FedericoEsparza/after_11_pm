@@ -15,11 +15,26 @@ class SineEquationGenerator
 
   def generate_equation
     select_variables
-    sin_eqn(add(mtp(a, variable), b), rs)
+
+    evals  = evaluate_a_b
+    a_var = evals[:a]
+    rs_var = evals[:rs]
+
+    if b == 0
+      ls = mtp(a_var, variable)
+      ls = variable unless a_var != 0
+    elsif b.to_s =~ /-/
+      ls = sbt(mtp(a_var, variable), b)
+      ls = sbt(variable, b) unless a_var != 0
+    else
+      ls = add(mtp(a_var, variable), b)
+      ls = add(variable, b) unless a_var != 0
+    end
+
+    sin_eqn(ls, rs_var)
   end
 
   def select_variables
-    p 'Running'
     select_a
     select_b
     select_rs

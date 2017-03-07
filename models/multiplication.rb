@@ -30,14 +30,15 @@ class Multiplication
   end
 
   def copy
-    new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || numerical?(e)
-        r << e
-      else
-        r << e.copy
-      end
-    end
-    mtp(new_args)
+    DeepClone.clone self
+    # new_args = args.inject([]) do |r,e|
+    #   if e.is_a?(string) || numerical?(e)
+    #     r << e
+    #   else
+    #     r << e.copy
+    #   end
+    # end
+    # mtp(new_args)
   end
 
   def convert_to_power
