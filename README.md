@@ -1,9 +1,8 @@
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
+\\[ x = {-b \pm \sqrt{b^2-4ac} \over 2a} \\]
 
+[TOC]
 
 # Question Generators and Solution Engines for OneMaths
 
