@@ -38,6 +38,10 @@ class String
     [self]
   end
 
+  def find_denoms
+    []
+  end
+
   def objectify
     original_string = self.dup
     original_string.gsub!(' ','')

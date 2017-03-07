@@ -98,5 +98,14 @@ class Power
     end
   end
 
+  def find_denoms
+    denoms = base.find_denoms
+    if denoms.length > 0
+      return pow(denoms, index)
+    else
+      return []
+    end
+  end
+
 
 end

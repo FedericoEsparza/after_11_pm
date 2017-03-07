@@ -35,5 +35,8 @@ class Fixnum
   #   end
   # end
 
+  def find_denoms
+    []
+  end
 
 end

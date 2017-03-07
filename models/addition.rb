@@ -277,4 +277,13 @@ class Addition < Expression
     quadractic
   end
 
+  def find_denoms
+    denoms = []
+    args.each do |a|
+      denoms += a.find_denoms
+    end
+    denoms
+  end
+
+
 end

@@ -613,4 +613,46 @@ class Multiplication
     result = mtp(new_args)
   end
 
+  def find_factors
+    factors = []
+    args.each do |factor|
+      if factor.is_a?(multiplication)
+        factors += factor.find_factors
+      else
+        factors << factor
+      end
+    end
+    factors
+  end
+
+  def top_heavy
+    num_args = []
+    denom_args = []
+    args.each do |factor|
+      if factor.is_a?(fraction)
+        num_args << factor.numerator
+        denom_args << factor.denominator
+      else
+        num_args << factor
+      end
+    end
+    if denom_args.length == 0
+      return self
+    elsif denom_args.length == 1
+      frac(mtp(num_args),denom_args.first)
+    else
+      frac(mtp(num_args),mtp(denom_args))
+    end
+  end
+
+  def find_denoms
+    denoms = []
+    args.each{|a| denoms += a.find_denoms}
+    denoms
+  end
+
+  def elim_common_factors
+    self
+  end
+
 end

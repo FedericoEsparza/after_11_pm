@@ -761,4 +761,12 @@ describe Multiplication do
     end
   end
 
+  describe '#top_heavy' do
+    it 'top heavies 5xy(3/x+1)' do
+      exp = mtp(5,'x','y',frac(3,add('x',1)))
+      result = exp.top_heavy
+      expect(result).to eq frac(mtp(5,'x','y',3),add('x',1))
+    end
+  end
+
 end

@@ -14,7 +14,10 @@ class Fraction
   def ==(frc)
     return false unless same_class?(frc)
 
-    self.evaluate_numeral == frc.evaluate_numeral
+    # self.evaluate_numeral == frc.evaluate_numeral
+
+    (numerator == frc.numerator && denominator == frc.denominator) ||
+    (numerator.is_a?(Numeric) && denominator.is_a?(Numeric) && self.evaluate_numeral == frc.evaluate_numeral)
   end
 
   def abs
@@ -78,6 +81,77 @@ class Fraction
     end
   end
 
+  def split_num
+    if numerator.is_a?(Addition)
+      new_args = []
+      new_sign = sign
+      numerator.args.each do |num|
+        new_args << frac(num,denominator,sign: sign)
+      end
+      return add(new_args)
+    else
+      self
+    end
+  end
+
+#curently primitive
+  def elim_common_factors
+    if numerator.is_a?(multiplication)
+      num_factors = numerator.args
+      num = numerator
+    else
+      num_factors = [numerator]
+      num = mtp(numerator)
+    end
+
+    if denominator.is_a?(multiplication)
+      denom_factors = denominator.args
+      denom = denominator
+    else
+      denom_factors = [denominator]
+      denom = mtp(denominator)
+    end
+
+    i = 0
+    while i < denom_factors.length
+      factor = denom_factors[i]
+      if num_factors.count(factor) > 0
+        denom_factors.delete_at(denom_factors.rindex(factor))
+        num_factors.delete_at(num_factors.rindex(factor))
+      else
+        i += 1
+      end
+    end
+
+    if denom_factors.length == 0
+      denom = 1
+    elsif denom_factors.length == 1
+      denom = denom_factors.first
+    else
+      denom = mtp(denom_factors)
+    end
+
+    if num_factors.length == 0
+      num = 1
+    elsif num_factors.length == 1
+      num = num_factors.first
+    else
+      num = mtp(num_factors)
+    end
+
+    if denom == 1
+      if sign == "+@"
+        num
+      else
+        mtp(-1,num)
+      end
+    else
+      frac(num,denom, sign: sign)
+    end
+
+  end
+
+
   def check_sign
     if (numerator<=>0)*(denominator<=>0) < 0
       if sign == "+@"
@@ -128,6 +202,10 @@ class Fraction
     bottom = denominator.respond_to?(:evaluate_numeral) ? denominator.evaluate_numeral : denominator
 
     (top.to_f / bottom).send(sign)
+  end
+
+  def find_denoms
+    return [denominator]
   end
 
   def base_latex
