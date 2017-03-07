@@ -4,7 +4,7 @@ class SineEquationGenerator
   B_VALUES = (-100..100).to_a
   SINGS = ['-@', '+@']
 
-  attr_reader :a, :b, :rs, :variable
+  attr_reader :a, :b, :rs, :variable, :limits
 
   def initialize(variable: 'x', limits: [0, 360])
     @a = { value: nil, sign: nil }
@@ -46,7 +46,7 @@ class SineEquationGenerator
       ls = sbt(ax, b.abs) if b.negative? && b != 0
     end
 
-    sin_eqn(ls, rs_var)
+    sin_eqn(ls, rs_var, ans_min: limits[0], ans_max: limits[1])
   end
 
   def select_variables
