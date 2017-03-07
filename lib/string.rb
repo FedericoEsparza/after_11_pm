@@ -61,7 +61,7 @@ class String
 
   def original_objectify
     original_string = self.dup
-    original_string.gsub!(' ','')
+    # original_string.gsub!(' ','') #add an intelligent version of this later
     structure_str = empty_brackets(original_string.dup)
 
     if structure_str._outer_func_is_add?
@@ -111,6 +111,13 @@ class String
       object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return eqn(object_args[0],object_args[1])
     end
+
+    if structure_str._outer_func_is_sin?
+      args = structure_str._sin_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return sin(object_args)
+    end
+
   end
 
   def _add_args(original_string)
@@ -195,12 +202,13 @@ class String
   end
 
   def _outer_func_is_mtp?
-    # return false if self == '-'
-    # return false if self[1..(length-1)] =~ /\+|\-|\=/
-    # return false if split_mtp_args(dup).length == 1
-    # return true
-    !((self == '-') || (self[1..(length-1)] =~ /\+|\-|\=/) ||
-      (split_mtp_args(dup).length == 1))
+    return false if self == '-'
+    return false if self[1..(length-1)] =~ /\+|\-|\=/
+    return false if split_mtp_args(dup).length == 1
+    return false if self =~ /^\\sin/
+    return true
+    # !((self == '-') || (self[1..(length-1)] =~ /\+|\-|\=/) ||
+      # (split_mtp_args(dup).length == 1))
   end
 
   def _outer_func_is_div?
@@ -239,6 +247,24 @@ class String
     return false if split_mtp_args(dup).length > 1
     return true if self =~ /\^/
     return false
+  end
+
+  def _sin_args(original_string)
+    original_string.slice!(0..3)
+    original_string.gsub!(' ','')
+    args = [original_string]
+    remove_enclosing_bracks(args)
+    args
+    # top_indices = matching_brackets(original_string,'{','}')
+    # numerator = original_string.slice(top_indices[0]+1..top_indices[1]-1)
+    # original_string.slice!(0..top_indices[1])
+    # bot_indices = matching_brackets(original_string,'{','}')
+    # denominator = original_string.slice(bot_indices[0]+1..bot_indices[1]-1)
+    # [numerator,denominator]
+  end
+
+  def _outer_func_is_sin?
+    !!(self =~ /^\\sin/)
   end
 
   def _outer_func_is_eqn?

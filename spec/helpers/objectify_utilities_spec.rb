@@ -149,6 +149,11 @@ describe ObjectifyUtilities do
       str = '-\frac{$}{$}'
       expect(dummy_class.split_mtp_args(str)).to eq ['-','\frac{$}{$}']
     end
+
+    it '' do
+      str = '\sin x'
+      expect(dummy_class.split_mtp_args(str)).to eq ['\sin x']
+    end
   end
 
   # describe '#reenter_str_content' do

@@ -230,6 +230,11 @@ describe String do
       end
     end
 
+    context 'sine' do
+      it '\sin x' do
+        expect('\sin x'.objectify).to eq sin('x')
+      end
+    end
 
   end
 
@@ -424,6 +429,12 @@ describe String do
 
     it '\ to false' do
       expect('\\'._is_string_var?).to be false
+    end
+  end
+
+  describe '#_outer_func_is_sin' do
+    it '' do
+      expect('\sin 5'._outer_func_is_sin?).to eq true
     end
   end
 end

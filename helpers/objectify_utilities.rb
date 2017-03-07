@@ -62,9 +62,16 @@ module ObjectifyUtilities
       _add_next_brac_arg(result_array,string_copy)
       _delete_next_times_arg(string_copy)
       _add_next_minus_one_arg(result_array,string_copy)
+      # _add_next_sine_arg(result_array,string_copy)
       i += 1
     end
     result_array
+  end
+
+  def _add_next_sine_arg(result_array,string_copy)
+    sin_reg = //
+    sliced = string_copy.slice!(sin_reg)
+    result_array << sliced unless sliced.nil?
   end
 
   def _add_next_minus_one_arg(result_array,string_copy)
