@@ -1,10 +1,6 @@
-# OneMaths
-
-[Current Beta Site](http://138.68.139.152/)
+# Question Generators and Solution Engines for OneMaths
 
 [One Maths Beta Site](https://postimg.org/image/es2tmx4rh/)
-
-# www.OneMaths.com Question Generators and Solution Engines
 
 This project aims to produce question generators to generator A-level mathematics questions in [MathJax](https://github.com/mathjax/MathJax) LaTeX format.  In addition, generators of each type of question will be accompanied by a solution engine, which will return a fully detailed solution in MathJax compatible LaTex, if a solution exists for the generated question.
 
