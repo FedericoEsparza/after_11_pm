@@ -1,9 +1,3 @@
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-
-\\[ x = {-b \pm \sqrt{b^2-4ac} \over 2a} \\]
-
-[TOC]
-
 # Question Generators and Solution Engines for OneMaths
 
 [One Maths Beta Site](https://postimg.org/image/es2tmx4rh/)
@@ -150,7 +144,7 @@ eq_solution = equation.latex_solution
 expect(eq_solution).to eq "\\begin{align*}\n &&  ".... #the entire latex is rendered below
 ```
 
-[Imgur](http://i.imgur.com/uPKlqYI.png)
+![Imgur](http://i.imgur.com/uPKlqYI.png)
 
 \begin{align*}
  &&  && \sin \left(2x-10\right)&=0.5 &&  && \\[10pt]
@@ -182,6 +176,8 @@ equation = QuadraticEquation.new(quad_term: 30, linear_term: -19, constant_term:
 solution_latex = equation.latex
 # solution_latex string is rendered below
 ```
+
+![Imgur](http://i.imgur.com/z52G9MJ.png)
 
 \begin{align*}
     0&=30x^2-19x-5& && &P=30\times-5=-150 \hspace{30pt}S=-19&\\[5pt]
