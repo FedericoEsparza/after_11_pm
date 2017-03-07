@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Division
   attr_accessor :args
@@ -60,8 +61,36 @@ class Division
     end
   end
 
-  def latex
-    '\displaystyle\frac{' + top.latex + '}{' + bot.latex + '}'
+  def base_latex
+    '\displaystyle\frac{' + top.base_latex + '}{' + bot.base_latex + '}'
+  end
+
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
+  end
+  # RECURSION
+  def includes?(object_class)
+    args.any? do |arg|
+      if arg.is_a?(Power)
+        arg.args.any? { |e| e.is_a?(object_class) }
+      elsif arg.is_a?(self.class)
+        arg.includes?(object_class)
+      else
+        arg.is_a?(object_class)
+      end
+    end
   end
 
 end

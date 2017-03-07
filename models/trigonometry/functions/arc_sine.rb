@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class ArcSine
   attr_accessor :args
@@ -35,7 +36,9 @@ class ArcSine
   end
 
   def evaluate_numeral
-    if value.is_a?(Hash)
+    if value.is_a?(Fraction)
+      var = value.evaluate_numeral
+    elsif value.is_a?(Hash)
       var = value[:value].send(value[:sign])
     else
       var = value
@@ -45,8 +48,8 @@ class ArcSine
     degree.round
   end
 
-  def latex
-    value_latex = value.latex
+  def base_latex
+    value_latex = value.base_latex
     '\arcsin ' + value_latex
   end
 end

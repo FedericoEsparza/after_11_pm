@@ -33,6 +33,7 @@ class CosineEquation
     set_1_steps = set_1_eqn.solve_one_var_eqn
     set_1_period = evaluate_period
 
+    # set_2_eqn = eqn(cos(sbt(nil,mtp(-1, ls))),rs)
     set_2_eqn = eqn(cos(mtp(-1, ls)),rs)
     set_2_steps = set_2_eqn.solve_one_var_eqn
     set_2_period = evaluate_period

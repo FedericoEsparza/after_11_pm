@@ -1,34 +1,49 @@
 class SineEquationGenerator
-  RS_VALUES = [0, frac(1, sqrt(2)), frac(1, 2), frac(sqrt(3), 2)]
-  A_VALUES = [frac(1, 3), frac(1, 2)] + (1..6).to_a
+  RS_VALUES = [frac(1, sqrt(2)), frac(1, 2), frac(sqrt(3), 2), 0]
+  A_VALUES = [0, frac(1, 3), frac(1, 2)] + (1..6).to_a
   B_VALUES = (-100..100).to_a
   SINGS = ['-@', '+@']
 
   attr_reader :a, :b, :rs, :variable
 
-  def initialize(variable: 'x')
+  def initialize(variable: 'x', limits: [0, 360])
     @a = { value: nil, sign: nil }
     @b = nil
     @rs = { value: nil, sign: nil }
     @variable = variable
+    @limits = limits
   end
 
   def generate_equation
     select_variables
+    compose_equation
+  end
 
-    evals  = evaluate_a_b
-    a_var = evals[:a]
-    rs_var = evals[:rs]
+  def compose_equation
+    evals  = evaluate_a_rs
+    ls = nil
 
-    if b == 0
-      ls = mtp(a_var, variable)
-      ls = variable unless a_var != 0
-    elsif b.to_s =~ /-/
-      ls = sbt(mtp(a_var, variable), b)
-      ls = sbt(variable, b) unless a_var != 0
+    rs_var =  if rs[:value].is_a?(Fraction)
+                rs[:value].sign = rs[:sign]
+                rs[:value]
+              else
+                rs[:value].send(rs[:sign])
+              end
+
+    if a[:value].is_a?(Fraction)
+      ax = div(variable, a[:value].denominator)
     else
-      ls = add(mtp(a_var, variable), b)
-      ls = add(variable, b) unless a_var != 0
+      ax = variable
+      ax = mtp(a[:value], variable) unless a[:value] == 0
+    end
+
+    if a[:sign] == '-@'
+      ls = ax
+      ls = sbt(b, ax) unless b == 0
+    else
+      ls = ax
+      ls = add(ax, b) unless b == 0
+      ls = sbt(ax, b.abs) if b.negative? && b != 0
     end
 
     sin_eqn(ls, rs_var)
@@ -51,7 +66,7 @@ class SineEquationGenerator
   end
 
   def select_b
-   @b = rand_b
+    @b = (@a[:sign] == '-@') ? rand_b.abs : rand_b
   end
 
   def select_rs
@@ -60,11 +75,11 @@ class SineEquationGenerator
   end
 
   def evaluate_numerals
-    evals  = evaluate_a_b
+    evals  = evaluate_a_rs
     a_var = evals[:a]
     rs_var = evals[:rs]
-
-    ((Math.asin(rs_var) - b) / a_var)
+    return 0.75 if a_var == 0 || b == 0
+    ((Math.asin(rs_var).degrees.round - b) / a_var)
   end
 
   private
@@ -86,10 +101,11 @@ class SineEquationGenerator
   end
 
   def rand_rs
-    RS_VALUES.sample
+    index = (0...RS_VALUES.length).to_a.sample
+    RS_VALUES[index]
   end
 
-  def evaluate_a_b
+  def evaluate_a_rs
     a_var = if a[:value].respond_to?(:evaluate_numeral)
               a[:value].evaluate_numeral.send(a[:sign])
             else

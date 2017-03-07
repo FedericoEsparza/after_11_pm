@@ -11,8 +11,8 @@ module ClassName
     Float
   end
 
-  def rational
-    Rational
+  def fraction
+    Fraction
   end
 
   def power
@@ -31,11 +31,19 @@ module ClassName
     Multiplication
   end
 
+  def division
+    Division
+  end
+
   def sine
     Sine
   end
 
   def cosine
     Cosine
+  end
+
+  def tangent
+    Tangent
   end
 end

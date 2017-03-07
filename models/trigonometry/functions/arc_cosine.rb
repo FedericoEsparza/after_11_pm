@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class ArcCosine
   attr_accessor :args
@@ -39,8 +40,8 @@ class ArcCosine
     (rad / (Math::PI) * 180).round
   end
 
-  def latex
-    value_latex = value.latex
+  def base_latex
+    value_latex = value.base_latex
     '\arccos ' + value_latex
   end
 end

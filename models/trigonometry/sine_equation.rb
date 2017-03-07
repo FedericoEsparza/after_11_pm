@@ -11,17 +11,18 @@ class SineEquation
   end
 
   def copy
-    if ls.is_a?(string) || ls.is_a?(integer)
-      left_side = ls
-    else
-      left_side = ls.copy
-    end
-    if rs.is_a?(string) || rs.is_a?(integer)
-      right_side = rs
-    else
-      right_side = rs.copy
-    end
-    sin_eqn(left_side,right_side,options)
+    DeepClone.clone self
+    # if ls.is_a?(string) || ls.is_a?(integer)
+    #   left_side = ls
+    # else
+    #   left_side = ls.copy
+    # end
+    # if rs.is_a?(string) || rs.is_a?(integer)
+    #   right_side = rs
+    # else
+    #   right_side = rs.copy
+    # end
+    # sin_eqn(left_side,right_side,options)
   end
 
   def ==(eqn)
@@ -31,12 +32,17 @@ class SineEquation
   def evaluate_period
     return 360 if ls.is_a?(String)
     scalar = nil
+
     if ls.is_a?(Multiplication) && ls.includes?(String)
       scalar = ls.fetch(object: :numeric)
     else
       ls.args.each do |obj|
         if obj.is_a?(Multiplication) && obj.includes?(String)
           scalar = obj.fetch(object: :numeric)
+        end
+
+        if obj.is_a?(Division) && obj.includes?(String)
+          scalar = 1.0 / obj.fetch(object: :numeric)
         end
       end
     end
@@ -55,7 +61,7 @@ class SineEquation
       result = []
 
       if max == 1
-        result << solution
+        result << solution if within_limits?(solution)
       else
         i = 0
         while i < max

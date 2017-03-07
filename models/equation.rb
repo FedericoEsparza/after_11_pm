@@ -1,4 +1,5 @@
 include Factory
+include Latex
 
 class Equation
   attr_accessor :ls, :rs
@@ -41,7 +42,6 @@ class Equation
   end
 
   def reverse_last_step(curr_steps)
-    p ls.reverse_step(rs)
     new_sides = ls.reverse_step(rs)
     self.ls = new_sides[:ls]
     self.rs = new_sides[:rs]

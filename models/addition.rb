@@ -1,5 +1,5 @@
-include LatexUtilities
 include Factory
+include Latex
 
 class Addition < Expression
   attr_accessor :args
@@ -15,6 +15,15 @@ class Addition < Expression
   def ==(exp)
     exp.class == self.class && args == exp.args
   end
+
+  def greater?(exp)
+    if self.class == exp.class
+      self.args.greater?(exp.args)
+    else
+      (self.args.first.greater?(exp)) || (self.args.first == exp)
+    end
+  end
+
 
   def copy
 #     DeepClone.clone(self)  #4-brackets
@@ -59,34 +68,39 @@ class Addition < Expression
   def select_variables
     result = []
     args.each do |a|
-      a = a.remove_coef
+      a = a.remove_coef.sort_elements
       unique = 1
-      result.each {|b| unique = 0 if same_elements?(a,b)}
+      result.each {|b| unique = 0 if a==b}
       if unique == 1
         result << a
+
       end
     end
     result
   end
 
+  def sort_elements
+    array = self.copy.args
+    add(array.sort_elements)
+  end
+
   def simplify_add_m_forms
     copy = self.copy
-    factors = copy.select_variables
+    factors = copy.select_variables.sort_elements
     results = []
     factors.each do |factor|
       count = 0
       for i in 0..copy.args.length-1
-        if same_elements?(copy.args[i].remove_coef,factor)
+        if copy.args[i].remove_coef.sort_elements==factor
           count = count + copy.args[i].remove_exp
         end
       end
       if count != 0
-        if count == 1
-          new_mtp_args = []
-        else
-          new_mtp_args = [count]
-        end
+        new_mtp_args = []
         factor.each{|a| new_mtp_args << a}
+        if count != 1
+          new_mtp_args = new_mtp_args.insert(0,count)
+        end
         new_mtp = mtp(new_mtp_args)
         results << new_mtp
       end
@@ -101,26 +115,138 @@ class Addition < Expression
   def reverse_step(rs)
     result = {}
     if args[0].is_a?(integer)
-      result[:ls] = args[1]
-      result[:rs] = sbt(rs,args[0])
-      return result
+
+      if args[1].is_a?(multiplication) && args[1].args[0] == -1
+        result[:ls] = args[1].args[1]
+        result[:rs] = sbt(args[0],rs)
+        return result
+
+      else
+        result[:ls] = args[1]
+        result[:rs] = sbt(rs,args[0])
+        return result
+
+      end
     end
     if args[1].is_a?(integer)
-      result[:ls] = args[0]
-      result[:rs] = sbt(rs,args[1])
-      return result
+      if args[1] > 0
+        result[:ls] = args[0]
+        result[:rs] = sbt(rs,args[1])
+        return result
+      else
+        result[:ls] = args[0]
+        result[:rs] = add(rs,args[1].abs)
+        return result
+      end
     end
   end
 
-  def latex
-    result = args.first.latex
+  def base_latex
+    result = args.first.base_latex
     for i in 1..args.length - 1
       if args[i].is_a?(subtraction) || args[i].is_a?(addition)
-        result += '+' + brackets(args[i].latex)
+        result += '+' + brackets(args[i].base_latex)
       else
-        result += '+' + args[i].latex
+        result += '+' + args[i].base_latex
       end
     end
     result
   end
+
+  def simplify_brackets
+    copy = self.copy
+    steps = []
+    has_brackets = false
+    copy.args.each do |m|
+      if m.is_a?(Multiplication) && m.is_bracket
+        steps << m.combine_brackets
+        has_brackets = true
+      else
+        steps << [m]
+      end
+    end
+
+    if has_brackets
+      steps.equalise_array_lengths
+      steps = steps.transpose
+      steps = steps.map{|a| add(a)}
+      steps.insert(0,self.copy)
+      ##now remove brackets
+      # last_step_args = []
+      # steps.last.args.each do |a|
+      #   a.args.each{|b| last_step_args << b}
+      # end
+      # steps << add(last_step_args)
+      steps = delete_duplicate_steps(steps)
+      steps
+    else
+      return self
+    end
+
+
+  end
+
+  def delete_duplicate_steps(steps)
+    i = 0
+    while i < steps.length
+      if steps[i] == steps[i+1]
+        steps.delete_at(i)
+      else
+        i += 1
+      end
+    end
+    steps
+  end
+
+  def order_similar_terms
+    copy = self.copy
+    result_args = []
+    while copy.args.length != 0 do
+      result_args << copy.args.delete_at(0)
+      i = 0
+      while i < copy.args.length do
+        if copy.args[i].similar?(result_args.last)
+          result_args << copy.args.delete_at(i)
+        else
+          i += 1
+        end
+      end
+    end
+    add(result_args)
+  end
+
+  #RECURSION
+  def expand
+    copy = self.copy
+    steps = []
+    copy.args.each do |exp|
+      steps << exp.expand
+    end
+    steps = steps.equalise_array_lengths.transpose
+    steps = steps.map{|a| add(a)}
+    steps = steps.map{|a| a.flatit}
+    steps = delete_duplicate_steps(steps)
+  end
+
+  def flatit
+    copy = self.copy
+    new_args = []
+    copy.args.each do |m|
+      if m.is_a?(Addition)
+        m = m.flatit
+        m.args.each{|a| new_args << a}
+      elsif m.is_a?(Multiplication)
+        m = m.flatit
+        if m.args.length == 1
+          m.args.each{|a| new_args << a}
+        else
+          new_args << m
+        end
+      else
+        new_args << m
+      end
+    end
+    result = add(new_args)
+  end
+
 end

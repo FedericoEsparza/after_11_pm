@@ -1,7 +1,9 @@
 include Factory
+require 'prime'
+include Latex
 
 class Fraction
-  attr_reader :numerator, :denominator, :sign
+  attr_accessor :numerator, :denominator, :sign
 
   def initialize(numerator:, denominator:, sign: :+)
     @numerator = numerator
@@ -9,28 +11,99 @@ class Fraction
     @sign = sign.is_a?(String) ? sign : sign.to_s + '@'
   end
 
-  def ==(fraction)
-    return false unless same_class?(fraction)
+  def ==(frc)
+    return false unless same_class?(frc)
 
-    self.evaluate_numeral == fraction.evaluate_numeral
+    self.evaluate_numeral == frc.evaluate_numeral
   end
 
-  def <(fraction)
-    return false unless same_class?(fraction)
-
-    self.evaluate_numeral < fraction.evaluate_numeral
+  def abs
+    self.sign = '+@'
+    self
   end
 
-  def >(fraction)
-    return false unless same_class?(fraction)
-
-    self.evaluate_numeral > fraction.evaluate_numeral
+  def <(numeral)
+    return false unless numerical?(numeral)
+    if numeral.is_a?(fraction)
+      evaluate_numeral < numeral.evaluate_numeral
+    else
+      evaluate_numeral < numeral
+    end
   end
 
-  def <=(fraction)
-    return false unless same_class?(fraction)
+  def >(numeral)
+    return false unless numerical?(numeral)
+    if numeral.is_a?(fraction)
+      evaluate_numeral > numeral.evaluate_numeral
+    else
+      evaluate_numeral > numeral
+    end
+  end
 
-    self.evaluate_numeral <= fraction.evaluate_numeral
+  def <=(frc)
+    return false unless same_class?(frc)
+
+    self.evaluate_numeral <= frc.evaluate_numeral
+  end
+
+  def simplify
+      num = numerator
+      denom = denominator
+    top_primes, top_powers = Prime.prime_division(numerator).transpose
+    bot_primes, bot_powers = Prime.prime_division(denominator).transpose
+
+    top_primes = [] if top_primes == nil
+    bot_primes = [] if bot_primes == nil
+
+    common_factors = top_primes & bot_primes
+    common_powers = []
+    common_factors.each do |factor|
+      common_powers << [
+        top_powers[top_primes.rindex(factor)],
+        bot_powers[bot_primes.rindex(factor)]
+      ].min
+    end
+    common_factors = common_factors.each_with_index.map{|a,i| a**common_powers[i]}
+    product = common_factors.evaluate_product
+    num = num/product
+    denom = denom/product
+    if denom == 1 || denom == -1
+      if sign == "+@"
+        num*denom
+      else
+        -num*denom
+      end
+    else
+      frac(num,denom,sign: sign).check_sign
+    end
+  end
+
+  def check_sign
+    if (numerator<=>0)*(denominator<=>0) < 0
+      if sign == "+@"
+        if numerator < 0
+          frac(-numerator,denominator,sign: :-)
+        else
+          frac(numerator,-denominator,sign: :-)
+        end
+      else
+        if numerator < 0
+          frac(-numerator,denominator)
+        else
+          frac(numerator,-denominator)
+        end
+      end
+    elsif (numerator<=>0)*(denominator<=>0) == 0
+      0
+    else
+      self
+    end
+
+  end
+
+  def negative
+    num = -numerator
+    frac(num,denominator, sign: sign).check_sign
   end
 
   def copy
@@ -55,8 +128,12 @@ class Fraction
     (top.to_f / bottom).send(sign)
   end
 
-  def latex
-    '\frac{' + numerator.latex + '}{' + denominator.latex + '}'
+  def base_latex
+    if sign == '+@'
+      '\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
+    else
+      '-\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
+    end
   end
 
   private

@@ -38,17 +38,19 @@ describe Addition do
   # end
   # end
 
-  describe '#simplify_add_m_forms' do
-    it '#simplifies 3xy+2xy+xyz' do
-      addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
-      result = addition.simplify_add_m_forms
-      expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
-    end
 
+  describe '#simplify_add_m_forms' do
+
+    it '#simplifies 3xy+2xy+xyz'do
+    addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
+    result = addition.simplify_add_m_forms
+    expect(result).to eq add(mtp('x','y','z'),mtp(5,'x','y'))
+    end
+    #
     it '#simplifies 3xy+yx+x^2' do
     addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
     result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(4,'x','y'),mtp(pow('x',2)))
+    expect(result).to eq add(mtp(pow('x',2)),mtp(4,'x','y'))
     end
 
     it '#simplifies x^2 + xy + yx + y^2' do
@@ -56,8 +58,67 @@ describe Addition do
     result = addition.simplify_add_m_forms
     expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
     end
+
+    it '#simplifies x^2 + x^2 + y^2' do
+      addition = add(mtp(pow('x',2)),mtp(pow('x',2)),mtp(pow('y',2)))
+      result = addition.simplify_add_m_forms
+      expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
+    end
   end
 
+  describe '#simplify_brackets' do
+    it 'simplifies (x+y)(a+b) + (w+z)(c+d)' do
+      exp = add(mtp(add('x','y'),add('a','b')),mtp(add('w','z'),add('c','d')))
+      result = exp.simplify_brackets
+      expect(result.last).to eq add(
+        add(mtp('a','x'),mtp('a','y'),mtp('b','x'),mtp('b','y')),
+        add(mtp('c','w'),mtp('c','z'),mtp('d','w'),mtp('d','z'))
+      )
+    end
+
+    it 'leaves x' do
+      exp = add('x')
+      result = exp.simplify_brackets
+      expect(result).to eq add('x')
+    end
+
+    it 'simplifies x(x+y) + y' do
+      exp = add(mtp('x',add('x','y')),'y')
+      result = exp.simplify_brackets
+      expect(result.last).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
+
+      expect(result[0]).to eq add(mtp('x',add('x','y')),'y')
+      expect(result[1]).to eq add(mtp(add('x'),add('x','y')),'y')
+      expect(result[2]).to eq add(add(mtp(mtp('x'),mtp('x')),mtp(mtp('x'),mtp('y'))),'y')
+      expect(result[3]).to eq add(add(mtp(mtp('x','x')),mtp('x','y')),'y')
+      expect(result[4]).to eq add(add(mtp(mtp(pow('x',1),pow('x',1))),mtp('x','y')),'y')
+      expect(result[5]).to eq add(add(mtp(pow('x',add(1,1))),mtp('x','y')),'y')
+      expect(result[6]).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
+    end
+  end
+
+  describe '#order_similar_terms' do
+    it '2x + 3a + 4x -> 2x + 4x + 3a' do
+      exp = add(mtp(2,'x'),mtp(3,'a'),mtp(4,'x'))
+      result = exp.order_similar_terms
+      expect(result).to eq add(mtp(2,'x'),mtp(4,'x'),mtp(3,'a'))
+    end
+
+    it '2xy^3+3a+b^3+4xy^3 -> ....' do
+      exp = add(mtp(2,'x',pow('y',3)),mtp(3,'a'),mtp(pow('b',3)),mtp(4,'x',pow('y',3)),mtp(4,'a'),mtp(pow('b',5)))
+      result = exp.order_similar_terms
+      expect(result).to eq add(mtp(2,'x',pow('y',3)),mtp(4,'x',pow('y',3)),mtp(3,'a'),mtp(4,'a'),mtp(pow('b',3)),mtp(pow('b',5)))
+    end
+
+  end
+
+  describe '#flatit' do
+    it 'flats x+(x+xy) + ((x+y)+xz)' do
+      exp = add('x',add('x',mtp('x','y')),add(add('x','y'),mtp('x','z')))
+      result = exp.flatit
+      expect(result).to eq add('x','x',mtp('x','y'),'x','y',mtp('x','z'))
+    end
+  end
 
 
 end
