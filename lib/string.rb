@@ -111,7 +111,6 @@ class String
       object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return eqn(object_args[0],object_args[1])
     end
-
   end
 
   def _add_args(original_string)
