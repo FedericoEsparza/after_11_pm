@@ -143,29 +143,7 @@ equation = SineEquation.new(sbt(mtp(2,'x'),10),0.5)
 eq_solution = equation.latex_solution
 expect(eq_solution).to eq "\\begin{align*}\n &&  ".... #the entire latex is rendered below
 ```
-
 ![Imgur](http://i.imgur.com/uPKlqYI.png)
-
-\begin{align*}
- &&  && \sin \left(2x-10\right)&=0.5 &&  && \\[10pt]
- && &(1)&\sin \left(2x-10\right)&=0.5 && \\
- &&  && 2x-10&=\arcsin 0.5 &&  && \\
- &&  && 2x-10&=30 &&  && \\
- &&  && 2x&=30+10 &&  && \\
- &&  && 2x&=40 &&  && \\
- &&  && x&=\displaystyle\frac{40}{2} &&  && \\
- &&  && x&=20\pm 180n &&  && \\[10pt]
- && &(2)&\sin \left(180-\left(2x-10\right)\right)&=0.5 && \\
- &&  && 180-\left(2x-10\right)&=\arcsin 0.5 &&  && \\
- &&  && 180-\left(2x-10\right)&=30 &&  && \\
- &&  && 2x-10&=180-30 &&  && \\
- &&  && 2x-10&=150 &&  && \\
- &&  && 2x&=150+10 &&  && \\
- &&  && 2x&=160 &&  && \\
- &&  && x&=\displaystyle\frac{160}{2} &&  && \\
- &&  && x&=80\pm 180n &&  &&
-\end{align*}
-$x= 20,200,80,260$
 
 --------
 ## Standard quadratic equation step by step
@@ -178,13 +156,6 @@ solution_latex = equation.latex
 ```
 
 ![Imgur](http://i.imgur.com/z52G9MJ.png)
-
-\begin{align*}
-    0&=30x^2-19x-5& && &P=30\times-5=-150 \hspace{30pt}S=-19&\\[5pt]
-    0&=\left(x-\frac{5}{6}\right)\left(x+\frac{1}{5}\right)& && &\left(-25,\,\,6\right)\hspace{10pt}\left(\frac{-25}{30},\,\,\frac{6}{30}\right)\hspace{10pt}\left(-\frac{5}{6},\,\,\frac{1}{5}\right)\hspace{10pt}&\\[5pt]
-    x&=\frac{5}{6} ,\,\, -\frac{1}{5}\\[5pt]
-    \end{align*}
-
 
 --------
 # To Do List
