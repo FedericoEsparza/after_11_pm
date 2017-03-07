@@ -150,7 +150,7 @@ eq_solution = equation.latex_solution
 expect(eq_solution).to eq "\\begin{align*}\n &&  ".... #the entire latex is rendered below
 ```
 
-![](http://imgur.com/zhozvMa)
+[Imgur](http://i.imgur.com/uPKlqYI.png)
 
 \begin{align*}
  &&  && \sin \left(2x-10\right)&=0.5 &&  && \\[10pt]
