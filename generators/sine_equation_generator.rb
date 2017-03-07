@@ -6,12 +6,14 @@ class SineEquationGenerator
 
   attr_reader :a, :b, :rs, :variable, :limits
 
-  def initialize(variable: 'x', limits: [0, 360])
+  def initialize(variable: 'x', limits: [0, 360], a_values: A_VALUES, b_values: B_VALUES)
     @a = { value: nil, sign: nil }
     @b = nil
     @rs = { value: nil, sign: nil }
     @variable = variable
     @limits = limits
+    @a_values = a_values
+    @b_values = b_values
   end
 
   def generate_equation
@@ -61,7 +63,7 @@ class SineEquationGenerator
   end
 
   def select_a
-    @a[:value] = A_VALUES.sample
+    @a[:value] = rand_a
     @a[:sign] = rand_sign
   end
 
@@ -79,7 +81,10 @@ class SineEquationGenerator
     a_var = evals[:a]
     rs_var = evals[:rs]
     return 0.75 if a_var == 0 || b == 0
-    ((Math.asin(rs_var).degrees.round - b) / a_var)
+    p a_var
+    p b
+    p Math.asin(rs_var).degrees.round
+    ((Math.asin(rs_var).degrees.round - b.to_f) / a_var)
   end
 
   private
@@ -93,11 +98,11 @@ class SineEquationGenerator
   end
 
   def rand_a
-    A_VALUES.sample
+    @a_values.sample
   end
 
   def rand_b
-    B_VALUES.sample
+    @b_values.sample
   end
 
   def rand_rs
