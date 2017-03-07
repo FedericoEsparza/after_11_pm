@@ -1,3 +1,5 @@
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+
 # Question Generators and Solution Engines for OneMaths
 
 [One Maths Beta Site](https://postimg.org/image/es2tmx4rh/)
