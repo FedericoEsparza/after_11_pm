@@ -46,4 +46,8 @@ module ClassName
   def tangent
     Tangent
   end
+
+  def differentiation
+    Differentiation
+  end
 end

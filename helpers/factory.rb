@@ -81,4 +81,8 @@ module Factory
   def quad(quad_term,linear_term,constant_term,variable)
     QuadraticEquation.new(quad_term: quad_term, linear_term: linear_term, constant_term: constant_term, variable: variable)
   end
+
+  def diff(*args)
+    Differentiation.new(*args)
+  end
 end
