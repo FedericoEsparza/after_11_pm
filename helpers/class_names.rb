@@ -46,4 +46,8 @@ module ClassName
   def tangent
     Tangent
   end
+
+  def sin_eqn_qs
+    SineEquationQuestion
+  end
 end
