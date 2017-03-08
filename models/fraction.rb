@@ -106,8 +106,6 @@ class Fraction
     frac(num,denominator, sign: sign).check_sign
   end
 
-
-
   def copy
     DeepClone.clone self
     # if numerator.is_a?(string) || numerator.is_a?(integer)

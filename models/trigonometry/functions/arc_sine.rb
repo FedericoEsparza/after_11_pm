@@ -36,7 +36,14 @@ class ArcSine
   end
 
   def evaluate_numeral
-    rad = Math.asin(value)
+    if value.is_a?(Fraction)
+      var = value.evaluate_numeral
+    elsif value.is_a?(Hash)
+      var = value[:value].send(value[:sign])
+    else
+      var = value
+    end
+    rad = Math.asin(var)
     degree = rad / (Math::PI) * 180
     degree.round
   end
