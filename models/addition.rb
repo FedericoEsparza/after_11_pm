@@ -273,6 +273,11 @@ class Addition < Expression
       end
     end
 
+    if square < 0
+      square = -square
+      lin = -lin
+      const = -const
+    end
     quadractic = quad(square,lin,const,'x')
     quadractic
   end

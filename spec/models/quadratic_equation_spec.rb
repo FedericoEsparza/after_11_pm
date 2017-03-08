@@ -99,7 +99,7 @@ describe QuadraticEquation do
       exp = quad(1,5,6,'x')
       result = exp.latex
       expect(result).to eq '\begin{align*}
-    0&=x^2+5x+6& && &P=6=6 \hspace{30pt}S=5&\\\[5pt]
+    0&=x^2+5x+6& && &P=6 \hspace{30pt}S=5&\\\[5pt]
     0&=\left(x+2\right)\left(x+3\right)& && &\left(2,\,\,3\right)\hspace{10pt}&\\\[5pt]
     x&=-2 ,\,\, -3\\\[5pt]
     \end{align*}'

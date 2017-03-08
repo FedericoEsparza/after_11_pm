@@ -218,13 +218,13 @@ describe Equation do
     it 'latexes (x-4)(x+2)=2x+4' do
       eqn = '(x-4)(x+2)=2x+4'.objectify
       result = eqn.latex_quad_solution
-      expect(result).to eq "\\begin{align*}\n    \\left(x-4\\right)\\left(x+2\\right)&=2x+4&\\\\[5pt]\n      \\left(x-4\\right)\\left(x+2\\right)&=2x+4&\\\\[5pt]\n      xx+x2-4x-4\\times2&=2x+4&\\\\[5pt]\n      x^1x^1+x2-4x-8&=2x+4&\\\\[5pt]\n      x^{1+1}+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+2x-4x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8-\\left(2x+4\\right)&=0&\\\\[5pt]\n      x^2-4x-12&=0&\\\\[5pt]\n      0&=x^2-4x-12& && &P=-12 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-6\\right)\\left(x+2\\right)& && &\\left(-6,\\,\\,2\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=6 ,\\,\\, -2\\\\[5pt]\n    \\end{align*}"
+      expect(result).to eq "\\begin{align*}\n    \\left(x-4\\right)\\left(x+2\\right)&=2x+4&\\\\[5pt]\n      xx+x2-4x-4\\times2&=2x+4&\\\\[5pt]\n      x^1x^1+x2-4x-8&=2x+4&\\\\[5pt]\n      x^{1+1}+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+2x-4x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8-\\left(2x+4\\right)&=0&\\\\[5pt]\n      x^2-4x-12&=0&\\\\[5pt]\n      0&=x^2-4x-12& && &P=-12 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-6\\right)\\left(x+2\\right)& && &\\left(-6,\\,\\,2\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=6 ,\\,\\, -2\\\\[5pt]\n    \\end{align*}"
     end
 
     it 'latexes (x+1)(2x-4)=2x-6' do
       eqn = '(x+1)(2x-4)=2x-6'.objectify
       result = eqn.latex_quad_solution
-      expect(result).to eq "\\begin{align*}\n    \\left(x+1\\right)\\left(2x-4\\right)&=2x-6&\\\\[5pt]\n      \\left(x+1\\right)\\left(2x-4\\right)&=2x-6&\\\\[5pt]\n      x2x+x-4+2x+-4&=2x-6&\\\\[5pt]\n      xx2+x-4+2x+-4&=2x-6&\\\\[5pt]\n      x^1x^12+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^{1+1}2+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^22+x-4+2x-4&=2x-6&\\\\[5pt]\n      2x^2+-4x+2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4-\\left(2x+-6\\right)&=0&\\\\[5pt]\n      2x^2+-4x+2&=0&\\\\[5pt]\n      0&=2x^2+-4x+2& && &P=2\\times2=4 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-1\\right)\\left(x-1\\right)& && &\\left(-2,\\,\\,-2\\right)\\hspace{10pt}\\left(\\frac{-2}{2},\\,\\,\\frac{-2}{2}\\right)\\hspace{10pt}\\left(-1,\\,\\,-1\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=1 ,\\,\\, 1\\\\[5pt]\n    \\end{align*}"
+      expect(result).to eq "\\begin{align*}\n    \\left(x+1\\right)\\left(2x-4\\right)&=2x-6&\\\\[5pt]\n      x2x+x-4+2x+-4&=2x-6&\\\\[5pt]\n      xx2+x-4+2x+-4&=2x-6&\\\\[5pt]\n      x^1x^12+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^{1+1}2+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^22+x-4+2x-4&=2x-6&\\\\[5pt]\n      2x^2+-4x+2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4-\\left(2x+-6\\right)&=0&\\\\[5pt]\n      2x^2+-4x+2&=0&\\\\[5pt]\n      0&=2x^2+-4x+2& && &P=2\\times2=4 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-1\\right)\\left(x-1\\right)& && &\\left(-2,\\,\\,-2\\right)\\hspace{10pt}\\left(\\frac{-2}{2},\\,\\,\\frac{-2}{2}\\right)\\hspace{10pt}\\left(-1,\\,\\,-1\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=1 ,\\,\\, 1\\\\[5pt]\n    \\end{align*}"
     end
   end
 
@@ -245,6 +245,34 @@ describe Equation do
       result = eqn.elim_common_factors
       expect(result).to eq eqn(add(mtp(add('x',2),1),mtp(add('x',1),'x')),mtp(5,add('x',1),add('x',2)))
     end
+  end
+
+  describe '#latex_rational_to_quad' do
+    xit 'latexes 1/(x+1) + x/(x+2) = 5 to quad form' do
+      eqn = eqn(add(frac(1,add('x',1)),frac('x',add('x',2))),5)
+      result = eqn.latex_rational_to_quad
+
+      puts result
+    end
+
+    it 'latexes x/(x+2) = 5x to quad form' do
+      eqn = eqn(frac('x',add('x',2)),mtp(5,'x'))
+      result = eqn.latex_rational_to_quad
+
+      puts result
+      p '=================='
+    end
+
+  end
+
+  describe '#latex_solve_rational_quad' do
+    it 'latexes solution of (x-4)/(x+2) = 5x' do
+      eqn = eqn(frac(add('x',-4),add('x',2)),mtp(5,'x'))
+      result = eqn.latex_solve_rational_quad
+
+      puts result
+    end
+
   end
 
 

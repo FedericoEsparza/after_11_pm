@@ -167,4 +167,12 @@ describe Factory do
       expect(result).to eq -3
     end
   end
+
+  describe '#latex' do
+    it 'latexes 1/(x+1) + x/(x+2)' do
+      exp = add(frac(1,add('x',1)),frac('x',add('x',2)))
+      result = exp.latex
+    end
+  end
+
 end

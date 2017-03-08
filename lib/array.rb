@@ -62,6 +62,19 @@ class Array
       end
     end
 
+    def delete_duplicate_steps
+      steps = self
+      i = 0
+      while i < steps.length
+        if steps[i] == steps[i+1]
+          steps.delete_at(i)
+        else
+          i += 1
+        end
+      end
+      steps
+    end
+
 
 
     ##is no longer needed, will keep if wanted later

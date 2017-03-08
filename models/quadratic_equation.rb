@@ -57,23 +57,27 @@ class QuadraticEquation
   def get_factors
     product = get_method[:Product][1]
     sum = get_method[:Sum]
-    attempts = product.factorisation
-    if product > 0
-      new_attempts = []
-      attempts.each{|factor| new_attempts << factor.map{|a| -a}}
-      attempts += new_attempts
-    end
-    done = 0
-    i = 1
-    while done == 0
-      if attempts[i].evaluate_sum == sum
-        done = 1
-        factors = attempts[i]
-      else
-        i = i+1
+    if product != 0
+      attempts = product.factorisation
+      if product > 0
+        new_attempts = []
+        attempts.each{|factor| new_attempts << factor.map{|a| -a}}
+        attempts += new_attempts
       end
+      done = 0
+      i = 1
+      while done == 0
+        if attempts[i].evaluate_sum == sum
+          done = 1
+          factors = attempts[i]
+        else
+          i = i+1
+        end
+      end
+      factors
+    else
+      factors = [0,sum]
     end
-    factors
   end
 
   def write_factors

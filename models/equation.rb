@@ -80,6 +80,7 @@ class Equation
     result = '\begin{align*}
     '
     steps = copy.solve_quad_eqn
+    steps = steps.delete_duplicate_steps
     latex_steps = steps.map{|a| a.latex}
 
     latex_steps.each do |step|
@@ -88,6 +89,7 @@ class Equation
     end
 
     quadractic = steps.last.ls.get_quad
+    p quadractic
     next_latex = quadractic.latex
     next_latex.slice!'\\begin{align*}
     '
@@ -111,13 +113,24 @@ class Equation
 
     steps = copy.convert_rational_to_quad
 
-    result = '\beign{align*}
+    result = '\begin{align*}
     '
 
     steps.each do |step|
-      result += step.latex + '&\\\[5pt]'
+      result += step.latex + '&\\\[5pt]
+      '
     end
 
+    result += '\end{align*}'
+  end
+
+  def latex_solve_rational_quad
+    result = latex_rational_to_quad.chomp('\end{align*}')
+    new_eqn = convert_rational_to_quad.last
+    next_steps = new_eqn.latex_quad_solution
+    next_steps.slice!('\begin{align*}
+    ')
+    result += next_steps
     result
   end
 
