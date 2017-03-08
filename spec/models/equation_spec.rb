@@ -186,4 +186,30 @@ describe Equation do
       end
     end
   end
+
+  describe '#change_subject_to' do
+    it 'change subject y for x+y=10' do
+      equation = eqn(add('x','y'),10)
+      result = equation.change_subject_to('x')
+      expect(result).to eq [
+        eqn(add('x','y'),10),
+        eqn('x',sbt(10,'y'))
+      ]
+    end
+
+    it 'change subject to y^2' do
+      equation = eqn(add('x',pow('y',2)),10)
+      result = equation.change_subject_to(pow('y',2))
+      expect(result).to eq [
+        eqn(add('x',pow('y',2)),10),
+        eqn(pow('y',2),sbt(10,'x'))
+      ]
+    end
+
+    it 'change subject z for x+y=10' do
+      equation = eqn(add('x','y'),10)
+      result = equation.change_subject_to('z')
+      expect(result).to eq nil
+    end
+  end
 end

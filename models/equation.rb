@@ -56,4 +56,10 @@ class Equation
     response = ls.latex + '&=' + rs.latex
     # no_new_line ? response : response + '\\\\'
   end
+
+  def change_subject_to(subject)
+
+  end
+
+
 end
