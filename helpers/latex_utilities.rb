@@ -120,57 +120,43 @@ module LatexUtilities
         end
       end
 
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return add(conventionalised_args)
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
+    end
 
-      # return exp
+    if exp.is_a?(multiplication) && numerical?(exp.args[0]) && exp.args[0] < 0
+      exp.args[0] = exp.args[0].abs
+      return sbt(nil,exp)
+    end
+
+    if exp.is_a?(multiplication) && !(numerical?(exp.args[0]) && exp.args[0] < 0)
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
     end
 
     if exp.is_a?(cosine)
-      return cos(conventionalise(exp.args[0]))
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
     end
 
     if exp.is_a?(subtraction)
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return sbt(conventionalised_args)
-    end
-
-    if exp.is_a?(multiplication)
-      if numerical?(exp.args[0]) && exp.args[0] < 0
-        exp.args[0] = exp.args[0].abs
-        return sbt(nil,exp)
-      end
-
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return mtp(conventionalised_args)
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
     end
 
     if exp.is_a?(division)
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return div(conventionalised_args)
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
     end
 
     if exp.is_a?(power)
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return pow(conventionalised_args)
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
     end
 
-    return exp
+    # if numerical?(exp) || exp.is_a?(string)
+      return exp
+    # end
   end
 
   def conventionalise_one_times(exp)
@@ -182,7 +168,7 @@ module LatexUtilities
       return exp
     end
 
-    if exp.is_a?(addition) || exp.is_a?(subtraction) || exp.is_a?(division) || exp.is_a?(power)
+    if exp.is_a?(addition) || exp.is_a?(subtraction) || exp.is_a?(division) || exp.is_a?(power) || exp.is_a?(cosine)
       for i in 0..exp.args.length-1
         conventionalise_one_times(exp.args[i])
       end
