@@ -93,4 +93,18 @@ class Division
     '\displaystyle\frac{' + top.base_latex + '}{' + bot.base_latex + '}'
   end
 
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      div(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
+  end
+
 end

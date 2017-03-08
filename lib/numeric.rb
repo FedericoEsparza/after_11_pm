@@ -39,5 +39,16 @@ class Fixnum
   #   end
   # end
 
+  def find_vars
+    []
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      self
+    end
+  end
 
 end

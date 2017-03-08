@@ -78,5 +78,36 @@ class Equation
     end
   end
 
+  def contains?(subject)
+    ls.contains?(subject) || rs.contains?(subject)
+  end
+
+  def find_vars
+    vars = ls.find_vars + rs.find_vars
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      eqn(ls.subs_terms(old_var,new_var),rs.subs_terms(old_var,new_var))
+    end
+  end
+
+  def expand
+    ls_steps = ls.expand
+    ls_steps << add(ls_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
+    rs_steps = rs.expand
+    rs_steps << add(rs_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
+    steps = [ls_steps,rs_steps].equalise_array_lengths.transpose
+    steps.map!{|a| eqn(a.first,a.last)}
+    steps = steps.delete_duplicate_steps
+
+  end
+
+  def flatit
+    eqn(ls.flatit,rs.flatit)
+  end
 
 end

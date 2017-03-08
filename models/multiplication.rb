@@ -308,6 +308,12 @@ class Multiplication
     result.inject(1, :*)
   end
 
+  def evaluate_nums
+    new_args = remove_coef
+    new_args = [remove_exp] + new_args
+    mtp(new_args)
+  end
+
 
 
     def standard_bracket_form
@@ -385,7 +391,7 @@ class Multiplication
       # 3ax^2 + 4y + 2ax^2 + 5y
       # 3ax^2 + 2ax^2 + 4y  + 5y
 
-      new_add << new_add.last.simplify_add_m_forms
+      # new_add << new_add.last.simplify_add_m_forms
       new_add = delete_duplicate_steps(new_add)
       new_add.insert(0,self.copy)
       self.args = new_add[-1].args
@@ -650,6 +656,21 @@ class Multiplication
       end
     end
     result = mtp(new_args)
+  end
+
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      mtp(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
   end
 
 end

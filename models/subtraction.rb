@@ -115,4 +115,30 @@ class Subtraction
     end
   end
 
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      sbt(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
+  end
+
+  # def expand
+  #   copy = self.copy
+  #   steps = []
+  #   copy.args.each do |exp|
+  #     steps << exp.expand
+  #   end
+  #   steps = steps.equalise_array_lengths.transpose
+  #   steps = steps.map{|a| add(a)}
+  #   steps = steps.map{|a| a.flatit}
+  #   steps = steps.delete_duplicate_steps
+  # end
+
 end

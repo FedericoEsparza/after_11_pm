@@ -24,6 +24,18 @@ class Addition < Expression
     end
   end
 
+  def standardize_add_m_form
+    new_args = []
+    args.each do |m|
+      if m.is_a?(Multiplication)
+        new_args << m
+      else
+        new_args << mtp(m)
+      end
+    end
+    add(new_args)
+  end
+
 
   def copy
 #     DeepClone.clone(self)  #4-brackets
@@ -146,7 +158,7 @@ class Addition < Expression
     end
 
     result[:ls] = new_ls
-    result[:rs] = sbt(rs,moved)
+    result[:rs] = add(rs,mtp(-1,moved).flatit.evaluate_nums)
     return result
   end
 
@@ -285,6 +297,20 @@ class Addition < Expression
       end
     end
     result = add(new_args)
+  end
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      add(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
   end
 
 end

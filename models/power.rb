@@ -107,5 +107,10 @@ class Power
     [self]
   end
 
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
 
 end

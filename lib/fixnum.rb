@@ -26,6 +26,10 @@ require "prime"
     [self]
   end
 
+  def flatit
+    self
+  end
+
   # def flatit
   #   self
   # end
@@ -44,6 +48,10 @@ require "prime"
       prime_factors.zip(powers).map{|prime, power| prime ** power}.inject(:*)
     end
     factors.sort.map{|div| [div, n / div]}
+  end
+
+  def find_vars
+    []
   end
 
 end

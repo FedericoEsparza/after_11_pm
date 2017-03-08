@@ -193,7 +193,7 @@ describe Equation do
       result = equation.change_subject_to('x')
       expect(result).to eq [
         eqn(add('x','y'),10),
-        eqn('x',sbt(10,'y'))
+        eqn('x',add(10,mtp(-1,'y')))
       ]
     end
 
@@ -202,7 +202,7 @@ describe Equation do
       result = equation.change_subject_to(pow('y',2))
       expect(result).to eq [
         eqn(add('x',pow('y',2)),10),
-        eqn(pow('y',2),sbt(10,'x'))
+        eqn(pow('y',2),add(10,mtp(-1,'x')))
       ]
     end
 
@@ -227,20 +227,21 @@ describe Equation do
 
       expect(result).to eq [
         eqn(add('x','y',mtp(2,'z')),6),
-        eqn('y',sbt(6,add('x',mtp(2,'z'))))
+        eqn('y',add(6,mtp(-1,add('x',mtp(2,'z')))))
       ]
     end
 
     it 'change subject to y^2 for x+2y^2 = 4z' do
       eqn = eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z'))
-      result = eqn.change_subject_to(pow('y',2))
+    result = eqn.change_subject_to(pow('y',2))
 
       expect(result).to eq [
         eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z')),
-        eqn(mtp(2,pow('y',2)),sbt(mtp(4,'z'),'x')),
-        eqn(pow('y',2),div(sbt(mtp(4,'z'),'x'),2))
+        eqn(mtp(2,pow('y',2)),add(mtp(4,'z'),mtp(-1,'x'))),
+        eqn(pow('y',2),div(add(mtp(4,'z'),mtp(-1,'x')),2))
       ]
     end
+
 
   end
 end
