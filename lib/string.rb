@@ -40,7 +40,7 @@ class String
 
   def objectify
     original_string = self.dup
-    original_string.gsub!(' ','')
+    # original_string.gsub!(' ','')
     i = 1
     while i < original_string.length
       if insert_plus?(original_string,i)
@@ -242,11 +242,10 @@ class String
   end
 
   def _outer_func_is_pow?
-    return false if self =~ /\=/
-    return false if self[1..(length-1)] =~ /\+|\-/
-    return false if split_mtp_args(dup).length > 1
-    return true if self =~ /\^/
-    return false
+    return false unless self =~ /\^/
+    copy = self.dup
+    power_part = copy.slice(/((\d+)|(\(\$*\))|([A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d))/)
+    power_part == self
   end
 
   def _sin_args(original_string)
@@ -255,12 +254,6 @@ class String
     args = [original_string]
     remove_enclosing_bracks(args)
     args
-    # top_indices = matching_brackets(original_string,'{','}')
-    # numerator = original_string.slice(top_indices[0]+1..top_indices[1]-1)
-    # original_string.slice!(0..top_indices[1])
-    # bot_indices = matching_brackets(original_string,'{','}')
-    # denominator = original_string.slice(bot_indices[0]+1..bot_indices[1]-1)
-    # [numerator,denominator]
   end
 
   def _outer_func_is_sin?

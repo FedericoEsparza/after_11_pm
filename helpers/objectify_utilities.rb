@@ -62,16 +62,26 @@ module ObjectifyUtilities
       _add_next_brac_arg(result_array,string_copy)
       _delete_next_times_arg(string_copy)
       _add_next_minus_one_arg(result_array,string_copy)
-      # _add_next_sine_arg(result_array,string_copy)
+      _add_next_sine_arg(result_array,string_copy)
       i += 1
     end
     result_array
   end
 
   def _add_next_sine_arg(result_array,string_copy)
-    sin_reg = //
-    sliced = string_copy.slice!(sin_reg)
-    result_array << sliced unless sliced.nil?
+    slice_index = _sine_arg_end_index(string_copy)
+    return if slice_index.nil?
+    result_array << string_copy.slice!(0..slice_index)
+  end
+
+  def _sine_arg_end_index(string_copy)
+    return nil unless string_copy =~ /^\\sin/
+    for i in 5..(string_copy.length-1)
+      if string_copy[i] =~ /\(|\\|\=/
+        return i - 1
+      end
+    end
+    return string_copy.length - 1
   end
 
   def _add_next_minus_one_arg(result_array,string_copy)
@@ -117,21 +127,6 @@ module ObjectifyUtilities
     # end
   end
 
-  # this is happening because I suck at regex
-  # must start with - or a digit
-  # followed by one or more digits if start with -, zero or more digits if start with digit
-  # digits not followed by ^, and the chars after the digits are not returned on slice
-  # examples:
-  # will match 2abc and return 2 (string.slice(regex) as argument)
-  # will match -2abc and return -2 (string.slice(regex) as argument)
-  # will match -123abc and return -123 (string.slice(regex) as argument)
-  # will match 123a12bc and return 123 (string.slice(regex) as argument)
-  # will match 123a^12bc and return 123 (string.slice(regex) as argument)
-  # will not match a-123abc and return nil (string.slice(regex) as argument)
-  # will not match a123abc and return nil (string.slice(regex) as argument)
-  # will not match 123^abc and return nil (string.slice(regex) as argument)
-  # will not match -123^abc and return nil (string.slice(regex) as argument)
-
   def _next_num_index(string_copy)
     unless string_copy[0] =~ /\d/ || string_copy[0] == '-'
       return nil
@@ -155,8 +150,6 @@ module ObjectifyUtilities
   end
 
   def _add_next_pow_arg(result_array,string_copy)
-    # why this does not work?
-    # pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\d*)|(\{\$*\}))/
     pow_reg = /((^\d+)|(^\(\$*\))|(^[A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d))/
     sliced = string_copy.slice!(pow_reg)
     result_array << sliced unless sliced.nil?

@@ -154,6 +154,16 @@ describe ObjectifyUtilities do
       str = '\sin x'
       expect(dummy_class.split_mtp_args(str)).to eq ['\sin x']
     end
+
+    it '' do
+      str = '\sin($$$)($$$$)'
+      expect(dummy_class.split_mtp_args(str)).to eq ['\sin($$$)','($$$$)']
+    end
+
+    it '' do
+      str = '\sin 2xy($$$$)^2'
+      expect(dummy_class.split_mtp_args(str)).to eq ['\sin 2xy','($$$$)^2']
+    end
   end
 
   # describe '#reenter_str_content' do
