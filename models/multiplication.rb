@@ -243,6 +243,45 @@ class Multiplication
     steps
   end
 
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    moved_args = []
+    subject_index = -1
+    args.each_with_index do |arg,i|
+      if arg.contains?(subject)
+        subject_index = i
+      end
+    end
+
+    if args.length > 2
+      new_ls = args.delete_at(subject_index)
+      moved = mtp(args)
+    else
+      new_ls = args.delete_at(subject_index)
+      moved = args.first
+    end
+
+    result[:ls] = new_ls
+    result[:rs] = div(rs,moved)
+    return result
+  end
+
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+
+    result
+  end
+
   def reverse_step(rs)
     result = {}
     if numerical?(args[0])

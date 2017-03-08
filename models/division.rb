@@ -47,6 +47,34 @@ class Division
     args[0]/args[1]
   end
 
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+    result
+  end
+
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    if top.contains?(subject)
+      result[:ls] = top
+      result[:rs] = mtp(rs,bot)
+      return result
+    elsif bot.contains?(subject)
+      result[:ls] = bot
+      result[:rs] = div(top,rs)
+      return result
+    end
+  end
+
   def reverse_step(rs)
     result = {}
     if args[0].is_a?(integer)

@@ -19,6 +19,10 @@ class Fixnum
     end
   end
 
+  def contains?(subject)
+    false
+  end
+
   def sort_elements
     self
   end

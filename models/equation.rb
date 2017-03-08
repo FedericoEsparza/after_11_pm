@@ -57,8 +57,25 @@ class Equation
     # no_new_line ? response : response + '\\\\'
   end
 
-  def change_subject_to(subject)
+  def reverse_last_subject_step(subject,curr_steps)
+    new_sides = ls.reverse_subject_step(subject,rs)
+    self.ls = new_sides[:ls]
+    self.rs = new_sides[:rs]
+    curr_steps << self.copy
+  end
 
+  def change_subject_to(subject)
+    if ls.contains?(subject)
+      curr_steps = [self.copy]
+      i = 1
+      while !(ls == subject) && i < 100 do
+        reverse_last_subject_step(subject,curr_steps)
+        i += 1
+      end
+      curr_steps
+    else
+      nil
+    end
   end
 
 

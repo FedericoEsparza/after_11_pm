@@ -19,6 +19,10 @@ class String
     end
   end
 
+  def contains?(subject)
+    self == subject
+  end
+
   def sort_elements
     self
   end

@@ -48,6 +48,34 @@ class Subtraction
     minuend - subend
   end
 
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+    result
+  end
+
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    if minuend.contains?(subject)
+      result[:ls] = minuend
+      result[:rs] = add(rs,subend)
+      return result
+    elsif subend.contains?(subject)
+      result[:ls] = subend
+      result[:rs] = sbt(minuend,rs)
+      return result
+    end
+  end
+
   def reverse_step(rs)
     result = {}
     if args[0].is_a?(integer)

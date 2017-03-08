@@ -188,7 +188,7 @@ describe Equation do
   end
 
   describe '#change_subject_to' do
-    it 'change subject y for x+y=10' do
+    it 'change subject to x for x+y=10' do
       equation = eqn(add('x','y'),10)
       result = equation.change_subject_to('x')
       expect(result).to eq [
@@ -197,7 +197,7 @@ describe Equation do
       ]
     end
 
-    it 'change subject to y^2' do
+    it 'change subject to y^2 of x+y^2=10' do
       equation = eqn(add('x',pow('y',2)),10)
       result = equation.change_subject_to(pow('y',2))
       expect(result).to eq [
@@ -206,10 +206,41 @@ describe Equation do
       ]
     end
 
-    it 'change subject z for x+y=10' do
+    it 'change subject to z for x+y=10' do
       equation = eqn(add('x','y'),10)
       result = equation.change_subject_to('z')
       expect(result).to eq nil
     end
+
+    it 'change subject to x for xy=5' do
+      eqn = eqn(mtp('x','y'),5)
+      result = eqn.change_subject_to('x')
+      expect(result).to eq [
+        eqn(mtp('x','y'),5),
+        eqn('x',div(5,'y'))
+      ]
+    end
+
+    it 'change subject to y for x+y+2z = 6' do
+      eqn = eqn(add('x','y',mtp(2,'z')),6)
+      result = eqn.change_subject_to('y')
+
+      expect(result).to eq [
+        eqn(add('x','y',mtp(2,'z')),6),
+        eqn('y',sbt(6,add('x',mtp(2,'z'))))
+      ]
+    end
+
+    it 'change subject to y^2 for x+2y^2 = 4z' do
+      eqn = eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z'))
+      result = eqn.change_subject_to(pow('y',2))
+
+      expect(result).to eq [
+        eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z')),
+        eqn(mtp(2,pow('y',2)),sbt(mtp(4,'z'),'x')),
+        eqn(pow('y',2),div(sbt(mtp(4,'z'),'x'),2))
+      ]
+    end
+
   end
 end
