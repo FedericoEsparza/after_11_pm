@@ -1,5 +1,5 @@
-describe SineEquationGenerator do
-  xcontext '#select_a' do
+describe SineEquationQuestion do
+  context '#select_a' do
     it "selects a value and sign srand 101" do
       srand(101)
       exp = described_class.new
@@ -17,7 +17,7 @@ describe SineEquationGenerator do
     end
   end
 
-  xcontext '#evaluate_numerals' do
+  context '#evaluate_numerals' do
     it 'a = 2, b = -10 and rs = 0 eval x to ' do
       srand(104)
       exp = described_class.new
@@ -32,11 +32,8 @@ describe SineEquationGenerator do
       allow(exp).to receive(:a).and_return({ value: 2, sign: '+@' })
       allow(exp).to receive(:b).and_return(-20)
       allow(exp).to receive(:rs).and_return({ value: frac(1, sqrt(2)), sign: '-@' })
-      expect(exp.evaluate_numerals).to eq -13
+      expect(exp.evaluate_numerals).to eq -12.5
     end
-  end
-
-  context '#select_variables' do
   end
 
   context 'generates sine equation in the form of sin(ax+b) = c' do
@@ -146,6 +143,40 @@ describe SineEquationGenerator do
       exp = described_class.new(b_values: [5])
       gen_eqn = exp.generate_equation
       expect(gen_eqn).to eq sin_eqn(sbt(5, mtp(5, 'x')), 0)
+    end
+  end
+
+  context '#generate_question' do
+    it 'returns instance of SineEqQuestion' do
+      exp = described_class.generate_question
+      expect(exp).to be_a(SineEquationQuestion)
+    end
+
+    it 'when passed params it instanciates instance with those params' do
+      exp = described_class.generate_question(limits: [180, 520], a_values:[5])
+      expect(exp.limits).to eq [180, 520]
+      expect(exp.a_values).to eq [5]
+    end
+  end
+
+  context '#generate_solution' do
+    it "calls #solve on question and returns solution hash" do
+      exp = described_class.generate_question(a_values: [5])
+      expect(exp.generate_solution).to be_a(Hash)
+    end
+  end
+
+  context '#question_latex' do
+    it "returns latex for question only" do
+      exp = described_class.generate_question
+      expect(exp.question_latex).to eq '\sin \left(11-1x\right)&=0'
+    end
+  end
+
+  context '#solution_latex' do
+    it "returns latex for question solution" do
+      exp = described_class.generate_question
+      expect(exp.solution_latex).to eq "\\begin{align*}\n &&  && \\sin \\left(55-\\displaystyle\\frac{x}{3}\\right)&=0 &&  && \\\\[10pt]\n && &(1)&\\sin \\left(55-\\displaystyle\\frac{x}{3}\\right)&=0 && \\\\\n &&  && 55-\\displaystyle\\frac{x}{3}&=\\arcsin 0 &&  && \\\\\n &&  && 55-\\displaystyle\\frac{x}{3}&=0 &&  && \\\\\n &&  && \\displaystyle\\frac{x}{3}&=55-0 &&  && \\\\\n &&  && \\displaystyle\\frac{x}{3}&=55 &&  && \\\\\n &&  && x&=55\\times3 &&  && \\\\\n &&  && x&=165\\pm 1080n &&  && \\\\[10pt]\n && &(2)&\\sin \\left(180-\\left(55-\\displaystyle\\frac{x}{3}\\right)\\right)&=0 && \\\\\n &&  && 180-\\left(55-\\displaystyle\\frac{x}{3}\\right)&=\\arcsin 0 &&  && \\\\\n &&  && 180-\\left(55-\\displaystyle\\frac{x}{3}\\right)&=0 &&  && \\\\\n &&  && 55-\\displaystyle\\frac{x}{3}&=180-0 &&  && \\\\\n &&  && 55-\\displaystyle\\frac{x}{3}&=180 &&  && \\\\\n &&  && \\displaystyle\\frac{x}{3}&=55-180 &&  && \\\\\n &&  && \\displaystyle\\frac{x}{3}&=-125 &&  && \\\\\n &&  && x&=-125\\times3 &&  && \\\\\n &&  && x&=-375\\pm 1080n &&  && \n\\end{align*}\n$x= 165$"
     end
   end
 end

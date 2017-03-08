@@ -1,10 +1,10 @@
-class SineEquationGenerator
+class SineEquationQuestion
   RS_VALUES = [frac(1, sqrt(2)), frac(1, 2), frac(sqrt(3), 2), 0]
   A_VALUES = [0, frac(1, 3), frac(1, 2)] + (1..6).to_a
   B_VALUES = (-100..100).to_a
   SINGS = ['-@', '+@']
 
-  attr_reader :a, :b, :rs, :variable, :limits
+  attr_reader :a, :b, :rs, :variable, :limits, :a_values, :b_values, :question, :solution
 
   def initialize(variable: 'x', limits: [0, 360], a_values: A_VALUES, b_values: B_VALUES)
     @a = { value: nil, sign: nil }
@@ -14,11 +14,68 @@ class SineEquationGenerator
     @limits = limits
     @a_values = a_values
     @b_values = b_values
+    @question = nil
+    @solution = nil
+  end
+
+  def self.generate_question(params={})
+    gen_instance = self.new(params)
+    gen_instance.generate_equation
+    gen_instance
   end
 
   def generate_equation
     select_variables
-    compose_equation
+    @question = compose_equation
+  end
+
+  def generate_solution
+    @solution = @question.solve
+  end
+
+  def question_latex
+    generate_equation unless !@question.nil?
+    @question.latex
+  end
+
+  def solution_latex
+    generate_equation unless !@question.nil?
+    @question.latex_solution
+  end
+
+  def select_a
+    @a[:value] = rand_a
+    @a[:sign] = rand_sign
+  end
+
+  def select_b
+    @b = (@a[:sign] == '-@') ? rand_b.abs : rand_b
+  end
+
+  def select_rs
+    @rs[:value] = rand_rs
+    @rs[:sign] = rand_sign
+  end
+
+  def evaluate_numerals
+    evals  = evaluate_a_rs
+    a_var = evals[:a]
+    rs_var = evals[:rs]
+    return 0.75 if a_var == 0 || b == 0
+    ((Math.asin(rs_var).degrees.round - b.to_f) / a_var)
+  end
+
+  private
+
+  def select_variables
+    select_a
+    select_b
+    select_rs
+    if is_integer?(evaluate_numerals)
+      evaluate_numerals.round
+    else
+      select_variables
+    end
   end
 
   def compose_equation
@@ -50,41 +107,6 @@ class SineEquationGenerator
 
     sin_eqn(ls, rs_var, ans_min: limits[0], ans_max: limits[1])
   end
-
-  def select_variables
-    select_a
-    select_b
-    select_rs
-    if is_integer?(evaluate_numerals)
-      evaluate_numerals.round
-    else
-      select_variables
-    end
-  end
-
-  def select_a
-    @a[:value] = rand_a
-    @a[:sign] = rand_sign
-  end
-
-  def select_b
-    @b = (@a[:sign] == '-@') ? rand_b.abs : rand_b
-  end
-
-  def select_rs
-    @rs[:value] = rand_rs
-    @rs[:sign] = rand_sign
-  end
-
-  def evaluate_numerals
-    evals  = evaluate_a_rs
-    a_var = evals[:a]
-    rs_var = evals[:rs]
-    return 0.75 if a_var == 0 || b == 0
-    ((Math.asin(rs_var).degrees.round - b.to_f) / a_var)
-  end
-
-  private
 
   def is_integer?(num)
     num % 1 == 0

@@ -128,4 +128,9 @@ class SineEquation
     response = add_align_env(response)
     response + '$' + solution[:set_1][:steps].last.ls + '=' + ' ' + solution[:solutions].join(',') + '$'
   end
+
+  def latex
+    solution = self.solve
+    solution[:set_1][:steps][0].latex
+  end
 end
