@@ -81,9 +81,6 @@ class SineEquationGenerator
     a_var = evals[:a]
     rs_var = evals[:rs]
     return 0.75 if a_var == 0 || b == 0
-    p a_var
-    p b
-    p Math.asin(rs_var).degrees.round
     ((Math.asin(rs_var).degrees.round - b.to_f) / a_var)
   end
 

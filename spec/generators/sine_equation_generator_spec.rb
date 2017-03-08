@@ -40,101 +40,112 @@ describe SineEquationGenerator do
   end
 
   context 'generates sine equation in the form of sin(ax+b) = c' do
-    # it "equation srand 100" do
-    #   srand(102)
-    #   exp = described_class.new
-    #   gen_eqn = exp.generate_equation
-    #   expect(gen_eqn).to eq sin_eqn(add(div('x', 2), 100), frac(1, 2, sign: :-))
-    # end
-#
-    # it "equation srand 103" do
-    #   srand(104)
-    #   exp = described_class.new
-    #   gen_eqn = exp.generate_equation
-    #   expect(gen_eqn).to eq sin_eqn(add(mtp(3, 'x'), 42), frac(sqrt(3), 2))
-    # end
-    #
-    xit "equation srand 234" do
+    it "equation srand 100" do
+      srand(102)
+      exp = described_class.new
+      gen_eqn = exp.generate_equation
+      expect(gen_eqn).to eq sin_eqn(add(div('x', 2), 100), frac(1, 2, sign: :-))
+    end
+
+    it "equation srand 103" do
+      srand(104)
+      exp = described_class.new
+      gen_eqn = exp.generate_equation
+      expect(gen_eqn).to eq sin_eqn(add(mtp(3, 'x'), 42), frac(sqrt(3), 2))
+    end
+
+    it "equation srand 234" do
       srand(210)
       exp = described_class.new
       gen_eqn = exp.generate_equation
-      puts gen_eqn.latex_solution
-      expect(gen_eqn).to eq sin_eqn(sbt(mtp(6, 'x'), 32), frac(1, 2))
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(sbt(35, mtp(5, 'x')), 0)
     end
 
     it "equation srand 234" do
       srand(210)
       exp = described_class.new(a_values: [2,3,4])
       gen_eqn = exp.generate_equation
-      puts gen_eqn.latex_solution
-      expect(gen_eqn).to eq sin_eqn(sbt(mtp(6, 'x'), 32), frac(1, 2))
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(sbt(mtp(4, 'x'), 61), frac(1, sqrt(2), sign: :-))
     end
-    #
-    # it 'equation in the right format sin(2x - 20) = -frac(1, 2)' do
-    #   exp = described_class.new
-    #   allow(exp).to receive(:select_variables)
-    #   allow(exp).to receive(:a).and_return({ value: 2, sign: '+@' })
-    #   allow(exp).to receive(:b).and_return(-20)
-    #   allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
-    #   gen_eqn = exp.generate_equation
-    #   # puts gen_eqn.latex_solution
-    #   expect(gen_eqn).to eq sin_eqn(sbt(mtp(2, 'x'), 20), frac(1, 2, sign: :-))
-    # end
-    #
-    # it 'equation in the right format sin(20 - 2x) = frac(1, 2)' do
-    #   exp = described_class.new
-    #   allow(exp).to receive(:select_variables)
-    #   allow(exp).to receive(:a).and_return({ value: 2, sign: '-@' })
-    #   allow(exp).to receive(:b).and_return(20)
-    #   allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '+@' })
-    #   gen_eqn = exp.generate_equation
-    #   # puts gen_eqn.latex_solution
-    #   expect(gen_eqn).to eq sin_eqn(sbt(20, mtp(2, 'x')), frac(1, 2))
-    # end
-    #
-    # it 'equation in the right format sin(2x) = frac(1, 2)' do
-    #   exp = described_class.new
-    #   allow(exp).to receive(:select_variables)
-    #   allow(exp).to receive(:a).and_return({ value: 2, sign: '+@' })
-    #   allow(exp).to receive(:b).and_return(0)
-    #   allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '+@' })
-    #   gen_eqn = exp.generate_equation
-    #   # puts gen_eqn.latex_solution
-    #   expect(gen_eqn).to eq sin_eqn(mtp(2, 'x'), frac(1, 2))
-    # end
-    #
-    # it 'equation in the right format sin(x - 20) = -frac(1, 2)' do
-    #   exp = described_class.new
-    #   allow(exp).to receive(:select_variables)
-    #   allow(exp).to receive(:a).and_return({ value: 0, sign: '+@' })
-    #   allow(exp).to receive(:b).and_return(-20)
-    #   allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
-    #   gen_eqn = exp.generate_equation
-    #   # puts gen_eqn.latex_solution
-    #   expect(gen_eqn).to eq sin_eqn(sbt('x', 20), frac(1, 2, sign: :-))
-    # end
-    #
-    # it 'equation in the right format sin(x/2 - 20) = -frac(1, 2)' do
-    #   exp = described_class.new
-    #   allow(exp).to receive(:select_variables)
-    #   allow(exp).to receive(:a).and_return({ value: frac(1, 2), sign: '+@' })
-    #   allow(exp).to receive(:b).and_return(-20)
-    #   allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
-    #   gen_eqn = exp.generate_equation
-    #   # puts gen_eqn.latex_solution
-    #   expect(gen_eqn).to eq sin_eqn(sbt(div('x', 2), 20), frac(1, 2, sign: :-))
-    # end
-    #
-    # it 'equation in the right format sin(20 - x/3) = -frac(1, 2)' do
-    #   exp = described_class.new
-    #   allow(exp).to receive(:select_variables)
-    #   allow(exp).to receive(:a).and_return({ value: frac(1, 3), sign: '-@' })
-    #   allow(exp).to receive(:b).and_return(20)
-    #   allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
-    #   gen_eqn = exp.generate_equation
-    #   # puts gen_eqn.latex_solution
-    #   expect(gen_eqn).to eq sin_eqn(sbt(20, div('x', 3)), frac(1, 2, sign: :-))
-    # end
 
+    it 'equation in the right format sin(2x - 20) = -frac(1, 2)' do
+      exp = described_class.new
+      allow(exp).to receive(:select_variables)
+      allow(exp).to receive(:a).and_return({ value: 2, sign: '+@' })
+      allow(exp).to receive(:b).and_return(-20)
+      allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
+      gen_eqn = exp.generate_equation
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(sbt(mtp(2, 'x'), 20), frac(1, 2, sign: :-))
+    end
+
+    it 'equation in the right format sin(20 - 2x) = frac(1, 2)' do
+      exp = described_class.new
+      allow(exp).to receive(:select_variables)
+      allow(exp).to receive(:a).and_return({ value: 2, sign: '-@' })
+      allow(exp).to receive(:b).and_return(20)
+      allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '+@' })
+      gen_eqn = exp.generate_equation
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(sbt(20, mtp(2, 'x')), frac(1, 2))
+    end
+
+    it 'equation in the right format sin(2x) = frac(1, 2)' do
+      exp = described_class.new
+      allow(exp).to receive(:select_variables)
+      allow(exp).to receive(:a).and_return({ value: 2, sign: '+@' })
+      allow(exp).to receive(:b).and_return(0)
+      allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '+@' })
+      gen_eqn = exp.generate_equation
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(mtp(2, 'x'), frac(1, 2))
+    end
+
+    it 'equation in the right format sin(x - 20) = -frac(1, 2)' do
+      exp = described_class.new
+      allow(exp).to receive(:select_variables)
+      allow(exp).to receive(:a).and_return({ value: 0, sign: '+@' })
+      allow(exp).to receive(:b).and_return(-20)
+      allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
+      gen_eqn = exp.generate_equation
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(sbt('x', 20), frac(1, 2, sign: :-))
+    end
+
+    it 'equation in the right format sin(x/2 - 20) = -frac(1, 2)' do
+      exp = described_class.new
+      allow(exp).to receive(:select_variables)
+      allow(exp).to receive(:a).and_return({ value: frac(1, 2), sign: '+@' })
+      allow(exp).to receive(:b).and_return(-20)
+      allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
+      gen_eqn = exp.generate_equation
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(sbt(div('x', 2), 20), frac(1, 2, sign: :-))
+    end
+
+    it 'equation in the right format sin(20 - x/3) = -frac(1, 2)' do
+      exp = described_class.new
+      allow(exp).to receive(:select_variables)
+      allow(exp).to receive(:a).and_return({ value: frac(1, 3), sign: '-@' })
+      allow(exp).to receive(:b).and_return(20)
+      allow(exp).to receive(:rs).and_return({ value: frac(1, 2), sign: '-@' })
+      gen_eqn = exp.generate_equation
+      # puts gen_eqn.latex_solution
+      expect(gen_eqn).to eq sin_eqn(sbt(20, div('x', 3)), frac(1, 2, sign: :-))
+    end
+
+    it 'specified A values to eq [5]' do
+      exp = described_class.new(a_values: [5])
+      gen_eqn = exp.generate_equation
+      expect(gen_eqn).to eq sin_eqn(add(mtp(5, 'x'), 70), 0)
+    end
+
+    it 'specified B values to eq [4]' do
+      exp = described_class.new(b_values: [5])
+      gen_eqn = exp.generate_equation
+      expect(gen_eqn).to eq sin_eqn(sbt(5, mtp(5, 'x')), 0)
+    end
   end
 end
