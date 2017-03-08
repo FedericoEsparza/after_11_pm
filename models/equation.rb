@@ -89,7 +89,6 @@ class Equation
     end
 
     quadractic = steps.last.ls.get_quad
-    p quadractic
     next_latex = quadractic.latex
     next_latex.slice!'\\begin{align*}
     '

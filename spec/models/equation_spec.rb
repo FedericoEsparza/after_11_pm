@@ -259,8 +259,8 @@ describe Equation do
       eqn = eqn(frac('x',add('x',2)),mtp(5,'x'))
       result = eqn.latex_rational_to_quad
 
-      puts result
-      p '=================='
+      expect(result).to eq "\\begin{align*}\n    \\frac{x}{x+2}&=5x&\\\\[5pt]\n      \\left(x+2\\right)\\frac{x}{x+2}&=\\left(x+2\\right)5x&\\\\[5pt]\n      x&=\\left(x+2\\right)5x&\\\\[5pt]\n      \\end{align*}"
+
     end
 
   end
@@ -270,7 +270,8 @@ describe Equation do
       eqn = eqn(frac(add('x',-4),add('x',2)),mtp(5,'x'))
       result = eqn.latex_solve_rational_quad
 
-      puts result
+      expect(result).to eq "\\begin{align*}\n    \\frac{x+-4}{x+2}&=5x&\\\\[5pt]\n      \\left(x+2\\right)\\frac{x+-4}{x+2}&=\\left(x+2\\right)5x&\\\\[5pt]\n      x-4&=\\left(x+2\\right)5x&\\\\[5pt]\n      x-4&=\\left(x+2\\right)5x&\\\\[5pt]\n      x-4&=\\left(x5+2\\times5\\right)x&\\\\[5pt]\n      x-4&=\\left(x5+10\\right)x&\\\\[5pt]\n      x-4&=\\left(5x+10\\right)x&\\\\[5pt]\n      x-4&=5xx+10x&\\\\[5pt]\n      x-4&=5x^1x^1+10x&\\\\[5pt]\n      x-4&=5x^{1+1}+10x&\\\\[5pt]\n      x-4&=5x^2+10x&\\\\[5pt]\n      x-4-\\left(5x^2+10x\\right)&=0&\\\\[5pt]\n      -5x^2-9x-4&=0&\\\\[5pt]\n      0&=5x^2+9x+4& && &P=5\\times4=20 \\hspace{30pt}S=9&\\\\[5pt]\n    0&=\\left(x+\\frac{4}{5}\\right)\\left(x+1\\right)& && &\\left(4,\\,\\,5\\right)\\hspace{10pt}\\left(\\frac{4}{5},\\,\\,\\frac{5}{5}\\right)\\hspace{10pt}\\left(\\frac{4}{5},\\,\\,1\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-\\frac{4}{5} ,\\,\\, -1\\\\[5pt]\n    \\end{align*}"
+
     end
 
   end
