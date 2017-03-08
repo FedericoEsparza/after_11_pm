@@ -1,4 +1,6 @@
 class SimultaneousEquation
+  include LatexUtilities
+  
   attr_reader :args
 
   def initialize(*args)
@@ -14,7 +16,13 @@ class SimultaneousEquation
   end
 
   def solve
-    determine_multiplier
+    instruction = determine_multiplier
+    steps = []
+
+    determine_multiplier.each do |k, v|
+      steps << eqn(mtp(v.to_i, self.send(k).ls), mtp(v.to_i, self.send(k).rs))
+    end
+    steps
   end
 
   def determine_multiplier

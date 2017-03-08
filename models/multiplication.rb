@@ -556,7 +556,7 @@ class Multiplication
       if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
         arg_i_base_latex = args[i].base_latex
       else
-        arg_i_base_latex = brackets(args[i].base_latex)
+        arg_i_base_latex = args[i].is_a?(equation) ? brackets(args[i].latex) : brackets(args[i].base_latex)
       end
       if numerical?(args[i-1]) && numerical?(args[i])
         result += '\times' + arg_i_base_latex
