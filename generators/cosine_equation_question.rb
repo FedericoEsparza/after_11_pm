@@ -1,5 +1,5 @@
 class CosineEquationQuestion
-  RS_VALUES = [0, frac(1, sqrt(2)), frac(1, 2), frac(sqrt(3), 2), frac(sqrt(2), 2)]
+  RS_VALUES = [frac(1, sqrt(2)), frac(1, 2), frac(sqrt(3), 2), frac(sqrt(2), 2), 0]
   A_VALUES = [0, frac(1, 3), frac(1, 2)] + (1..6).to_a
   B_VALUES = (-100..100).to_a
   SINGS = ['-@', '+@']
@@ -105,7 +105,7 @@ class CosineEquationQuestion
       ls = sbt(ax, b.abs) if b.negative? && b != 0
     end
 
-    cos_eqn(ls, rs_var, ans_min: limits[0], ans_max: limits[1])
+    cos_eqn(ls, rs_var, options: {ans_min: limits[0], ans_max: limits[1]})
   end
 
   def is_integer?(num)
