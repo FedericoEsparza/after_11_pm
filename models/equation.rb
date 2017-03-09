@@ -57,4 +57,58 @@ class Equation
     response = ls.latex + '&=' + rs.latex
     # no_new_line ? response : response + '\\\\'
   end
+
+  def reverse_last_subject_step(subject,curr_steps)
+    new_sides = ls.reverse_subject_step(subject,rs)
+    self.ls = new_sides[:ls]
+    self.rs = new_sides[:rs]
+    curr_steps << self.copy
+  end
+
+  def change_subject_to(subject)
+    if ls.contains?(subject)
+      curr_steps = [self.copy]
+      i = 1
+      while !(ls == subject) && i < 100 do
+        reverse_last_subject_step(subject,curr_steps)
+        i += 1
+      end
+      curr_steps
+    else
+      nil
+    end
+  end
+
+  def contains?(subject)
+    ls.contains?(subject) || rs.contains?(subject)
+  end
+
+  def find_vars
+    vars = ls.find_vars + rs.find_vars
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      eqn(ls.subs_terms(old_var,new_var),rs.subs_terms(old_var,new_var))
+    end
+  end
+
+  def expand
+    ls_steps = ls.expand
+    ls_steps << add(ls_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
+    rs_steps = rs.expand
+    rs_steps << add(rs_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
+    steps = [ls_steps,rs_steps].equalise_array_lengths.transpose
+    steps.map!{|a| eqn(a.first,a.last)}
+    steps = steps.delete_duplicate_steps
+
+  end
+
+  def flatit
+    eqn(ls.flatit,rs.flatit)
+  end
+
 end

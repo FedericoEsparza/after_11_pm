@@ -64,6 +64,12 @@ describe Addition do
       result = addition.simplify_add_m_forms
       expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
     end
+
+    it 'simplifies 25-10y+3y' do
+      addition = add(mtp(25),mtp(-10,'y'),mtp(3,'y'))
+      result = addition.simplify_add_m_forms
+      expect(result).to eq add(mtp(-7,'y'),mtp(25))
+    end
   end
 
   describe '#simplify_brackets' do

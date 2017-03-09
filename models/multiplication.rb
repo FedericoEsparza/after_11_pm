@@ -244,6 +244,45 @@ class Multiplication
     steps
   end
 
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    moved_args = []
+    subject_index = -1
+    args.each_with_index do |arg,i|
+      if arg.contains?(subject)
+        subject_index = i
+      end
+    end
+
+    if args.length > 2
+      new_ls = args.delete_at(subject_index)
+      moved = mtp(args)
+    else
+      new_ls = args.delete_at(subject_index)
+      moved = args.first
+    end
+
+    result[:ls] = new_ls
+    result[:rs] = div(rs,moved)
+    return result
+  end
+
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+
+    result
+  end
+
   def reverse_step(rs)
     result = {}
     if numerical?(args[0])
@@ -260,14 +299,20 @@ class Multiplication
 
   def remove_coef
     result = []
-    args.each {|a| result << a if !(a.is_a?(Numeric))}
+    args.each {|a| result << a if (!(a.is_a?(Numeric)) && !(a.is_a?(fraction)))}
     result
   end
 
   def remove_exp
     result = []
-    args.each {|a| result << a if a.is_a?(Numeric)}
+    args.each {|a| result << a if (a.is_a?(Numeric) || a.is_a?(fraction))}
     result.inject(1, :*)
+  end
+
+  def evaluate_nums
+    new_args = remove_coef
+    new_args = [remove_exp] + new_args
+    mtp(new_args)
   end
 
 
@@ -572,24 +617,48 @@ class Multiplication
     end
   end
 
+  def top_heavy_div
+    top_args = []
+    bot_args = []
+    args.each do |factor|
+      if factor.is_a?(division)
+        top_args << factor.top
+        bot_args << factor.bot
+      else
+        top_args << factor
+      end
+    end
+    if bot_args.length == 0
+      return self
+    elsif bot_args.length == 1
+      div(mtp(top_args),bot_args.first)
+    else
+      div(mtp(top_args),mtp(bot_args))
+    end
+  end
 
 
   #RECURSION
   def expand
     copy = self.copy
     steps = []
-    copy.args.each do |exp|
-      steps << exp.expand
+    if copy == copy.top_heavy_div
+      copy.args.each do |exp|
+        steps << exp.expand
+      end
+      steps = steps.equalise_array_lengths.transpose
+      steps = steps.map{|a| mtp(a)}
+      steps = steps.map{|a| a.flatit}
+      brackets = steps.last
+      next_steps = brackets.combine_brackets
+      steps = steps + next_steps
+      steps = steps.map{|a| a.flatit}
+      steps = delete_duplicate_steps(steps)
+      steps
+    else
+      copy = copy.top_heavy_div
+      copy.expand
     end
-    steps = steps.equalise_array_lengths.transpose
-    steps = steps.map{|a| mtp(a)}
-    steps = steps.map{|a| a.flatit}
-    brackets = steps.last
-    next_steps = brackets.combine_brackets
-    steps = steps + next_steps
-    steps = steps.map{|a| a.flatit}
-    steps = delete_duplicate_steps(steps)
-    steps
   end
 
   def flatit
@@ -612,6 +681,21 @@ class Multiplication
       end
     end
     result = mtp(new_args)
+  end
+
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      mtp(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
   end
 
 end

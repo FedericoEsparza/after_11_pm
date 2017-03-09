@@ -187,6 +187,62 @@ describe Equation do
     end
   end
 
+
+  describe '#change_subject_to' do
+    it 'change subject to x for x+y=10' do
+      equation = eqn(add('x','y'),10)
+      result = equation.change_subject_to('x')
+      expect(result).to eq [
+        eqn(add('x','y'),10),
+        eqn('x',add(10,mtp(-1,'y')))
+      ]
+    end
+
+    it 'change subject to y^2 of x+y^2=10' do
+      equation = eqn(add('x',pow('y',2)),10)
+      result = equation.change_subject_to(pow('y',2))
+      expect(result).to eq [
+        eqn(add('x',pow('y',2)),10),
+        eqn(pow('y',2),add(10,mtp(-1,'x')))
+      ]
+    end
+
+    it 'change subject to z for x+y=10' do
+      equation = eqn(add('x','y'),10)
+      result = equation.change_subject_to('z')
+      expect(result).to eq nil
+    end
+
+    it 'change subject to x for xy=5' do
+      eqn = eqn(mtp('x','y'),5)
+      result = eqn.change_subject_to('x')
+      expect(result).to eq [
+        eqn(mtp('x','y'),5),
+        eqn('x',div(5,'y'))
+      ]
+    end
+
+    it 'change subject to y for x+y+2z = 6' do
+      eqn = eqn(add('x','y',mtp(2,'z')),6)
+      result = eqn.change_subject_to('y')
+
+      expect(result).to eq [
+        eqn(add('x','y',mtp(2,'z')),6),
+        eqn('y',add(6,mtp(-1,add('x',mtp(2,'z')))))
+      ]
+    end
+
+    it 'change subject to y^2 for x+2y^2 = 4z' do
+      eqn = eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z'))
+    result = eqn.change_subject_to(pow('y',2))
+
+      expect(result).to eq [
+        eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z')),
+        eqn(mtp(2,pow('y',2)),add(mtp(4,'z'),mtp(-1,'x'))),
+        eqn(pow('y',2),div(add(mtp(4,'z'),mtp(-1,'x')),2))
+      ]
+    end
+
   describe '#similar_trig_eqn?' do
     it 'returns true for 0=3sinx and 0=4sin2x' do
       eqn_1 = '0=3sinx'.objectify

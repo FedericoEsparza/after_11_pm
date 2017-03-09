@@ -12,14 +12,22 @@ class String
   def greater?(exp)
     if exp.is_a?(String)
       self < exp
-    elsif exp.is_a?(Numeric)
+    elsif exp.is_a?(Numeric) || exp.is_a?(fraction)
       true
     else
       self.greater?(exp.args.first)
     end
   end
 
+  def contains?(subject)
+    self == subject
+  end
+
   def sort_elements
+    self
+  end
+
+  def flatit
     self
   end
 
@@ -295,6 +303,18 @@ class String
 
   def _is_string_var?
     !!(self =~ /[A-Za-z]/) && length == 1
+  end
+
+  def find_vars
+    [self]
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      self
+    end
   end
 
 end
