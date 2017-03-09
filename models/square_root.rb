@@ -13,6 +13,16 @@ class SquareRoot
     @value = new_value
   end
 
+  def sign=(new_sign)
+    @sign = new_sign
+  end
+
+  def ==(sqr)
+    return false unless same_class?(sqr)
+
+    self.evaluate_numeral == sqr.evaluate_numeral
+  end
+
   def evaluate_numeral
     val = value.respond_to?(:evaluate_numeral) ? value.evaluate_numeral : value
     Math.sqrt(val).send(sign)

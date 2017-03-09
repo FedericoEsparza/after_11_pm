@@ -187,6 +187,7 @@ describe Equation do
     end
   end
 
+
   describe '#change_subject_to' do
     it 'change subject to x for x+y=10' do
       equation = eqn(add('x','y'),10)
@@ -242,6 +243,14 @@ describe Equation do
       ]
     end
 
+  describe '#similar_trig_eqn?' do
+    it 'returns true for 0=3sinx and 0=4sin2x' do
+      eqn_1 = '0=3sinx'.objectify
+      eqn_2 = '0=4sin2x'.objectify
+    end
 
+    it 'returns false for 0=3sinx and 0=3cosx' do
+      
+    end
   end
 end
