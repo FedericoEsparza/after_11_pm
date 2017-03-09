@@ -111,4 +111,12 @@ class Equation
     eqn(ls.flatit,rs.flatit)
   end
 
+  def similar_trig_eqn?
+
+  end
+
+  def _fix_trig_args
+
+  end
+
 end

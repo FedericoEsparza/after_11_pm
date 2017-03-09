@@ -9,6 +9,10 @@ class String
     self
   end
 
+  def copy
+    self
+  end
+
   def greater?(exp)
     if exp.is_a?(String)
       self < exp

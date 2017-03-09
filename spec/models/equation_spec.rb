@@ -242,6 +242,7 @@ describe Equation do
         eqn(pow('y',2),div(add(mtp(4,'z'),mtp(-1,'x')),2))
       ]
     end
+  end
 
   describe '#similar_trig_eqn?' do
     it 'returns true for 0=3sinx and 0=4sin2x' do
@@ -250,7 +251,7 @@ describe Equation do
     end
 
     it 'returns false for 0=3sinx and 0=3cosx' do
-      
+
     end
   end
 end
