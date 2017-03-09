@@ -110,3 +110,74 @@ expect(expression.latex.shorten).to eq '2-5(\frac{3}{x-4}+y)'
 latex_string = '2-5(\frac{3}{x-4}+y)'
 expect(latex_string.objectify.latex.shorten).to eq latex_string
 ```
+
+--------
+## Single variable equation step by step
+
+Solving single variable equation step by steps.
+```ruby
+it 'solves conventionalised 9 + 36 / (7x - 2) = 12' do
+  eqn = eqn(add(9,div(36,add(mtp(7,'x'),-2))),12)
+  result = eqn.solve_one_var_eqn
+  expect(result).to eq [
+    eqn(add(9,div(36,add(mtp(7,'x'),-2))),12),
+    eqn(div(36,add(mtp(7,'x'),-2)),sbt(12,9)),
+    eqn(div(36,add(mtp(7,'x'),-2)),3),
+    eqn(add(mtp(7,'x'),-2),div(36,3)),
+    eqn(add(mtp(7,'x'),-2),12),
+    eqn(mtp(7,'x'),add(12,2)),
+    eqn(mtp(7,'x'),14),
+    eqn('x',div(14,7)),
+    eqn('x',2)
+  ]
+end
+```
+The latex to put the solutions together is not yet complete, but its very straight forward, involving calling latex on each element of the returned array and adding the latex strings together.
+
+--------
+## Standard sine equation step by step
+
+Solving standard sine equation step by step.
+```ruby
+equation = SineEquation.new(sbt(mtp(2,'x'),10),0.5)
+eq_solution = equation.latex_solution
+expect(eq_solution).to eq "\\begin{align*}\n &&  ".... #the entire latex is rendered below
+```
+![Imgur](http://i.imgur.com/uPKlqYI.png)
+
+--------
+## Standard quadratic equation step by step
+
+Solving standard quadratic equation by factorisation step by step full solution LaTeX.
+```ruby
+equation = QuadraticEquation.new(quad_term: 30, linear_term: -19, constant_term: -5, variable: 'x')
+solution_latex = equation.latex
+# solution_latex string is rendered below
+```
+
+![Imgur](http://i.imgur.com/z52G9MJ.png)
+
+--------
+# To Do List
+> - Non-standard quadratic equation solver
+> - Quadratic equation (standard and non-standard) question generator
+> - Linear two variable simultaneous equation solver by elimination.
+> - Linear two variable simultaneous equation solver by substitution.
+> - Linear two variable simultaneous equation question generator.
+> - One quadratic and one linear simultaneous equation solver by substitution.
+> - One quadratic and one linear simultaneous equation question generator.
+> - Non-standard Core 2 trigonometric equation solver.  (Machine learning see below)
+> - Almost all A-level Maths topics!
+
+
+--------
+## Machine Learning
+
+For topics such as general trigonometric equation solving, or integration, we would like to build machine learning engines.  The basic idea is that we will give the engine some basic rules like trigonometric identities, and some basic generic ideas of things it can try.  We then have an unintelligent question generator, which generates questions at random, and maybe most cannot be solved, the questions are passed to the solver engine, which will attempt to solve the question with all the rules and basic generic methods we gave to it at the beginning.  Every so often, the solver engine will encounter a question it can solve, and solved it in a particular way.  It then remembers this question type, as one which can be solved, and in this specific way.  So that in the future, should it encounter something which can be rearranged into something similar to the one it solved earlier, it will know that the question can be solved and how to do it.  
+
+This is particularly powerful for integration, perhaps a little too hard for now.  We are planning to start building such an engine for non-standard core 2 trigonometric equations as a starting point.
+
+--------
+## Contributions are welcome and will be paid!
+
+Anyone interested in contributing to this interesting project please contact me *joezhou@onemaths.com*, and if you are able to make contributions, we will pay you as a contractor appropriately.

@@ -50,6 +50,10 @@ class TangentEquation
         if obj.is_a?(Multiplication) && obj.includes?(String)
           scalar = obj.fetch(object: :numeric)
         end
+
+        if obj.is_a?(Division) && obj.includes?(String)
+          scalar = 1.0 / obj.fetch(object: :numeric)
+        end
       end
     end
     (180 / scalar).round
@@ -110,5 +114,10 @@ class TangentEquation
     response = response.flatten.join("\\\\[10pt]\n")
     response = add_align_env(response)
     response + '$' + solution[:set_1][:steps].last.ls + '=' + ' ' + solution[:solutions].join(',') + '$'
+  end
+
+  def latex
+    solution = self.solve
+    solution[:set_1][:steps][0].latex
   end
 end
