@@ -53,12 +53,13 @@ module TrigUtilities
     if exp_copy.is_a?(sine) || exp_copy.is_a?(cosine) || exp_copy.is_a?(tangent)
       return exp_copy.class.new('x')
     end
-    unless exp_copy.is_a?(sine) || exp_copy.is_a?(cosine) || exp_copy.is_a?(tangent)
-      new_args = exp_copy.args.map do |arg|
-        fix_angles_to_x(arg)
-      end
-      return exp_copy.class.new(new_args)
+    if exp_copy.is_a?(string) || numerical?(exp)
+      return exp
     end
+    new_args = exp_copy.args.map do |arg|
+      fix_angles_to_x(arg)
+    end
+    return exp_copy.class.new(new_args)
   end
 
 end

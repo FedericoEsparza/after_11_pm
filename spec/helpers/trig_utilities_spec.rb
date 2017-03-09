@@ -90,6 +90,13 @@ describe TrigUtilities do
       expect(result).to eq '\sin x'.objectify
       expect(result.object_id).not_to eq exp.object_id
     end
+
+    it 'fixes 5-\frac{3+2\tan y^2}{2+\cos y^2}' do
+      exp = '5-\frac{3+2\tan y^2}{2+\cos y^2}'.objectify
+      result = dummy_class.fix_angles_to_x(exp)
+      expect(result).to eq '5-\frac{3+2\tan x}{2+\cos x}'.objectify
+      expect(result.object_id).not_to eq exp.object_id
+    end
   end
 
 end
