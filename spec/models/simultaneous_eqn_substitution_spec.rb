@@ -26,7 +26,6 @@ describe SimutaneousEqnSubstitution do
       equations = sseqn(eqn(add('x',mtp(2,'y')),5),eqn(add(mtp(5,'x'),mtp(3,'y')),15))
 
       result = equations.solve_eqns
-      result.each{|a| puts a.latex}
     end
   end
 
@@ -35,6 +34,24 @@ describe SimutaneousEqnSubstitution do
       equations = sseqn(eqn(add('x',mtp(2,'y')),5),eqn(add(mtp(5,'x'),mtp(3,'y')),15))
       result = equations.latex
       # puts result
+    end
+  end
+
+  describe '#solve_eqns_latex' do
+    it 'latexes solution of x+2y=5, 5x+3y=15' do
+      equations = sseqn('x+2y=5'.objectify,'5x+3y=15'.objectify)
+      result =  equations.solve_eqns_latex
+
+      puts result
+      p '=================='
+    end
+
+    it 'latexes solution of 5x+4y=14, 2x+3y=7' do
+      equations = sseqn('5x+4y=14'.objectify, '2x+3y=7'.objectify)
+      result = equations.solve_eqns_latex
+
+      puts result
+      p '==================='
     end
   end
 

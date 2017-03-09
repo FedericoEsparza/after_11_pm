@@ -107,4 +107,14 @@ class Division
     end
   end
 
+  def expand
+    top_steps = top.expand
+    # top_steps << add(top_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
+    bot_steps = bot.expand
+    # bot_steps << add(bot_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
+    steps = [top_steps,bot_steps].equalise_array_lengths.transpose
+    steps.map!{|a| div(a.first,a.last)}
+    steps = steps.delete_duplicate_steps
+  end
+
 end
