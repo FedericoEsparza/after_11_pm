@@ -60,8 +60,15 @@ class String
   end
 
   def original_objectify
+    # should refactor to the following lines inbetween *'s
+    # ****************************************************
+    # original_string = self.dup
+    # structure_str = empty_brackets(original_string.dup)
+    # args = structure_str.outer_function_args(original_string)
+    # return structure_str.outer_function_class.new(args)
+    # ****************************************************
+
     original_string = self.dup
-    # original_string.gsub!(' ','') #add an intelligent version of this later
     structure_str = empty_brackets(original_string.dup)
 
     if structure_str._outer_func_is_add?
@@ -113,19 +120,19 @@ class String
     end
 
     if structure_str._outer_func_is_sin?
-      args = structure_str._sin_args(original_string)
+      args = structure_str._sin_cos_tan_args(original_string)
       object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return sin(object_args)
     end
 
     if structure_str._outer_func_is_cos?
-      args = structure_str._cos_args(original_string)
+      args = structure_str._sin_cos_tan_args(original_string)
       object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return cos(object_args)
     end
 
     if structure_str._outer_func_is_tan?
-      args = structure_str._tan_args(original_string)
+      args = structure_str._sin_cos_tan_args(original_string)
       object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return tan(object_args)
     end
@@ -229,9 +236,7 @@ class String
     # return false if split_mtp_args(dup).length > 1
     # return true if self =~ /^\\frac/
     # return false
-
     # !!((!(self =~ /\=/) && !(self[1..(length-1)] =~ /\+|\-/) && !(split_mtp_args(dup).length > 1)) && (self =~ /^\\frac/))
-
     __not_eqn? && __not_plus_or_minus? &&
      __not_more_than_one_mtp_args? && __starts_with_frac?
 
@@ -260,23 +265,7 @@ class String
     power_part == self
   end
 
-  def _sin_args(original_string)
-    original_string.slice!(0..3)
-    original_string.gsub!(' ','')
-    args = [original_string]
-    remove_enclosing_bracks(args)
-    args
-  end
-
-  def _cos_args(original_string)
-    original_string.slice!(0..3)
-    original_string.gsub!(' ','')
-    args = [original_string]
-    remove_enclosing_bracks(args)
-    args
-  end
-
-  def _tan_args(original_string)
+  def _sin_cos_tan_args(original_string)
     original_string.slice!(0..3)
     original_string.gsub!(' ','')
     args = [original_string]
