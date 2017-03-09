@@ -6,7 +6,5 @@ class GeneralTrigSolver
   def initialize
   end
 
-  
-
 
 end
