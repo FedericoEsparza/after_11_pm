@@ -23,12 +23,9 @@ module TrigUtilities
     exp.args.each do |a|
       if (numerical?(a) || a.is_a?(string)) == false
         if a.is_a?(sine) || a.is_a?(cosine) || a.is_a?(tangent)
-          if angle != a.angle
-            return false
-          end
-        else #not string num or trig
-          arg_same_angle = _all_has_this_angle?(a,angle)
-          return false if arg_same_angle == false
+          return false if angle != a.angle
+        else
+          return false unless _all_has_this_angle?(a,angle)
         end
       end
     end
