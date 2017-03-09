@@ -40,12 +40,10 @@ module TrigUtilities
     if numerical?(exp_copy)
       return 1
     end
-    unless exp_copy.is_a?(string) || numerical?(exp_copy)
-      new_args = exp_copy.args.map do |arg|
-        fix_nums_to_one(arg)
-      end
-      return exp_copy.class.new(new_args)
+    new_args = exp_copy.args.map do |arg|
+      fix_nums_to_one(arg)
     end
+    return exp_copy.class.new(new_args)
   end
 
   def fix_angles_to_x(exp)

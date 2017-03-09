@@ -1,5 +1,6 @@
 include Factory
 include Latex
+include TrigUtilities
 
 class Equation
   attr_accessor :ls, :rs
@@ -112,12 +113,22 @@ class Equation
   end
 
   def similar_trig_eqn?(eqn_2)
-    # self = eqn_1
-    return false unless same_angles?(eqn_1.rs) && same_angles?(eqn_2.rs)
-    #conventionalise both
-    #fix coefficients
-    #fix angles
-    # eqn_1_copy == eqn_2_copy
+    eqn_1_copy = self.copy
+    eqn_2_copy = eqn_2.copy
+
+    return false unless same_angles?(eqn_1_copy.rs) && same_angles?(eqn_2_copy.rs)
+    return false unless eqn_1_copy.ls == 0 && eqn_2_copy.ls == 0
+
+    eqn_1_copy.rs = conventionalise_plus_minus(eqn_1_copy.rs)
+    eqn_2_copy.rs = conventionalise_plus_minus(eqn_2_copy.rs)
+
+    eqn_1_copy.rs = fix_angles_to_x(eqn_1_copy.rs)
+    eqn_2_copy.rs = fix_angles_to_x(eqn_2_copy.rs)
+
+    eqn_1_copy.rs = fix_nums_to_one(eqn_1_copy.rs)
+    eqn_2_copy.rs = fix_nums_to_one(eqn_2_copy.rs)
+
+    return eqn_1_copy == eqn_2_copy
   end
 
   def _fix_trig_args
