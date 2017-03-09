@@ -5,6 +5,8 @@ include ObjectifyUtilities
 include Latex
 
 class Multiplication
+  include GeneralUtilities
+  
   attr_accessor :args
 
   def standardize_m_form
@@ -270,174 +272,172 @@ class Multiplication
     result.inject(1, :*)
   end
 
-
-
-    def standard_bracket_form
-      new_args = []
-      args.each do |m|
-        if m.is_a?(Addition)
-          new_args << m
-        else
-          new_args << add(m)
-        end
-      end
-      mtp(new_args)
-    end
-
-
-    def greater?(exp)
-      if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power)
-        (self.args.first.greater?(exp)) || (self.args.first == exp)
-      elsif exp.is_a?(Addition)
-        self.greater?(exp.args.first)
+  def standard_bracket_form
+    new_args = []
+    args.each do |m|
+      if m.is_a?(Addition)
+        new_args << m
       else
-        self.args.greater?(exp.args)
+        new_args << add(m)
       end
     end
+    mtp(new_args)
+  end
 
-    def sort_elements
-      array = self.copy.args
-      num_array = []
-      string_array = []
-      array.each do |a|
-        if a.is_a?(Numeric)
-          num_array << a
-        else
-          string_array << a
-        end
-      end
-      string_array = string_array.sort_elements
-      array = num_array + string_array
-      mtp(array)
+
+  def greater?(exp)
+    if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power)
+      (self.args.first.greater?(exp)) || (self.args.first == exp)
+    elsif exp.is_a?(Addition)
+      self.greater?(exp.args.first)
+    else
+      self.args.greater?(exp.args)
     end
+  end
 
-    def is_bracket
-      brac = false
-      mtp = self.copy
-      mtp.args.each{|a| brac = true if a.is_a?(Addition)}
-      brac
-    end
-
-    def combine_two_brackets
-      copy = self.copy
-      new_args = []
-      copy.args.first.args.each_with_index do |a|
-        copy.args.last.args.each_with_index do |b|
-          c = mtp(a,b)
-          new_args << c
-          end
-      end
-      new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
-      new_args.equalise_array_lengths
-      new_add = []
-      new_args.first.each_with_index do |a,i|
-        c = []
-        new_args.each_with_index do |b,j|
-          c << new_args[j][i]
-        end
-        new_add << add(c)
-      end
-      # new_add << new_add.last.sort_elements
-      new_step = new_add.last.copy
-      new_step.args.each do |m|
-        m.m_form_sort
-      end
-      new_add << new_step
-
-      # 3ax^2 + 4y + 2ax^2 + 5y
-      # 3ax^2 + 2ax^2 + 4y  + 5y
-
-      new_add << new_add.last.simplify_add_m_forms
-      new_add = delete_duplicate_steps(new_add)
-      new_add.insert(0,self.copy)
-      self.args = new_add[-1].args
-      new_add
-    end
-
-    def combine_brackets
-      copy = self.copy
-      copy = copy.standard_bracket_form
-
-      no_of_brackets = copy.args.length
-      if no_of_brackets == 1
-        [copy]
-      elsif no_of_brackets == 2
-        copy = copy.combine_two_brackets
+  def sort_elements
+    array = self.copy.args
+    num_array = []
+    string_array = []
+    array.each do |a|
+      if a.is_a?(Numeric)
+        num_array << a
       else
-        first_two_brackets = mtp(copy.args[0],copy.args[1])
-        copy.args = copy.args.drop(2)
-        expanded_brackets_steps = first_two_brackets.combine_two_brackets
-        new_args = []
-        expanded_brackets_steps.each do |a|
-          new_line = [a]
-          copy.args.each{|b| new_line << b}
-          new_args << mtp(new_line)
-        end
-        expanded_brackets_steps = new_args
-        expanded_brackets = expanded_brackets_steps.last
-        expanded_brackets = expanded_brackets.combine_brackets
-        expanded_brackets.each{|a| expanded_brackets_steps << a}
-        expanded_brackets_steps.insert(0,self)
-        expanded_brackets_steps = expanded_brackets_steps.map{|a| a.flatit}
-        expanded_brackets_steps = delete_duplicate_steps(expanded_brackets_steps)
-        expanded_brackets_steps
-      end
-
-    end
-
-
-
-
-    # RECURSION
-    def fetch(object:)
-      object_class = Kernel.const_get(object.to_s.capitalize)
-      args.each do |arg|
-        if arg.is_a?(Power)
-          return arg.args.each { |e|
-            return e if e.is_a?(object_class)
-          }
-        elsif arg.is_a?(self.class)
-          return arg.fetch(object: object)
-        else
-          return arg if arg.is_a?(object_class)
-        end
+        string_array << a
       end
     end
-    # RECURSION
-    def includes?(object_class)
-      args.any? do |arg|
-        if arg.is_a?(Power)
-          arg.args.any? { |e| e.is_a?(object_class) }
-        elsif arg.is_a?(self.class)
-          arg.includes?(object_class)
-        else
-          arg.is_a?(object_class)
+    string_array = string_array.sort_elements
+    array = num_array + string_array
+    mtp(array)
+  end
+
+  def is_bracket
+    brac = false
+    mtp = self.copy
+    mtp.args.each{|a| brac = true if a.is_a?(Addition)}
+    brac
+  end
+
+  def combine_two_brackets
+    copy = self.copy
+    new_args = []
+    copy.args.first.args.each_with_index do |a|
+      copy.args.last.args.each_with_index do |b|
+        c = mtp(a,b)
+        new_args << c
         end
+    end
+    new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+    new_args.equalise_array_lengths
+    new_add = []
+    new_args.first.each_with_index do |a,i|
+      c = []
+      new_args.each_with_index do |b,j|
+        c << new_args[j][i]
       end
+      new_add << add(c)
+    end
+    # new_add << new_add.last.sort_elements
+    new_step = new_add.last.copy
+    new_step.args.each do |m|
+      m.m_form_sort
+    end
+    new_add << new_step
+
+    # 3ax^2 + 4y + 2ax^2 + 5y
+    # 3ax^2 + 2ax^2 + 4y  + 5y
+
+    new_add << new_add.last.simplify_add_m_forms
+    new_add = delete_duplicate_steps(new_add)
+    new_add.insert(0,self.copy)
+    self.args = new_add[-1].args
+    new_add
+  end
+
+  def combine_brackets
+    copy = self.copy
+    copy = copy.standard_bracket_form
+
+    no_of_brackets = copy.args.length
+    if no_of_brackets == 1
+      [copy]
+    elsif no_of_brackets == 2
+      copy = copy.combine_two_brackets
+    else
+      first_two_brackets = mtp(copy.args[0],copy.args[1])
+      copy.args = copy.args.drop(2)
+      expanded_brackets_steps = first_two_brackets.combine_two_brackets
+      new_args = []
+      expanded_brackets_steps.each do |a|
+        new_line = [a]
+        copy.args.each{|b| new_line << b}
+        new_args << mtp(new_line)
+      end
+      expanded_brackets_steps = new_args
+      expanded_brackets = expanded_brackets_steps.last
+      expanded_brackets = expanded_brackets.combine_brackets
+      expanded_brackets.each{|a| expanded_brackets_steps << a}
+      expanded_brackets_steps.insert(0,self)
+      expanded_brackets_steps = expanded_brackets_steps.map{|a| a.flatit}
+      expanded_brackets_steps = delete_duplicate_steps(expanded_brackets_steps)
+      expanded_brackets_steps
     end
 
+  end
 
-    # def latex
-    #   result = ''
-    #   for i in 0..args.length - 1
-    #     if elementary?(args[i]) || args[i].is_a?(power)
-    #       arg_i_latex = args[i].latex
-    #     else
-    #       arg_i_latex = brackets(args[i].latex)
-    #     end
-    #     if numerical?(args[i-1]) && numerical?(args[i])
-    #       result += '\times' + arg_i_latex
-    #     else
-    #       result += arg_i_latex
-    #     end
-    #   end
-    #   first_part =  result.slice!(0..5)
-    #   if first_part == '\times'
-    #     result
-    #   else
-    #     first_part + result
-    #   end
-    # end
+
+
+
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
+  end
+  # RECURSION
+  def includes?(object_class)
+    args.any? do |arg|
+      if arg.is_a?(Power)
+        arg.args.any? { |e| e.is_a?(object_class) }
+      elsif arg.is_a?(self.class)
+        arg.includes?(object_class)
+      else
+        arg.is_a?(object_class)
+      end
+    end
+  end
+
+
+  # def latex
+  #   result = ''
+  #   for i in 0..args.length - 1
+  #     if elementary?(args[i]) || args[i].is_a?(power)
+  #       arg_i_latex = args[i].latex
+  #     else
+  #       arg_i_latex = brackets(args[i].latex)
+  #     end
+  #     if numerical?(args[i-1]) && numerical?(args[i])
+  #       result += '\times' + arg_i_latex
+  #     else
+  #       result += arg_i_latex
+  #     end
+  #   end
+  #   first_part =  result.slice!(0..5)
+  #   if first_part == '\times'
+  #     result
+  #   else
+  #     first_part + result
+  #   end
+  # end
 
 #     def latex
 #       result = ''

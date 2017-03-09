@@ -1,4 +1,4 @@
-require './helpers/latex_utilities'
+# require './helpers/latex_utilities'
 
 describe LatexUtilities do
   let(:dummy_class){(Class.new{include LatexUtilities}).new}

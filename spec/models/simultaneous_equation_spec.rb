@@ -86,12 +86,24 @@ describe SimultaneousEquation do
   end
 
   context '#solve' do
-    it "" do
+    xit "" do
       equation_1 = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)
       equation_2 = eqn(sbt(mtp(6, 'x'), mtp(2, 'y')), 5)
       exp = described_class.new(equation_1, equation_2)
       response = 1
       puts exp.solve[0].latex
+      expect(exp.solve).to eq response
+    end
+
+    it "" do
+      equation_1 = eqn(add(mtp(4, 'x'), mtp(-5, 'y')), 10)
+      equation_2 = eqn(add(mtp(6, 'x'), mtp(-2, 'y')), 5)
+      exp = described_class.new(equation_1, equation_2)
+      response = 1
+      # p exp.solve[2].ls.flatit.simplify_add_m_forms
+      # p exp.solve.last.ls.expand.last.simplify_add_m_forms.latex
+      # puts exp.solve.last.latex
+      p exp.solve.last.ls.flatit
       expect(exp.solve).to eq response
     end
   end

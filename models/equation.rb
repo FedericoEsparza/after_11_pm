@@ -41,8 +41,21 @@ class Equation
     curr_steps
   end
 
+  def solve_two_var_eqn
+    curr_steps = [self.copy]
+    i = 1
+    while (ls.is_a?(string) && numerical?(rs)) == false && i < 100 do
+      reverse_last_step(curr_steps)
+      evaluate_right_side(curr_steps)
+      i += 1
+    end
+    curr_steps
+  end
+
   def reverse_last_step(curr_steps)
     new_sides = ls.reverse_step(rs)
+    p ls
+    p rs
     self.ls = new_sides[:ls]
     self.rs = new_sides[:rs]
     curr_steps << self.copy
