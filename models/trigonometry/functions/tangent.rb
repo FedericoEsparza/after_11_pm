@@ -55,4 +55,6 @@ class Tangent
     end
     '\tan ' + angle_latex
   end
+
+  alias_method :~, :==
 end

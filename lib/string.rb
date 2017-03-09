@@ -321,4 +321,5 @@ class String
     end
   end
 
+  alias_method :~, :==
 end

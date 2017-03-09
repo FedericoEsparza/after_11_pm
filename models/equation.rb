@@ -29,6 +29,10 @@ class Equation
     eqn.class == self.class && ls == eqn.ls && rs == eqn.rs
   end
 
+  def ~(eqn)
+    (eqn.class == self.class && ls.~(eqn.ls) && rs.~(eqn.rs)) || (eqn.class == self.class && eqn.ls.~(self.rs) && eqn.rs.~(self.ls))
+  end
+
   def solve_one_var_eqn
     #assume left exp, right num and it is one variable
     #reverse the outer most expression until 'x' is left
@@ -117,10 +121,8 @@ class Equation
     eqn_2_copy = eqn_2.copy
 
     return false unless same_angles?(eqn_1_copy.rs) && same_angles?(eqn_2_copy.rs)
-    return false unless eqn_1_copy.ls == 0 && eqn_2_copy.ls == 0
 
-    eqn_1_copy.rs = conventionalise_plus_minus(eqn_1_copy.rs)
-    eqn_2_copy.rs = conventionalise_plus_minus(eqn_2_copy.rs)
+    # expand_brackets / multiplication
 
     eqn_1_copy.rs = fix_angles_to_x(eqn_1_copy.rs)
     eqn_2_copy.rs = fix_angles_to_x(eqn_2_copy.rs)
@@ -128,11 +130,14 @@ class Equation
     eqn_1_copy.rs = fix_nums_to_one(eqn_1_copy.rs)
     eqn_2_copy.rs = fix_nums_to_one(eqn_2_copy.rs)
 
-    return eqn_1_copy == eqn_2_copy
+    # puts eqn_1_copy.rs.latex.shorten
+    # puts eqn_2_copy.rs.latex.shorten
+    return eqn_1_copy.rs.~(eqn_2_copy.rs)
   end
 
   def _fix_trig_args
 
   end
+
 
 end

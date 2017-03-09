@@ -16,6 +16,21 @@ class Addition < Expression
     exp.class == self.class && args == exp.args
   end
 
+  def ~(exp)
+    return false unless exp.class == self.class
+    return false unless args.length == exp.args.length
+
+    args.each do |arg|
+      return false unless exp.args.any? { |exp_arg| arg.~(exp_arg) }
+    end
+
+    exp.args.each do |exp_arg|
+      return false unless args.any? { |arg| exp_arg.~(arg) }
+    end
+
+    true
+  end
+
   def greater?(exp)
     if self.class == exp.class
       self.args.greater?(exp.args)

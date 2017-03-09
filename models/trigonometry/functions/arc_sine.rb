@@ -52,4 +52,6 @@ class ArcSine
     value_latex = value.base_latex
     '\arcsin ' + value_latex
   end
+
+  alias_method :~, :==
 end

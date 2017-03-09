@@ -27,6 +27,32 @@ describe Multiplication do
     end
   end
 
+  describe '#~' do
+    it 'returns true for xyz ~ yzx' do
+      exp_1 = 'xyz'.objectify
+      exp_2 = 'yzx'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns true for xyz ~ yzx' do
+      exp_1 = '(x+2)(y-3)(z+4)'.objectify
+      exp_2 = '(z+4)(-3+y)(2+x)'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns true for xyz ~ yzx' do
+      exp_1 = '(x+2)(3-2y)(z+4)'.objectify
+      exp_2 = '(z+4)(-2y+3)(2+x)'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns true for this' do
+      exp_1 = '(\sin x)^2-5+2\sin x'.objectify
+      exp_2 = '-5+2\sin x+(\sin x)^2'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+  end
+
   describe '#>' do
     it 'checks y > z' do
       mtp_1 = 'y'

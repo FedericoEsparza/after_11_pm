@@ -54,4 +54,6 @@ class Cosine
     end
       '\cos ' + angle_latex
   end
+
+  alias_method :~, :==
 end

@@ -46,4 +46,6 @@ class ArcTangent
     value_latex = value.base_latex
     '\arctan ' + value_latex
   end
+
+  alias_method :~, :==
 end

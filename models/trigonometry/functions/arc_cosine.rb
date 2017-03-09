@@ -52,4 +52,6 @@ class ArcCosine
     value_latex = value.base_latex
     '\arccos ' + value_latex
   end
+
+  alias_method :~, :==
 end

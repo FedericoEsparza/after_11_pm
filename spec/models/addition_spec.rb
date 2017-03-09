@@ -126,5 +126,31 @@ describe Addition do
     end
   end
 
+  describe '#~' do
+    it 'returns true for 3+4 and 4+3' do
+      exp_1 = add(3, 4)
+      exp_2 = add(4,3)
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns true for x^2 +3 +5' do
+      exp_1 = 'x^2+3+5'.objectify
+      exp_2 = '3+5+x^2'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns true for \sin x+y^2+z^{-3}' do
+      exp_1 = '\sin x+(y^2+z^{-3})'.objectify
+      exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns false for \sin x+y^2+z^{-3}' do
+      exp_1 = '\sin x+y^2+z^{-3}'.objectify
+      exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
+      expect(exp_1.~(exp_2)).to be false
+    end
+  end
+
 
 end
