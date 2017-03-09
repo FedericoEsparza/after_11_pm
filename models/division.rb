@@ -46,7 +46,7 @@ class Division
   def evaluate_numeral
     args[0]/args[1]
   end
-
+#
   def contains?(subject)
     result = false
     if self == subject
@@ -59,6 +59,19 @@ class Division
       end
     end
     result
+  end
+
+  def sort_elements
+    array = self.copy.args
+    div(array.sort_elements)
+  end
+
+  def greater?(exp)
+    if self.class == exp.class
+      self.args.greater?(exp.args)
+    else
+      (self.args.first.greater?(exp))
+    end
   end
 
   def reverse_subject_step(subject,rs)
@@ -107,6 +120,18 @@ class Division
     end
   end
 
+  def split_div
+    if top.is_a?(addition)
+      new_add = []
+      top.args.each do |arg|
+        new_add << mtp(frac(1,bot),arg)
+      end
+      add(new_add)
+    else
+      mtp(frac(1,bot),top)
+    end
+  end
+
   def expand
     top_steps = top.expand
     # top_steps << add(top_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
@@ -114,6 +139,7 @@ class Division
     # bot_steps << add(bot_steps.last).flatit.standardize_add_m_form.simplify_add_m_forms
     steps = [top_steps,bot_steps].equalise_array_lengths.transpose
     steps.map!{|a| div(a.first,a.last)}
+    steps << steps.last.split_div
     steps = steps.delete_duplicate_steps
   end
 

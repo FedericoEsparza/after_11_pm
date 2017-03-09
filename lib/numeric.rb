@@ -12,7 +12,7 @@
 class Fixnum
 
   def greater? (exp)
-    if exp.is_a?(Fixnum)
+    if exp.is_a?(Numeric) || exp.is_a?(fraction)
       self > exp
     else
       false

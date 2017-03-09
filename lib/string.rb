@@ -12,7 +12,7 @@ class String
   def greater?(exp)
     if exp.is_a?(String)
       self < exp
-    elsif exp.is_a?(Numeric)
+    elsif exp.is_a?(Numeric) || exp.is_a?(fraction)
       true
     else
       self.greater?(exp.args.first)

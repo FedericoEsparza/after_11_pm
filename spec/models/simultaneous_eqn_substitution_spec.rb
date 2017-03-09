@@ -46,8 +46,8 @@ describe SimutaneousEqnSubstitution do
       p '=================='
     end
 
-    it 'latexes solution of 5x+4y=14, 2x+3y=7' do
-      equations = sseqn('5x+4y=14'.objectify, '2x+3y=7'.objectify)
+    it 'latexes solution of x+5y=20, 2x+2y=24' do
+      equations = sseqn('x+5y=20'.objectify, '2x+2y=24'.objectify)
       result = equations.solve_eqns_latex
 
       puts result

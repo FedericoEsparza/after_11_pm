@@ -298,13 +298,13 @@ class Multiplication
 
   def remove_coef
     result = []
-    args.each {|a| result << a if !(a.is_a?(Numeric))}
+    args.each {|a| result << a if (!(a.is_a?(Numeric)) && !(a.is_a?(fraction)))}
     result
   end
 
   def remove_exp
     result = []
-    args.each {|a| result << a if a.is_a?(Numeric)}
+    args.each {|a| result << a if (a.is_a?(Numeric) || a.is_a?(fraction))}
     result.inject(1, :*)
   end
 
@@ -391,7 +391,7 @@ class Multiplication
       # 3ax^2 + 4y + 2ax^2 + 5y
       # 3ax^2 + 2ax^2 + 4y  + 5y
 
-      # new_add << new_add.last.simplify_add_m_forms
+      new_add << new_add.last.simplify_add_m_forms
       new_add = delete_duplicate_steps(new_add)
       new_add.insert(0,self.copy)
       self.args = new_add[-1].args
@@ -616,24 +616,48 @@ class Multiplication
     end
   end
 
+  def top_heavy_div
+    top_args = []
+    bot_args = []
+    args.each do |factor|
+      if factor.is_a?(division)
+        top_args << factor.top
+        bot_args << factor.bot
+      else
+        top_args << factor
+      end
+    end
+    if bot_args.length == 0
+      return self
+    elsif bot_args.length == 1
+      div(mtp(top_args),bot_args.first)
+    else
+      div(mtp(top_args),mtp(bot_args))
+    end
+  end
 
 
   #RECURSION
   def expand
     copy = self.copy
     steps = []
-    copy.args.each do |exp|
-      steps << exp.expand
+    if copy == copy.top_heavy_div
+      copy.args.each do |exp|
+        steps << exp.expand
+      end
+      steps = steps.equalise_array_lengths.transpose
+      steps = steps.map{|a| mtp(a)}
+      steps = steps.map{|a| a.flatit}
+      brackets = steps.last
+      next_steps = brackets.combine_brackets
+      steps = steps + next_steps
+      steps = steps.map{|a| a.flatit}
+      steps = delete_duplicate_steps(steps)
+      steps
+    else
+      copy = copy.top_heavy_div
+      copy.expand
     end
-    steps = steps.equalise_array_lengths.transpose
-    steps = steps.map{|a| mtp(a)}
-    steps = steps.map{|a| a.flatit}
-    brackets = steps.last
-    next_steps = brackets.combine_brackets
-    steps = steps + next_steps
-    steps = steps.map{|a| a.flatit}
-    steps = delete_duplicate_steps(steps)
-    steps
   end
 
   def flatit

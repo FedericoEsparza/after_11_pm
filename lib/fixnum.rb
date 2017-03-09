@@ -11,7 +11,7 @@ require "prime"
 
 
   def greater? (exp)
-    if exp.is_a?(Fixnum)
+    if exp.is_a?(Fixnum) || exp.is_a?(fraction)
       self > exp
     else
       false
@@ -29,6 +29,23 @@ require "prime"
   def flatit
     self
   end
+
+  # def mult(fract)
+  #   if fract.is_a?(fraction)
+  #     frac(mtp(fract.numerator,self).evaluate_numeral,fract.denominator)
+  #   else
+  #     self*fract
+  #   end
+  # end
+  #
+  # def plus(fract)
+  #   if fract.is_a?(fraction)
+  #     frac(add(fract.numerator,self).evaluate_numeral,fract.denominator)
+  #   else
+  #     self+fract
+  #   end
+  # end
+
 
   # def flatit
   #   self

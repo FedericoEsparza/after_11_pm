@@ -744,4 +744,12 @@ describe Multiplication do
     end
   end
 
+  describe '#top_heavy_div' do
+    it 'top heavies 2((14-4y)/5)' do
+      exp = mtp(2,div(add(14,mtp(-4,'y')),5))
+      result = exp.top_heavy_div
+      expect(result).to eq div(mtp(2,add(14,mtp(-4,'y'))),5)
+    end
+  end
+
 end

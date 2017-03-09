@@ -56,11 +56,13 @@ class SimutaneousEqnSubstitution
     first_steps = eqns[0].change_subject_to(subject)
     # first_steps.delete_at(-1)
     first_steps = first_steps.delete_duplicate_steps
+
     new_eqn = eqns[1].subs_terms(subject,first_steps.last.rs)
-    p new_eqn
     sub_steps = new_eqn.expand
     next_step = new_eqn.expand.last
-    next_step = next_step.change_subject_to('y')
+    next_step = next_step.flatit
+    next_step = eqn(next_step.ls,next_step.rs.evaluate_numeral)
+    next_step = next_step.solve_one_var_eqn
     sub_steps += next_step
     sub_steps = sub_steps.delete_duplicate_steps
     steps = {first: first_steps, last: sub_steps}
