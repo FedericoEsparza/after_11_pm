@@ -67,7 +67,13 @@ describe TrigUtilities do
     end
   end
 
-
-
+  describe '#fix_nums_to_one' do
+    it 'fixes 3+2 to 1+1' do
+      exp = '3+2'.objectify
+      result = dummy_class.fix_nums_to_one(exp)
+      expect(result).to eq '1+1'.objectify
+      expect(result.object_id).not_to eq exp.object_id
+    end
+  end
 
 end

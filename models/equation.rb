@@ -111,8 +111,13 @@ class Equation
     eqn(ls.flatit,rs.flatit)
   end
 
-  def similar_trig_eqn?
-
+  def similar_trig_eqn?(eqn_2)
+    # self = eqn_1
+    return false unless same_angles?(eqn_1.rs) && same_angles?(eqn_2.rs)
+    #conventionalise both
+    #fix coefficients
+    #fix angles
+    # eqn_1_copy == eqn_2_copy
   end
 
   def _fix_trig_args

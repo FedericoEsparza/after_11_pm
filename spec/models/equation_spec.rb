@@ -248,6 +248,7 @@ describe Equation do
     it 'returns true for 0=3sinx and 0=4sin2x' do
       eqn_1 = '0=3sinx'.objectify
       eqn_2 = '0=4sin2x'.objectify
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq true
     end
 
     it 'returns false for 0=3sinx and 0=3cosx' do
