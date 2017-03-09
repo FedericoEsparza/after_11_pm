@@ -83,4 +83,13 @@ describe TrigUtilities do
     end
   end
 
+  describe '#fix_angles_to_x' do
+    it 'fixes \sin 2x to \sin x' do
+      exp = '\sin 2x'.objectify
+      result = dummy_class.fix_angles_to_x(exp)
+      expect(result).to eq '\sin x'.objectify
+      expect(result.object_id).not_to eq exp.object_id
+    end
+  end
+
 end
