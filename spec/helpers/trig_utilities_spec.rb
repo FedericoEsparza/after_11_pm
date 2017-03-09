@@ -74,6 +74,13 @@ describe TrigUtilities do
       expect(result).to eq '1+1'.objectify
       expect(result.object_id).not_to eq exp.object_id
     end
+
+    it 'fixes 5-\frac{3+2\tan y^2}{2+\cos y^2}' do
+      exp = '5-\frac{3+2\tan y^2}{2+\cos y^2}'.objectify
+      result = dummy_class.fix_nums_to_one(exp)
+      expect(result).to eq '1+\frac{1+1\tan y^1}{1+\cos y^1}'.objectify
+      expect(result.object_id).not_to eq exp.object_id
+    end
   end
 
 end
