@@ -9,7 +9,7 @@
 # require './models/numerals'
 # require './models/factory'
 
-class Fixnum
+class Numeric
 
   def greater? (exp)
     if exp.is_a?(Fixnum)
@@ -27,6 +27,13 @@ class Fixnum
     Prime.prime_division(n).flat_map { |factor, power| [factor] * power }
   end
 
+  def radiance
+    self * Math::PI / 180
+  end
+
+  def degrees
+    self * 180 / Math::PI
+  end
   # def <(exp)
   #   if exp.is_a?(String)
   #     self > exp

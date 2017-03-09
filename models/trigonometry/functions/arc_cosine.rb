@@ -36,7 +36,15 @@ class ArcCosine
   end
 
   def evaluate_numeral
-    rad = Math.acos(value)
+    if value.is_a?(Fraction)
+      var = value.evaluate_numeral
+    elsif value.is_a?(Hash)
+      var = value[:value].send(value[:sign])
+    else
+      var = value
+    end
+
+    rad = Math.acos(var)
     (rad / (Math::PI) * 180).round
   end
 
