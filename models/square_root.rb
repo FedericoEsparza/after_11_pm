@@ -42,6 +42,8 @@ class SquareRoot
     '\sqrt{' + value.base_latex + '}'
   end
 
+  alias_method :~, :==
+  
   private
 
   def same_class?(object)

@@ -141,4 +141,5 @@ class Subtraction
   #   steps = steps.delete_duplicate_steps
   # end
 
+  alias_method :~, :==
 end

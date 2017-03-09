@@ -113,4 +113,5 @@ class Power
     vars
   end
 
+  alias_method :~, :==
 end

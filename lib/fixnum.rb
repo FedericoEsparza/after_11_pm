@@ -74,4 +74,5 @@ require "prime"
     []
   end
 
+  alias_method :~, :==
 end

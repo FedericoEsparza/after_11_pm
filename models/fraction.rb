@@ -160,6 +160,8 @@ class Fraction
     end
   end
 
+  alias_method :~, :==
+
   private
 
   def same_class?(object)

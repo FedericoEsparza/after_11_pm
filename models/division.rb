@@ -171,4 +171,6 @@ class Division
     end
   end
 
+
+  alias_method :~, :==
 end
