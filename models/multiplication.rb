@@ -401,15 +401,13 @@ class Multiplication
     end
     new_add << new_step
 
-    # 3ax^2 + 4y + 2ax^2 + 5y
-    # 3ax^2 + 2ax^2 + 4y  + 5y
-
-    new_add << new_add.last.simplify_add_m_forms
+    # new_add << new_add.last.simplify_add_m_forms
     new_add = delete_duplicate_steps(new_add)
     new_add.insert(0,self.copy)
     self.args = new_add[-1].args
     new_add
   end
+
 
   def combine_brackets
     copy = self.copy
@@ -424,6 +422,7 @@ class Multiplication
       first_two_brackets = mtp(copy.args[0],copy.args[1])
       copy.args = copy.args.drop(2)
       expanded_brackets_steps = first_two_brackets.combine_two_brackets
+      expanded_brackets_steps << expanded_brackets_steps.last.simplify_add_m_forms
       new_args = []
       expanded_brackets_steps.each do |a|
         new_line = [a]

@@ -132,7 +132,11 @@ class Addition < Expression
         results << new_mtp
       end
     end
-    add(results)
+    if results.length == 0
+      0
+    else
+      add(results)
+    end
   end
 
   def evaluate_numeral
