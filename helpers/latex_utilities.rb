@@ -134,34 +134,26 @@ module LatexUtilities
       return exp.class.new(conv_args)
     end
 
-    if exp.is_a?(cosine)
+    if _standard_class?(exp)
       conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
       return exp.class.new(conv_args)
     end
 
-    if exp.is_a?(sine)
-      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
-      return exp.class.new(conv_args)
+    if numerical?(exp) || exp.is_a?(string)
+      return exp
     end
 
-    if exp.is_a?(subtraction)
-      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
-      return exp.class.new(conv_args)
+    if exp.is_a?(square_root)
+      exp.value = conventionalise_plus_minus(exp.value)
+      return exp
     end
 
-    if exp.is_a?(division)
-      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
-      return exp.class.new(conv_args)
-    end
+    # should not have the line below
+    # return exp
+  end
 
-    if exp.is_a?(power)
-      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
-      return exp.class.new(conv_args)
-    end
-
-    # if numerical?(exp) || exp.is_a?(string)
-    return exp
-    # end
+  def _standard_class?(exp)
+    [power,division,subtraction,sine,cosine,tangent,arcsine,arctangent,arccosine,equation].include?(exp.class)
   end
 
   def conventionalise_one_times(exp)

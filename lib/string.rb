@@ -31,7 +31,7 @@ class String
   end
 
   def correct_latex?
-    objectify(self).latex.shorten == self
+    objectify.latex.shorten == self
   end
 
   def expand

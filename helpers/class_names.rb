@@ -51,6 +51,26 @@ module ClassName
     Tangent
   end
 
+  def arcsine
+    ArcSine
+  end
+
+  def arccosine
+    ArcCosine
+  end
+
+  def arctangent
+    ArcTangent
+  end
+
+  def square_root
+    SquareRoot
+  end
+
+  def equation
+    Equation
+  end
+
   def sin_eqn_qs
     SineEquationQuestion
   end
