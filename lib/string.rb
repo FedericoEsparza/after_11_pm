@@ -40,7 +40,7 @@ class String
 
   def objectify
     original_string = self.dup
-    original_string.gsub!(' ','')
+    # original_string.gsub!(' ','')
     i = 1
     while i < original_string.length
       if insert_plus?(original_string,i)
@@ -61,7 +61,7 @@ class String
 
   def original_objectify
     original_string = self.dup
-    original_string.gsub!(' ','')
+    # original_string.gsub!(' ','') #add an intelligent version of this later
     structure_str = empty_brackets(original_string.dup)
 
     if structure_str._outer_func_is_add?
@@ -111,6 +111,25 @@ class String
       object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return eqn(object_args[0],object_args[1])
     end
+
+    if structure_str._outer_func_is_sin?
+      args = structure_str._sin_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return sin(object_args)
+    end
+
+    if structure_str._outer_func_is_cos?
+      args = structure_str._cos_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return cos(object_args)
+    end
+
+    if structure_str._outer_func_is_tan?
+      args = structure_str._tan_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return tan(object_args)
+    end
+
   end
 
   def _add_args(original_string)
@@ -195,12 +214,13 @@ class String
   end
 
   def _outer_func_is_mtp?
-    # return false if self == '-'
-    # return false if self[1..(length-1)] =~ /\+|\-|\=/
-    # return false if split_mtp_args(dup).length == 1
-    # return true
-    !((self == '-') || (self[1..(length-1)] =~ /\+|\-|\=/) ||
-      (split_mtp_args(dup).length == 1))
+    return false if self == '-'
+    return false if self[1..(length-1)] =~ /\+|\-|\=/
+    return false if split_mtp_args(dup).length == 1
+    return false if self =~ /^\\sin/
+    return true
+    # !((self == '-') || (self[1..(length-1)] =~ /\+|\-|\=/) ||
+      # (split_mtp_args(dup).length == 1))
   end
 
   def _outer_func_is_div?
@@ -234,11 +254,46 @@ class String
   end
 
   def _outer_func_is_pow?
-    return false if self =~ /\=/
-    return false if self[1..(length-1)] =~ /\+|\-/
-    return false if split_mtp_args(dup).length > 1
-    return true if self =~ /\^/
-    return false
+    return false unless self =~ /\^/
+    copy = self.dup
+    power_part = copy.slice(/((\d+)|(\(\$*\))|([A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d))/)
+    power_part == self
+  end
+
+  def _sin_args(original_string)
+    original_string.slice!(0..3)
+    original_string.gsub!(' ','')
+    args = [original_string]
+    remove_enclosing_bracks(args)
+    args
+  end
+
+  def _cos_args(original_string)
+    original_string.slice!(0..3)
+    original_string.gsub!(' ','')
+    args = [original_string]
+    remove_enclosing_bracks(args)
+    args
+  end
+
+  def _tan_args(original_string)
+    original_string.slice!(0..3)
+    original_string.gsub!(' ','')
+    args = [original_string]
+    remove_enclosing_bracks(args)
+    args
+  end
+
+  def _outer_func_is_sin?
+    !!(self =~ /^\\sin/)
+  end
+
+  def _outer_func_is_cos?
+    !!(self =~ /^\\cos/)
+  end
+
+  def _outer_func_is_tan?
+    !!(self =~ /^\\tan/)
   end
 
   def _outer_func_is_eqn?
