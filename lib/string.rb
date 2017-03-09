@@ -118,6 +118,18 @@ class String
       return sin(object_args)
     end
 
+    if structure_str._outer_func_is_cos?
+      args = structure_str._cos_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return cos(object_args)
+    end
+
+    if structure_str._outer_func_is_tan?
+      args = structure_str._tan_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return tan(object_args)
+    end
+
   end
 
   def _add_args(original_string)
@@ -256,8 +268,32 @@ class String
     args
   end
 
+  def _cos_args(original_string)
+    original_string.slice!(0..3)
+    original_string.gsub!(' ','')
+    args = [original_string]
+    remove_enclosing_bracks(args)
+    args
+  end
+
+  def _tan_args(original_string)
+    original_string.slice!(0..3)
+    original_string.gsub!(' ','')
+    args = [original_string]
+    remove_enclosing_bracks(args)
+    args
+  end
+
   def _outer_func_is_sin?
     !!(self =~ /^\\sin/)
+  end
+
+  def _outer_func_is_cos?
+    !!(self =~ /^\\cos/)
+  end
+
+  def _outer_func_is_tan?
+    !!(self =~ /^\\tan/)
   end
 
   def _outer_func_is_eqn?

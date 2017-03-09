@@ -252,6 +252,50 @@ describe String do
       end
     end
 
+    context 'cosine' do
+      it '\cos x' do
+        expect('\cos x'.objectify).to eq cos('x')
+      end
+
+      it '\cos(2x)+4' do
+        expect('\cos(2x)+4'.objectify).to eq add(cos(mtp(2,'x')),4)
+      end
+
+      it '\cos 2x-4' do
+        expect('\cos 2x-4'.objectify).to eq add(cos(mtp(2,'x')),-4)
+      end
+
+      it '\cos ax+4' do
+        expect('\cos ax+4'.objectify).to eq add(cos(mtp('a','x')),4)
+      end
+
+      it '\cos a^2' do
+        expect('\cos a^2'.objectify).to eq cos(pow('a',2))
+      end
+    end
+
+    context 'tangent' do
+      it '\tan x' do
+        expect('\tan x'.objectify).to eq tan('x')
+      end
+
+      it '\tan(2x)+4' do
+        expect('\tan(2x)+4'.objectify).to eq add(tan(mtp(2,'x')),4)
+      end
+
+      it '\tan 2x-4' do
+        expect('\tan 2x-4'.objectify).to eq add(tan(mtp(2,'x')),-4)
+      end
+
+      it '\tan ax+4' do
+        expect('\tan ax+4'.objectify).to eq add(tan(mtp('a','x')),4)
+      end
+
+      it '\tan a^2' do
+        expect('\tan a^2'.objectify).to eq tan(pow('a',2))
+      end
+    end
+
   end
   #
   # xdescribe 'objectify and olatex back' do

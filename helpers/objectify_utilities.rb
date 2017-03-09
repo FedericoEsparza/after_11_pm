@@ -63,9 +63,43 @@ module ObjectifyUtilities
       _delete_next_times_arg(string_copy)
       _add_next_minus_one_arg(result_array,string_copy)
       _add_next_sine_arg(result_array,string_copy)
+      _add_next_cos_arg(result_array,string_copy)
+      _add_next_tan_arg(result_array,string_copy)
       i += 1
     end
     result_array
+  end
+
+  def _add_next_tan_arg(result_array,string_copy)
+    slice_index = _tan_arg_end_index(string_copy)
+    return if slice_index.nil?
+    result_array << string_copy.slice!(0..slice_index)
+  end
+
+  def _tan_arg_end_index(string_copy)
+    return nil unless string_copy =~ /^\\tan/
+    for i in 5..(string_copy.length-1)
+      if string_copy[i] =~ /\(|\\|\=/
+        return i - 1
+      end
+    end
+    return string_copy.length - 1
+  end
+
+  def _add_next_cos_arg(result_array,string_copy)
+    slice_index = _cos_arg_end_index(string_copy)
+    return if slice_index.nil?
+    result_array << string_copy.slice!(0..slice_index)
+  end
+
+  def _cos_arg_end_index(string_copy)
+    return nil unless string_copy =~ /^\\cos/
+    for i in 5..(string_copy.length-1)
+      if string_copy[i] =~ /\(|\\|\=/
+        return i - 1
+      end
+    end
+    return string_copy.length - 1
   end
 
   def _add_next_sine_arg(result_array,string_copy)
