@@ -5,6 +5,10 @@ class Array
     self
   end
 
+  def copy
+    DeepClone.clone self
+  end
+
 
   def greater?(exp)
     array = self
@@ -54,7 +58,7 @@ class Array
     end
 
     def evaluate_sum
-      array = self
+      array = self.copy
       if array == []
         0
       else
@@ -63,10 +67,12 @@ class Array
     end
 
     def delete_duplicate_steps
-      steps = self
+      steps = self.copy
       i = 0
-      while i < steps.length
-        if steps[i] == steps[i+1]
+      while i < (steps.length - 1)
+        step_1 = steps[i].copy
+        step_2 = steps[i+1].copy
+        if step_1.latex == step_2.latex
           steps.delete_at(i)
         else
           i += 1

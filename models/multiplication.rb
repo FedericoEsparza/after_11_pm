@@ -392,7 +392,7 @@ class Multiplication
       # 3ax^2 + 4y + 2ax^2 + 5y
       # 3ax^2 + 2ax^2 + 4y  + 5y
 
-      new_add << new_add.last.simplify_add_m_forms
+      # new_add << new_add.last.simplify_add_m_forms
       new_add = delete_duplicate_steps(new_add)
       new_add.insert(0,self.copy)
       self.args = new_add[-1].args
