@@ -121,14 +121,8 @@ class Equation
     eqn_2_copy = eqn_2.copy
 
     return false unless same_angles?(eqn_1_copy.rs) && same_angles?(eqn_2_copy.rs)
-    return false unless eqn_1_copy.ls == 0 && eqn_2_copy.ls == 0
 
     # expand_brackets / multiplication
-
-    # sort ?  or check arg one by one
-
-    # eqn_1_copy.rs = conventionalise_plus_minus(eqn_1_copy.rs)
-    # eqn_2_copy.rs = conventionalise_plus_minus(eqn_2_copy.rs)
 
     eqn_1_copy.rs = fix_angles_to_x(eqn_1_copy.rs)
     eqn_2_copy.rs = fix_angles_to_x(eqn_2_copy.rs)

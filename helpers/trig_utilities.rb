@@ -32,8 +32,10 @@ module TrigUtilities
     return true
   end
 
-  def fix_nums_to_one(exp)
+  def fix_nums_to_one(exp, fix_pow: false)
     exp_copy = exp.copy
+    return exp_copy if numerical?(exp_copy) && fix_pow
+
     if exp_copy.is_a?(string)
       return exp_copy
     end
@@ -41,7 +43,7 @@ module TrigUtilities
       return 1
     end
     new_args = exp_copy.args.map do |arg|
-      fix_nums_to_one(arg)
+      fix_nums_to_one(arg, fix_pow: exp_copy.is_a?(power))
     end
     return exp_copy.class.new(new_args)
   end
