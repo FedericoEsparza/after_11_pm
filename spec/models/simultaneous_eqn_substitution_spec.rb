@@ -27,7 +27,7 @@ describe SimutaneousEqnSubstitution do
 
       result = equations.generate_solution
 
-      
+
     end
   end
 

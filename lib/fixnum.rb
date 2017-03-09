@@ -9,6 +9,9 @@ require "prime"
     self.to_s
   end
 
+  def copy
+    self
+  end
 
   def greater? (exp)
     if exp.is_a?(Fixnum) || exp.is_a?(fraction)
