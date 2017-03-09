@@ -186,4 +186,15 @@ describe Equation do
       end
     end
   end
+
+  describe '#similar_trig_eqn?' do
+    it 'returns true for 0=3sinx and 0=4sin2x' do
+      eqn_1 = '0=3sinx'.objectify
+      eqn_2 = '0=4sin2x'.objectify
+    end
+
+    it 'returns false for 0=3sinx and 0=3cosx' do
+      
+    end
+  end
 end
