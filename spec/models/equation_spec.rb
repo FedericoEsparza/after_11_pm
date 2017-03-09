@@ -246,8 +246,8 @@ describe Equation do
 
   describe '#similar_trig_eqn?' do
     it 'returns true for 0=3sinx and 0=4sin2x' do
-      eqn_1 = '0=3\sinx'.objectify
-      eqn_2 = '0=4\sin2x'.objectify
+      eqn_1 = '0=3\sinx-5'.objectify
+      eqn_2 = '0=4\sin2x+6'.objectify
       expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq true
     end
 
