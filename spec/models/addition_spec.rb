@@ -65,12 +65,12 @@ describe Addition do
       expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
     end
 
-    it '#simplifies x^2 + 4x + 4 + (x-2)' do
+    xit '#simplifies x^2 + 4x + 4 + (x-2)' do
       addition = 'x^2 + 4x + 4 + x-2'.objectify.standardize_add_m_form
       result = addition.simplify_add_m_forms.flatit
       expect(result).to eq 'x^2 + 5x + 2'.objectify
-    end  
-     
+    end
+
     it 'simplifies 25-10y+3y' do
       addition = add(mtp(25),mtp(-10,'y'),mtp(3,'y'))
       result = addition.simplify_add_m_forms
@@ -144,7 +144,7 @@ describe Addition do
       exp = frac(mtp('x',add('x',1)),'x')
       result = exp.elim_common_factors
 
-      expect(result).to eq frac(add('x',1),1)
+      expect(result).to eq add('x',1)
     end
 
     it 'simplifies (x-1)yz/xz(y-1)' do
@@ -153,7 +153,7 @@ describe Addition do
       expect(result).to eq frac(mtp(add('x',-1),'y'),mtp('x',add('y',-1)))
     end
   end
- 
+
   describe '#~' do
     it 'returns true for 3+4 and 4+3' do
       exp_1 = add(3, 4)

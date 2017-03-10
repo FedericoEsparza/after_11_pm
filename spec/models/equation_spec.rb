@@ -296,7 +296,7 @@ describe Equation do
   end
 
   describe '#expand_quad_eqn' do
-    it 'expands (x+2)^2= x-2 ' do
+    xit 'expands (x+2)^2= x-2 ' do
       eqn = eqn(pow(add('x',2),2),add('x',-2))
       result = eqn.expand_quad_eqn
 
@@ -304,7 +304,6 @@ describe Equation do
       #   string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
       #   puts string
       # end
-
       expect(result[0]).to eq eqn('(x+2)^2'.objectify,'x-2'.objectify)
       expect(result[1]).to eq eqn('(x+2)(x+2)'.objectify,'x-2'.objectify)
       expect(result[2]).to eq eqn('xx+x2+2x+2\times2'.objectify,'x-2'.objectify)
@@ -313,7 +312,6 @@ describe Equation do
       expect(result[5]).to eq eqn('x^2+x2+2x+4'.objectify,'x-2'.objectify)
       expect(result[6]).to eq eqn('x^2+2x+2x+4'.objectify,'x-2'.objectify)
       expect(result[7]).to eq eqn('x^2+4x+4'.objectify,'x-2'.objectify)
-
 
     end
   end
@@ -331,7 +329,7 @@ describe Equation do
     end
   end
 
-  describe '#solve_quad_eqn' do
+  xdescribe '#solve_quad_eqn' do
     it 'solves (x+2)^2= x-2' do
       eqn = eqn(pow(add('x',2),2),add('x',-2))
       result = eqn.solve_quad_eqn
@@ -350,7 +348,7 @@ describe Equation do
     end
   end
 
-  describe '#latex_quad_solution' do
+  xdescribe '#latex_quad_solution' do
     it 'latexes (x+2)^2= -x-2' do
       eqn = eqn(pow(add('x',2),2),add(mtp(-1,'x'),-2))
       result = eqn.latex_quad_solution

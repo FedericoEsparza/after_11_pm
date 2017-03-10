@@ -740,7 +740,7 @@ describe Multiplication do
 
     end
 
-    it 'expands (x+2)^2' do
+    xit 'expands (x+2)^2' do
       exp = '(x+2)^2'.objectify
       result = exp.expand
 
@@ -788,7 +788,7 @@ describe Multiplication do
       expect(result).to eq frac(mtp(5,'x','y',3),add('x',1))
     end
   end
-      
+
   describe '#top_heavy_div' do
     it 'top heavies 2((14-4y)/5)' do
       exp = mtp(2,div(add(14,mtp(-4,'y')),5))

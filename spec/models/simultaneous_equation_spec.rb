@@ -95,7 +95,7 @@ describe SimultaneousEquation do
       expect(exp.solve).to eq response
     end
 
-    it "" do
+    xit "" do
       equation_1 = eqn(add(mtp(2, 'x'), mtp(-3, 'y')), -15)
       equation_2 = eqn(add(mtp(-3, 'x'), mtp(-2, 'y')), -36)
       exp = described_class.new(equation_1, equation_2)

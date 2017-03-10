@@ -169,9 +169,10 @@ describe Factory do
   end
 
   describe '#latex' do
-    it 'latexes 1/(x+1) + x/(x+2)' do
-      exp = add(frac(1,add('x',1)),frac('x',add('x',2)))
+    it 'latexes 1/3 + 2/3' do
+      exp = add(frac(1,3),frac(2,3))
       result = exp.latex
+      expect(result).to eq '\frac{1}{3}+\frac{2}{3}'
     end
   end
 
