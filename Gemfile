@@ -4,4 +4,4 @@ gem 'rspec'
 gem 'capybara'
 gem 'ruby_deep_clone'
 gem 'require_all'
-# gem 'coveralls', require: false
+gem 'coveralls', require: false
