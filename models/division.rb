@@ -205,6 +205,8 @@ class Division
 
         if num_index.nil?
           new_top_args << top_arg
+        elsif bot_args[num_index] == top_arg
+          bot_args.delete_at(num_index)
         else
           hcf = bot_args[num_index].gcd(top_arg)
 
@@ -254,8 +256,19 @@ class Division
       end
     end
 
-    div(mtp(new_top_args).depower.flatten,mtp(bot_args).depower.flatten)
+    if bot_args == [] && new_top_args != []
+      return mtp(new_top_args).depower.flatten
+    end
 
+    if bot_args != [] && new_top_args == []
+      return div(1,mtp(bot_args).depower.flatten)
+    end
+
+    if bot_args == [] && new_top_args == []
+      return 1
+    end
+
+    return div(mtp(new_top_args).depower.flatten,mtp(bot_args).depower.flatten)
   end
 
 
