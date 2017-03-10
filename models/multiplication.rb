@@ -5,6 +5,8 @@ include ObjectifyUtilities
 include Latex
 
 class Multiplication
+  include GeneralUtilities
+
   attr_accessor :args
 
   def standardize_m_form
@@ -401,13 +403,71 @@ class Multiplication
     end
     new_add << new_step
 
-    # new_add << new_add.last.simplify_add_m_forms
+    # 3ax^2 + 4y + 2ax^2 + 5y
+    # 3ax^2 + 2ax^2 + 4y  + 5y
+
+    new_add << new_add.last.simplify_add_m_forms
     new_add = delete_duplicate_steps(new_add)
     new_add.insert(0,self.copy)
     self.args = new_add[-1].args
     new_add
   end
 
+  def sort_elements
+    array = self.copy.args
+    num_array = []
+    string_array = []
+    array.each do |a|
+      if a.is_a?(Numeric)
+        num_array << a
+      else
+        string_array << a
+      end
+    end
+    string_array = string_array.sort_elements
+    array = num_array + string_array
+    mtp(array)
+  end
+
+  def is_bracket
+    brac = false
+    mtp = self.copy
+    mtp.args.each{|a| brac = true if a.is_a?(Addition)}
+    brac
+  end
+
+  def combine_two_brackets
+    copy = self.copy
+    new_args = []
+    copy.args.first.args.each_with_index do |a|
+      copy.args.last.args.each_with_index do |b|
+        c = mtp(a,b)
+        new_args << c
+        end
+    end
+    new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+    new_args.equalise_array_lengths
+    new_add = []
+    new_args.first.each_with_index do |a,i|
+      c = []
+      new_args.each_with_index do |b,j|
+        c << new_args[j][i]
+      end
+      new_add << add(c)
+    end
+    # new_add << new_add.last.sort_elements
+    new_step = new_add.last.copy
+    new_step.args.each do |m|
+      m.m_form_sort
+    end
+    new_add << new_step
+
+    # new_add << new_add.last.simplify_add_m_forms
+    new_add = delete_duplicate_steps(new_add)
+    new_add.insert(0,self.copy)
+    self.args = new_add[-1].args
+    new_add
+  end
 
   def combine_brackets
     copy = self.copy
@@ -473,27 +533,27 @@ class Multiplication
   end
 
 
-    # def latex
-    #   result = ''
-    #   for i in 0..args.length - 1
-    #     if elementary?(args[i]) || args[i].is_a?(power)
-    #       arg_i_latex = args[i].latex
-    #     else
-    #       arg_i_latex = brackets(args[i].latex)
-    #     end
-    #     if numerical?(args[i-1]) && numerical?(args[i])
-    #       result += '\times' + arg_i_latex
-    #     else
-    #       result += arg_i_latex
-    #     end
-    #   end
-    #   first_part =  result.slice!(0..5)
-    #   if first_part == '\times'
-    #     result
-    #   else
-    #     first_part + result
-    #   end
-    # end
+  # def latex
+  #   result = ''
+  #   for i in 0..args.length - 1
+  #     if elementary?(args[i]) || args[i].is_a?(power)
+  #       arg_i_latex = args[i].latex
+  #     else
+  #       arg_i_latex = brackets(args[i].latex)
+  #     end
+  #     if numerical?(args[i-1]) && numerical?(args[i])
+  #       result += '\times' + arg_i_latex
+  #     else
+  #       result += arg_i_latex
+  #     end
+  #   end
+  #   first_part =  result.slice!(0..5)
+  #   if first_part == '\times'
+  #     result
+  #   else
+  #     first_part + result
+  #   end
+  # end
 
 #     def latex
 #       result = ''
@@ -612,7 +672,7 @@ class Multiplication
       if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division) || args[i].is_a?(sine) || args[i].is_a?(cosine) || args[i].is_a?(tangent)
         arg_i_base_latex = args[i].base_latex
       else
-        arg_i_base_latex = brackets(args[i].base_latex)
+        arg_i_base_latex = args[i].is_a?(equation) ? brackets(args[i].latex) : brackets(args[i].base_latex)
       end
       if numerical?(args[i-1]) && numerical?(args[i])
         result += '\times' + arg_i_base_latex

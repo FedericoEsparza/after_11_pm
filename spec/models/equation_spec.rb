@@ -195,7 +195,6 @@ describe Equation do
     end
   end
 
-
   describe '#change_subject_to' do
     it 'change subject to x for x+y=10' do
       equation = eqn(add('x','y'),10)

@@ -2,6 +2,7 @@ include Factory
 include Latex
 
 class Division
+  include GeneralUtilities
   attr_accessor :args
 
   def initialize(*args)

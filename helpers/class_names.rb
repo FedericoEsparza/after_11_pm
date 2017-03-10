@@ -39,6 +39,10 @@ module ClassName
     Division
   end
 
+  def equation
+    Equation
+  end
+
   def sine
     Sine
   end

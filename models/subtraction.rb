@@ -90,12 +90,19 @@ class Subtraction
     end
   end
 
+  def base_latex
+    if subend.is_a?(addition) || subend.is_a?(subtraction)
+      minuend.base_latex + '-' + brackets(subend.base_latex)
+    else
+      minuend.base_latex + '-' + subend.base_latex
+    end
+  end
+
   # RECURSION
   def fetch(object:)
     object_class = Kernel.const_get(object.to_s.capitalize)
-
     args.each do |arg|
-      if arg.is_a?(Multiplication)
+      if arg.is_a?(Power)
         return arg.args.each { |e|
           return e if e.is_a?(object_class)
         }
@@ -107,12 +114,22 @@ class Subtraction
     end
   end
 
-  def base_latex
-    if subend.is_a?(addition) || subend.is_a?(subtraction)
-      minuend.base_latex + '-' + brackets(subend.base_latex)
-    else
-      minuend.base_latex + '-' + subend.base_latex
+  def fetch_all(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+    response = []
+
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          response << e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        response << arg.fetch_all(object: object)
+      else
+        response << arg if arg.is_a?(object_class)
+      end
     end
+    response
   end
 
   def find_vars

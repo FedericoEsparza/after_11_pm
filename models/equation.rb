@@ -3,11 +3,27 @@ include Latex
 include TrigUtilities
 
 class Equation
-  attr_accessor :ls, :rs
+  include GeneralUtilities
+  attr_accessor :args
 
-  def initialize(ls,rs)
-    @ls = ls
-    @rs = rs
+  def initialize(*args)
+    @args = *args
+  end
+
+  def ls
+    args[0]
+  end
+
+  def rs
+    args[1]
+  end
+
+  def ls=(new_ls)
+    args[0] = new_ls
+  end
+
+  def rs=(new_rs)
+    args[1] = new_rs
   end
 
   def copy
@@ -46,6 +62,17 @@ class Equation
     curr_steps
   end
 
+  def solve_two_var_eqn
+    curr_steps = [self.copy]
+    i = 1
+    while (ls.is_a?(string) && numerical?(rs)) == false && i < 100 do
+      reverse_last_step(curr_steps)
+      evaluate_right_side(curr_steps)
+      i += 1
+    end
+    curr_steps
+  end
+
   def reverse_last_step(curr_steps)
     new_sides = ls.reverse_step(rs)
     self.ls = new_sides[:ls]
@@ -61,6 +88,22 @@ class Equation
   def latex(no_new_line: false)
     response = ls.latex + '&=' + rs.latex
     # no_new_line ? response : response + '\\\\'
+  end
+
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
   end
 
   def reverse_last_subject_step(subject,curr_steps)
@@ -138,6 +181,4 @@ class Equation
   def _fix_trig_args
 
   end
-
-
 end
