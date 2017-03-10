@@ -22,22 +22,27 @@ describe Division do
   end
 
   describe '#simplify' do
-    it 'simpliies \frac{6x}{8y}' do
+    it '\frac{6x}{8y} where common factor of two numbers are cancelled' do
       exp = '\frac{6x}{8y}'.objectify
       expect(exp.simplify).to eq '\frac{3x}{4y}'.objectify
     end
 
-    it 'simpliies \frac{6x}{3yz}' do
+    it '\frac{6x}{3yz} bot number divided out' do
       exp = '\frac{6x}{3yz}'.objectify
       expect(exp.simplify).to eq '\frac{2x}{yz}'.objectify
     end
 
-    it 'simpliies \frac{6x^4}{8x^2y}' do
+    it '\frac{3xw}{6yz} bot number divided out' do
+      exp = '\frac{3xw}{6yz}'.objectify
+      expect(exp.simplify).to eq '\frac{xw}{2yz}'.objectify
+    end
+
+    it '\frac{6x^4}{8x^2y} power cancellation top left with power' do
       exp = '\frac{6x^4}{8x^2y}'.objectify
       expect(exp.simplify).to eq '\frac{3x^2}{4y}'.objectify
     end
 
-    it 'simpliies \frac{6x^3}{8x^2y}' do
+    it '\frac{6x^3}{8x^2y} power cancel top left with str-var' do
       exp = '\frac{6x^3}{8x^2y}'.objectify
       expect(exp.simplify).to eq '\frac{3x}{4y}'.objectify
     end

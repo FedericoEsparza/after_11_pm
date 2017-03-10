@@ -199,7 +199,10 @@ class Division
         else
           bot_args[num_index] = bot_args[num_index]/hcf
         end
-        new_top_args << (top_arg/hcf)
+
+        unless top_arg/hcf == 1
+          new_top_args << (top_arg/hcf)
+        end
 
       elsif top_arg.is_a?(power)
 
