@@ -65,6 +65,12 @@ describe Addition do
       expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
     end
 
+    it '#simplifies x^2 + 4x + 4 + (x-2)' do
+      addition = 'x^2 + 4x + 4 + x-2'.objectify.standardize_add_m_form
+      result = addition.simplify_add_m_forms.flatit
+      expect(result).to eq 'x^2 + 5x + 2'.objectify
+    end  
+     
     it 'simplifies 25-10y+3y' do
       addition = add(mtp(25),mtp(-10,'y'),mtp(3,'y'))
       result = addition.simplify_add_m_forms
@@ -123,6 +129,31 @@ describe Addition do
     end
   end
 
+  describe '#split_num' do
+    it 'splits (x^2+6x+7)/5' do
+      exp = frac(add(pow('x',2),mtp(6,'x'),7),5)
+      result = exp.split_num
+
+      expect(result).to eq add(frac(pow('x',2),5),frac(mtp(6,'x'),5),frac(7,5))
+
+    end
+  end
+
+  describe '#elim_common_factors' do
+    it 'simplifies x(x+1)/x' do
+      exp = frac(mtp('x',add('x',1)),'x')
+      result = exp.elim_common_factors
+
+      expect(result).to eq frac(add('x',1),1)
+    end
+
+    it 'simplifies (x-1)yz/xz(y-1)' do
+      exp = frac(mtp(add('x',-1),'y','z'),mtp('x','z',add('y',-1)))
+      result = exp.elim_common_factors
+      expect(result).to eq frac(mtp(add('x',-1),'y'),mtp('x',add('y',-1)))
+    end
+  end
+ 
   describe '#~' do
     it 'returns true for 3+4 and 4+3' do
       exp_1 = add(3, 4)

@@ -46,6 +46,10 @@ class Numeric
   #   end
   # end
 
+  def find_denoms
+    []
+  end
+
   def find_vars
     []
   end
@@ -57,5 +61,6 @@ class Numeric
       self
     end
   end
+
 
 end

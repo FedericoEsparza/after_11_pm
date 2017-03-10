@@ -67,7 +67,7 @@ class Array
     end
 
     def delete_duplicate_steps
-      steps = self.copy
+      steps = self
       i = 0
       while i < (steps.length - 1)
         step_1 = steps[i].copy

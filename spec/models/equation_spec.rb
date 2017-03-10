@@ -294,4 +294,131 @@ describe Equation do
       expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq false
     end
   end
+
+  describe '#expand_quad_eqn' do
+    it 'expands (x+2)^2= x-2 ' do
+      eqn = eqn(pow(add('x',2),2),add('x',-2))
+      result = eqn.expand_quad_eqn
+
+      # result.each_with_index do |a,i|
+      #   string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
+      #   puts string
+      # end
+
+      expect(result[0]).to eq eqn('(x+2)^2'.objectify,'x-2'.objectify)
+      expect(result[1]).to eq eqn('(x+2)(x+2)'.objectify,'x-2'.objectify)
+      expect(result[2]).to eq eqn('xx+x2+2x+2\times2'.objectify,'x-2'.objectify)
+      expect(result[3]).to eq eqn('x^1x^1+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[4]).to eq eqn('x^{1+1}+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[5]).to eq eqn('x^2+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[6]).to eq eqn('x^2+2x+2x+4'.objectify,'x-2'.objectify)
+      expect(result[7]).to eq eqn('x^2+4x+4'.objectify,'x-2'.objectify)
+
+
+    end
+  end
+
+  describe '#simplify_quad_eqn' do
+    it 'simplifies x^2+4x+4=x-2' do
+      eqn = eqn('x^2+4x+4'.objectify,'x-2'.objectify)
+      result = eqn.simplify_quad_eqn
+
+      expect(result).to eq [
+        'x^2+4x+4-(x+-2)=0'.objectify,
+        'x^2+3x+6=0'.objectify
+        ]
+
+    end
+  end
+
+  describe '#solve_quad_eqn' do
+    it 'solves (x+2)^2= x-2' do
+      eqn = eqn(pow(add('x',2),2),add('x',-2))
+      result = eqn.solve_quad_eqn
+
+      expect(result[0]).to eq eqn('(x+2)^2'.objectify,'x-2'.objectify)
+      expect(result[1]).to eq eqn('(x+2)(x+2)'.objectify,'x-2'.objectify)
+      expect(result[2]).to eq eqn('xx+x2+2x+2\times2'.objectify,'x-2'.objectify)
+      expect(result[3]).to eq eqn('x^1x^1+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[4]).to eq eqn('x^{1+1}+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[5]).to eq eqn('x^2+x2+2x+4'.objectify,'x-2'.objectify)
+      expect(result[6]).to eq eqn('x^2+2x+2x+4'.objectify,'x-2'.objectify)
+      expect(result[7]).to eq eqn('x^2+4x+4'.objectify,'x-2'.objectify)
+      expect(result[8]).to eq 'x^2+4x+4-(x-2)=0'.objectify
+      expect(result[9]).to eq 'x^2+3x+6=0'.objectify
+
+    end
+  end
+
+  describe '#latex_quad_solution' do
+    it 'latexes (x+2)^2= -x-2' do
+      eqn = eqn(pow(add('x',2),2),add(mtp(-1,'x'),-2))
+      result = eqn.latex_quad_solution
+
+      expect(result).to eq "\\begin{align*}\n    \\left(x+2\\right)^2&=-x-2&\\\\[5pt]\n      \\left(x+2\\right)\\left(x+2\\right)&=-x-2&\\\\[5pt]\n      xx+x2+2x+2\\times2&=x-2&\\\\[5pt]\n      x^1x^1+x2+2x+4&=x-2&\\\\[5pt]\n      x^{1+1}+x2+2x+4&=x-2&\\\\[5pt]\n      x^2+x2+2x+4&=x-2&\\\\[5pt]\n      x^2+2x+2x+4&=x-2&\\\\[5pt]\n      x^2+4x+4&=x-2&\\\\[5pt]\n      x^2+4x+4-\\left(-1x+-2\\right)&=0&\\\\[5pt]\n      x^2+5x+6&=0&\\\\[5pt]\n      0&=x^2+5x+6& && &P=6 \\hspace{30pt}S=5&\\\\[5pt]\n    0&=\\left(x+2\\right)\\left(x+3\\right)& && &\\left(2,\\,\\,3\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-2 ,\\,\\, -3\\\\[5pt]\n    \\end{align*}"
+
+    end
+
+    it 'latexes (x-4)(x+2)=2x+4' do
+      eqn = '(x-4)(x+2)=2x+4'.objectify
+      result = eqn.latex_quad_solution
+      expect(result).to eq "\\begin{align*}\n    \\left(x-4\\right)\\left(x+2\\right)&=2x+4&\\\\[5pt]\n      xx+x2-4x-4\\times2&=2x+4&\\\\[5pt]\n      x^1x^1+x2-4x-8&=2x+4&\\\\[5pt]\n      x^{1+1}+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+x2-4x-8&=2x+4&\\\\[5pt]\n      x^2+2x-4x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8&=2x+4&\\\\[5pt]\n      x^2-2x-8-\\left(2x+4\\right)&=0&\\\\[5pt]\n      x^2-4x-12&=0&\\\\[5pt]\n      0&=x^2-4x-12& && &P=-12 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-6\\right)\\left(x+2\\right)& && &\\left(-6,\\,\\,2\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=6 ,\\,\\, -2\\\\[5pt]\n    \\end{align*}"
+    end
+
+    it 'latexes (x+1)(2x-4)=2x-6' do
+      eqn = '(x+1)(2x-4)=2x-6'.objectify
+      result = eqn.latex_quad_solution
+      expect(result).to eq "\\begin{align*}\n    \\left(x+1\\right)\\left(2x-4\\right)&=2x-6&\\\\[5pt]\n      x2x+x-4+2x+-4&=2x-6&\\\\[5pt]\n      xx2+x-4+2x+-4&=2x-6&\\\\[5pt]\n      x^1x^12+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^{1+1}2+x-4+2x-4&=2x-6&\\\\[5pt]\n      x^22+x-4+2x-4&=2x-6&\\\\[5pt]\n      2x^2+-4x+2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4&=2x-6&\\\\[5pt]\n      2x^2-2x-4-\\left(2x+-6\\right)&=0&\\\\[5pt]\n      2x^2+-4x+2&=0&\\\\[5pt]\n      0&=2x^2+-4x+2& && &P=2\\times2=4 \\hspace{30pt}S=-4&\\\\[5pt]\n    0&=\\left(x-1\\right)\\left(x-1\\right)& && &\\left(-2,\\,\\,-2\\right)\\hspace{10pt}\\left(\\frac{-2}{2},\\,\\,\\frac{-2}{2}\\right)\\hspace{10pt}\\left(-1,\\,\\,-1\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=1 ,\\,\\, 1\\\\[5pt]\n    \\end{align*}"
+    end
+  end
+
+  describe '#mtp_common_denoms' do
+    it 'deals with 1/(x+1) + x/(x+2) = 5' do
+      eqn = eqn(add(frac(1,add('x',1)),frac('x',add('x',2))),5)
+      result = eqn.mtp_common_denoms
+
+      expect(result).to eq eqn(add(mtp(add('x',1),add('x',2),frac(1,add('x',1))),mtp(add('x',1),add('x',2),frac('x',add('x',2)))),
+      mtp(add('x',1),add('x',2),5))
+    end
+  end
+
+  describe '#elim_common_factors' do
+    it 'deals with (x+1)(x+2)*1/(x+1) + (x+1)(x+2)*x/(x+2) = 5(x+1)(x+2)' do
+      eqn = eqn(add(mtp(add('x',1),add('x',2),frac(1,add('x',1))),mtp(add('x',1),add('x',2),frac('x',add('x',2)))),
+      mtp(5,add('x',1),add('x',2)))
+      result = eqn.elim_common_factors
+      expect(result).to eq eqn(add(mtp(add('x',2),1),mtp(add('x',1),'x')),mtp(5,add('x',1),add('x',2)))
+    end
+  end
+
+  describe '#latex_rational_to_quad' do
+    xit 'latexes 1/(x+1) + x/(x+2) = 5 to quad form' do
+      eqn = eqn(add(frac(1,add('x',1)),frac('x',add('x',2))),5)
+      result = eqn.latex_rational_to_quad
+
+      puts result
+    end
+
+    it 'latexes x/(x+2) = 5x to quad form' do
+      eqn = eqn(frac('x',add('x',2)),mtp(5,'x'))
+      result = eqn.latex_rational_to_quad
+
+      expect(result).to eq "\\begin{align*}\n    \\frac{x}{x+2}&=5x&\\\\[5pt]\n      \\left(x+2\\right)\\frac{x}{x+2}&=\\left(x+2\\right)5x&\\\\[5pt]\n      x&=\\left(x+2\\right)5x&\\\\[5pt]\n      \\end{align*}"
+
+    end
+
+  end
+
+  describe '#latex_solve_rational_quad' do
+    it 'latexes solution of (x-4)/(x+2) = 5x' do
+      eqn = eqn(frac(add('x',-4),add('x',2)),mtp(5,'x'))
+      result = eqn.latex_solve_rational_quad
+
+      expect(result).to eq "\\begin{align*}\n    \\frac{x+-4}{x+2}&=5x&\\\\[5pt]\n      \\left(x+2\\right)\\frac{x+-4}{x+2}&=\\left(x+2\\right)5x&\\\\[5pt]\n      x-4&=\\left(x+2\\right)5x&\\\\[5pt]\n      x-4&=\\left(x+2\\right)5x&\\\\[5pt]\n      x-4&=\\left(x5+2\\times5\\right)x&\\\\[5pt]\n      x-4&=\\left(x5+10\\right)x&\\\\[5pt]\n      x-4&=\\left(5x+10\\right)x&\\\\[5pt]\n      x-4&=5xx+10x&\\\\[5pt]\n      x-4&=5x^1x^1+10x&\\\\[5pt]\n      x-4&=5x^{1+1}+10x&\\\\[5pt]\n      x-4&=5x^2+10x&\\\\[5pt]\n      x-4-\\left(5x^2+10x\\right)&=0&\\\\[5pt]\n      -5x^2-9x-4&=0&\\\\[5pt]\n      0&=5x^2+9x+4& && &P=5\\times4=20 \\hspace{30pt}S=9&\\\\[5pt]\n    0&=\\left(x+\\frac{4}{5}\\right)\\left(x+1\\right)& && &\\left(4,\\,\\,5\\right)\\hspace{10pt}\\left(\\frac{4}{5},\\,\\,\\frac{5}{5}\\right)\\hspace{10pt}\\left(\\frac{4}{5},\\,\\,1\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-\\frac{4}{5} ,\\,\\, -1\\\\[5pt]\n    \\end{align*}"
+
+    end
+
+  end
+
+
 end
