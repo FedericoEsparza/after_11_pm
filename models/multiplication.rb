@@ -70,6 +70,7 @@ class Multiplication
       end
     end
     @args = new_args
+    self
   end
 
   def depower
@@ -82,6 +83,7 @@ class Multiplication
       end
     end
     @args = new_args
+    self
   end
 
   def combine_powers

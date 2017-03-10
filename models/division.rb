@@ -174,7 +174,18 @@ class Division
 
   def simplify
     exp_copy = self.copy
+
+    unless exp_copy.top.is_a?(multiplication)
+      exp_copy.top = mtp(exp_copy.top)
+    end
+
+    unless exp_copy.bot.is_a?(multiplication)
+      exp_copy.bot = mtp(exp_copy.bot)
+    end
     #usually 2xy/4yz unless 2/x
+    exp_copy.top.convert_to_power
+    exp_copy.bot.convert_to_power
+
     top_args = exp_copy.top.args
     bot_args = exp_copy.bot.args
 
@@ -209,56 +220,45 @@ class Division
         end
 
       elsif top_arg.is_a?(power)
-
         pow_match_index = nil
-        str_match_index = nil
 
         bot_args.each_with_index do |bot_arg,i|
           if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
             pow_match_index = i
             break
           end
-          if bot_arg.is_a?(string) && bot_arg == top_arg.base
-            str_match_index = i
-            break
+        end
+
+        if pow_match_index.nil?
+          new_top_args << top_arg
+        else
+          if top_arg.index >= bot_args[pow_match_index].index
+            new_index = top_arg.index - bot_args[pow_match_index].index
+
+            if new_index != 0 && new_index != 1
+              new_top_args << (pow(top_arg.base,new_index))
+            end
+
+            if new_index == 1
+              new_top_args << top_arg.base
+            end
+
+            bot_args.delete_at(pow_match_index)
+          else
+            bot_args[pow_match_index].index -= top_arg.index
           end
         end
 
-        unless pow_match_index.nil?
-          new_index = top_arg.index - bot_args[pow_match_index].index
-
-          if new_index != 0 && new_index != 1
-            new_top_args << (pow(top_arg.base,new_index))
-          end
-
-          if new_index == 1
-            new_top_args << top_arg.base
-          end
-
-          bot_args.delete_at(pow_match_index)
-        end
-
-        unless str_match_index.nil?
-          new_index = top_arg.index - 1
-
-          if new_index != 0 && new_index != 1
-            new_top_args << (pow(top_arg.base,new_index))
-          end
-
-          if new_index == 1
-            new_top_args << top_arg.base
-          end
-
-          bot_args.delete_at(str_match_index)
-        end
       else
         new_top_args << top_arg
       end
     end
 
-    div(mtp(new_top_args),mtp(bot_args))
+    div(mtp(new_top_args).depower.flatten,mtp(bot_args).depower.flatten)
 
   end
+
+
 
   alias_method :~, :==
 

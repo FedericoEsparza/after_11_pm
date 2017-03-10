@@ -57,12 +57,20 @@ describe Division do
       expect(exp.simplify).to eq '\frac{3x^2}{4y}'.objectify
     end
 
-    xit '\frac{3ax^2}{4x^5y} top string bot power var cancel' do
+    it '\frac{3ax^2}{4x^5y} top string bot power var cancel' do
       exp = '\frac{3ax^2}{4x^5y}'.objectify
       expect(exp.simplify).to eq '\frac{3a}{4x^3y}'.objectify
     end
 
+    it '\frac{3ax^2}{4x^2y} cancel completely' do
+      exp = '\frac{3ax^2}{4x^2y}'.objectify
+      expect(exp.simplify).to eq '\frac{3a}{4y}'.objectify
+    end
 
+    it '\frac{x}{3} cancel completely' do
+      exp = '\frac{x}{3}'.objectify
+      expect(exp.simplify).to eq '\frac{x}{3}'.objectify
+    end
 
   end
 
