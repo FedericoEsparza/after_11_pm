@@ -194,8 +194,13 @@ class Division
 
         hcf = bot_args[num_index].gcd(top_arg)
 
-        bot_args[num_index] = bot_args[num_index]/hcf
+        if bot_args[num_index]/hcf == 1
+          bot_args.delete_at(num_index)
+        else
+          bot_args[num_index] = bot_args[num_index]/hcf
+        end
         new_top_args << (top_arg/hcf)
+
       elsif top_arg.is_a?(power)
 
         match_index = nil
@@ -208,7 +213,14 @@ class Division
         end
 
         new_index = top_arg.index - bot_args[match_index].index
-        new_top_args << (pow(top_arg.base,new_index))
+
+        if new_index != 0 && new_index != 1
+          new_top_args << (pow(top_arg.base,new_index))
+        end
+
+        if new_index == 1
+          new_top_args << top_arg.base
+        end
 
         bot_args.delete_at(match_index)
 
