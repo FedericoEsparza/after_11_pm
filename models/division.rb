@@ -174,7 +174,6 @@ class Division
 
   def simplify
     exp_copy = self.copy
-
     #usually 2xy/4yz unless 2/x
     top_args = exp_copy.top.args
     bot_args = exp_copy.bot.args
@@ -197,6 +196,22 @@ class Division
 
         bot_args[num_index] = bot_args[num_index]/hcf
         new_top_args << (top_arg/hcf)
+      elsif top_arg.is_a?(power)
+
+        match_index = nil
+
+        bot_args.each_with_index do |bot_arg,i|
+          if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
+            match_index = i
+            break
+          end
+        end
+
+        new_index = top_arg.index - bot_args[match_index].index
+        new_top_args << (pow(top_arg.base,new_index))
+
+        bot_args.delete_at(match_index)
+
       else
         new_top_args << top_arg
       end
@@ -207,5 +222,5 @@ class Division
   end
 
   alias_method :~, :==
-  
+
 end

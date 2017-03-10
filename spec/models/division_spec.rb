@@ -26,6 +26,11 @@ describe Division do
       exp = '\frac{6x}{8y}'.objectify
       expect(exp.simplify).to eq '\frac{3x}{4y}'.objectify
     end
+
+    it 'simpliies \frac{6x^4}{8x^2y}' do
+      exp = '\frac{6x^4}{8x^2y}'.objectify
+      expect(exp.simplify).to eq '\frac{3x^2}{4y}'.objectify
+    end
   end
 
   # describe '#expand' do
