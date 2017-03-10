@@ -8,7 +8,11 @@ class Equation
   attr_accessor :args
 
   def initialize(*args)
-    @args = *args
+    if args.length == 1 && args[0].class == Array
+      @args = args.first
+    else
+      @args = args
+    end
   end
 
   def ls
@@ -163,13 +167,13 @@ class Equation
     right_args = []
 
     if left.is_a?(multiplication)
-      left = left.top_heavy.elim_common_factors
+      left = left.top_heavy_div.elim_common_factors
     elsif  left.is_a?(fraction)
       left = left.elim_common_factors
     elsif left.is_a?(addition)
       left.args.each do |arg|
         if arg.is_a?(multiplication)
-          left_args << arg.top_heavy.elim_common_factors
+          left_args << arg.top_heavy_div.elim_common_factors
         elsif arg.is_a?(fraction)
           left_args << arg.elim_common_factors
         else
@@ -180,13 +184,13 @@ class Equation
     end
 
     if right.is_a?(multiplication)
-      right = right.top_heavy.elim_common_factors
+      right = right.top_heavy_div.elim_common_factors
     elsif  right.is_a?(fraction)
       right = right.elim_common_factors
     elsif right.is_a?(addition)
       right.args.each do |arg|
         if arg.is_a?(multiplication)
-          right_args << arg.top_heavy.elim_common_factors
+          right_args << arg.top_heavy_div.elim_common_factors
         elsif arg.is_a?(fraction)
           right_args << arg.elim_common_factors
         else
@@ -198,6 +202,12 @@ class Equation
 
     eqn(left,right)
 
+  end
+
+  def find_denoms
+    denoms = []
+    args.each{|side| denoms += side.find_denoms}
+    denoms
   end
 
   def mtp_common_denoms

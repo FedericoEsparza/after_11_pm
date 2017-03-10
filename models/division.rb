@@ -172,6 +172,62 @@ class Division
     end
   end
 
+  def find_denoms
+    return [bot]
+  end
+
+  def elim_common_factors
+    if top.is_a?(multiplication)
+      num_factors = top.args
+      num = top
+    else
+      num_factors = [top]
+      num = mtp(top)
+    end
+
+    if bot.is_a?(multiplication)
+      denom_factors = bot.args
+      denom = bot
+    else
+      denom_factors = [bot]
+      denom = mtp(bot)
+    end
+
+    i = 0
+    while i < denom_factors.length
+      factor = denom_factors[i]
+      if num_factors.count(factor) > 0
+        denom_factors.delete_at(denom_factors.rindex(factor))
+        num_factors.delete_at(num_factors.rindex(factor))
+      else
+        i += 1
+      end
+    end
+
+    if denom_factors.length == 0
+      denom = 1
+    elsif denom_factors.length == 1
+      denom = denom_factors.first
+    else
+      denom = mtp(denom_factors)
+    end
+
+    if num_factors.length == 0
+      num = 1
+    elsif num_factors.length == 1
+      num = num_factors.first
+    else
+      num = mtp(num_factors)
+    end
+
+    if denom == 1
+      num
+    else
+      div(num,denom)
+    end
+
+  end
+
 
   alias_method :~, :==
 end

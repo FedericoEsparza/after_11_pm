@@ -52,8 +52,8 @@ describe QuadraticEquation do
       result = exp.write_factorisation_solution
 
       expect(result).to eq [
-        '12x^2+17x+-7'.objectify,
-        mtp(add('x',frac(1,3,sign: :-)),add('x',frac(7,4))),
+        '0=12x^2+17x+-7'.objectify,
+        eqn(0,mtp(add('x',frac(1,3,sign: :-)),add('x',frac(7,4)))),
         [frac(1,3),frac(7,4,sign: :-)]
       ]
     end
@@ -63,8 +63,8 @@ describe QuadraticEquation do
       result = exp.write_factorisation_solution
 
       expect(result).to eq [
-        '8x^2+10x+-7'.objectify,
-        mtp(add('x',frac(1,2,sign: :-)),add('x',frac(7,4))),
+        '0=8x^2+10x+-7'.objectify,
+        eqn(0,mtp(add('x',frac(1,2,sign: :-)),add('x',frac(7,4)))),
         [frac(1,2),frac(7,4,sign: :-)]
       ]
     end
@@ -88,21 +88,16 @@ describe QuadraticEquation do
     it 'latexes $8y^2+10y-7$' do
       exp = quad(8,10,-7,'y')
       result = exp.latex
-      expect(result).to eq '\begin{align*}
-    0&=8y^2+10y-7& && &P=8\times-7=-56 \hspace{30pt}S=10&\\\[5pt]
-    0&=\left(y-\frac{1}{2}\right)\left(y+\frac{7}{4}\right)& && &\left(-4,\,\,14\right)\hspace{10pt}\left(\frac{-4}{8},\,\,\frac{14}{8}\right)\hspace{10pt}\left(-\frac{1}{2},\,\,\frac{7}{4}\right)\hspace{10pt}&\\\[5pt]
-    y&=\frac{1}{2} ,\,\, -\frac{7}{4}\\\[5pt]
-    \end{align*}'
+      expect(result).to eq "\\begin{align*}\n    0&=8y^2+10y-7& && &P=8\\times-7=-56 \\hspace{30pt}S=10&\\\\[5pt]\n    0&=\\left(y-\\frac{1}{2}\\right)\\left(y+\\frac{7}{4}\\right)& && &\\left(-4,\\,\\,14\\right)\\hspace{10pt}\\left(\\frac{-4}{8},\\,\\,\\frac{14}{8}\\right)\\hspace{10pt}\\left(-\\frac{1}{2},\\,\\,\\frac{7}{4}\\right)\\hspace{10pt}&\\\\[5pt]\n    y&=\\frac{1}{2} ,\\,\\, -\\frac{7}{4}\\\\[5pt]\n    \\end{align*}"
+
     end
 
     it 'latexes $x^2+5x+6$' do
       exp = quad(1,5,6,'x')
       result = exp.latex
-      expect(result).to eq '\begin{align*}
-    0&=x^2+5x+6& && &P=6 \hspace{30pt}S=5&\\\[5pt]
-    0&=\left(x+2\right)\left(x+3\right)& && &\left(2,\,\,3\right)\hspace{10pt}&\\\[5pt]
-    x&=-2 ,\,\, -3\\\[5pt]
-    \end{align*}'
+
+      expect(result).to eq "\\begin{align*}\n    0&=x^2+5x+6& && &P=6 \\hspace{30pt}S=5&\\\\[5pt]\n    0&=\\left(x+2\\right)\\left(x+3\\right)& && &\\left(2,\\,\\,3\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-2 ,\\,\\, -3\\\\[5pt]\n    \\end{align*}"
+
     end
 
     it 'latexes $2x^2-9x+7$' do
@@ -146,6 +141,26 @@ describe QuadraticEquation do
     x&=-\frac{1}{3} ,\,\, 3\\\[5pt]
     \end{align*}'
     end
+
+    it 'latexes 3(y^2)^2 -8(y^2) - 3' do
+      exp = quad(3,-8,-3,pow('y',2))
+      result = exp.write_factors
+
+      # puts exp.latex
+      # p '===================s'
+      # p result
+    end
+
+    # it 'latexes 3(sin(y))^2 -8siny -3' do
+    #   exp = quad(3,-8,-3,sin('y'))
+    #   result = exp.write_factorisation_solution
+    #
+    #   puts result[0].latex
+    #   puts result[1].latex
+    #   puts result[2].latex
+    #
+    # end
+
 
   end
 
