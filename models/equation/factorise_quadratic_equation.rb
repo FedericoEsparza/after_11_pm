@@ -34,10 +34,23 @@ module FactoriseQuadraticEquation
     variable_args = all_args.select do |arg|
       numerical?(arg) == false
     end
+    uniques = variable_args.uniq
 
-    variable_args
-    
+    return false unless uniques.length == 2
 
+    check_1 = div(uniques[0].copy,uniques[1].copy).simplify
+
+    if check_1 == uniques[1]
+      return true
+    end
+
+    check_2 = div(uniques[1].copy,uniques[0].copy).simplify
+
+    if check_2 == uniques[0]
+      return true
+    end
+
+    return false
 
   end
 

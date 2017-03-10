@@ -91,14 +91,5 @@ describe Division do
       exp = '\frac{x^2}{x^2}'.objectify
       expect(exp.simplify).to eq 1
     end
-
   end
-
-  # describe '#expand' do
-  #   it 'expands 2(14-4y)/5' do
-  #     exp = div(mtp(2,add(14,mtp(-4,'y'))),5)
-  #     result = exp.expand
-  #     expect(result).to eq []
-  #   end
-  # end
 end
