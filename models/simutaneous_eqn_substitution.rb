@@ -33,7 +33,6 @@ class SimutaneousEqnSubstitution
     sub_eqn = eqns[0].change_subject_to(subject).last.rs
 
     eqns[1] = eqns[1].subs_terms(subject,sub_eqn)
-
   end
 
   def find_subject(equa)
@@ -77,8 +76,7 @@ class SimutaneousEqnSubstitution
   end
 
   def solution_latex
-    result = '\begin{align*}
-    '
+    result = '\begin{align*}'
     result += latex
     steps = generate_solution
     steps[:first].delete_at(0)
@@ -92,11 +90,9 @@ class SimutaneousEqnSubstitution
         result += '&&' + step.latex
       end
       if i ==  steps[:first].length - 1
-        result += '&\left(3\right)&\\\[15pt]
-        '
+        result += '&\left(3\right)&\\\[15pt]'
       else
-        result += '&\\\[5pt]
-        '
+        result += '&\\\[5pt]'
       end
     end
     result += '&\text{Sub (3) into (2)}'
@@ -108,22 +104,18 @@ class SimutaneousEqnSubstitution
         result += '&&' + step.latex
       end
       if i == steps[:sub].length - 1
-        result += '&\\\[15pt]
-        '
+        result += '&\\\[15pt]'
       else
-        result += '&\\\[5pt]
-        '
+        result += '&\\\[5pt]'
       end
     end
     result += '&\text{Sub ' + steps[:second_var].ls.latex + ' into (3)}'
 
     steps[:last].each_with_index do |step,i|
       if i == 0
-        result += '&' + step.latex + '&\\\[5pt]
-        '
+        result += '&' + step.latex + '&\\\[5pt]'
       else
-        result += '&&' + step.latex + '&\\\[5pt]
-        '
+        result += '&&' + step.latex + '&\\\[5pt]'
       end
     end
 
