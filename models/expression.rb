@@ -4,6 +4,8 @@ require 'prime'
 include Latex
 
 class Expression
+  include GeneralUtilities
+  
   attr_accessor :args
 
   def initialize(*args)

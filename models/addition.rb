@@ -16,6 +16,21 @@ class Addition < Expression
     exp.class == self.class && args == exp.args
   end
 
+  def ~(exp)
+    return false unless exp.class == self.class
+    return false unless args.length == exp.args.length
+
+    args.each do |arg|
+      return false unless exp.args.any? { |exp_arg| arg.~(exp_arg) }
+    end
+
+    exp.args.each do |exp_arg|
+      return false unless args.any? { |arg| exp_arg.~(arg) }
+    end
+
+    true
+  end
+
   def greater?(exp)
     if self.class == exp.class
       self.args.greater?(exp.args)
@@ -24,17 +39,29 @@ class Addition < Expression
     end
   end
 
-
-  def copy
-#     DeepClone.clone(self)  #4-brackets
-    new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || numerical?(e)
-        r << e
+  def standardize_add_m_form
+    new_args = []
+    args.each do |m|
+      if m.is_a?(Multiplication)
+        new_args << m
       else
-        r << e.copy
+        new_args << mtp(m)
       end
     end
     add(new_args)
+  end
+
+
+  def copy
+    DeepClone.clone(self)
+    # new_args = args.inject([]) do |r,e|
+    #   if e.is_a?(string) || numerical?(e)
+    #     r << e
+    #   else
+    #     r << e.copy
+    #   end
+    # end
+    # add(new_args)
   end
 
   def evaluate
@@ -105,24 +132,81 @@ class Addition < Expression
         results << new_mtp
       end
     end
-    add(results)
+    if results.length == 0
+      0
+    else
+      add(results)
+    end
   end
 
   def evaluate_numeral
     args.inject(0){|r,e| r + e}
   end
 
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+    result
+  end
+
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    moved_args = []
+    subject_index = -1
+    args.each_with_index do |arg,i|
+      if arg.contains?(subject)
+        subject_index = i
+      end
+    end
+
+    if args.length > 2
+      new_ls = args.delete_at(subject_index)
+      moved = add(args)
+    else
+      new_ls = args.delete_at(subject_index)
+      moved = args.first
+    end
+
+    result[:ls] = new_ls
+    result[:rs] = add(rs,mtp(-1,moved).flatit.evaluate_nums)
+    return result
+  end
+
   def reverse_step(rs)
     result = {}
     if args[0].is_a?(integer)
-      result[:ls] = args[1]
-      result[:rs] = sbt(rs,args[0])
-      return result
+
+      if args[1].is_a?(multiplication) && args[1].args[0] == -1
+        result[:ls] = args[1].args[1]
+        result[:rs] = sbt(args[0],rs)
+        return result
+
+      else
+        result[:ls] = args[1]
+        result[:rs] = sbt(rs,args[0])
+        return result
+
+      end
     end
     if args[1].is_a?(integer)
-      result[:ls] = args[0]
-      result[:rs] = sbt(rs,args[1])
-      return result
+      if args[1] > 0
+        result[:ls] = args[0]
+        result[:rs] = sbt(rs,args[1])
+        return result
+      else
+        result[:ls] = args[0]
+        result[:rs] = add(rs,args[1].abs)
+        return result
+      end
     end
   end
 
@@ -290,5 +374,51 @@ class Addition < Expression
     denoms
   end
 
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
+  end
 
+  def fetch_all(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+    response = []
+
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          response << e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        response << arg.fetch_all(object: object)
+      else
+        response << arg if arg.is_a?(object_class)
+      end
+    end
+    response
+  end
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      add(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
+  end
 end

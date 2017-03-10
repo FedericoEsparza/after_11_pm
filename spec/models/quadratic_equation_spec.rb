@@ -108,11 +108,7 @@ describe QuadraticEquation do
     it 'latexes $2x^2-9x+7$' do
       exp = quad(2,-9,7,'x')
       result = exp.latex
-      expect(result).to eq '\begin{align*}
-    0&=2x^2+-9x+7& && &P=2\times7=14 \hspace{30pt}S=-9&\\\[5pt]
-    0&=\left(x-1\right)\left(x-\frac{7}{2}\right)& && &\left(-2,\,\,-7\right)\hspace{10pt}\left(\frac{-2}{2},\,\,\frac{-7}{2}\right)\hspace{10pt}\left(-1,\,\,-\frac{7}{2}\right)\hspace{10pt}&\\\[5pt]
-    x&=1 ,\,\, \frac{7}{2}\\\[5pt]
-    \end{align*}'
+      expect(result).to eq "\\begin{align*}\n    0&=2x^2-9x+7& && &P=2\\times7=14 \\hspace{30pt}S=-9&\\\\[5pt]\n    0&=\\left(x-1\\right)\\left(x-\\frac{7}{2}\\right)& && &\\left(-2,\\,\\,-7\\right)\\hspace{10pt}\\left(\\frac{-2}{2},\\,\\,\\frac{-7}{2}\\right)\\hspace{10pt}\\left(-1,\\,\\,-\\frac{7}{2}\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=1 ,\\,\\, \\frac{7}{2}\\\\[5pt]\n    \\end{align*}"
     end
 
     it 'latexes $30x^2-19x-5$' do
@@ -135,24 +131,10 @@ describe QuadraticEquation do
     \end{align*}'
     end
 
-    it 'latexes $-56x^2+31x-3$' do
-      exp = quad(-56,31,-3,'x')
-      result = exp.latex
-      expect(result).to eq '\begin{align*}
-    0&=-56x^2+31x-3& && &P=-56\times-3=168 \hspace{30pt}S=31&\\\[5pt]
-    0&=\left(x-\frac{1}{8}\right)\left(x-\frac{3}{7}\right)& && &\left(7,\,\,24\right)\hspace{10pt}\left(\frac{7}{-56},\,\,\frac{24}{-56}\right)\hspace{10pt}\left(-\frac{1}{8},\,\,-\frac{3}{7}\right)\hspace{10pt}&\\\[5pt]
-    x&=\frac{1}{8} ,\,\, \frac{3}{7}\\\[5pt]
-    \end{align*}'
-    end
-
     it 'latexes $-16x^2-23x+18$' do
       exp = quad(-16,-23,18,'x')
       result = exp.latex
-      expect(result).to eq '\begin{align*}
-    0&=-16x^2+-23x+18& && &P=-16\times18=-288 \hspace{30pt}S=-23&\\\[5pt]
-    0&=\left(x+2\right)\left(x-\frac{9}{16}\right)& && &\left(-32,\,\,9\right)\hspace{10pt}\left(\frac{-32}{-16},\,\,\frac{9}{-16}\right)\hspace{10pt}\left(2,\,\,-\frac{9}{16}\right)\hspace{10pt}&\\\[5pt]
-    x&=-2 ,\,\, \frac{9}{16}\\\[5pt]
-    \end{align*}'
+      expect(result).to eq "\\begin{align*}\n    0&=-16x^2-23x+18& && &P=-16\\times18=-288 \\hspace{30pt}S=-23&\\\\[5pt]\n    0&=\\left(x+2\\right)\\left(x-\\frac{9}{16}\\right)& && &\\left(-32,\\,\\,9\\right)\\hspace{10pt}\\left(\\frac{-32}{-16},\\,\\,\\frac{9}{-16}\\right)\\hspace{10pt}\\left(2,\\,\\,-\\frac{9}{16}\\right)\\hspace{10pt}&\\\\[5pt]\n    x&=-2 ,\\,\\, \\frac{9}{16}\\\\[5pt]\n    \\end{align*}"
     end
 
     it 'latexes $3x^2 - 8x -3$' do

@@ -33,6 +33,7 @@ class CosineEquation
     set_1_steps = set_1_eqn.solve_one_var_eqn
     set_1_period = evaluate_period
 
+    # set_2_eqn = eqn(cos(sbt(nil,mtp(-1, ls))),rs)
     set_2_eqn = eqn(cos(mtp(-1, ls)),rs)
     set_2_steps = set_2_eqn.solve_one_var_eqn
     set_2_period = evaluate_period
@@ -54,6 +55,10 @@ class CosineEquation
       ls.args.each do |obj|
         if obj.is_a?(Multiplication) && obj.includes?(String)
           scalar = obj.fetch(object: :numeric)
+        end
+
+        if obj.is_a?(Division) && obj.includes?(String)
+          scalar = 1.0 / obj.fetch(object: :numeric)
         end
       end
     end
@@ -121,5 +126,10 @@ class CosineEquation
     response = response.flatten.join("\\\\[10pt]\n")
     response = add_align_env(response)
     response + '$' + solution[:set_1][:steps].last.ls + '=' + ' ' + solution[:solutions].join(',') + '$'
+  end
+
+  def latex
+    solution = self.solve
+    solution[:set_1][:steps][0].latex
   end
 end

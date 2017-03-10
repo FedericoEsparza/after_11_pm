@@ -54,4 +54,6 @@ class Sine
     end
     '\sin ' + angle_latex
   end
+
+  alias_method :~, :==
 end

@@ -58,7 +58,6 @@ module LatexUtilities
         end
       end
 
-
       if exp.args[-1].is_a?(multiplication) && numerical?(exp.args[-1].args[0]) && exp.args[-1].args[0] < 0
         sub_end = exp.args[-1].copy
         sub_end.args[0] = sub_end.args[0].abs
@@ -79,8 +78,6 @@ module LatexUtilities
         exp.args[0] = sbt(nil,exp.args[0].abs)
       end
 
-      # puts '============'
-
       for i in 2..(exp.args.length-1)
         if numerical?(exp.args[-i]) && exp.args[-i] < 0
           minus_arg_i = exp.args.length  - i
@@ -97,49 +94,66 @@ module LatexUtilities
           new_args.insert(0,front_sbt)
           return add(new_args)
         end
+
+        if exp.args[-i].is_a?(multiplication) && numerical?(exp.args[-i].args[0]) && exp.args[-i].args[0] < 0
+
+          minus_arg_i = exp.args.length  - i
+          new_args = []
+          for j in (exp.args.length-i+1)..(exp.args.length-1)
+            new_args << exp.args[j]  #check this it needs to be a new copy
+          end
+          front_add_args = []
+          for k in 0..((exp.args.length - i)-1)
+            front_add_args << exp.args[k]
+          end
+          if front_add_args.length == 1
+            minus_end = conventionalise_plus_minus(front_add_args[0])
+          else
+            minus_end = conventionalise_plus_minus(add(front_add_args))
+          end
+
+          exp.args[-i].args[0] = exp.args[-i].args[0].abs
+
+          front_sbt = sbt(minus_end,exp.args[-i])
+          new_args.insert(0,front_sbt)
+          return add(new_args)
+        end
       end
+
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
+    end
+
+    if exp.is_a?(multiplication) && numerical?(exp.args[0]) && exp.args[0] < 0
+      exp.args[0] = exp.args[0].abs
+      return sbt(nil,exp)
+    end
+
+    if exp.is_a?(multiplication) && !(numerical?(exp.args[0]) && exp.args[0] < 0)
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
+    end
+
+    if _standard_class?(exp)
+      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      return exp.class.new(conv_args)
+    end
+
+    if numerical?(exp) || exp.is_a?(string)
       return exp
     end
 
-    if exp.is_a?(subtraction)
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return sbt(conventionalised_args)
+    if exp.is_a?(square_root)
+      exp.value = conventionalise_plus_minus(exp.value)
+      return exp
     end
 
-    if exp.is_a?(multiplication)
-      if numerical?(exp.args[0]) && exp.args[0] < 0
-        exp.args[0] = exp.args[0].abs
-        return sbt(nil,exp)
-      end
+    # should not have the line below
+    # return exp
+  end
 
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return mtp(conventionalised_args)
-    end
-
-    if exp.is_a?(division)
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return div(conventionalised_args)
-    end
-
-    if exp.is_a?(power)
-      conventionalised_args = []
-      exp.args.each do |arg|
-        conventionalised_args << conventionalise_plus_minus(arg)
-      end
-      return pow(conventionalised_args)
-    end
-
-    # if numerical?(exp) || exp.is_a?(string) || exp.nil?
-    return exp
+  def _standard_class?(exp)
+    [power,division,subtraction,sine,cosine,tangent,arcsine,arctangent,arccosine,equation].include?(exp.class)
   end
 
   def conventionalise_one_times(exp)
@@ -151,7 +165,7 @@ module LatexUtilities
       return exp
     end
 
-    if exp.is_a?(addition) || exp.is_a?(subtraction) || exp.is_a?(division) || exp.is_a?(power)
+    if exp.is_a?(addition) || exp.is_a?(subtraction) || exp.is_a?(division) || exp.is_a?(power) || exp.is_a?(cosine) || exp.is_a?(sine) || exp.is_a?(tangent)
       for i in 0..exp.args.length-1
         conventionalise_one_times(exp.args[i])
       end

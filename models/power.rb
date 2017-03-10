@@ -70,6 +70,29 @@ class Power
     pow(array.base.sort_elements,array.index.sort_elements)
   end
 
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    if base.contains?(subject)
+      result[:ls] = base
+      result[:rs] = pow(rs,div(1,index))
+      return result
+    elsif index.contains?(subject)
+      ## wait for logs
+    end
+  end
+
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    elsif base.contains?(subject)
+      result = true
+    end
+
+    result
+  end
+
   def greater?(exp)
     if exp.class == self.class
       (self.base.greater?(exp.base)) || (self.base == exp.base && self.index.greater?(exp.index))
@@ -107,5 +130,11 @@ class Power
     end
   end
 
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
 
+  alias_method :~, :==
 end

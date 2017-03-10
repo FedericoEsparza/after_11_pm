@@ -69,6 +69,12 @@ describe Addition do
       addition = 'x^2 + 4x + 4 + x-2'.objectify.standardize_add_m_form
       result = addition.simplify_add_m_forms.flatit
       expect(result).to eq 'x^2 + 5x + 2'.objectify
+    end  
+     
+    it 'simplifies 25-10y+3y' do
+      addition = add(mtp(25),mtp(-10,'y'),mtp(3,'y'))
+      result = addition.simplify_add_m_forms
+      expect(result).to eq add(mtp(-7,'y'),mtp(25))
     end
   end
 
@@ -76,10 +82,7 @@ describe Addition do
     it 'simplifies (x+y)(a+b) + (w+z)(c+d)' do
       exp = add(mtp(add('x','y'),add('a','b')),mtp(add('w','z'),add('c','d')))
       result = exp.simplify_brackets
-      expect(result.last).to eq add(
-        add(mtp('a','x'),mtp('a','y'),mtp('b','x'),mtp('b','y')),
-        add(mtp('c','w'),mtp('c','z'),mtp('d','w'),mtp('d','z'))
-      )
+      expect(result.last).to eq '(ax+bx+ay+by)+(cw+dw+cz+dz)'.objectify
     end
 
     it 'leaves x' do
@@ -147,8 +150,33 @@ describe Addition do
     it 'simplifies (x-1)yz/xz(y-1)' do
       exp = frac(mtp(add('x',-1),'y','z'),mtp('x','z',add('y',-1)))
       result = exp.elim_common_factors
-
       expect(result).to eq frac(mtp(add('x',-1),'y'),mtp('x',add('y',-1)))
+    end
+  end
+ 
+  describe '#~' do
+    it 'returns true for 3+4 and 4+3' do
+      exp_1 = add(3, 4)
+      exp_2 = add(4,3)
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns true for x^2 +3 +5' do
+      exp_1 = 'x^2+3+5'.objectify
+      exp_2 = '3+5+x^2'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns true for \sin x+y^2+z^{-3}' do
+      exp_1 = '\sin x+(y^2+z^{-3})'.objectify
+      exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
+      expect(exp_1.~(exp_2)).to be true
+    end
+
+    it 'returns false for \sin x+y^2+z^{-3}' do
+      exp_1 = '\sin x+y^2+z^{-3}'.objectify
+      exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
+      expect(exp_1.~(exp_2)).to be false
     end
   end
 

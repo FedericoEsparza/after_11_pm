@@ -7,6 +7,14 @@ describe Equation do
     end
   end
 
+  describe '#.~' do
+    it 'xyz = 3 ~ 3 = zyx ' do
+      eqn_1 = eqn('yxz'.objectify,3)
+      eqn_2 = eqn(3,'xyz'.objectify)
+      expect(eqn_1.~(eqn_2)).to be true
+    end
+  end
+
   describe '#solve_one_var_eqn' do
     context '#one-step' do
       it 'reverses one step right addition' do
@@ -59,6 +67,16 @@ describe Equation do
         ]
       end
 
+      it 'reverse conventionalised right subtraction' do
+        equation = eqn(add('x',-3),5)
+        result = equation.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add('x',-3),5),
+          eqn('x',add(5,3)),
+          eqn('x',8)
+        ]
+      end
+
       it 'reverses one step left subtraction' do
         eqn = eqn(sbt(5,'x'),3)
         result = eqn.solve_one_var_eqn
@@ -66,6 +84,16 @@ describe Equation do
           eqn(sbt(5,'x'),3),
           eqn('x',sbt(5,3)),
           eqn('x',2)
+        ]
+      end
+
+      it 'reverses conventionalised one step left subtraction' do
+        equation = eqn(add(9,mtp(-1,'x')),3)
+        result = equation.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add(9,mtp(-1,'x')),3),
+          eqn('x',sbt(9,3)),
+          eqn('x',6)
         ]
       end
 
@@ -148,6 +176,122 @@ describe Equation do
           eqn('x',2)
         ]
       end
+
+      it 'solves conventionalised 9 + 36 / (7x - 2) = 12' do
+        eqn = eqn(add(9,div(36,add(mtp(7,'x'),-2))),12)
+        result = eqn.solve_one_var_eqn
+        expect(result).to eq [
+          eqn(add(9,div(36,add(mtp(7,'x'),-2))),12),
+          eqn(div(36,add(mtp(7,'x'),-2)),sbt(12,9)),
+          eqn(div(36,add(mtp(7,'x'),-2)),3),
+          eqn(add(mtp(7,'x'),-2),div(36,3)),
+          eqn(add(mtp(7,'x'),-2),12),
+          eqn(mtp(7,'x'),add(12,2)),
+          eqn(mtp(7,'x'),14),
+          eqn('x',div(14,7)),
+          eqn('x',2)
+        ]
+      end
+    end
+  end
+
+  describe '#change_subject_to' do
+    it 'change subject to x for x+y=10' do
+      equation = eqn(add('x','y'),10)
+      result = equation.change_subject_to('x')
+      expect(result).to eq [
+        eqn(add('x','y'),10),
+        eqn('x',add(10,mtp(-1,'y')))
+      ]
+    end
+
+    it 'change subject to y^2 of x+y^2=10' do
+      equation = eqn(add('x',pow('y',2)),10)
+      result = equation.change_subject_to(pow('y',2))
+      expect(result).to eq [
+        eqn(add('x',pow('y',2)),10),
+        eqn(pow('y',2),add(10,mtp(-1,'x')))
+      ]
+    end
+
+    it 'change subject to z for x+y=10' do
+      equation = eqn(add('x','y'),10)
+      result = equation.change_subject_to('z')
+      expect(result).to eq nil
+    end
+
+    it 'change subject to x for xy=5' do
+      eqn = eqn(mtp('x','y'),5)
+      result = eqn.change_subject_to('x')
+      expect(result).to eq [
+        eqn(mtp('x','y'),5),
+        eqn('x',div(5,'y'))
+      ]
+    end
+
+    it 'change subject to y for x+y+2z = 6' do
+      eqn = eqn(add('x','y',mtp(2,'z')),6)
+      result = eqn.change_subject_to('y')
+
+      expect(result).to eq [
+        eqn(add('x','y',mtp(2,'z')),6),
+        eqn('y',add(6,mtp(-1,add('x',mtp(2,'z')))))
+      ]
+    end
+
+    it 'change subject to y^2 for x+2y^2 = 4z' do
+      eqn = eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z'))
+    result = eqn.change_subject_to(pow('y',2))
+
+      expect(result).to eq [
+        eqn(add('x',mtp(2,pow('y',2))),mtp(4,'z')),
+        eqn(mtp(2,pow('y',2)),add(mtp(4,'z'),mtp(-1,'x'))),
+        eqn(pow('y',2),div(add(mtp(4,'z'),mtp(-1,'x')),2))
+      ]
+    end
+  end
+
+  describe '#similar_trig_eqn?' do
+    it 'returns true for 0=3sinx and 0=4sin2x' do
+      eqn_1 = '0=3\sinx-5'.objectify
+      eqn_2 = '0=4\sin2x+6'.objectify
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq true
+    end
+
+    it 'returns false for 0=3sinx and 0=3cosx' do
+      eqn_1 = '0=3\sinx'.objectify
+      eqn_2 = '0=4\cosx'.objectify
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq false
+    end
+
+    it 'returns true for eg 1' do
+      eqn_1 = eqn(0,add(mtp(3,sin(mtp(2,'x'))),-115,mtp(4,cos(mtp(2,'x'))) ))
+      eqn_2 = eqn(0,add(12,mtp(-5,sin(mtp('y'))),mtp(-3,cos(mtp('y')))))
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq true
+    end
+
+    it 'returns false for eg 2' do
+      eqn_1 = eqn(0,add(mtp(3,sin(mtp(2,'x'))),-115,mtp(4,tan(mtp(2,'x'))) ))
+      eqn_2 = eqn(0,add(12,mtp(-5,sin(mtp('y'))),mtp(-3,cos(mtp('y'))) ))
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq false
+    end
+
+    it 'returns false for eg 3' do
+      eqn_1 = eqn(0,add(mtp(3,sin(mtp(2,'x'))),-115,mtp(4,cos(mtp(2,'x'))) ))
+      eqn_2 = eqn(0,add(mtp(-5,sin(mtp('y'))),mtp(-3,cos(mtp('y')))))
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq false
+    end
+
+    it 'returns true for eg 4' do
+      eqn_1 = '0=3(\sin 2x)^2-115-4\cos 2x'.objectify
+      eqn_2 = '0=23-3\cos y+55(\sin y)^2'.objectify
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq true
+    end
+
+    it 'returns false for eg 5' do
+      eqn_1 = '0=3(\sin 2x)^2-115-4\cos 2x'.objectify
+      eqn_2 = '0=23-3\cos y+55(\sin y)^3'.objectify
+      expect(eqn_1.similar_trig_eqn?(eqn_2)).to eq false
     end
   end
 

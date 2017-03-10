@@ -9,17 +9,29 @@ class String
     self
   end
 
+  def copy
+    self
+  end
+
   def greater?(exp)
     if exp.is_a?(String)
       self < exp
-    elsif exp.is_a?(Numeric)
+    elsif exp.is_a?(Numeric) || exp.is_a?(fraction)
       true
     else
       self.greater?(exp.args.first)
     end
   end
 
+  def contains?(subject)
+    self == subject
+  end
+
   def sort_elements
+    self
+  end
+
+  def flatit
     self
   end
 
@@ -31,7 +43,7 @@ class String
   end
 
   def correct_latex?
-    objectify(self).latex.shorten == self
+    objectify.latex.shorten == self
   end
 
   def expand
@@ -44,7 +56,7 @@ class String
 
   def objectify
     original_string = self.dup
-    original_string.gsub!(' ','')
+    # original_string.gsub!(' ','')
     i = 1
     while i < original_string.length
       if insert_plus?(original_string,i)
@@ -64,8 +76,15 @@ class String
   end
 
   def original_objectify
+    # should refactor to the following lines inbetween *'s
+    # ****************************************************
+    # original_string = self.dup
+    # structure_str = empty_brackets(original_string.dup)
+    # args = structure_str.outer_function_args(original_string)
+    # return structure_str.outer_function_class.new(args)
+    # ****************************************************
+
     original_string = self.dup
-    original_string.gsub!(' ','')
     structure_str = empty_brackets(original_string.dup)
 
     if structure_str._outer_func_is_add?
@@ -114,6 +133,24 @@ class String
       args = structure_str._eqn_args(original_string)
       object_args = args.inject([]){ |r,e| r << e.original_objectify }
       return eqn(object_args[0],object_args[1])
+    end
+
+    if structure_str._outer_func_is_sin?
+      args = structure_str._sin_cos_tan_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return sin(object_args)
+    end
+
+    if structure_str._outer_func_is_cos?
+      args = structure_str._sin_cos_tan_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return cos(object_args)
+    end
+
+    if structure_str._outer_func_is_tan?
+      args = structure_str._sin_cos_tan_args(original_string)
+      object_args = args.inject([]){ |r,e| r << e.original_objectify }
+      return tan(object_args)
     end
 
   end
@@ -203,23 +240,65 @@ class String
     return false if self == '-'
     return false if self[1..(length-1)] =~ /\+|\-|\=/
     return false if split_mtp_args(dup).length == 1
+    return false if self =~ /^\\sin/
     return true
+    # !((self == '-') || (self[1..(length-1)] =~ /\+|\-|\=/) ||
+      # (split_mtp_args(dup).length == 1))
   end
 
   def _outer_func_is_div?
-    return false if self =~ /\=/
-    return false if self[1..(length-1)] =~ /\+|\-/
-    return false if split_mtp_args(dup).length > 1
-    return true if self =~ /^\\frac/
-    return false
+    # return false if self =~ /\=/
+    # return false if self[1..(length-1)] =~ /\+|\-/
+    # return false if split_mtp_args(dup).length > 1
+    # return true if self =~ /^\\frac/
+    # return false
+    # !!((!(self =~ /\=/) && !(self[1..(length-1)] =~ /\+|\-/) && !(split_mtp_args(dup).length > 1)) && (self =~ /^\\frac/))
+    __not_eqn? && __not_plus_or_minus? &&
+     __not_more_than_one_mtp_args? && __starts_with_frac?
+
+  end
+
+  def __not_eqn?
+    !(self =~ /\=/)
+  end
+
+  def __not_plus_or_minus?
+    !(self[1..(length-1)] =~ /\+|\-/)
+  end
+
+  def __not_more_than_one_mtp_args?
+    !(split_mtp_args(dup).length > 1)
+  end
+
+  def __starts_with_frac?
+    !!(self =~ /^\\frac/)
   end
 
   def _outer_func_is_pow?
-    return false if self =~ /\=/
-    return false if self[1..(length-1)] =~ /\+|\-/
-    return false if split_mtp_args(dup).length > 1
-    return true if self =~ /\^/
-    return false
+    return false unless self =~ /\^/
+    copy = self.dup
+    power_part = copy.slice(/((\d+)|(\(\$*\))|([A-Za-z]))\^(([A-Za-z])|(\{\$*\})|(\d))/)
+    power_part == self
+  end
+
+  def _sin_cos_tan_args(original_string)
+    original_string.slice!(0..3)
+    original_string.gsub!(' ','')
+    args = [original_string]
+    remove_enclosing_bracks(args)
+    args
+  end
+
+  def _outer_func_is_sin?
+    !!(self =~ /^\\sin/)
+  end
+
+  def _outer_func_is_cos?
+    !!(self =~ /^\\cos/)
+  end
+
+  def _outer_func_is_tan?
+    !!(self =~ /^\\tan/)
   end
 
   def _outer_func_is_eqn?
@@ -234,4 +313,17 @@ class String
     !!(self =~ /[A-Za-z]/) && length == 1
   end
 
+  def find_vars
+    [self]
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      self
+    end
+  end
+
+  alias_method :~, :==
 end

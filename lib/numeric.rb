@@ -9,14 +9,18 @@
 # require './models/numerals'
 # require './models/factory'
 
-class Fixnum
+class Numeric
 
   def greater? (exp)
-    if exp.is_a?(Fixnum)
+    if exp.is_a?(Numeric) || exp.is_a?(fraction)
       self > exp
     else
       false
     end
+  end
+
+  def contains?(subject)
+    false
   end
 
   def sort_elements
@@ -27,6 +31,13 @@ class Fixnum
     Prime.prime_division(n).flat_map { |factor, power| [factor] * power }
   end
 
+  def radiance
+    self * Math::PI / 180
+  end
+
+  def degrees
+    self * 180 / Math::PI
+  end
   # def <(exp)
   #   if exp.is_a?(String)
   #     self > exp
@@ -38,5 +49,18 @@ class Fixnum
   def find_denoms
     []
   end
+
+  def find_vars
+    []
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      self
+    end
+  end
+
 
 end
