@@ -2,11 +2,27 @@ include Factory
 include Latex
 
 class Equation
-  attr_accessor :ls, :rs
+  include GeneralUtilities
+  attr_accessor :args
 
-  def initialize(ls,rs)
-    @ls = ls
-    @rs = rs
+  def initialize(*args)
+    @args = *args
+  end
+
+  def ls
+    args[0]
+  end
+
+  def rs
+    args[1]
+  end
+
+  def ls=(new_ls)
+    args[0] = new_ls
+  end
+
+  def rs=(new_rs)
+    args[1] = new_rs
   end
 
   def copy
@@ -54,8 +70,6 @@ class Equation
 
   def reverse_last_step(curr_steps)
     new_sides = ls.reverse_step(rs)
-    p ls
-    p rs
     self.ls = new_sides[:ls]
     self.rs = new_sides[:rs]
     curr_steps << self.copy
@@ -69,5 +83,21 @@ class Equation
   def latex(no_new_line: false)
     response = ls.latex + '&=' + rs.latex
     # no_new_line ? response : response + '\\\\'
+  end
+
+  # RECURSION
+  def fetch(object:)
+    object_class = Kernel.const_get(object.to_s.capitalize)
+    args.each do |arg|
+      if arg.is_a?(Power)
+        return arg.args.each { |e|
+          return e if e.is_a?(object_class)
+        }
+      elsif arg.is_a?(self.class)
+        return arg.fetch(object: object)
+      else
+        return arg if arg.is_a?(object_class)
+      end
+    end
   end
 end

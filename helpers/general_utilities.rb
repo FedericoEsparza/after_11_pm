@@ -2,7 +2,7 @@ module GeneralUtilities
 
   def flatten(exp=nil)
     exp = exp || self
-    
+
     if exp.respond_to?(:args)
 
       if (exp.is_a?(multiplication) || exp.is_a?(addition)) && exp.args.length == 1

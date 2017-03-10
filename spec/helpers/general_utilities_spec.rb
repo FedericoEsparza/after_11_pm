@@ -50,5 +50,10 @@ describe GeneralUtilities do
       exp = add(add(3),3)
       expect(exp.flatten).to eq add(3, 3)
     end
+
+    it '' do
+      exp = eqn(add(mtp(3, 'x')), -5)
+      expect(exp.flatten).to eq eqn(mtp(3, 'x'), -5)
+    end
   end
 end

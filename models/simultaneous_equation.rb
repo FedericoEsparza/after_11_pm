@@ -50,10 +50,19 @@ class SimultaneousEquation
 
     steps << add_equations(negative: negative?(equation_1_coefs, equation_2_coefs))
     steps << eqn(steps.last.ls.expand.last.simplify_add_m_forms, steps.last.rs.expand.last.evaluate)
-    # steps << steps.last.solve_one_var_eqn
+    steps << steps.last.flatten.solve_one_var_eqn
+    steps << sub_in(steps.last.last)
 
     steps
     # [equation_1_coefs, equation_2_coefs]
+  end
+
+  def sub_in(var_ans)
+    var = var_ans.fetch(object: :string)
+    value = var_ans.fetch(object: :numeric)
+    p var
+    p value
+    eq_1.ls
   end
 
   def expand_equations
@@ -87,8 +96,14 @@ class SimultaneousEquation
       next if equation_2_coefs[var].nil?
 
       if equation_2_coefs[var].abs == coef.abs
-        negative = coef.negative? && equation_2_coefs[var].negative?
-        add_equations(negative: negative)
+        if coef.negative? && equation_2_coefs[var].negative?
+          return true
+        end
+
+        if coef.positive? && equation_2_coefs[var].positive?
+          return true
+        end
+        return false
       end
     end
   end
@@ -175,6 +190,10 @@ class SimultaneousEquation
         arg.is_a?(object_class)
       end
     end
+  end
+  # RECURSION
+  def inject(target_obj:, payload:)
+    
   end
 
 end
