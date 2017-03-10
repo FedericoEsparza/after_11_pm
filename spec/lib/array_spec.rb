@@ -14,6 +14,24 @@ describe Array do
     end
   end
 
+  context '#to_latex' do
+    it "converts [eqn(mtp(2, 'x'), 2)] to ['2x=2']" do
+      array = [eqn(mtp(2, 'x'), 2)]
+      expect(array.to_latex).to eq ['2x&=2']
+    end
+
+    it "converts [[eqn(mtp(2, 'x'), 2)]] to [['2x=2']]" do
+      array = [[eqn(mtp(2, 'x'), 2)]]
+      expect(array.to_latex).to eq [['2x&=2']]
+    end
+
+    it "converts [eqn(add(mtp(2, 'x'), 2), 2), [eqn(mtp(2, 'x'), 2)]] to [['2x=2']]" do
+      array = [eqn(add(mtp(2, 'x'), 2), 2), [eqn(mtp(2, 'x'), 2)]]
+      expect(array.to_latex).to eq ['2x+2&=2',['2x&=2']]
+    end
+
+  end
+
   # describe '#find_common' do
   #   it 'finds common with [1,2,2,3] and [2,2,1,4]' do
   #     array_1 = [1,2,3]
