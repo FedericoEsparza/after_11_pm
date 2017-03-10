@@ -9,18 +9,6 @@ class Multiplication
 
   attr_accessor :args
 
-  def standardize_m_form
-    new_args = []
-    args.each do |m|
-      if m.is_a?(Multiplication)
-        new_args << m
-      else
-        new_args << mtp(m)
-      end
-    end
-    mtp(new_args)
-  end
-
   def initialize(*args)
     if args.length == 1 && args[0].class == Array
       @args = args.first
@@ -48,6 +36,18 @@ class Multiplication
     true
   end
 
+  def standardize_m_form
+    new_args = []
+    args.each do |m|
+      if m.is_a?(Multiplication)
+        new_args << m
+      else
+        new_args << mtp(m)
+      end
+    end
+    mtp(new_args)
+  end
+
   def copy
     DeepClone.clone self
     # new_args = args.inject([]) do |r,e|
@@ -63,13 +63,27 @@ class Multiplication
   def convert_to_power
     new_args = []
     args.each do |a|
-      if a.is_a?(string)
+      if numerical?(a) || a.is_a?(power)
+        new_args << a
+      else
         new_args << pow(a,1)
+      end
+    end
+    @args = new_args
+    self
+  end
+
+  def depower
+    new_args = []
+    args.each do |a|
+      if a.is_a?(power) && a.index == 1
+        new_args << a.base
       else
         new_args << a
       end
     end
     @args = new_args
+    self
   end
 
   def combine_powers
@@ -809,4 +823,6 @@ class Multiplication
       mtp(args.map{|a| a.subs_terms(old_var,new_var)})
     end
   end
+
+
 end

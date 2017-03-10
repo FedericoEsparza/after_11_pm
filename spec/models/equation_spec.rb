@@ -417,6 +417,6 @@ describe Equation do
     end
 
   end
-
+  
 
 end

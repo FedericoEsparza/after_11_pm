@@ -55,5 +55,17 @@ describe GeneralUtilities do
       exp = eqn(add(mtp(3, 'x')), -5)
       expect(exp.flatten).to eq eqn(mtp(3, 'x'), -5)
     end
+
+    it '' do
+      exp = 1
+      # puts add(sbt(add('x',2),3),4,5).latex
+      expect(exp.flatten).to eq 1
+    end
+
+    it 'x' do
+      exp = 'x'
+      # puts add(sbt(add('x',2),3),4,5).latex
+      expect(exp.flatten).to eq 'x'
+    end
   end
 end
