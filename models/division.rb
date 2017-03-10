@@ -172,6 +172,40 @@ class Division
     end
   end
 
+  def simplify
+    exp_copy = self.copy
+
+    #usually 2xy/4yz unless 2/x
+    top_args = exp_copy.top.args
+    bot_args = exp_copy.bot.args
+
+    new_top_args = []
+
+    top_args.each do |top_arg|
+      if numerical?(top_arg)
+
+        num_index = nil
+
+        bot_args.each_with_index do |bot_arg,i|
+          if numerical?(bot_arg)
+            num_index = i
+            break
+          end
+        end
+
+        hcf = bot_args[num_index].gcd(top_arg)
+
+        bot_args[num_index] = bot_args[num_index]/hcf
+        new_top_args << (top_arg/hcf)
+      else
+        new_top_args << top_arg
+      end
+    end
+
+    div(mtp(new_top_args),mtp(bot_args))
+
+  end
 
   alias_method :~, :==
+  
 end

@@ -21,6 +21,13 @@ describe Division do
     end
   end
 
+  describe '#simplify' do
+    it 'simpliies \frac{6x}{8y}' do
+      exp = '\frac{6x}{8y}'.objectify
+      expect(exp.simplify).to eq '\frac{3x}{4y}'.objectify
+    end
+  end
+
   # describe '#expand' do
   #   it 'expands 2(14-4y)/5' do
   #     exp = div(mtp(2,add(14,mtp(-4,'y'))),5)
