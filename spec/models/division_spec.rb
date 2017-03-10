@@ -37,6 +37,11 @@ describe Division do
       expect(exp.simplify).to eq '\frac{xw}{2yz}'.objectify
     end
 
+    it '\frac{3xw}{yz} bot no num' do
+      exp = '\frac{3xw}{yz}'.objectify
+      expect(exp.simplify).to eq '\frac{3xw}{yz}'.objectify
+    end
+
     it '\frac{6x^4}{8x^2y} power cancellation top left with power' do
       exp = '\frac{6x^4}{8x^2y}'.objectify
       expect(exp.simplify).to eq '\frac{3x^2}{4y}'.objectify
@@ -46,6 +51,19 @@ describe Division do
       exp = '\frac{6x^3}{8x^2y}'.objectify
       expect(exp.simplify).to eq '\frac{3x}{4y}'.objectify
     end
+
+    it '\frac{3x^3}{4xy} top power bot string var cancel' do
+      exp = '\frac{3x^3}{4xy}'.objectify
+      expect(exp.simplify).to eq '\frac{3x^2}{4y}'.objectify
+    end
+
+    xit '\frac{3ax^2}{4x^5y} top string bot power var cancel' do
+      exp = '\frac{3ax^2}{4x^5y}'.objectify
+      expect(exp.simplify).to eq '\frac{3a}{4x^3y}'.objectify
+    end
+
+
+
   end
 
   # describe '#expand' do

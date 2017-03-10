@@ -109,6 +109,14 @@ describe Multiplication do
     end
   end
 
+  describe '#depower' do
+    it 'converts power one arguments to base' do
+      exp = mtp(2,pow(add(3,'x'),1),'y')
+      exp.depower
+      expect(exp.args).to eq [2,add(3,'x'),'y']
+    end
+  end
+
   describe '#combine_powers' do
     it 'combines x^2 times x^3' do
       exp = mtp(pow('x',2),pow('x',3))

@@ -192,41 +192,65 @@ class Division
           end
         end
 
-        hcf = bot_args[num_index].gcd(top_arg)
-
-        if bot_args[num_index]/hcf == 1
-          bot_args.delete_at(num_index)
+        if num_index.nil?
+          new_top_args << top_arg
         else
-          bot_args[num_index] = bot_args[num_index]/hcf
-        end
+          hcf = bot_args[num_index].gcd(top_arg)
 
-        unless top_arg/hcf == 1
-          new_top_args << (top_arg/hcf)
+          if bot_args[num_index]/hcf == 1
+            bot_args.delete_at(num_index)
+          else
+            bot_args[num_index] = bot_args[num_index]/hcf
+          end
+
+          unless top_arg/hcf == 1
+            new_top_args << (top_arg/hcf)
+          end
         end
 
       elsif top_arg.is_a?(power)
 
-        match_index = nil
+        pow_match_index = nil
+        str_match_index = nil
 
         bot_args.each_with_index do |bot_arg,i|
           if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
-            match_index = i
+            pow_match_index = i
+            break
+          end
+          if bot_arg.is_a?(string) && bot_arg == top_arg.base
+            str_match_index = i
             break
           end
         end
 
-        new_index = top_arg.index - bot_args[match_index].index
+        unless pow_match_index.nil?
+          new_index = top_arg.index - bot_args[pow_match_index].index
 
-        if new_index != 0 && new_index != 1
-          new_top_args << (pow(top_arg.base,new_index))
+          if new_index != 0 && new_index != 1
+            new_top_args << (pow(top_arg.base,new_index))
+          end
+
+          if new_index == 1
+            new_top_args << top_arg.base
+          end
+
+          bot_args.delete_at(pow_match_index)
         end
 
-        if new_index == 1
-          new_top_args << top_arg.base
+        unless str_match_index.nil?
+          new_index = top_arg.index - 1
+
+          if new_index != 0 && new_index != 1
+            new_top_args << (pow(top_arg.base,new_index))
+          end
+
+          if new_index == 1
+            new_top_args << top_arg.base
+          end
+
+          bot_args.delete_at(str_match_index)
         end
-
-        bot_args.delete_at(match_index)
-
       else
         new_top_args << top_arg
       end
