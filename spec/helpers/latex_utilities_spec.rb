@@ -185,5 +185,10 @@ describe LatexUtilities do
       expect(dummy_class.conventionalise(exp)).to eq add(sbt(mtp(2,pow('x',2)),mtp(9,'x')),7)
     end
 
+    it '' do
+      exp = sin(add(100,mtp(-2,'x')))
+      expect(dummy_class.conventionalise(exp)).to eq sin(sbt(100,mtp(2,'x')))
+    end
+
   end
 end

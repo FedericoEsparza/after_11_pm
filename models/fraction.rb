@@ -40,10 +40,34 @@ class Fraction
     end
   end
 
+  def *(exp)
+    new_frac = frac(mtp(numerator,exp).evaluate_numeral,denominator)
+  end
+
+  def mult(exp)
+    new_frac = frac(mtp(numerator,exp).evaluate_numeral,denominator)
+  end
+
+  def greater?(exp)
+    if exp.is_a?(Fixnum) || exp.is_a?(fraction)
+      self > exp
+    else
+      false
+    end
+  end
+
+  def contains?(subject)
+    false
+  end
+
   def <=(frc)
     return false unless same_class?(frc)
 
     self.evaluate_numeral <= frc.evaluate_numeral
+  end
+
+  def sort_elements
+    self
   end
 
   def simplify
@@ -135,6 +159,8 @@ class Fraction
       '-\frac{' + numerator.base_latex + '}{' + denominator.base_latex + '}'
     end
   end
+
+  alias_method :~, :==
 
   private
 

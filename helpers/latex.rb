@@ -1,5 +1,6 @@
 module Latex
   def latex
-    conventionalise(self).base_latex
+    conventionalised = conventionalise(self)
+    conventionalised.base_latex
   end
 end

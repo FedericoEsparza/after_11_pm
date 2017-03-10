@@ -26,6 +26,10 @@ module Factory
     Equation.new(ls,rs)
   end
 
+  def sseqn(eqn_1,eqn_2)
+    SimutaneousEqnSubstitution.new(eqn_1,eqn_2)
+  end
+
   def div(*args)
     Division.new(*args)
   end
@@ -81,4 +85,5 @@ module Factory
   def quad(quad_term,linear_term,constant_term,variable)
     QuadraticEquation.new(quad_term: quad_term, linear_term: linear_term, constant_term: constant_term, variable: variable)
   end
+
 end

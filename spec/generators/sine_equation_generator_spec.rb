@@ -169,7 +169,7 @@ describe SineEquationQuestion do
   context '#question_latex' do
     it "returns latex for question only" do
       exp = described_class.generate_question
-      expect(exp.question_latex).to eq '\sin \left(11-1x\right)&=0'
+      expect(exp.question_latex).to eq '\sin \left(11-x\right)&=0'
     end
   end
 

@@ -12,11 +12,15 @@
 class Numeric
 
   def greater? (exp)
-    if exp.is_a?(Fixnum)
+    if exp.is_a?(Numeric) || exp.is_a?(fraction)
       self > exp
     else
       false
     end
+  end
+
+  def contains?(subject)
+    false
   end
 
   def sort_elements
@@ -42,5 +46,16 @@ class Numeric
   #   end
   # end
 
+  def find_vars
+    []
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      self
+    end
+  end
 
 end

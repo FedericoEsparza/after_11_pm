@@ -15,6 +15,10 @@ module ClassName
     Fraction
   end
 
+  def square_root
+    SquareRoot
+  end
+
   def power
     Power
   end
@@ -51,7 +55,35 @@ module ClassName
     Tangent
   end
 
+  def arcsine
+    ArcSine
+  end
+
+  def arccosine
+    ArcCosine
+  end
+
+  def arctangent
+    ArcTangent
+  end
+
+  def square_root
+    SquareRoot
+  end
+
+  def equation
+    Equation
+  end
+
   def sin_eqn_qs
     SineEquationQuestion
+  end
+
+  def cos_eqn_qs
+    CosineEquationQuestion
+  end
+
+  def tan_eqn_qs
+    TangentEquationQuestion
   end
 end

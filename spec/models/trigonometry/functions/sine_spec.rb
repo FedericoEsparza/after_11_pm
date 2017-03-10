@@ -28,4 +28,11 @@ describe Sine do
       expect(sin(60).evaluate_numeral).to eq 0.86603
     end
   end
+
+  describe '#~' do
+    it 'return true' do
+      exp = sin('x')
+      expect(exp.~(sin('x'))).to be true
+    end
+  end
 end

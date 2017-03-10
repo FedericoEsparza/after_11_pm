@@ -6,7 +6,7 @@ include Latex
 
 class Multiplication
   include GeneralUtilities
-  
+
   attr_accessor :args
 
   def standardize_m_form
@@ -31,6 +31,21 @@ class Multiplication
 
   def ==(exp)
     exp.class == self.class && args == exp.args
+  end
+
+  def ~(exp)
+    return false unless exp.class == self.class
+    return false unless args.length == exp.args.length
+
+    args.each do |arg|
+      return false unless exp.args.any? { |exp_arg| arg.~(exp_arg) }
+    end
+
+    exp.args.each do |exp_arg|
+      return false unless args.any? { |arg| exp_arg.~(arg) }
+    end
+
+    true
   end
 
   def copy
@@ -246,6 +261,45 @@ class Multiplication
     steps
   end
 
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    moved_args = []
+    subject_index = -1
+    args.each_with_index do |arg,i|
+      if arg.contains?(subject)
+        subject_index = i
+      end
+    end
+
+    if args.length > 2
+      new_ls = args.delete_at(subject_index)
+      moved = mtp(args)
+    else
+      new_ls = args.delete_at(subject_index)
+      moved = args.first
+    end
+
+    result[:ls] = new_ls
+    result[:rs] = div(rs,moved)
+    return result
+  end
+
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+
+    result
+  end
+
   def reverse_step(rs)
     result = {}
     if numerical?(args[0])
@@ -262,14 +316,20 @@ class Multiplication
 
   def remove_coef
     result = []
-    args.each {|a| result << a if !(a.is_a?(Numeric))}
+    args.each {|a| result << a if (!(a.is_a?(Numeric)) && !(a.is_a?(fraction)))}
     result
   end
 
   def remove_exp
     result = []
-    args.each {|a| result << a if a.is_a?(Numeric)}
+    args.each {|a| result << a if (a.is_a?(Numeric) || a.is_a?(fraction))}
     result.inject(1, :*)
+  end
+
+  def evaluate_nums
+    new_args = remove_coef
+    new_args = [remove_exp] + new_args
+    mtp(new_args)
   end
 
   def standard_bracket_form
@@ -283,7 +343,6 @@ class Multiplication
     end
     mtp(new_args)
   end
-
 
   def greater?(exp)
     if exp.is_a?(Numeric) || exp.is_a?(String) || exp.is_a?(Power)
@@ -354,6 +413,62 @@ class Multiplication
     new_add
   end
 
+  def sort_elements
+    array = self.copy.args
+    num_array = []
+    string_array = []
+    array.each do |a|
+      if a.is_a?(Numeric)
+        num_array << a
+      else
+        string_array << a
+      end
+    end
+    string_array = string_array.sort_elements
+    array = num_array + string_array
+    mtp(array)
+  end
+
+  def is_bracket
+    brac = false
+    mtp = self.copy
+    mtp.args.each{|a| brac = true if a.is_a?(Addition)}
+    brac
+  end
+
+  def combine_two_brackets
+    copy = self.copy
+    new_args = []
+    copy.args.first.args.each_with_index do |a|
+      copy.args.last.args.each_with_index do |b|
+        c = mtp(a,b)
+        new_args << c
+        end
+    end
+    new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+    new_args.equalise_array_lengths
+    new_add = []
+    new_args.first.each_with_index do |a,i|
+      c = []
+      new_args.each_with_index do |b,j|
+        c << new_args[j][i]
+      end
+      new_add << add(c)
+    end
+    # new_add << new_add.last.sort_elements
+    new_step = new_add.last.copy
+    new_step.args.each do |m|
+      m.m_form_sort
+    end
+    new_add << new_step
+
+    # new_add << new_add.last.simplify_add_m_forms
+    new_add = delete_duplicate_steps(new_add)
+    new_add.insert(0,self.copy)
+    self.args = new_add[-1].args
+    new_add
+  end
+
   def combine_brackets
     copy = self.copy
     copy = copy.standard_bracket_form
@@ -367,6 +482,7 @@ class Multiplication
       first_two_brackets = mtp(copy.args[0],copy.args[1])
       copy.args = copy.args.drop(2)
       expanded_brackets_steps = first_two_brackets.combine_two_brackets
+      expanded_brackets_steps << expanded_brackets_steps.last.simplify_add_m_forms
       new_args = []
       expanded_brackets_steps.each do |a|
         new_line = [a]
@@ -553,7 +669,7 @@ class Multiplication
   def base_latex
     result = ''
     for i in 0..args.length - 1
-      if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
+      if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division) || args[i].is_a?(sine) || args[i].is_a?(cosine) || args[i].is_a?(tangent)
         arg_i_base_latex = args[i].base_latex
       else
         arg_i_base_latex = args[i].is_a?(equation) ? brackets(args[i].latex) : brackets(args[i].base_latex)
@@ -572,24 +688,48 @@ class Multiplication
     end
   end
 
+  def top_heavy_div
+    top_args = []
+    bot_args = []
+    args.each do |factor|
+      if factor.is_a?(division)
+        top_args << factor.top
+        bot_args << factor.bot
+      else
+        top_args << factor
+      end
+    end
+    if bot_args.length == 0
+      return self
+    elsif bot_args.length == 1
+      div(mtp(top_args),bot_args.first)
+    else
+      div(mtp(top_args),mtp(bot_args))
+    end
+  end
 
 
   #RECURSION
   def expand
     copy = self.copy
     steps = []
-    copy.args.each do |exp|
-      steps << exp.expand
+    if copy == copy.top_heavy_div
+      copy.args.each do |exp|
+        steps << exp.expand
+      end
+      steps = steps.equalise_array_lengths.transpose
+      steps = steps.map{|a| mtp(a)}
+      steps = steps.map{|a| a.flatit}
+      brackets = steps.last
+      next_steps = brackets.combine_brackets
+      steps = steps + next_steps
+      steps = steps.map{|a| a.flatit}
+      steps = delete_duplicate_steps(steps)
+      steps
+    else
+      copy = copy.top_heavy_div
+      copy.expand
     end
-    steps = steps.equalise_array_lengths.transpose
-    steps = steps.map{|a| mtp(a)}
-    steps = steps.map{|a| a.flatit}
-    brackets = steps.last
-    next_steps = brackets.combine_brackets
-    steps = steps + next_steps
-    steps = steps.map{|a| a.flatit}
-    steps = delete_duplicate_steps(steps)
-    steps
   end
 
   def flatit
@@ -612,6 +752,21 @@ class Multiplication
       end
     end
     result = mtp(new_args)
+  end
+
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      mtp(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
   end
 
 end

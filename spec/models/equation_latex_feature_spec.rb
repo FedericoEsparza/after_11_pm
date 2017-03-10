@@ -13,7 +13,7 @@ feature '#latex' do
   context 'all_steps' do
     scenario 'sine equation' do
       equation = sin_eqn(sbt(mtp(2,'x'),10),0.5)
-      eq_solution = equation.latex_solution     
+      eq_solution = equation.latex_solution
       expect(eq_solution).to eq "\\begin{align*}\n &&  && \\sin \\left(2x-10\\right)&=0.5 &&  && \\\\[10pt]\n && &(1)&\\sin \\left(2x-10\\right)&=0.5 && \\\\\n &&  && 2x-10&=\\arcsin 0.5 &&  && \\\\\n &&  && 2x-10&=30 &&  && \\\\\n &&  && 2x&=30+10 &&  && \\\\\n &&  && 2x&=40 &&  && \\\\\n &&  && x&=\\displaystyle\\frac{40}{2} &&  && \\\\\n &&  && x&=20\\pm 180n &&  && \\\\[10pt]\n && &(2)&\\sin \\left(180-\\left(2x-10\\right)\\right)&=0.5 && \\\\\n &&  && 180-\\left(2x-10\\right)&=\\arcsin 0.5 &&  && \\\\\n &&  && 180-\\left(2x-10\\right)&=30 &&  && \\\\\n &&  && 2x-10&=180-30 &&  && \\\\\n &&  && 2x-10&=150 &&  && \\\\\n &&  && 2x&=150+10 &&  && \\\\\n &&  && 2x&=160 &&  && \\\\\n &&  && x&=\\displaystyle\\frac{160}{2} &&  && \\\\\n &&  && x&=80\\pm 180n &&  && \n\\end{align*}\n$x= 20,200,80,260$"
     end
 

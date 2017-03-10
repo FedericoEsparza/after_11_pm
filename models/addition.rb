@@ -16,12 +16,39 @@ class Addition < Expression
     exp.class == self.class && args == exp.args
   end
 
+  def ~(exp)
+    return false unless exp.class == self.class
+    return false unless args.length == exp.args.length
+
+    args.each do |arg|
+      return false unless exp.args.any? { |exp_arg| arg.~(exp_arg) }
+    end
+
+    exp.args.each do |exp_arg|
+      return false unless args.any? { |arg| exp_arg.~(arg) }
+    end
+
+    true
+  end
+
   def greater?(exp)
     if self.class == exp.class
       self.args.greater?(exp.args)
     else
       (self.args.first.greater?(exp)) || (self.args.first == exp)
     end
+  end
+
+  def standardize_add_m_form
+    new_args = []
+    args.each do |m|
+      if m.is_a?(Multiplication)
+        new_args << m
+      else
+        new_args << mtp(m)
+      end
+    end
+    add(new_args)
   end
 
 
@@ -105,11 +132,53 @@ class Addition < Expression
         results << new_mtp
       end
     end
-    add(results)
+    if results.length == 0
+      0
+    else
+      add(results)
+    end
   end
 
   def evaluate_numeral
     args.inject(0){|r,e| r + e}
+  end
+
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+    result
+  end
+
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    moved_args = []
+    subject_index = -1
+    args.each_with_index do |arg,i|
+      if arg.contains?(subject)
+        subject_index = i
+      end
+    end
+
+    if args.length > 2
+      new_ls = args.delete_at(subject_index)
+      moved = add(args)
+    else
+      new_ls = args.delete_at(subject_index)
+      moved = args.first
+    end
+
+    result[:ls] = new_ls
+    result[:rs] = add(rs,mtp(-1,moved).flatit.evaluate_nums)
+    return result
   end
 
   def reverse_step(rs)
@@ -281,5 +350,19 @@ class Addition < Expression
       end
     end
     response
+  end
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      add(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
   end
 end

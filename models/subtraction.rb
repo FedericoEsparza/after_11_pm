@@ -48,6 +48,34 @@ class Subtraction
     minuend - subend
   end
 
+  def contains?(subject)
+    result = false
+    if self == subject
+      result = true
+    else
+      args.each do |arg|
+        if arg.contains?(subject)
+          result = true
+        end
+      end
+    end
+    result
+  end
+
+  def reverse_subject_step(subject,rs)
+    result = {}
+
+    if minuend.contains?(subject)
+      result[:ls] = minuend
+      result[:rs] = add(rs,subend)
+      return result
+    elsif subend.contains?(subject)
+      result[:ls] = subend
+      result[:rs] = sbt(minuend,rs)
+      return result
+    end
+  end
+
   def reverse_step(rs)
     result = {}
     if args[0].is_a?(integer)
@@ -69,7 +97,7 @@ class Subtraction
       minuend.base_latex + '-' + subend.base_latex
     end
   end
-  
+
   # RECURSION
   def fetch(object:)
     object_class = Kernel.const_get(object.to_s.capitalize)
@@ -103,4 +131,32 @@ class Subtraction
     end
     response
   end
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      sbt(args.map{|a| a.subs_terms(old_var,new_var)})
+    end
+  end
+
+  # def expand
+  #   copy = self.copy
+  #   steps = []
+  #   copy.args.each do |exp|
+  #     steps << exp.expand
+  #   end
+  #   steps = steps.equalise_array_lengths.transpose
+  #   steps = steps.map{|a| add(a)}
+  #   steps = steps.map{|a| a.flatit}
+  #   steps = steps.delete_duplicate_steps
+  # end
+
+  alias_method :~, :==
 end
