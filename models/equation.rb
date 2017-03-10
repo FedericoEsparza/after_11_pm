@@ -4,6 +4,7 @@ include TrigUtilities
 
 class Equation
   include GeneralUtilities
+  include FactoriseQuadraticEquation
   attr_accessor :args
 
   def initialize(*args)
