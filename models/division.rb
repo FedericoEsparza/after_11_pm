@@ -175,52 +175,17 @@ class Division
   def simplify
     exp_copy = self.copy
 
-    unless exp_copy.top.is_a?(multiplication)
-      exp_copy.top = mtp(exp_copy.top)
-    end
+    exp_copy.top = mtp(exp_copy.top) unless exp_copy.top.is_a?(multiplication)
+    exp_copy.bot = mtp(exp_copy.bot) unless exp_copy.bot.is_a?(multiplication)
 
-    unless exp_copy.bot.is_a?(multiplication)
-      exp_copy.bot = mtp(exp_copy.bot)
-    end
-    #usually 2xy/4yz unless 2/x
-    exp_copy.top.convert_to_power
-    exp_copy.bot.convert_to_power
-
-    top_args = exp_copy.top.args
-    bot_args = exp_copy.bot.args
+    top_args = exp_copy.top.convert_to_power.args
+    bot_args = exp_copy.bot.convert_to_power.args
 
     new_top_args = []
 
     top_args.each do |top_arg|
       if numerical?(top_arg)
-
-        num_index = nil
-
-        bot_args.each_with_index do |bot_arg,i|
-          if numerical?(bot_arg)
-            num_index = i
-            break
-          end
-        end
-
-        if num_index.nil?
-          new_top_args << top_arg
-        elsif bot_args[num_index] == top_arg
-          bot_args.delete_at(num_index)
-        else
-          hcf = bot_args[num_index].gcd(top_arg)
-
-          if bot_args[num_index]/hcf == 1
-            bot_args.delete_at(num_index)
-          else
-            bot_args[num_index] = bot_args[num_index]/hcf
-          end
-
-          unless top_arg/hcf == 1
-            new_top_args << (top_arg/hcf)
-          end
-        end
-
+        _simplify_numerals(top_arg,bot_args,new_top_args)
       elsif top_arg.is_a?(power)
         pow_match_index = nil
 
@@ -269,6 +234,38 @@ class Division
     end
 
     return div(mtp(new_top_args).depower.flatten,mtp(bot_args).depower.flatten)
+  end
+
+  def _simplify_numerals(top_arg,bot_args,new_top_args)
+    num_index = nil
+    bot_args.each_with_index do |bot_arg,i|
+      if numerical?(bot_arg)
+        num_index = i
+        break
+      end
+    end
+
+    bot_args_copy = DeepClone.clone bot_args
+
+    if num_index.nil?
+      new_top_args << top_arg
+    end
+    if !num_index.nil? && bot_args_copy[num_index] == top_arg
+      bot_args.delete_at(num_index)
+    end
+    if !num_index.nil? && !(bot_args_copy[num_index] == top_arg)
+      hcf = bot_args[num_index].gcd(top_arg)
+
+      if bot_args[num_index]/hcf == 1
+        bot_args.delete_at(num_index)
+      else
+        bot_args[num_index] = bot_args[num_index]/hcf
+      end
+
+      unless top_arg/hcf == 1
+        new_top_args << (top_arg/hcf)
+      end
+    end
   end
 
 
