@@ -28,7 +28,7 @@ module FactoriseQuadraticEquation
     end
 
     all_args = all_args.map do |arg|
-      flatten(arg)
+      arg.flatten
     end
 
     variable_args = all_args.select do |arg|
@@ -36,8 +36,8 @@ module FactoriseQuadraticEquation
     end
 
     variable_args
+    
 
-      
 
   end
 
