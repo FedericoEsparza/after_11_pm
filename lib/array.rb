@@ -81,7 +81,16 @@ class Array
       steps
     end
 
-
+    # RECURSION
+    def to_latex
+      map do |element|
+        if element.is_a?(Array)
+          element.to_latex
+        else
+          element.latex
+        end
+      end
+    end
 
     ##is no longer needed, will keep if wanted later
 

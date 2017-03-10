@@ -69,7 +69,6 @@ describe SimutaneousEqnSubstitution do
     it 'latexes solution of x+5y=20, 2x+2y=24' do
       equations = sseqn('x+5y=20'.objectify, '2x+2y=24'.objectify)
       result = equations.solution_latex
-
       expect(result).to eq '\begin{align*}
     &&x+5y&=20&\left(1\right)&&&&\\\[5pt]
       &&2x+2y&=24&\left(2\right)&&&&\\\[15pt]
