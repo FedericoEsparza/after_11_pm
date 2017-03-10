@@ -44,7 +44,22 @@ describe FactoriseQuadraticEquation do
     end
   end
 
+  describe '#quadratic_var' do
+    it 'returns x as var for 0=2x^2-4x+3' do
+      equation = '0=2x^2-4x+3'.objectify
+      expect(equation.quadratic_var).to eq 'x'
+    end
 
+    it 'returns x^2\sin x for 2(\sin x)^2x^4-3=2x^2\sin x-4' do
+      equation = '2(\sin x)^2x^4-3=2x^2\sin x-4'.objectify
+      expect(equation.quadratic_var).to eq 'x^2\sin x'.objectify
+    end
+
+    it 'returns nil for 0=3x-4x+3x^3-5' do
+      equation = '0=3x-4x^3+3x-5'.objectify
+      expect(equation.quadratic_var).to eq nil
+    end
+  end
 
 
 end
