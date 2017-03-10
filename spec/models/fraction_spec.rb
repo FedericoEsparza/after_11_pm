@@ -167,4 +167,13 @@ describe Factory do
       expect(result).to eq -3
     end
   end
+
+  describe '#latex' do
+    it 'latexes 1/3 + 2/3' do
+      exp = add(frac(1,3),frac(2,3))
+      result = exp.latex
+      expect(result).to eq '\frac{1}{3}+\frac{2}{3}'
+    end
+  end
+
 end

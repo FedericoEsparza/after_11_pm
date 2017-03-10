@@ -109,6 +109,14 @@ describe Multiplication do
     end
   end
 
+  describe '#depower' do
+    it 'converts power one arguments to base' do
+      exp = mtp(2,pow(add(3,'x'),1),'y')
+      exp.depower
+      expect(exp.args).to eq [2,add(3,'x'),'y']
+    end
+  end
+
   describe '#combine_powers' do
     it 'combines x^2 times x^3' do
       exp = mtp(pow('x',2),pow('x',3))
@@ -522,11 +530,6 @@ describe Multiplication do
        exp = mtp(add('x','y'),add('x','y'),add('x','y'),add('x','y'))
        result = exp.combine_brackets
 
-        # result.each_with_index do |a,i|
-        #   string = "expect(result[" + i.to_s + "]).to eq objectify('" + a.latex.shorten + "')"
-        #   puts string
-        # end
-
         expect(result[0]).to eq '(x+y)(x+y)(x+y)(x+y)'.objectify
         expect(result[1]).to eq '(xx+xy+yx+yy)(x+y)(x+y)'.objectify
         expect(result[2]).to eq '(x^1x^1+xy+yx+y^1y^1)(x+y)(x+y)'.objectify
@@ -547,9 +550,6 @@ describe Multiplication do
         expect(result[17]).to eq 'x^{3+1}+x^3y+3x^{2+1}y+3x^2y^{1+1}+3x^{1+1}y^2+3xy^{2+1}+y^3x+y^{3+1}'.objectify
         expect(result[18]).to eq 'x^4+x^3y+3x^3y+3x^2y^2+3x^2y^2+3xy^3+y^3x+y^4'.objectify
         expect(result[19]).to eq 'x^4+x^3y+3x^3y+3x^2y^2+3x^2y^2+3xy^3+xy^3+y^4'.objectify
-        # expect(result[20]).to eq 'x^4+4x^3y+6x^2y^2+4xy^3+y^4'.objectify
-
-
      end
 
      it 'combines x(y+z)' do
@@ -748,7 +748,24 @@ describe Multiplication do
 
     end
 
-    # it 'expands ()'
+    xit 'expands (x+2)^2' do
+      exp = '(x+2)^2'.objectify
+      result = exp.expand
+
+      # result.each_with_index do |a,i|
+      #   string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
+      #   puts string
+      # end
+
+      expect(result[0]).to eq '(x+2)(x+2)'.objectify
+      expect(result[1]).to eq 'xx+x2+2x+2\times2'.objectify
+      expect(result[2]).to eq 'x^1x^1+x2+2x+4'.objectify
+      expect(result[3]).to eq 'x^{1+1}+x2+2x+4'.objectify
+      expect(result[4]).to eq 'x^2+x2+2x+4'.objectify
+      expect(result[5]).to eq 'x^2+2x+2x+4'.objectify
+      expect(result[6]).to eq 'x^2+4x+4'.objectify
+
+    end
 
   end
 
@@ -769,6 +786,14 @@ describe Multiplication do
       exp = add(mtp(pow('x',2)),'y')
       result = exp.flatit
       expect(result).to eq add(pow('x',2),'y')
+    end
+  end
+
+  describe '#top_heavy' do
+    it 'top heavies 5xy(3/x+1)' do
+      exp = mtp(5,'x','y',frac(3,add('x',1)))
+      result = exp.top_heavy
+      expect(result).to eq frac(mtp(5,'x','y',3),add('x',1))
     end
   end
 

@@ -1,9 +1,11 @@
 require './helpers/latex'
+require './helpers/general_utilities'
 
 include Latex
+include GeneralUtilities
 
 class Fixnum
-require "prime"
+  require "prime"
 
   def base_latex
     self.to_s
