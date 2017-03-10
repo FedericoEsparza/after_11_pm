@@ -2,6 +2,10 @@
 
 [One Maths Beta Site](https://postimg.org/image/es2tmx4rh/)
 
+[![Build Status](https://travis-ci.org/chn-challenger/after_11_pm.svg?branch=master)](https://travis-ci.org/chn-challenger/after_11_pm)
+
+[![Coverage Status](https://coveralls.io/repos/github/chn-challenger/after_11_pm/badge.svg?branch=master)](https://coveralls.io/github/chn-challenger/after_11_pm?branch=master)
+
 This project aims to produce question generators to generator A-level mathematics questions in [MathJax](https://github.com/mathjax/MathJax) LaTeX format.  In addition, generators of each type of question will be accompanied by a solution engine, which will return a fully detailed solution in MathJax compatible LaTex, if a solution exists for the generated question.
 
 --------
