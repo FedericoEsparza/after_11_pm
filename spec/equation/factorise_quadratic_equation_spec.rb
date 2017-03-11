@@ -1,6 +1,6 @@
 describe FactoriseQuadraticEquation do
 
-  describe '#factorise_standard_quadractic' do
+  xdescribe '#factorise_standard_quadractic' do
     it 'factorises 0=3z^2-z-2' do
       exp = '0=3z^2-z-2'.objectify
       result = exp.factorise_standard_quadractic
@@ -41,7 +41,7 @@ describe FactoriseQuadraticEquation do
 
   end
 
-  describe '#factorise_quadractic' do
+  xdescribe '#factorise_quadractic' do
     it 'factorises 6\(x+1) + 3\(2x-3)=1 for y^2' do
 
       exp = eqn(add(div(8,add(pow('y',2),1)),div(3,add(mtp(2,pow('y',2)),-3))),1)

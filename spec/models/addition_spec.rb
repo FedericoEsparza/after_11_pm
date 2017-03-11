@@ -39,7 +39,7 @@ describe Addition do
   # end
 
 
-  describe '#simplify_add_m_forms' do
+  xdescribe '#simplify_add_m_forms' do
 
     it '#simplifies 3xy+2xy+xyz'do
     addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))

@@ -295,7 +295,7 @@ describe Equation do
     end
   end
 
-  describe '#expand_quad_eqn' do
+  xdescribe '#expand_quad_eqn' do
     xit 'expands (x+2)^2= x-2 ' do
       eqn = eqn(pow(add('x',2),2),add('x',-2))
       result = eqn.expand_quad_eqn
@@ -316,7 +316,7 @@ describe Equation do
     end
   end
 
-  describe '#simplify_quad_eqn' do
+  xdescribe '#simplify_quad_eqn' do
     it 'simplifies x^2+4x+4=x-2' do
       eqn = eqn('x^2+4x+4'.objectify,'x-2'.objectify)
       result = eqn.simplify_quad_eqn
@@ -370,7 +370,7 @@ describe Equation do
     end
   end
 
-  describe '#mtp_common_denoms' do
+  xdescribe '#mtp_common_denoms' do
     it 'deals with 1/(x+1) + x/(x+2) = 5' do
       eqn = eqn(add(frac(1,add('x',1)),frac('x',add('x',2))),5)
       result = eqn.mtp_common_denoms
@@ -380,7 +380,7 @@ describe Equation do
     end
   end
 
-  describe '#elim_common_factors' do
+  xdescribe '#elim_common_factors' do
     it 'deals with (x+1)(x+2)*1/(x+1) + (x+1)(x+2)*x/(x+2) = 5(x+1)(x+2)' do
       eqn = eqn(add(mtp(add('x',1),add('x',2),frac(1,add('x',1))),mtp(add('x',1),add('x',2),frac('x',add('x',2)))),
       mtp(5,add('x',1),add('x',2)))
@@ -389,7 +389,7 @@ describe Equation do
     end
   end
 
-  describe '#latex_rational_to_quad' do
+  xdescribe '#latex_rational_to_quad' do
     xit 'latexes 1/(x+1) + x/(x+2) = 5 to quad form' do
       eqn = eqn(add(frac(1,add('x',1)),frac('x',add('x',2))),5)
       result = eqn.latex_rational_to_quad
@@ -407,7 +407,7 @@ describe Equation do
 
   end
 
-  describe '#latex_solve_rational_quad' do
+  xdescribe '#latex_solve_rational_quad' do
     it 'latexes solution of (x-4)/(x+2) = 5x' do
       eqn = eqn(frac(add('x',-4),add('x',2)),mtp(5,'x'))
       result = eqn.latex_solve_rational_quad
@@ -417,6 +417,6 @@ describe Equation do
     end
 
   end
-  
+
 
 end
