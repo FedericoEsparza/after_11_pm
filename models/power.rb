@@ -82,6 +82,14 @@ class Power
     end
   end
 
+  def subs_terms(old_var,new_var)
+    if self == old_var
+      return new_var
+    else
+      pow(base.subs_terms(old_var,new_var),index.subs_terms(old_var,new_var))
+    end
+  end
+
   def contains?(subject)
     result = false
     if self == subject
