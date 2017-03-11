@@ -474,7 +474,7 @@ describe Multiplication do
 
    end
 
-   describe '#combine n brackets' do
+   xdescribe '#combine n brackets' do
 
      it 'combines (x+y)(x+y)(x+y)' do
        exp = mtp(add('x','y'),add('x','y'),add('x','y'))
@@ -526,7 +526,7 @@ describe Multiplication do
 
      end
 
-     it 'combines (x+y)(x+y)(x+y)(x+y)' do
+     xit 'combines (x+y)(x+y)(x+y)(x+y)' do
        exp = mtp(add('x','y'),add('x','y'),add('x','y'),add('x','y'))
        result = exp.combine_brackets
 
@@ -698,7 +698,7 @@ describe Multiplication do
 
     end
 
-    it 'expands (x+y)(x+y)(x+y)' do
+    xit 'expands (x+y)(x+y)(x+y)' do
       exp = '(x+y)(x+y)(x+y)'.objectify
       result = exp.expand
 

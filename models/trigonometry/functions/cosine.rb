@@ -47,6 +47,50 @@ class Cosine
     result
   end
 
+  def sort_elements
+    array = self.copy
+    cos(array.angle.sort_elements)
+  end
+
+  def contains?(subject)
+    (self == subject) || angle.contains?(subject)
+  end
+
+  def subs_terms(old_var, new_var)
+    if self == old_var
+      return new_var
+    else
+      cos(angle.subs_terms(old_var,new_var))
+    end
+  end
+
+  def find_denoms
+    []
+  end
+
+  def find_vars
+    vars = []
+    args.each{|a| vars += a.find_vars}
+    vars
+  end
+
+  def expand
+    steps = angle.expand
+    steps.map{|a| cos(a)}
+  end
+
+  def flatit
+    cos(angle.flatit)
+  end
+
+  def greater?(exp)
+    if self.class == exp.class
+      angle.greater?(exp.angle)
+    else
+      angle.greater?(exp)
+    end
+  end
+
   def base_latex
     angle_latex = angle.base_latex
     if angle.is_a?(addition) || angle.is_a?(subtraction)
