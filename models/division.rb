@@ -188,7 +188,6 @@ class Division
         _simplify_numerals(top_arg,bot_args,new_top_args)
       elsif top_arg.is_a?(power)
         pow_match_index = nil
-
         bot_args.each_with_index do |bot_arg,i|
           if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
             pow_match_index = i
@@ -221,18 +220,9 @@ class Division
       end
     end
 
-    if bot_args == [] && new_top_args != []
-      return mtp(new_top_args).depower.flatten
-    end
-
-    if bot_args != [] && new_top_args == []
-      return div(1,mtp(bot_args).depower.flatten)
-    end
-
-    if bot_args == [] && new_top_args == []
-      return 1
-    end
-
+    return mtp(new_top_args).depower.flatten if bot_args == [] && new_top_args != []
+    return div(1,mtp(bot_args).depower.flatten) if bot_args != [] && new_top_args == []
+    return 1 if bot_args == [] && new_top_args == []
     return div(mtp(new_top_args).depower.flatten,mtp(bot_args).depower.flatten)
   end
 
@@ -262,9 +252,7 @@ class Division
         bot_args[num_index] = bot_args[num_index]/hcf
       end
 
-      unless top_arg/hcf == 1
-        new_top_args << (top_arg/hcf)
-      end
+      new_top_args << (top_arg/hcf) unless top_arg/hcf == 1
     end
   end
 
