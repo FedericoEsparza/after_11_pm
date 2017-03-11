@@ -184,40 +184,8 @@ class Division
     new_top_args = []
 
     top_args.each do |top_arg|
-      if numerical?(top_arg)
-        _simplify_numerals(top_arg,bot_args,new_top_args)
-      elsif top_arg.is_a?(power)
-        pow_match_index = nil
-        bot_args.each_with_index do |bot_arg,i|
-          if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
-            pow_match_index = i
-            break
-          end
-        end
-
-        if pow_match_index.nil?
-          new_top_args << top_arg
-        else
-          if top_arg.index >= bot_args[pow_match_index].index
-            new_index = top_arg.index - bot_args[pow_match_index].index
-
-            if new_index != 0 && new_index != 1
-              new_top_args << (pow(top_arg.base,new_index))
-            end
-
-            if new_index == 1
-              new_top_args << top_arg.base
-            end
-
-            bot_args.delete_at(pow_match_index)
-          else
-            bot_args[pow_match_index].index -= top_arg.index
-          end
-        end
-
-      else
-        new_top_args << top_arg
-      end
+      _simplify_numerals(top_arg,bot_args,new_top_args) if numerical?(top_arg)
+      _simplify_variables(top_arg,bot_args,new_top_args) if top_arg.is_a?(power)
     end
 
     return mtp(new_top_args).depower.flatten if bot_args == [] && new_top_args != []
@@ -256,8 +224,30 @@ class Division
     end
   end
 
+  def _simplify_variables(top_arg,bot_args,new_top_args)
+    pow_match_index = nil
+    bot_args.each_with_index do |bot_arg,i|
+      if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
+        pow_match_index = i
+        break
+      end
+    end
 
+    if pow_match_index.nil?
+      new_top_args << top_arg
+    else
+      if top_arg.index >= bot_args[pow_match_index].index
+        new_index = top_arg.index - bot_args[pow_match_index].index
+
+        new_top_args << (pow(top_arg.base,new_index)) if new_index != 0 && new_index != 1
+        new_top_args << top_arg.base if new_index == 1
+
+        bot_args.delete_at(pow_match_index)
+      else
+        bot_args[pow_match_index].index -= top_arg.index
+      end
+    end
+  end
 
   alias_method :~, :==
-
 end
