@@ -161,10 +161,10 @@ solution_latex = equation.latex
 
 --------
 # To Do List
-> - Non-standard quadratic equation solver
+> - ~~Non-standard quadratic equation solver~~
 > - Quadratic equation (standard and non-standard) question generator
-> - Linear two variable simultaneous equation solver by elimination.
-> - Linear two variable simultaneous equation solver by substitution.
+> - ~~Linear two variable simultaneous equation solver by elimination.~~
+> - ~~Linear two variable simultaneous equation solver by substitution.~~
 > - Linear two variable simultaneous equation question generator.
 > - One quadratic and one linear simultaneous equation solver by substitution.
 > - One quadratic and one linear simultaneous equation question generator.
