@@ -28,4 +28,13 @@ module GeneralUtilities
     test_string += ']'
     test_string
   end
+
+  def is_m_form?(exp)
+    return false unless exp.is_a?(multiplication)
+    exp.args.each do |arg|
+      return false if arg.is_a?(addition) || arg.is_a?(subtraction)
+    end
+    return true
+  end
+
 end

@@ -36,10 +36,10 @@ class Multiplication
     true
   end
 
-  def standardize_m_form
+  def standardise_m_form
     new_args = []
     args.each do |m|
-      if m.is_a?(Multiplication)
+      if m.is_a?(multiplication)
         new_args << m
       else
         new_args << mtp(m)
@@ -390,7 +390,7 @@ class Multiplication
         new_args << c
         end
     end
-    new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+    new_args = new_args.map {|a| a.standardise_m_form.simplify_product_of_m_forms}
     new_args.equalise_array_lengths
     new_add = []
     new_args.first.each_with_index do |a,i|
@@ -449,7 +449,7 @@ class Multiplication
         new_args << c
         end
     end
-    new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
+    new_args = new_args.map {|a| a.standardise_m_form.simplify_product_of_m_forms}
     new_args.equalise_array_lengths
     new_add = []
     new_args.first.each_with_index do |a,i|

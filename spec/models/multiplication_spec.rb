@@ -319,13 +319,13 @@ describe Multiplication do
   describe '#standardize m form' do
     it 'turns m(x,m(xy)) to m(m(x)m(xy))' do
      exp = mtp('x',mtp('x','y'))
-     result = exp.standardize_m_form
+     result = exp.standardise_m_form
      expect(result).to eq mtp(mtp('x'),mtp('x','y'))
     end
 
     it 'turns m(x^2,y^3,m(x^2y))' do
      exp = mtp(pow('x',2),pow('y',3),mtp(pow('x',2),'y'))
-     result = exp.standardize_m_form
+     result = exp.standardise_m_form
       expect(result).to eq mtp(mtp(pow('x',2)),mtp(pow('y',3)),mtp(pow('x',2),'y'))
     end
   end

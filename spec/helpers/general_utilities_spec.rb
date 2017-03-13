@@ -66,4 +66,11 @@ describe GeneralUtilities do
       expect(write_test(result_steps)).to eq "expect(result).to eq [\n  '2x^3'.objectify,\n  '5+\\frac{y}{4}'.objectify\n]"
     end
   end
+
+  describe '#is_m_form?' do
+    it 'true for 3xyz' do
+      exp = '3xyz'.objectify
+      expect(is_m_form?(exp)).to eq true
+    end    
+  end
 end
