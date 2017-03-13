@@ -14,16 +14,16 @@ module Factory
     Power.new(*args)
   end
 
-  def var(string)
-    Variable.new(string)
-  end
+  # def var(string)
+  #   Variable.new(string)
+  # end
 
   def num(n)
     Numeral.new(n)
   end
 
-  def eqn(ls,rs)
-    Equation.new(ls,rs)
+  def eqn(*args)
+    Equation.new(*args)
   end
 
   def sseqn(eqn_1,eqn_2)

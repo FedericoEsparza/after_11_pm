@@ -125,10 +125,12 @@ class Addition < Expression
       if count != 0
         new_mtp_args = []
         factor.each{|a| new_mtp_args << a}
-        if count != 1
+        # if count != 1
           new_mtp_args = new_mtp_args.insert(0,count)
-        end
-        new_mtp = mtp(new_mtp_args)
+        # elsif new_mtp_args = []
+        #   new_mtp_args = 1
+        # end
+        new_mtp = mtp(new_mtp_args).evaluate_nums
         results << new_mtp
       end
     end
@@ -336,6 +338,7 @@ class Addition < Expression
     square = 0
     lin = 0
     const = 0
+    variable = 'y'
 
     eqn.args.each do |a|
       if a.is_a?(multiplication)
@@ -343,6 +346,7 @@ class Addition < Expression
         type = a.args.last
         if type.is_a?(power)
           square = coef
+          variable = type.base
         elsif type.is_a?(string)
           lin = coef
         else
@@ -350,6 +354,7 @@ class Addition < Expression
         end
       elsif a.is_a?(power)
         square =1
+        variable = type.base
       elsif a.is_a?(string)
         lin =1
       else
@@ -362,7 +367,7 @@ class Addition < Expression
       lin = -lin
       const = -const
     end
-    quadractic = quad(square,lin,const,'x')
+    quadractic = quad(square,lin,const,variable)
     quadractic
   end
 

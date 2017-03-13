@@ -114,10 +114,10 @@ class QuadraticEquation
       equa << constant_term
     end
 
-    equa = add(equa)
+    equa = eqn(0,add(equa))
     steps = [equa]
 
-    steps << brackets_used
+    steps << eqn(0,brackets_used)
     steps << factors_used.map do |a|
       if a.is_a?(Fraction)
         a.negative
@@ -148,16 +148,16 @@ class QuadraticEquation
     '
     solution = write_whole_solution
     solution_steps = solution[:steps]
-    latex_steps += '0&=' + solution_steps[0].latex +
+    latex_steps += solution_steps[0].latex +
     '& && &' + solution[:method] + '&\\\[5pt]
     '
 
 
-    latex_steps += '0&=' + solution_steps[1].latex  +
+    latex_steps += solution_steps[1].latex  +
     '& && &' + solution[:factors] + '&\\\[5pt]
     '
 
-    answer = variable + '&=' + solution_steps[2][0].latex +
+    answer = variable.latex + '&=' + solution_steps[2][0].latex +
     ' ,\,\, ' + solution_steps[2][1].latex + '\\\[5pt]
     '
 

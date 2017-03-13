@@ -172,107 +172,141 @@ class Division
     end
   end
 
+
+  def find_denoms
+    return [bot]
+  end
+
+  def elim_common_factors
+    if top.is_a?(multiplication)
+      num_factors = top.args
+      num = top
+    else
+      num_factors = [top]
+      num = mtp(top)
+    end
+
+    if bot.is_a?(multiplication)
+      denom_factors = bot.args
+      denom = bot
+    else
+      denom_factors = [bot]
+      denom = mtp(bot)
+    end
+
+    i = 0
+    while i < denom_factors.length
+      factor = denom_factors[i]
+      if num_factors.count(factor) > 0
+        denom_factors.delete_at(denom_factors.rindex(factor))
+        num_factors.delete_at(num_factors.rindex(factor))
+      else
+        i += 1
+      end
+    end
+
+    if denom_factors.length == 0
+      denom = 1
+    elsif denom_factors.length == 1
+      denom = denom_factors.first
+    else
+      denom = mtp(denom_factors)
+    end
+
+    if num_factors.length == 0
+      num = 1
+    elsif num_factors.length == 1
+      num = num_factors.first
+    else
+      num = mtp(num_factors)
+    end
+
+    if denom == 1
+      num
+    else
+      div(num,denom)
+    end
+
+  end
+
+
   def simplify
     exp_copy = self.copy
 
-    unless exp_copy.top.is_a?(multiplication)
-      exp_copy.top = mtp(exp_copy.top)
-    end
+    exp_copy.top = mtp(exp_copy.top) unless exp_copy.top.is_a?(multiplication)
+    exp_copy.bot = mtp(exp_copy.bot) unless exp_copy.bot.is_a?(multiplication)
 
-    unless exp_copy.bot.is_a?(multiplication)
-      exp_copy.bot = mtp(exp_copy.bot)
-    end
-    #usually 2xy/4yz unless 2/x
-    exp_copy.top.convert_to_power
-    exp_copy.bot.convert_to_power
-
-    top_args = exp_copy.top.args
-    bot_args = exp_copy.bot.args
+    top_args = exp_copy.top.convert_to_power.args
+    bot_args = exp_copy.bot.convert_to_power.args
 
     new_top_args = []
 
     top_args.each do |top_arg|
-      if numerical?(top_arg)
-
-        num_index = nil
-
-        bot_args.each_with_index do |bot_arg,i|
-          if numerical?(bot_arg)
-            num_index = i
-            break
-          end
-        end
-
-        if num_index.nil?
-          new_top_args << top_arg
-        elsif bot_args[num_index] == top_arg
-          bot_args.delete_at(num_index)
-        else
-          hcf = bot_args[num_index].gcd(top_arg)
-
-          if bot_args[num_index]/hcf == 1
-            bot_args.delete_at(num_index)
-          else
-            bot_args[num_index] = bot_args[num_index]/hcf
-          end
-
-          unless top_arg/hcf == 1
-            new_top_args << (top_arg/hcf)
-          end
-        end
-
-      elsif top_arg.is_a?(power)
-        pow_match_index = nil
-
-        bot_args.each_with_index do |bot_arg,i|
-          if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
-            pow_match_index = i
-            break
-          end
-        end
-
-        if pow_match_index.nil?
-          new_top_args << top_arg
-        else
-          if top_arg.index >= bot_args[pow_match_index].index
-            new_index = top_arg.index - bot_args[pow_match_index].index
-
-            if new_index != 0 && new_index != 1
-              new_top_args << (pow(top_arg.base,new_index))
-            end
-
-            if new_index == 1
-              new_top_args << top_arg.base
-            end
-
-            bot_args.delete_at(pow_match_index)
-          else
-            bot_args[pow_match_index].index -= top_arg.index
-          end
-        end
-
-      else
-        new_top_args << top_arg
-      end
+      _simplify_numerals(top_arg,bot_args,new_top_args) if numerical?(top_arg)
+      _simplify_variables(top_arg,bot_args,new_top_args) if top_arg.is_a?(power)
     end
 
-    if bot_args == [] && new_top_args != []
-      return mtp(new_top_args).depower.flatten
-    end
-
-    if bot_args != [] && new_top_args == []
-      return div(1,mtp(bot_args).depower.flatten)
-    end
-
-    if bot_args == [] && new_top_args == []
-      return 1
-    end
-
+    return mtp(new_top_args).depower.flatten if bot_args == [] && new_top_args != []
+    return div(1,mtp(bot_args).depower.flatten) if bot_args != [] && new_top_args == []
+    return 1 if bot_args == [] && new_top_args == []
     return div(mtp(new_top_args).depower.flatten,mtp(bot_args).depower.flatten)
   end
 
+  def _simplify_numerals(top_arg,bot_args,new_top_args)
+    num_index = nil
+    bot_args.each_with_index do |bot_arg,i|
+      if numerical?(bot_arg)
+        num_index = i
+        break
+      end
+    end
+
+    bot_args_copy = DeepClone.clone bot_args
+
+    if num_index.nil?
+      new_top_args << top_arg
+    end
+    if !num_index.nil? && bot_args_copy[num_index] == top_arg
+      bot_args.delete_at(num_index)
+    end
+    if !num_index.nil? && !(bot_args_copy[num_index] == top_arg)
+      hcf = bot_args[num_index].gcd(top_arg)
+
+      if bot_args[num_index]/hcf == 1
+        bot_args.delete_at(num_index)
+      else
+        bot_args[num_index] = bot_args[num_index]/hcf
+      end
+
+      new_top_args << (top_arg/hcf) unless top_arg/hcf == 1
+    end
+  end
+
+  def _simplify_variables(top_arg,bot_args,new_top_args)
+    pow_match_index = nil
+    bot_args.each_with_index do |bot_arg,i|
+      if bot_arg.is_a?(power) && bot_arg.base == top_arg.base
+        pow_match_index = i
+        break
+      end
+    end
+
+    if pow_match_index.nil?
+      new_top_args << top_arg
+    else
+      if top_arg.index >= bot_args[pow_match_index].index
+        new_index = top_arg.index - bot_args[pow_match_index].index
+
+        new_top_args << (pow(top_arg.base,new_index)) if new_index != 0 && new_index != 1
+        new_top_args << top_arg.base if new_index == 1
+
+        bot_args.delete_at(pow_match_index)
+      else
+        bot_args[pow_match_index].index -= top_arg.index
+      end
+    end
+  end
 
 
   alias_method :~, :==
-
 end
