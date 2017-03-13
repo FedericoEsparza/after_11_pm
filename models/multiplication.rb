@@ -21,7 +21,7 @@ class Multiplication
     exp.class == self.class && args == exp.args
   end
 
-  def ~(exp)
+  def ~(exp)  #multiplicative and additive equivalence
     return false unless exp.class == self.class
     return false unless args.length == exp.args.length
 
@@ -50,14 +50,6 @@ class Multiplication
 
   def copy
     DeepClone.clone self
-    # new_args = args.inject([]) do |r,e|
-    #   if e.is_a?(string) || numerical?(e)
-    #     r << e
-    #   else
-    #     r << e.copy
-    #   end
-    # end
-    # mtp(new_args)
   end
 
   def convert_to_power
@@ -106,7 +98,7 @@ class Multiplication
     end
     if args.first.is_a?(integer)
       evaled_pow = copy.eval_num_pow
-      evaled_nums = evaled_pow.eval_numerics
+      evaled_nums = evaled_pow.evaluate_numeral
       steps = [self,evaled_pow,evaled_nums]
     end
     result = delete_duplicate_steps(steps)
@@ -229,10 +221,6 @@ class Multiplication
   def delete_empty_args
     i = 1
     while i <= args.length do args[i-1].empty? ? delete_arg(i) : i += 1 end
-  end
-
-  def eval_numerics
-    args.inject(1){|r,e| r * e}
   end
 
   def evaluate_numeral
@@ -515,9 +503,6 @@ class Multiplication
 
   end
 
-
-
-
   # RECURSION
   def fetch(object:)
     object_class = Kernel.const_get(object.to_s.capitalize)
@@ -546,110 +531,53 @@ class Multiplication
     end
   end
 
-
-  # def latex
-  #   result = ''
-  #   for i in 0..args.length - 1
-  #     if elementary?(args[i]) || args[i].is_a?(power)
-  #       arg_i_latex = args[i].latex
-  #     else
-  #       arg_i_latex = brackets(args[i].latex)
-  #     end
-  #     if numerical?(args[i-1]) && numerical?(args[i])
-  #       result += '\times' + arg_i_latex
-  #     else
-  #       result += arg_i_latex
-  #     end
-  #   end
-  #   first_part =  result.slice!(0..5)
-  #   if first_part == '\times'
-  #     result
-  #   else
-  #     first_part + result
-  #   end
-  # end
-
-#     def latex
-#       result = ''
-#       for i in 0..args.length - 1
-#         if elementary?(args[i]) || args[i].is_a?(power) || args[i].is_a?(division)
-#           arg_i_latex = args[i].latex
-# =======
-#     def base_latex
-#       result = ''
-#       for i in 0..args.length - 1
-#         if elementary?(args[i]) || args[i].is_a?(power)
-#           arg_i_base_latex = args[i].base_latex
-# >>>>>>> master
-#         else
-#           arg_i_base_latex = brackets(args[i].base_latex)
-#         end
-#         if numerical?(args[i-1]) && numerical?(args[i])
-#           result += '\times' + arg_i_base_latex
-#         else
-#           result += arg_i_base_latex
-#         end
-#       end
-#       first_part =  result.slice!(0..5)
-#       if first_part == '\times'
-#         result
-#       else
-#         first_part + result
-#       end
-#     end
-
-
-
-    def m_form_sort
-      array = self.args
-      number_of_swaps = 0
-      number_of_items = array.length
-      for x in 0...(number_of_items-1)
-        if array[x].is_a?(Power)
-          a_1 = array[x].base
-        else
-          a_1 = array[x]
-        end
-
-        if array[x+1].is_a?(Power)
-          a_2 = array[x+1].base
-        else
-          a_2 = array[x+1]
-        end
-
-        if  a_1.is_a?(String) && a_2.is_a?(String) && a_2 < a_1
-          array[x+1],array[x] = array[x],array[x+1]
-          number_of_swaps += 1
-        end
-
-        if a_1.is_a?(String) && a_2.is_a?(Numeric)
-          array[x+1],array[x] = array[x],array[x+1]
-          number_of_swaps += 1
-        end
-
-      end
-
-      if number_of_swaps == 0
-        self.args = array
-        return mtp(array)
+  def m_form_sort
+    array = self.args
+    number_of_swaps = 0
+    number_of_items = array.length
+    for x in 0...(number_of_items-1)
+      if array[x].is_a?(Power)
+        a_1 = array[x].base
       else
-        mtp(array).m_form_sort
+        a_1 = array[x]
       end
+
+      if array[x+1].is_a?(Power)
+        a_2 = array[x+1].base
+      else
+        a_2 = array[x+1]
+      end
+
+      if  a_1.is_a?(String) && a_2.is_a?(String) && a_2 < a_1
+        array[x+1],array[x] = array[x],array[x+1]
+        number_of_swaps += 1
+      end
+
+      if a_1.is_a?(String) && a_2.is_a?(Numeric)
+        array[x+1],array[x] = array[x],array[x+1]
+        number_of_swaps += 1
+      end
+
     end
 
-    def similar?(m2)
-      copy = self.copy
-      m1 = mtp(copy.remove_coef)
-      m2 = mtp(m2.remove_coef)
-      if m1.m_form_sort == m2.m_form_sort
-        true
-      else
-        false
-      end
+    if number_of_swaps == 0
+      self.args = array
+      return mtp(array)
+    else
+      mtp(array).m_form_sort
     end
+  end
 
-
-
+  def similar?(m2)
+    copy = self.copy
+    m1 = mtp(copy.remove_coef)
+    m2 = mtp(m2.remove_coef)
+    if m1.m_form_sort == m2.m_form_sort
+      true
+    else
+      false
+    end
+  end
 
   # RECURSION
   def fetch(object:)
@@ -678,7 +606,6 @@ class Multiplication
       end
     end
   end
-
 
   def base_latex
     result = ''
@@ -721,7 +648,6 @@ class Multiplication
       div(mtp(top_args),mtp(bot_args))
     end
   end
-
 
   #RECURSION
   def expand
@@ -823,6 +749,5 @@ class Multiplication
       mtp(args.map{|a| a.subs_terms(old_var,new_var)})
     end
   end
-
 
 end

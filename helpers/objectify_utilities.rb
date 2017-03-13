@@ -197,8 +197,14 @@ module ObjectifyUtilities
   end
 
   def reenter_str_content(string,dollar_array)
+    # puts '+=++++++++++'
+    # p string
+    # p dollar_array
     string_copy = string.dup
-    string_copy.gsub!('\\times','')
+    string_copy.gsub!('\\times','')  #but not inside brackets
+    # puts '+=++++++++++'
+    # p string_copy
+    # p dollar_array
     i = 0
     dollar_array.each do |str|
       str.each_char.with_index do |c,c_i|
@@ -208,6 +214,9 @@ module ObjectifyUtilities
         i += 1
       end
     end
+    # puts '+=++++++++++'
+    # p string
+    # p dollar_array
   end
 
   def reenter_addition_str_content(string,dollar_array) #work same way for subtraction

@@ -18,4 +18,14 @@ module GeneralUtilities
       return exp
     end
   end
+
+  def write_test(result_steps=[])
+    test_string = "expect(result).to eq [\n"
+    result_steps.each do |step|
+      test_string += "  " + step.latex.shorten + '.objectify' + ",\n"
+    end
+    test_string.slice!(-2)
+    test_string += ']'
+    test_string
+  end
 end
