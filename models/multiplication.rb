@@ -60,6 +60,55 @@ class Multiplication
     # mtp(new_args)
   end
 
+  def de_convert_power
+    new_args = []
+    args.each do |a|
+      if a.is_a?(power) && a.index == 1
+        new_args << a.base
+      else
+        new_args << a
+      end
+    end
+    mtp(new_args)
+  end
+
+#stop it reordering
+  def divide_factors(common_factors)
+    factors = common_factors.flatit.convert_to_power.args
+    copy = self.copy.convert_to_power
+    spare = self.copy.convert_to_power.args
+    new_args = []
+    factors.each do |factor|
+      power = 0
+      copy.args.each do |arg|
+        if factor.base == arg.base
+          power = arg.index - factor.index
+          spare.delete(arg)
+        end
+      end
+      if power == 1
+        new_args << factor.base
+      elsif power != 0
+        new_args << pow(factor.base,power)
+      end
+    end
+    spare.map! do |a|
+      if (a.is_a?(power) && (a.index == 1))
+        a.base
+      else
+        a
+      end
+    end
+    new_args = spare + new_args
+    if new_args.length == 0
+      1
+    elsif new_args.length == 1
+      new_args.first
+    else
+      mtp(new_args)
+    end
+  end
+
   def convert_to_power
     new_args = []
     args.each do |a|

@@ -15,6 +15,10 @@ class Fixnum
     self
   end
 
+  def base
+    self
+  end
+
   def greater? (exp)
     if exp.is_a?(Fixnum) || exp.is_a?(fraction)
       self > exp
