@@ -23,10 +23,15 @@ class SimultaneousEquation
     @eq_4 = val || @eq_4
   end
 
-  def solve
+  def copy
+    DeepClone.clone self
+  end
+
+  def generate_solution
     equation_1_coefs = extract_coefficient(eq_1)
     equation_2_coefs = extract_coefficient(eq_2)
     instruction = determine_multiplier
+    solutions = {}
     steps = []
 
     mtp_eqn = []
@@ -48,21 +53,106 @@ class SimultaneousEquation
     steps << mtp_eqn
     steps << mtped_eqn
 
-    steps << add_equations(negative: negative?(equation_1_coefs, equation_2_coefs))
+    negative = negative?(equation_1_coefs, equation_2_coefs)
+
+    steps << add_equations(negative: negative)
     steps << eqn(steps.last.ls.expand.last.simplify_add_m_forms, steps.last.rs.expand.last.evaluate)
     steps << steps.last.flatten.solve_one_var_eqn
-    steps << sub_in(steps.last.last)
 
-    steps
-    # [equation_1_coefs, equation_2_coefs]
+    solutions = solutions.merge(extract_var(steps.last.last))
+
+    steps << sub_in(steps.last.last)
+    steps << steps.last.flatten.expand.last.flatten
+    steps << steps.last.solve_one_var_eqn
+
+    solutions = solutions.merge(extract_var(steps.last.last))
+
+    { steps: steps, negative: negative, solutions: solutions }
+  end
+
+  def solution_latex
+    solution = self.generate_solution
+    solutions = solution[:solutions]
+    response = []
+    latex_solution = solution[:steps].to_latex
+
+    eq_1_solution_latex = add_columns(num_of_column: 3, on_right: 2, latex_array: latex_solution[4])
+    eq_2_solution_latex = add_columns(num_of_column: 3, on_right: 2, latex_array: latex_solution[7])
+
+    eqs_latex = add_columns(num_of_column: 3, on_right: 2, skip_first: true, latex_array: eqs_to_latex)
+    mtped_eqs_latex = add_columns(num_of_column: 2, latex_array: mtped_eqs_to_latex)
+    eq_addition = add_columns(num_of_column: 2, latex_array: eq_addition_latex(latex_solution[2], solution[:negative]))
+    sub_in_eqs_latex = add_columns(num_of_column: 2, latex_array: sub_in_latex(latex_solution[5], solution[:steps][4].last))
+
+    response << eqs_latex
+    response << mtped_eqs_latex unless mtped_eqs_latex.empty?
+    response << eq_1_solution_latex.unshift(eq_addition)
+    response << eq_2_solution_latex.unshift(sub_in_eqs_latex)
+    response = response.map do |element|
+      if element.is_a?(Array)
+        element = element.join("\\\\\n")
+      else
+        element + "\\\\\n"
+      end
+    end
+    add_align_env(response.join("\\\\[15pt]\n")) + eq_solutions(solutions)
+  end
+
+  def eq_solutions(solution_hash)
+    solutions = []
+    solution_hash.each do |var, val|
+      solutions << var.to_s + '=' + val.to_s
+    end
+    '$ ' + solutions.join(', ') + ' $'
+  end
+
+  def eq_addition_latex(latex, negative)
+    index = nil
+    operation = negative ? '-' : '+'
+    if !eq_3.nil? && !eq_4.nil?
+      index = "&(3)#{operation}(4)&"
+    elsif !eq_3.nil? || !eq_4.nil?
+      index = "&(1)#{operation}(3)&"
+    else
+      index = "&(1)#{operation}(2)&"
+    end
+    index + latex
+  end
+
+  def eqs_to_latex
+    response = []
+    response << add_eq_index(latex: eq_1.latex, index: 1, side: :right)
+    response << add_eq_index(latex: eq_2.latex, index: 2, side: :right)
+    response
+  end
+
+  def mtped_eqs_to_latex
+    instruction = determine_multiplier
+    keys = instruction.keys
+    eq_index = 2
+    response = []
+    response << "&(#{1})\\times#{instruction[:eq_1].to_i}&" + add_eq_index(latex: eq_3.latex, index: (eq_index += 1), side: :right) if keys.include?(:eq_1) && instruction[:eq_1] != 1
+    response << "&(#{2})\\times#{instruction[:eq_2].to_i}&" + add_eq_index(latex: eq_4.latex, index: (eq_index += 1), side: :right) if keys.include?(:eq_2) && instruction[:eq_2] != 1
+    response
+  end
+
+  def sub_in_latex(latex, var_ans)
+    var = var_ans.fetch(object: :string)
+    sub_text = "&\\text{Sub}\\hspace{5pt} #{var}\\hspace{5pt} \\text{into}\\hspace{5pt} (1)&"
+    sub_text + latex
   end
 
   def sub_in(var_ans)
-    var = var_ans.fetch(object: :string)
-    value = var_ans.fetch(object: :numeric)
-    p var
-    p value
-    eq_1.ls
+    var = extract_var(var_ans).keys.first
+    value = extract_var(var_ans).values.first
+    eq_1_copy = eq_1.copy
+    eq_1_copy.subs_terms(var,value)
+  end
+
+  def extract_var(var_ans)
+    response = {}
+    response[var_ans.fetch(object: :string)] = var_ans.fetch(object: :numeric)
+    response
   end
 
   def expand_equations
@@ -80,7 +170,7 @@ class SimultaneousEquation
   def add_equations(negative:)
     coef = negative ? -1 : 1
 
-    if !eq_3.nil? && !eq_3.nil?
+    if !eq_3.nil? && !eq_4.nil?
       eqn(add(eq_3.ls, mtp(coef, eq_4.ls)), add(eq_3.rs, mtp(coef, eq_4.rs)))
     elsif !eq_3.nil?
       eqn(add(eq_2.ls, mtp(coef, eq_3.ls)), add(eq_2.rs, mtp(coef, eq_3.rs)))
@@ -191,9 +281,4 @@ class SimultaneousEquation
       end
     end
   end
-  # RECURSION
-  def inject(target_obj:, payload:)
-    
-  end
-
 end

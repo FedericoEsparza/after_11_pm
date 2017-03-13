@@ -1,5 +1,6 @@
-# require 'coveralls'
-# Coveralls.wear!
+require 'coveralls'
+Coveralls.wear!
+
 require 'capybara/rspec'
 require './app'
 

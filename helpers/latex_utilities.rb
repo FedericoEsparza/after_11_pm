@@ -7,26 +7,35 @@ module LatexUtilities
     '\pm ' + period_numeric.latex + 'n'
   end
 
-  def add_eq_index(latex:, index:)
-    "&(#{index})&" + latex
+  def add_eq_index(latex:, index:, side: :left)
+    left_side = side == :left ? "&(#{index})&" : ""
+    right_side = side == :right ? "&(#{index})&" : ""
+    left_side + latex + right_side
   end
 
-  def add_columns(num_of_column: 2, latex_array:)
+  def add_columns(num_of_column: 2, on_right: nil, latex_array:, skip_first: false)
     columns = ' && ' * num_of_column
+    right_columns = ' && ' * (on_right || num_of_column)
     first_element_columns = ' && ' * (num_of_column - 1)
+    latex_array.class
     if latex_array.respond_to?(:map)
-      latex_array.map { |e| e.map.with_index { |latex, index|
-                                               if index == 0
-                                                 first_element_columns + \
-                                                 latex + \
-                                                 first_element_columns
-                                               else
-                                                 columns + latex + columns
-                                               end
-                                             }
-                      } # [['&& \frac &&'], ['&& x= &&']]
+      return latex_array.map do |e|
+        if e.respond_to?(:map)
+           e.map.with_index do |latex, index|
+             if index == 0 && !skip_first
+               first_element_columns + \
+               latex + \
+               first_element_columns
+             else
+               columns + latex + right_columns
+             end
+           end
+         else
+           add_columns(num_of_column: num_of_column, on_right: on_right, skip_first: skip_first,  latex_array: e)
+         end
+        end # [['&& \frac &&'], ['&& x= &&']]
     else
-      columns + latex_array + columns
+      columns + latex_array + right_columns
     end
   end
 
