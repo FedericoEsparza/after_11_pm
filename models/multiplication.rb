@@ -72,34 +72,31 @@ class Multiplication
     mtp(new_args)
   end
 
-#stop it reordering
   def divide_factors(common_factors)
     factors = common_factors.flatit.convert_to_power.args
     copy = self.copy.convert_to_power
     spare = self.copy.convert_to_power.args
     new_args = []
-    factors.each do |factor|
-      power = 0
-      copy.args.each do |arg|
+    copy.args.each do |arg|
+      power = nil
+      factors.each do |factor|
         if factor.base == arg.base
           power = arg.index - factor.index
           spare.delete(arg)
         end
       end
       if power == 1
-        new_args << factor.base
+        new_args << arg.base
+      elsif power == nil
+        if arg.is_a?(Power) && arg.index == 1
+          new_args << arg.base
+        else
+          new_args << arg
+        end
       elsif power != 0
-        new_args << pow(factor.base,power)
+        new_args << pow(arg.base,power)
       end
     end
-    spare.map! do |a|
-      if (a.is_a?(power) && (a.index == 1))
-        a.base
-      else
-        a
-      end
-    end
-    new_args = spare + new_args
     if new_args.length == 0
       1
     elsif new_args.length == 1
