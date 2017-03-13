@@ -50,26 +50,6 @@ class Multiplication
 
   def copy
     DeepClone.clone self
-    # new_args = args.inject([]) do |r,e|
-    #   if e.is_a?(string) || numerical?(e)
-    #     r << e
-    #   else
-    #     r << e.copy
-    #   end
-    # end
-    # mtp(new_args)
-  end
-
-  def de_convert_power
-    new_args = []
-    args.each do |a|
-      if a.is_a?(power) && a.index == 1
-        new_args << a.base
-      else
-        new_args << a
-      end
-    end
-    mtp(new_args)
   end
 
   def divide_factors(common_factors)
@@ -152,10 +132,10 @@ class Multiplication
     end
     if args.first.is_a?(integer)
       evaled_pow = copy.eval_num_pow
-      evaled_nums = evaled_pow.eval_numerics
-      steps = [self,evaled_pow,evaled_nums]
+      evaled_nums = evaled_pow.evaluate_numeral
+      steps = [self,evaled_pow, evaled_nums]
     end
-    result = delete_duplicate_steps(steps)
+    result = steps.delete_duplicate_steps
 
     if result[-1].is_a?(power)
       if result[-1].index == 1
@@ -167,35 +147,11 @@ class Multiplication
     result
   end
 
-  def delete_nils
-    i = 1
-    while i <= args.length do
-      if args[i-1]==nil
-        delete_arg(i)
-      end
-      i += 1
-    end
-    args
-  end
-
-  def delete_duplicate_steps(steps)
-    i = 0
-    while i < steps.length
-      if steps[i] == steps[i+1]
-        steps.delete_at(i)
-      else
-        i += 1
-      end
-    end
-    steps
-  end
-
   def eval_num_pow
     i = 0
     for i in 0..args.length - 1
       if args[i].is_a?(power)
         args[i] = args[i].evaluate
-
       end
       i += 1
     end
@@ -277,23 +233,8 @@ class Multiplication
     while i <= args.length do args[i-1].empty? ? delete_arg(i) : i += 1 end
   end
 
-  def eval_numerics
-    args.inject(1){|r,e| r * e}
-  end
-
   def evaluate_numeral
     args.inject(1) { |r,e| r * e }
-  end
-
-  def delete_nils
-    i = 1
-    while i <= args.length do
-      if args[i-1]==nil
-        delete_arg(i)
-      end
-      i += 1
-    end
-    args
   end
 
   def simplify_product_of_m_forms
@@ -315,7 +256,7 @@ class Multiplication
       i += 1
     end
     steps.insert(0,self.copy)
-    steps = delete_duplicate_steps(steps)
+    steps = steps.delete_duplicate_steps
     self.args = steps[-1].args
     steps.each {|a| a.delete_nils}
     steps
@@ -324,7 +265,6 @@ class Multiplication
   def reverse_subject_step(subject,rs)
     result = {}
 
-    moved_args = []
     subject_index = -1
     args.each_with_index do |arg,i|
       if arg.contains?(subject)
@@ -345,6 +285,7 @@ class Multiplication
     return result
   end
 
+  # Look for common methods
   def contains?(subject)
     result = false
     if self == subject
@@ -467,63 +408,7 @@ class Multiplication
     # 3ax^2 + 2ax^2 + 4y  + 5y
 
     new_add << new_add.last.simplify_add_m_forms
-    new_add = delete_duplicate_steps(new_add)
-    new_add.insert(0,self.copy)
-    self.args = new_add[-1].args
-    new_add
-  end
-
-  def sort_elements
-    array = self.copy.args
-    num_array = []
-    string_array = []
-    array.each do |a|
-      if a.is_a?(Numeric)
-        num_array << a
-      else
-        string_array << a
-      end
-    end
-    string_array = string_array.sort_elements
-    array = num_array + string_array
-    mtp(array)
-  end
-
-  def is_bracket
-    brac = false
-    mtp = self.copy
-    mtp.args.each{|a| brac = true if a.is_a?(Addition)}
-    brac
-  end
-
-  def combine_two_brackets
-    copy = self.copy
-    new_args = []
-    copy.args.first.args.each_with_index do |a|
-      copy.args.last.args.each_with_index do |b|
-        c = mtp(a,b)
-        new_args << c
-        end
-    end
-    new_args = new_args.map {|a| a.standardize_m_form.simplify_product_of_m_forms}
-    new_args.equalise_array_lengths
-    new_add = []
-    new_args.first.each_with_index do |a,i|
-      c = []
-      new_args.each_with_index do |b,j|
-        c << new_args[j][i]
-      end
-      new_add << add(c)
-    end
-    # new_add << new_add.last.sort_elements
-    new_step = new_add.last.copy
-    new_step.args.each do |m|
-      m.m_form_sort
-    end
-    new_add << new_step
-
-    # new_add << new_add.last.simplify_add_m_forms
-    new_add = delete_duplicate_steps(new_add)
+    new_add = new_add.delete_duplicate_steps
     new_add.insert(0,self.copy)
     self.args = new_add[-1].args
     new_add
@@ -555,14 +440,11 @@ class Multiplication
       expanded_brackets.each{|a| expanded_brackets_steps << a}
       expanded_brackets_steps.insert(0,self)
       expanded_brackets_steps = expanded_brackets_steps.map{|a| a.flatit}
-      expanded_brackets_steps = delete_duplicate_steps(expanded_brackets_steps)
+      expanded_brackets_steps = expanded_brackets_steps.delete_duplicate_steps
       expanded_brackets_steps
     end
 
   end
-
-
-
 
   # RECURSION
   def fetch(object:)
@@ -694,38 +576,6 @@ class Multiplication
       end
     end
 
-
-
-
-  # RECURSION
-  def fetch(object:)
-    object_class = Kernel.const_get(object.to_s.capitalize)
-    args.each do |arg|
-      if arg.is_a?(Power)
-        return arg.args.each { |e|
-          return e if e.is_a?(object_class)
-        }
-      elsif arg.is_a?(self.class)
-        return arg.fetch(object: object)
-      else
-        return arg if arg.is_a?(object_class)
-      end
-    end
-  end
-  # RECURSION
-  def includes?(object_class)
-    args.any? do |arg|
-      if arg.is_a?(Power)
-        arg.args.any? { |e| e.is_a?(object_class) }
-      elsif arg.is_a?(self.class)
-        arg.includes?(object_class)
-      else
-        arg.is_a?(object_class)
-      end
-    end
-  end
-
-
   def base_latex
     result = ''
     for i in 0..args.length - 1
@@ -768,7 +618,6 @@ class Multiplication
     end
   end
 
-
   #RECURSION
   def expand
     copy = self.copy
@@ -784,7 +633,7 @@ class Multiplication
       next_steps = brackets.combine_brackets
       steps = steps + next_steps
       steps = steps.map{|a| a.flatit}
-      steps = delete_duplicate_steps(steps)
+      steps = steps.delete_duplicate_steps
       steps
     else
       copy = copy.top_heavy_div
@@ -792,6 +641,7 @@ class Multiplication
     end
   end
 
+  # Remove flatit and update with flatten
   def flatit
     copy = self.copy
     new_args = []
@@ -814,6 +664,7 @@ class Multiplication
     result = mtp(new_args)
   end
 
+  # If flattened beforehand code below becomes redundant
   def find_factors
     factors = []
     args.each do |factor|
@@ -826,6 +677,7 @@ class Multiplication
     factors
   end
 
+  # Remove when division is adopted as standard
   def top_heavy
     num_args = []
     denom_args = []
@@ -846,12 +698,14 @@ class Multiplication
     end
   end
 
+  # Addition Devision String Numeric
   def find_denoms
     denoms = []
     args.each{|a| denoms += a.find_denoms}
     denoms
   end
 
+  # Redundant method
   def elim_common_factors
     self
   end
@@ -866,9 +720,7 @@ class Multiplication
     if self == old_var
       return new_var
     else
-      mtp(args.map{|a| a.subs_terms(old_var,new_var)})
+      mtp(args.map{ |a| a.subs_terms(old_var, new_var) })
     end
   end
-
-
 end

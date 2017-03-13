@@ -9,7 +9,6 @@ class Array
     DeepClone.clone self
   end
 
-
   def greater?(exp)
     array = self
     i = 0

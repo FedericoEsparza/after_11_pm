@@ -274,10 +274,10 @@ describe Multiplication do
 
    end
 
-   describe '#eval_numerics' do
+   describe '#evaluate_numeral' do
      it 'evaluates to a product of the arguments' do
        multiplication = mtp(1,-2,3)
-       expect(multiplication.eval_numerics).to eq -6
+       expect(multiplication.evaluate_numeral).to eq -6
      end
    end
 
@@ -666,15 +666,11 @@ describe Multiplication do
       exp = mtp('x',add('x','y'))
       result = exp.expand
 
-
-
       expect(result[0]).to eq 'x(x+y)'.objectify
       expect(result[1]).to eq 'xx+xy'.objectify
       expect(result[2]).to eq 'x^1x^1+xy'.objectify
       expect(result[3]).to eq 'x^{1+1}+xy'.objectify
       expect(result[4]).to eq 'x^2+xy'.objectify
-
-
     end
 
     it 'expands x + a(b+c)' do
@@ -689,13 +685,9 @@ describe Multiplication do
       exp = mtp(add(mtp('x','y'),'z'),add('a','b'))
       result = exp.expand
 
-
-
       expect(result[0]).to eq '(xy+z)(a+b)'.objectify
       expect(result[1]).to eq 'xya+xyb+za+zb'.objectify
       expect(result[2]).to eq 'axy+bxy+az+bz'.objectify
-
-
     end
 
     xit 'expands (x+y)(x+y)(x+y)' do
@@ -716,8 +708,6 @@ describe Multiplication do
       expect(result[10]).to eq 'x^{2+1}+x^2y+2x^{1+1}y+2xy^{1+1}+y^2x+y^{2+1}'.objectify
       expect(result[11]).to eq 'x^3+x^2y+2x^2y+2xy^2+y^2x+y^3'.objectify
       expect(result[12]).to eq 'x^3+x^2y+2x^2y+2xy^2+xy^2+y^3'.objectify
-
-
     end
 
     it 'expands (x(a+b)+c)(y+d(z+e))' do

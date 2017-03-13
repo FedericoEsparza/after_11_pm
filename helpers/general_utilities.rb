@@ -18,4 +18,17 @@ module GeneralUtilities
       return exp
     end
   end
+
+  def delete_nils(exp=nil)
+    exp = exp || self
+
+    i = 1
+    while i <= exp.args.length do
+      if exp.args[i-1]==nil
+        delete_arg(i)
+      end
+      i += 1
+    end
+    exp.args
+  end
 end

@@ -248,26 +248,13 @@ class Addition < Expression
       #   a.args.each{|b| last_step_args << b}
       # end
       # steps << add(last_step_args)
-      steps = delete_duplicate_steps(steps)
+      steps = steps.delete_duplicate_steps
       steps
     else
       return self
     end
-
-
   end
 
-  def delete_duplicate_steps(steps)
-    i = 0
-    while i < steps.length
-      if steps[i] == steps[i+1]
-        steps.delete_at(i)
-      else
-        i += 1
-      end
-    end
-    steps
-  end
 
   def order_similar_terms
     copy = self.copy
@@ -296,7 +283,7 @@ class Addition < Expression
     steps = steps.equalise_array_lengths.transpose
     steps = steps.map{|a| add(a)}
     steps = steps.map{|a| a.flatit}
-    steps = delete_duplicate_steps(steps)
+    steps = steps.delete_duplicate_steps
   end
 
   def flatit

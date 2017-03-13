@@ -82,7 +82,9 @@ describe Addition do
     it 'simplifies (x+y)(a+b) + (w+z)(c+d)' do
       exp = add(mtp(add('x','y'),add('a','b')),mtp(add('w','z'),add('c','d')))
       result = exp.simplify_brackets
-      expect(result.last).to eq '(ax+bx+ay+by)+(cw+dw+cz+dz)'.objectify
+      response = add(add(mtp(1, 'a', 'x'), mtp(1,'a','y'), mtp(1,'b','x'), mtp(1,'b','y')),
+                     add(mtp(1,'c','w'), mtp(1,'c','z'), mtp(1,'d','w'), mtp(1,'d','z')))
+      expect(result.last).to eq response
     end
 
     it 'leaves x' do
@@ -94,7 +96,7 @@ describe Addition do
     it 'simplifies x(x+y) + y' do
       exp = add(mtp('x',add('x','y')),'y')
       result = exp.simplify_brackets
-      expect(result.last).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
+      expect(result.last).to eq add(add(mtp(pow('x',2)),mtp(1, 'x','y')),'y')
 
       expect(result[0]).to eq add(mtp('x',add('x','y')),'y')
       expect(result[1]).to eq add(mtp(add('x'),add('x','y')),'y')
