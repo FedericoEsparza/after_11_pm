@@ -2,37 +2,38 @@ include Factory
 include Latex
 
 class SimutaneousEqnSubstitution
-  attr_accessor :eqns, :vars
+  attr_accessor :args, :vars
 
-  def initialize(*eqns)
-    if eqns.length == 1 && eqns[0].class == Array
-      @eqns = eqns.first
+  def initialize(*args)
+    if args.length == 1 && args[0].class == Array
+      @args = args.flatten
     else
-      @eqns = eqns
+      @args = args
     end
 
     vars = []
-    eqns.each{|a| vars += a.find_vars}
+    @args.each { |a|
+      vars += a.find_vars }
     @vars = vars.uniq
   end
 
   # def copy
-  #   new_eqns = eqns.inject([]) do |r,e|
+  #   new_args = args.inject([]) do |r,e|
   #     if e.is_a?(string) || numerical?(e)
   #       r << e
   #     else
   #       r << e.copy
   #     end
   #   end
-  #   sseqn(new_eqns)
+  #   sseqn(new_args)
   # end
 
   def new_eqn
-    subject = find_subject(eqns[0])
+    subject = find_subject(args[0])
 
-    sub_eqn = eqns[0].change_subject_to(subject).last.rs
+    sub_eqn = args[0].change_subject_to(subject).last.rs
 
-    eqns[1] = eqns[1].subs_terms(subject,sub_eqn)
+    args[1] = args[1].subs_terms(subject,sub_eqn)
   end
 
   def find_subject(equa)
@@ -49,14 +50,14 @@ class SimutaneousEqnSubstitution
   end
 
   def generate_solution
-    subject = find_subject(eqns[0])
+    subject = find_subject(args[0])
     steps = []
 
-    first_steps = eqns[0].change_subject_to(subject)
+    first_steps = args[0].change_subject_to(subject)
     # first_steps.delete_at(-1)
     first_steps = first_steps.delete_duplicate_steps
 
-    new_eqn = eqns[1].subs_terms(subject,first_steps.last.rs)
+    new_eqn = args[1].subs_terms(subject,first_steps.last.rs)
     sub_steps = new_eqn.expand
     next_step = new_eqn.expand.last
     next_step = next_step.flatit
@@ -76,7 +77,7 @@ class SimutaneousEqnSubstitution
   end
 
   def solution_latex
-    result = '\begin{align*}'
+    result = '\begin{align*}' + "\n"
     result += latex
     steps = generate_solution
     steps[:first].delete_at(0)
@@ -90,9 +91,9 @@ class SimutaneousEqnSubstitution
         result += '&&' + step.latex
       end
       if i ==  steps[:first].length - 1
-        result += '&\left(3\right)&\\\[15pt]'
+        result += '&\left(3\right)\\\[15pt]' + "\n"
       else
-        result += '&\\\[5pt]'
+        result += '&\\\[5pt]' + "\n"
       end
     end
     result += '&\text{Sub (3) into (2)}'
@@ -104,36 +105,33 @@ class SimutaneousEqnSubstitution
         result += '&&' + step.latex
       end
       if i == steps[:sub].length - 1
-        result += '&\\\[15pt]'
+        result += '&\\\[15pt]' + "\n"
       else
-        result += '&\\\[5pt]'
+        result += '&\\\[5pt]' + "\n"
       end
     end
     result += '&\text{Sub ' + steps[:second_var].ls.latex + ' into (3)}'
 
     steps[:last].each_with_index do |step,i|
       if i == 0
-        result += '&' + step.latex + '&\\\[5pt]'
+        result += '&' + step.latex + '&\\\[5pt]' + "\n"
       else
-        result += '&&' + step.latex + '&\\\[5pt]'
+        result += '&&' + step.latex + '&\\\[5pt]' + "\n"
       end
     end
 
-    result += '\end{align*}
-    $' + steps[:first_var].ls.latex + '=' + steps[:first_var].rs.latex + '\,\,\,$ and $\,\,\,'
+    result += '\end{align*}' + "\n" + \
+    '$' + steps[:first_var].ls.latex + '=' + steps[:first_var].rs.latex + '\,\,\,$ and $\,\,\,'
     result += steps[:second_var].ls.latex + '=' + steps[:second_var].rs.latex + '$'
   end
 
   def latex
     result = ''
-    eqns.each_with_index do |equation,i|
-      result += '&&' + equation.latex + '&\left(' + (i+1).to_s + '\right)&&&&\\\[5pt]
-      '
+    args.each_with_index do |equation,i|
+      result += '&&' + equation.latex + '&\left(' + (i+1).to_s + '\right)&&&&\\\[5pt]' + "\n"
     end
-    result = result.chomp('[5pt]
-      ')
-    result += '[15pt]
-    '
+    result = result.chomp("[5pt]\n")
+    result += '[15pt]' + "\n"
     result
   end
 

@@ -142,8 +142,8 @@ describe QuadraticEquation do
     \end{align*}'
     end
 
-    it 'latexes 3(y^2)^2 -8(y^2) - 3' do
-      exp = quad(3,-8,-3,pow('y',2))
+    it 'latexes 2(y^2)^2 -20(y^2) + 18' do
+      exp = quad(2,-20,18,pow('y',2))
       result = exp.write_factors
 
       # puts exp.latex

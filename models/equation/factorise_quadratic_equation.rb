@@ -30,16 +30,14 @@ module FactoriseQuadraticEquation
 
   def factorise_standard_quadractic
     copy = self.copy
-    p rs
     quadr = rs.get_quad
 
-    p quadr
     next_step = eqn(0,quadr.brackets_used)
     steps = [copy,next_step]
 
     factors = quadr.write_factors
     product = quadr.get_method[:Product]
-    sum = quadractic.get_method[:Sum]
+    sum = quadr.get_method[:Sum]
 
     {steps: steps, P: product, S: sum, factors: factors}
   end
@@ -49,7 +47,7 @@ module FactoriseQuadraticEquation
     new_quad = copy.subs_terms(subject,'x')
     steps = new_quad.convert_rational_steps
     last_step = steps.last.copy
-    puts last_step.latex.shorten
+    # puts last_step.latex.shorten
     steps += last_step.expand
     last_step = steps.last.copy
     steps += last_step.bring_to_rhs
@@ -97,13 +95,7 @@ module FactoriseQuadraticEquation
   def factorise_quadractic(subject)
     steps = standardize_quadractic(subject)
     quadractic = steps.last.copy
-    steps.each{|a| puts a.latex + '\\\[5pt]'}
-    p '======================'
-    puts steps[-1].latex.shorten
-    p steps[-1].rs
-    puts quadractic.rs.latex.shorten
     factored_quad = quadractic.factorise_standard_quadractic
-    # puts factored_quad[:steps][-1].latex
     factored_quad[:steps] = (steps + factored_quad[:steps]).delete_duplicate_steps
 
     factored_quad

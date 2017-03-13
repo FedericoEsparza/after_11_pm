@@ -25,6 +25,10 @@ class Fraction
     self
   end
 
+  def *(numeral)
+    self.evaluate_numeral * numeral
+  end
+
   def <(numeral)
     return false unless numerical?(numeral)
     if numeral.is_a?(fraction)
