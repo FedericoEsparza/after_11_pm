@@ -145,6 +145,13 @@ describe SimultaneousEquation do
       exp = described_class.new(equation_2, equation_1)
       expect(exp.solution_latex).to eq "\\begin{align*}\n &&  &&  && -2x+3y&=4&(1)& &&  && \\\\\n &&  &&  && x+y&=13&(2)& &&  && \\\\[15pt]\n &&  && &(2)\\times3&3x+3y&=39&(3)& &&  && \\\\[15pt]\n &&  && &(1)-(3)&-2x+3y-\\left(3x+3y\\right)&=4-39 &&  && \\\\\n &&  &&  && -5x&=-35 &&  && \\\\\n &&  &&  && x&=\\displaystyle\\frac{-35}{-5} &&  && \\\\\n &&  &&  && x&=7 &&  && \\\\[15pt]\n &&  && &\\text{Sub}\\hspace{5pt} x\\hspace{5pt} \\text{into}\\hspace{5pt} (1)&-2\\times7+3y&=4 &&  && \\\\\n &&  &&  && 3y-14&=4 &&  && \\\\\n &&  &&  && 3y&=4+14 &&  && \\\\\n &&  &&  && 3y&=18 &&  && \\\\\n &&  &&  && y&=\\displaystyle\\frac{18}{3} &&  && \\\\\n &&  &&  && y&=6 &&  && \n\\end{align*}\n$ x=7, y=6 $"
     end
+
+    xit 'example 5' do
+      eqns = [eqn(add(mtp(-6, 'x'), mtp(-7, 'y')), -45), eqn(add(mtp(-2, 'x'), mtp(-1, 'y')), -11)]
+      exp = described_class.new(eqns)
+      puts exp.solution_latex
+      # expect(exp.solution_latex).to eq 1
+    end
   end
 
   context '#extract_var' do

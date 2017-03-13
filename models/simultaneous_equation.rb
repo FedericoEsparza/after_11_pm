@@ -4,7 +4,11 @@ class SimultaneousEquation
   attr_reader :args
 
   def initialize(*args)
-    @args = args
+    if args.length == 1 && args[0].class == Array
+      @args = args.first
+    else
+      @args = args
+    end
   end
 
   def eq_1
@@ -90,7 +94,7 @@ class SimultaneousEquation
     response = response.map do |element|
       element.is_a?(Array) ? element.join("\\\\\n") : element + "\\\\\n"
     end
-    
+
     add_align_env(response.join("\\\\[15pt]\n")) + eq_solutions(solutions)
   end
 
