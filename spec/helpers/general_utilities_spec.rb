@@ -70,7 +70,22 @@ describe GeneralUtilities do
   describe '#is_m_form?' do
     it 'true for 3xyz' do
       exp = '3xyz'.objectify
-      expect(is_m_form?(exp)).to eq true
-    end    
+      expect(exp.is_m_form?).to eq true
+    end
+
+    it 'false for 3(x+2)yz' do
+      exp = '3(x+2)yz'.objectify
+      expect(exp.is_m_form?).to eq false
+    end
+
+    it 'true for 3a^3yz' do
+      exp = '3a^3yz'.objectify
+      expect(exp.is_m_form?).to eq true
+    end
+
+    it 'false for 3(a+2)^3yz' do
+      exp = '3(a+2)^3yz'.objectify
+      expect(exp.is_m_form?).to eq false
+    end
   end
 end

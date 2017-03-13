@@ -1,5 +1,4 @@
 module GeneralUtilities
-
   def flatten(exp=nil)
     exp = exp || self
 
@@ -29,12 +28,13 @@ module GeneralUtilities
     test_string
   end
 
-  def is_m_form?(exp)
+  def is_m_form?(exp=nil)
+    exp = exp || self
     return false unless exp.is_a?(multiplication)
     exp.args.each do |arg|
       return false if arg.is_a?(addition) || arg.is_a?(subtraction)
+      return false if arg.is_a?(power) && (arg.base.is_a?(addition) || arg.base.is_a?(subtraction))
     end
     return true
   end
-
 end
