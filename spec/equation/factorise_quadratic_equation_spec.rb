@@ -35,25 +35,32 @@ describe FactoriseQuadraticEquation do
       exp = eqn(add(div(1,add(pow('y',2),1)),div(2,add(mtp(2,pow('y',2)),-3))),5)
       result = exp.standardize_quadractic(pow('y',2))
 
-      # result.each{|a| puts a.latex + '\\\[5pt]'}
-
     end
 
   end
 
-  xdescribe '#factorise_quadractic' do
+  describe '#factorise_quadractic' do
     it 'factorises 6\(x+1) + 3\(2x-3)=1 for y^2' do
 
       exp = eqn(add(div(8,add(pow('y',2),1)),div(3,add(mtp(2,pow('y',2)),-3))),1)
       result = exp.factorise_quadractic(pow('y',2))
 
-      result[:steps].each{|a| puts a.latex + '\\\[5pt]'}
+      expect(result[:P]).to eq [mtp(2,18),36]
+      expect(result[:S]).to eq -20
+      expect(result[:factors]).to eq [[-2,-18],[frac(-2,2),frac(-18,2)],[-1,-9]]
+      expect(result[:steps][16]).to eq '0=(y^2-1)(y^2-9)'.objectify
+    end
 
-      # expect(result[:P]).to eq [mtp(2,18),36]
-      # expect(result[:S]).to eq -20
-      # expect(result[:factors]).to eq [[-2,-18],[frac(-2,2),frac(-18,2)],[-1,-9]]
+    it 'factorises z(2z+6) = z-3 for z = y^3(sin(x)^2cos(x))' do
+      exp = eqn(mtp(div(mtp(pow('y',3),arcsin(pow('z',div(1,2)))),mtp(pow(sin('x'),2),cos(mtp(2,'x')))),add(mtp(2,div(mtp(pow('y',3),arcsin(pow('z',div(1,2)))),mtp(pow(sin('x'),2),cos(mtp(2,'x'))))),6)),add(div(mtp(pow('y',3),arcsin(pow('z',div(1,2)))),mtp(pow(sin('x'),2),cos(mtp(2,'x')))),-3))
+      result = exp.factorise_quadractic(div(mtp(pow('y',3),arcsin(pow('z',div(1,2)))),mtp(pow(sin('x'),2),cos(mtp(2,'x')))))
+      expect(result[:P]).to eq [mtp(2,3),6]
+      expect(result[:S]).to eq 5
+      expect(result[:factors]).to eq [[2,3],[frac(2,2),frac(3,2)],[1,frac(3,2)]]
+      expect(result[:steps].last.latex.shorten).to eq '0&=(\frac{y^3(\arcsin z^{\frac{1}{2}})}{(\sin x)^2\cos 2x}+1)(\frac{y^3(\arcsin z^{\frac{1}{2}})}{(\sin x)^2\cos 2x}+\frac{3}{2})'
 
     end
+
   end
 
   describe '#is_quadratic?' do
