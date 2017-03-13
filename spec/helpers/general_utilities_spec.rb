@@ -73,6 +73,21 @@ describe GeneralUtilities do
       expect(exp.is_m_form?).to eq true
     end
 
+    it 'false for 11' do
+      exp = '11'.objectify
+      expect(exp.is_m_form?).to eq false
+    end
+
+    it 'false for x' do
+      exp = 'x'.objectify
+      expect(exp.is_m_form?).to eq false
+    end
+
+    it 'false for 3+x' do
+      exp = '3+x'.objectify
+      expect(exp.is_m_form?).to eq false
+    end
+
     it 'false for 3(x+2)yz' do
       exp = '3(x+2)yz'.objectify
       expect(exp.is_m_form?).to eq false
@@ -96,6 +111,18 @@ describe GeneralUtilities do
     it 'true for 3(\sin x)^3yz' do
       exp = '3(\sin x)^3yz'.objectify
       expect(exp.is_m_form?).to eq true
+    end
+  end
+
+  describe '#is_m_form_sum?' do
+    it 'true for 2x+3y' do
+      exp = '2x+3y'.objectify
+      expect(exp.is_m_form_sum?).to eq true
+    end
+
+    it 'false for 2xy' do
+      exp = '2xy'.objectify
+      expect(exp.is_m_form_sum?).to eq false
     end
   end
 end

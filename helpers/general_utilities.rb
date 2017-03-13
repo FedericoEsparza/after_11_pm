@@ -30,11 +30,21 @@ module GeneralUtilities
 
   def is_m_form?(exp=nil)
     exp = exp || self
-    return false unless exp.is_a?(multiplication)
-    exp.args.each do |arg|
+    return false unless exp.is_a?(multiplication) 
+    args.each do |arg|
       return false if arg.is_a?(addition) || arg.is_a?(subtraction)
       return false if arg.is_a?(power) && (arg.base.is_a?(addition) || arg.base.is_a?(subtraction))
     end
     return true
   end
+
+  def is_m_form_sum?(exp=nil)
+    exp = exp || self
+    return false unless exp.is_a?(addition)
+    args.each do |arg|
+      return false unless arg.is_m_form?
+    end
+    return true
+  end
+
 end
