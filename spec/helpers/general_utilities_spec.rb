@@ -87,5 +87,15 @@ describe GeneralUtilities do
       exp = '3(a+2)^3yz'.objectify
       expect(exp.is_m_form?).to eq false
     end
+
+    it 'false for 3(2+\sin x)^3yz' do
+      exp = '3(2+\sin x)^3yz'.objectify
+      expect(exp.is_m_form?).to eq false
+    end
+
+    it 'true for 3(\sin x)^3yz' do
+      exp = '3(\sin x)^3yz'.objectify
+      expect(exp.is_m_form?).to eq true
+    end
   end
 end
