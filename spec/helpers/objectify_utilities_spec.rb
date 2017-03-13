@@ -203,7 +203,21 @@ describe ObjectifyUtilities do
       expect(string_array).to eq ["x","2-a",'y','3',"(5z)^4"]
     end
   end
-  #
+
+  describe '#_delete_slash_times' do
+    it 'delete\\timesdelete' do
+      expect(dummy_class._delete_slash_times('delete\\timesdelete')).to eq 'deletedelete'
+    end
+
+    it 's(a\\timesd)f' do
+      expect(dummy_class._delete_slash_times('s(a\\timesd)f')).to eq 's(a\\timesd)f'
+    end
+
+    it '2\times(-23)' do
+      expect(dummy_class._delete_slash_times('2\times(-23)')).to eq '2(-23)'
+    end
+  end
+
   # describe '#_next_num_index' do
   #   it 'returns 2 for 123abc' do
   #     expect(dummy_class._next_num_index('123abc')).to eq 2

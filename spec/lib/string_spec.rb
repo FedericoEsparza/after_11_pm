@@ -302,7 +302,7 @@ describe String do
       end
 
       it '(3\times3)(x^2x)' do
-        expect('(3\times3)(x^2x)'.objectify).to eq ''
+        expect('(3\times3)(x^2x)'.objectify).to eq mtp(mtp(3,3),mtp(pow('x',2),'x'))
       end
     end
 

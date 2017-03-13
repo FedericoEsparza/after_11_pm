@@ -197,14 +197,8 @@ module ObjectifyUtilities
   end
 
   def reenter_str_content(string,dollar_array)
-    # puts '+=++++++++++'
-    # p string
-    # p dollar_array
     string_copy = string.dup
-    string_copy.gsub!('\\times','')  #but not inside brackets
-    # puts '+=++++++++++'
-    # p string_copy
-    # p dollar_array
+    _delete_slash_times(string_copy)
     i = 0
     dollar_array.each do |str|
       str.each_char.with_index do |c,c_i|
@@ -214,9 +208,29 @@ module ObjectifyUtilities
         i += 1
       end
     end
-    # puts '+=++++++++++'
-    # p string
-    # p dollar_array
+  end
+
+  def _delete_slash_times(string_copy)
+    i = 0
+    while i < string_copy.length
+      if string_copy[i..i+5] == '\\times'
+        delete_times = true
+        for j in i..string_copy.length-1
+          if string_copy[j] == '{' || string_copy[j] == '('
+            delete_times = true
+            break
+          end
+          if string_copy[j] == '}' || string_copy[j] == ')'
+            delete_times = false
+            break
+          end
+          j += 1
+        end
+        string_copy.slice!(i..i+5) if delete_times
+      end
+      i += 1
+    end
+    return string_copy
   end
 
   def reenter_addition_str_content(string,dollar_array) #work same way for subtraction

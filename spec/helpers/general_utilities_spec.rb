@@ -63,7 +63,7 @@ describe GeneralUtilities do
   describe '#write test' do
     it 'writes a test eg 1' do
       result_steps = [mtp(2,pow('x',3)),add(5,div('y',4))]
-      expect(write_test(result_steps)).to eq "expect(result).to eq [\n  2x^3.objectify,\n  5+\\frac{y}{4}.objectify\n]"
+      expect(write_test(result_steps)).to eq "expect(result).to eq [\n  '2x^3'.objectify,\n  '5+\\frac{y}{4}'.objectify\n]"
     end
   end
 end
