@@ -332,6 +332,7 @@ class Addition < Expression
     add(new_args)
   end
 
+#not generic
   def get_quad
     eqn = self.copy
 
@@ -340,25 +341,25 @@ class Addition < Expression
     const = 0
     variable = 'y'
 
-    eqn.args.each do |a|
-      if a.is_a?(multiplication)
-        coef = a.args.first
-        type = a.args.last
-        if type.is_a?(power)
-          square = coef
-          variable = type.base
-        elsif type.is_a?(string)
-          lin = coef
-        else
-          const = coef
-        end
-      elsif a.is_a?(power)
-        square =1
-        variable = type.base
-      elsif a.is_a?(string)
-        lin =1
+    if args.length == 3
+      if args[0].is_a?(multiplication)
+        square = args[0].args.first
+        variable = args[0].args.last.args.first
       else
-        const = a
+        square = 1
+        variable = args[0].args.first
+      end
+
+      if args[1].is_a?(multiplication)
+        lin = args[1].args.first
+      else
+        lin = 1
+      end
+
+      if args[2].is_a?(multiplication)
+        const = args[2].args.first
+      else
+        const = args[2]
       end
     end
 
