@@ -63,6 +63,14 @@ describe FactoriseQuadraticEquation do
 
   end
 
+  describe '#latex_factorise_quadractic' do
+    it 'latexes solution of 2x(x+6) = 5(x+3)' do
+      exp = eqn(mtp(2,'x',add('x',6)),mtp(5,add('x',3)))
+      result = exp.latex_factorise_quadractic('x')
+      puts result
+    end
+  end
+
   describe '#is_quadratic?' do
     it 'returns true for 0=4x^2+3x-5' do
       equation = '0=4x^2+3x-5'.objectify
@@ -124,5 +132,6 @@ describe FactoriseQuadraticEquation do
       expect(equation.quadratic_var).to eq nil
     end
   end
+
 
 end

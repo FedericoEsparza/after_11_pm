@@ -101,6 +101,19 @@ module FactoriseQuadraticEquation
     factored_quad
   end
 
+  def latex_factorise_quadractic(subject)
+    standardises_steps = standardize_quadractic(subject)
+    quadractic = standardises_steps.last.copy.rs.get_quad
+    final_latex = quadractic.latex
+    final_latex.slice!('begin{align*}')
+
+    latex = 'begin{align*}\n'
+    standardises_steps.each do |step|
+      latex += step.latex + '\\\[5pt]'
+      
+    end
+
+  end
 
   def is_quadratic?
     _quadratic_infor[:is_quadratic?]
