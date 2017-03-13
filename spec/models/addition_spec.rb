@@ -181,4 +181,56 @@ describe Addition do
   end
 
 
+  describe '#find_common_factors' do
+    it 'finds x(y+1)z^2 + x(y+1)^2z^3' do
+      exp = 'x(y+1)z^2+x(y+1)^2z^3'.objectify
+      result = exp.find_common_factors
+      expect(result).to eq ['x',add('y',1),pow('z',2)]
+    end
+
+    it 'finds sinx(cosx+2)^2x^4 + sinx^2(cosx+2)x^6' do
+      exp = '(\sin x)(\cos x+2)^2x^4+(\sin x)^2(\cos x+2)x^6'.objectify
+      result = exp.find_common_factors
+      expect(result).to eq [sin('x'),add(cos('x'),2),pow('x',4)]
+    end
+
+    it 'finds (x+2)^2x - (x+2)^3y' do
+      exp = '(x+2)^2x-(x+2)^3y'.objectify
+      result = exp.find_common_factors
+      expect(result).to eq [pow(add('x',2),2)]
+    end
+  end
+
+  describe '#divide_factors' do
+    it 'divides x^2y^3(z-1)^4 by x^2y(z-1)' do
+      exp = 'x^2y^3(z-1)^4'.objectify
+      result = exp.divide_factors('x^2y(z-1)'.objectify)
+
+      expect(result).to eq 'y^2(z-1)^3'.objectify
+    end
+  end
+
+  describe '#factorise_common_factors' do
+    it 'factorises x(y+1)z^2+x(y+1)^2z^3' do
+      exp = 'x(y+1)z^2+x(y+1)^2z^3'.objectify
+      result = exp.factorise_common_factors
+
+      expect(result).to eq 'x(y+1)z^2(1+(y+1)z)'.objectify
+    end
+
+    it 'factorises xyz^2 + xyz^3' do
+      exp = 'xyz^2-xyz^3'.objectify
+      result = exp.factorise_common_factors
+      expect(result).to eq 'xyz^2(1-z)'.objectify
+
+    end
+
+    it 'does not factorise (x+2)^2z + (x+2)^-1y' do
+      exp = '(x+2)^2z+(x+2)^{-1}y'.objectify
+      result = exp.factorise_common_factors
+      expect(result).to eq '(x+2)^2z+(x+2)^{-1}y'.objectify
+    end
+  end
+
+
 end
