@@ -26,8 +26,12 @@ module Factory
     Equation.new(*args)
   end
 
-  def sseqn(eqn_1,eqn_2)
-    SimutaneousEqnSubstitution.new(eqn_1,eqn_2)
+  def sseqn(*args)
+    SimutaneousEqnSubstitution.new(*args)
+  end
+
+  def seqn(*args)
+    SimultaneousEquation.new(*args)
   end
 
   def div(*args)

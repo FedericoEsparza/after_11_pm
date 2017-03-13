@@ -4,7 +4,11 @@ class SimultaneousEquation
   attr_reader :args
 
   def initialize(*args)
-    @args = args
+    if args.length == 1 && args[0].class == Array
+      @args = args.first
+    else
+      @args = args
+    end
   end
 
   def eq_1
@@ -30,7 +34,6 @@ class SimultaneousEquation
   def generate_solution
     equation_1_coefs = extract_coefficient(eq_1)
     equation_2_coefs = extract_coefficient(eq_2)
-    instruction = determine_multiplier
     solutions = {}
     steps = []
 
@@ -42,8 +45,8 @@ class SimultaneousEquation
       k == :eq_1 ? eq_3(new_eqn) : eq_4(new_eqn)
       mtp_eqn << new_eqn
 
-      equation_1_coefs.update(equation_1_coefs) { |var, coef| coef * v } if k == :eq_1
-      equation_2_coefs.update(equation_2_coefs) { |var, coef| coef * v } if k == :eq_2
+      equation_1_coefs.update(equation_1_coefs) { |_var, coef| coef * v } if k == :eq_1
+      equation_2_coefs.update(equation_2_coefs) { |_var, coef| coef * v } if k == :eq_2
     end
 
     expand_equations
@@ -89,12 +92,9 @@ class SimultaneousEquation
     response << eq_1_solution_latex.unshift(eq_addition)
     response << eq_2_solution_latex.unshift(sub_in_eqs_latex)
     response = response.map do |element|
-      if element.is_a?(Array)
-        element = element.join("\\\\\n")
-      else
-        element + "\\\\\n"
-      end
+      element.is_a?(Array) ? element.join("\\\\\n") : element + "\\\\\n"
     end
+
     add_align_env(response.join("\\\\[15pt]\n")) + eq_solutions(solutions)
   end
 
@@ -150,9 +150,7 @@ class SimultaneousEquation
   end
 
   def extract_var(var_ans)
-    response = {}
-    response[var_ans.fetch(object: :string)] = var_ans.fetch(object: :numeric)
-    response
+    { var_ans.fetch(object: :string) => var_ans.fetch(object: :numeric) }
   end
 
   def expand_equations
@@ -236,9 +234,10 @@ class SimultaneousEquation
   def extract_coefficient(equation)
     extracted_obj = []
     response = {}
+    eqn_ls = equation.ls
 
-    extracted_obj << equation.ls.fetch_all(object: :multiplication)
-    extracted_obj << equation.ls.fetch_all(object: :string)
+    extracted_obj << eqn_ls.fetch_all(object: :multiplication) unless eqn_ls.is_a?(String)
+    extracted_obj << equation.ls.fetch_all(object: :string) unless eqn_ls.is_a?(String)
 
     extracted_obj.flatten.each do |obj|
       if obj.is_a?(Multiplication)
@@ -252,33 +251,5 @@ class SimultaneousEquation
     end
 
     response
-  end
-
-  # RECURSION
-  def fetch(object:)
-    object_class = Kernel.const_get(object.to_s.capitalize)
-    args.each do |arg|
-      if arg.is_a?(Power)
-        return arg.args.each { |e|
-          return e if e.is_a?(object_class)
-        }
-      elsif arg.is_a?(self.class)
-        return arg.fetch(object: object)
-      else
-        return arg if arg.is_a?(object_class)
-      end
-    end
-  end
-  # RECURSION
-  def includes?(object_class)
-    args.any? do |arg|
-      if arg.is_a?(Power)
-        arg.args.any? { |e| e.is_a?(object_class) }
-      elsif arg.is_a?(self.class)
-        arg.includes?(object_class)
-      else
-        arg.is_a?(object_class)
-      end
-    end
   end
 end
