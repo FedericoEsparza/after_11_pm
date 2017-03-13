@@ -111,6 +111,8 @@ class Multiplication
       end
     end
     result
+    #shorten combine powers, re revert to previous just delete below
+    return [result[-1]]
   end
 
   def delete_nils

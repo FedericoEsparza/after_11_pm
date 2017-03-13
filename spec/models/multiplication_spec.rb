@@ -121,8 +121,7 @@ describe Multiplication do
     it 'combines x^2 times x^3' do
       exp = mtp(pow('x',2),pow('x',3))
       expect(exp.combine_powers).to eq [
-        mtp(pow('x',2),pow('x',3)),
-        pow('x',add(2,3)),
+        # mtp(pow('x',2),pow('x',3)),
         pow('x',5)
       ]
     end
@@ -137,20 +136,15 @@ describe Multiplication do
     it 'combines y^3 times y^-2' do
       exp = mtp(pow('y',3),pow('y',-2))
       expect(exp.combine_powers).to eq [
-      mtp(pow('y',3),pow('y',-2)),
-      pow('y',add(3,-2)),
-      pow('y',1),
+      # mtp(pow('y',3),pow('y',-2)),
       'y'
       ]
     end
 
-
     it 'combines x times x^2' do
       exp = mtp('x',pow('x',2))
       expect(exp.combine_powers).to eq [
-        mtp('x',pow('x',2)),
-        mtp(pow('x',1),pow('x',2)),
-        pow('x',add(1,2)),
+        # mtp('x',pow('x',2)),
         pow('x',3)
       ]
     end
@@ -158,9 +152,7 @@ describe Multiplication do
     it 'combine y times y^3 times y^-2' do
       exp = mtp('y',pow('y',3),pow('y',-2))
       expect(exp.combine_powers).to eq [
-        mtp('y',pow('y',3),pow('y',-2)),
-        mtp(pow('y',1),pow('y',3),pow('y',-2)),
-        pow('y',add(1,3,-2)),
+        # mtp('y',pow('y',3),pow('y',-2)),
         pow('y',2)
       ]
     end
@@ -168,7 +160,7 @@ describe Multiplication do
     it 'combines 3 times 4 times 5' do
       exp = mtp(3,4,5)
       expect(exp.combine_powers).to eq [
-        mtp(3,4,5),
+        # mtp(3,4,5),
         60
       ]
     end
@@ -176,9 +168,16 @@ describe Multiplication do
     it 'combines 3 times 2^2 times 5' do
       exp = mtp(3,pow(2,2),5)
       expect(exp.combine_powers).to eq [
-        mtp(3,pow(2,2),5),
-        mtp(3,4,5),
+        # mtp(3,pow(2,2),5),
         60
+      ]
+    end
+
+    it 'combine y times y^2 times y^-3' do
+      exp = mtp('y',pow('y',2),pow('y',-3))
+      expect(exp.combine_powers).to eq [
+        # mtp('y',pow('y',2),pow('y',-3)),
+        nil
       ]
     end
   end
@@ -276,14 +275,11 @@ describe Multiplication do
      exp = mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4)))
      result = exp.simplify_product_of_m_forms
      expect(exp).to eq mtp(9,pow('x',3),pow('y',7))
-     #  puts write_test(result)
-     expect(result).to eq [
-       '(3x^2y^3)(3xy^4)'.objectify,
-       '(3\times3)(x^2x)(y^3y^4)'.objectify,
-       '9(x^2x^1)y^{3+4}'.objectify,
-       '9x^{2+1}y^7'.objectify,
-       '9x^3y^7'.objectify
-     ]
+      # puts write_test(result)
+      expect(result).to eq [
+        '(3x^2y^3)(3xy^4)'.objectify,
+        '9x^3y^7'.objectify
+      ]
     end
 
     it 'simplifies (3x)(4y)(5z) to 60xyz' do
@@ -293,22 +289,18 @@ describe Multiplication do
       # puts write_test(result)
       expect(result).to eq [
         '(3x)(4y)(5z)'.objectify,
-        '(3\times4\times5)xyz'.objectify,
         '60xyz'.objectify
       ]
     end
-
 
     it 'simplifies (3y^3z)(2^2y^-2)' do
      exp = mtp(mtp(3,pow('y',3),'z'),mtp(pow(2,2),pow('y',-2)))
      result = exp.simplify_product_of_m_forms
      expect(exp).to eq mtp(12,'y','z')
+    #  puts write_test(result)
      expect(result).to eq [
-       mtp(mtp(3,pow('y',3),'z'),mtp(pow(2,2),pow('y',-2))),
-       mtp(mtp(3,pow(2,2)),mtp(pow('y',3),pow('y',-2)),'z'),
-       mtp(mtp(3,4),pow('y',add(3,-2)),'z'),
-       mtp(12,pow('y',1),'z'),
-       mtp(12,'y','z')
+       '(3y^3z)(2^2y^{-2})'.objectify,
+       '12yz'.objectify
      ]
     end
 
@@ -316,31 +308,27 @@ describe Multiplication do
      exp = mtp(mtp(2,pow('x',2),'y','z'),mtp(3,pow('x',-2),pow('z',-1)))
      result = exp.simplify_product_of_m_forms
      expect(exp).to eq mtp(6,'y')
+    #  puts write_test(result)
      expect(result).to eq [
-       mtp(mtp(2,pow('x',2),'y','z'),mtp(3,pow('x',-2),pow('z',-1))),
-       mtp(mtp(2,3),mtp(pow('x',2),pow('x',-2)),'y',mtp('z',pow('z',-1))),
-       mtp(6,pow('x',add(2,-2)),'y',mtp(pow('z',1),pow('z',-1))),
-       mtp(6,pow('x',0),'y',pow('z',add(1,-1))),
-       mtp(6,'y',pow('z',0)),
-       mtp(6,'y')
+       '(2x^2yz)(3x^{-2}z^{-1})'.objectify,
+       '6y'.objectify
      ]
     end
   end
 
- #   describe '#standardize m form' do
- #     it 'turns m(x,m(xy)) to m(m(x)m(xy))' do
- #       exp = mtp('x',mtp('x','y'))
- #       result = exp.standardize_m_form
- #       expect(result).to eq mtp(mtp('x'),mtp('x','y'))
- #     end
- #
- #     it 'turns m(x^2,y^3,m(x^2y))' do
- #       exp = mtp(pow('x',2),pow('y',3),mtp(pow('x',2),'y'))
- #       result = exp.standardize_m_form
- #        expect(result).to eq mtp(mtp(pow('x',2)),mtp(pow('y',3)),mtp(pow('x',2),'y'))
- #     end
- #
- #   end
+  describe '#standardize m form' do
+    it 'turns m(x,m(xy)) to m(m(x)m(xy))' do
+     exp = mtp('x',mtp('x','y'))
+     result = exp.standardize_m_form
+     expect(result).to eq mtp(mtp('x'),mtp('x','y'))
+    end
+
+    it 'turns m(x^2,y^3,m(x^2y))' do
+     exp = mtp(pow('x',2),pow('y',3),mtp(pow('x',2),'y'))
+     result = exp.standardize_m_form
+      expect(result).to eq mtp(mtp(pow('x',2)),mtp(pow('y',3)),mtp(pow('x',2),'y'))
+    end
+  end
  #
  #  xdescribe '#combine_two_brackets' do
  #   it 'combines (x+y)(x+y)' do
