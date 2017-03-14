@@ -97,7 +97,9 @@ class Addition < Expression
         new_args += copy.args[i].remove_coef.copy
         copy.args.delete_at(i+1)
         copy.args.delete_at(i)
-        copy.args.insert(i,mtp(new_args))
+        if new_args[0] != 0
+          copy.args.insert(i,mtp(new_args))
+        end
       else
         i += 1
       end

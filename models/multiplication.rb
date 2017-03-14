@@ -223,7 +223,6 @@ class Multiplication
     new_args = copy.args.inject([]) do |res,arg|
       res.insert(-1,arg.combine_powers)
     end
-    
     new_args = new_args.equalise_array_lengths.transpose
 
     steps = new_args.inject([]) do |res,arg|
@@ -582,25 +581,43 @@ class Multiplication
   end
 
   #RECURSION
+  # def expand
+  #   copy = self.copy
+  #   steps = []
+  #   if copy == copy.top_heavy_div
+  #     copy.args.each do |exp|
+  #       steps << exp.expand
+  #     end
+  #     steps = steps.equalise_array_lengths.transpose
+  #     steps = steps.map{|a| mtp(a)}
+  #     steps = steps.map{|a| a.flatit}
+  #     brackets = steps.last
+  #     next_steps = brackets.combine_brackets
+  #     steps = steps + next_steps
+  #     steps = steps.map{|a| a.flatit}
+  #     steps.delete_duplicate_steps
+  #   else
+  #     copy = copy.top_heavy_div
+  #     copy.expand
+  #   end
+  # end
+
   def expand
     copy = self.copy
+    i = 0
+    #expand all args
     steps = []
-    if copy == copy.top_heavy_div
-      copy.args.each do |exp|
-        steps << exp.expand
+    while i <100
+      steps += mtp(copy.args[0],copy.args[1]).combine_two_brackets
+      steps.map! do |step|
+        tail_copy = copy.args[2..-1].map{|arg| arg.copy}
+        mtp([step,tail_copy].flatten).flatit
       end
-      steps = steps.equalise_array_lengths.transpose
-      steps = steps.map{|a| mtp(a)}
-      steps = steps.map{|a| a.flatit}
-      brackets = steps.last
-      next_steps = brackets.combine_brackets
-      steps = steps + next_steps
-      steps = steps.map{|a| a.flatit}
-      steps.delete_duplicate_steps
-    else
-      copy = copy.top_heavy_div
-      copy.expand
+      break if steps.last.args.length == 1
+      copy = steps.last.copy
+      i += 1
     end
+    steps.map!{|step| step.flatten}.delete_duplicate_steps
   end
 
   def flatit

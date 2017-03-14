@@ -56,6 +56,12 @@ describe Addition do
       result = addition.combine_similar_terms
       expect(result).to eq '3\sin x'.objectify
     end
+
+    it '#simplifies 2x^2-2x^2-13x+13x-7+3' do
+      addition = '2x^2-2x^2-13x+13x-7+3'.objectify.standardize_add_m_form
+      result = addition.combine_similar_terms
+      expect(result).to eq -4
+    end
   end
 
   # describe '#simplify_brackets' do

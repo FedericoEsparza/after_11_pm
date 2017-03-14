@@ -36,6 +36,11 @@ describe GeneralUtilities do
       exp = 1
       expect(dummy_class.flatten(exp)).to eq 1
     end
+
+    it '' do
+      exp = mtp(mtp(mtp(1)))
+      expect(dummy_class.flatten(exp)).to eq 1
+    end
   end
 
   context 'call #flatten from class' do
