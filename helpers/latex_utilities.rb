@@ -51,38 +51,32 @@ module LatexUtilities
     end
   end
 
-  def conventionalise_plus_minus(exp)
+  def conv_pm(exp = nil)
+    exp = exp || self
     if exp.is_a?(addition)
       if numerical?(exp.args[-1]) && exp.args[-1] < 0
-
         front_add_args = []
         for k in 0..(exp.args.length-2)
           front_add_args << exp.args[k]
         end
-        if front_add_args.length == 1
-          return sbt(conventionalise_plus_minus(front_add_args[0]),exp.args[-1].abs)
-        end
-        if front_add_args.length > 1
-          minus_end = conventionalise_plus_minus(add(front_add_args))
-          return sbt(minus_end,exp.args[-1].abs)
-        end
+        minus_end = add(front_add_args).flatten.conv_pm
+        sub_end = exp.args[-1].abs.conv_pm
+        return sbt(minus_end,sub_end)
       end
 
       if exp.args[-1].is_a?(multiplication) && numerical?(exp.args[-1].args[0]) && exp.args[-1].args[0] < 0
-        sub_end = exp.args[-1].copy
-        sub_end.args[0] = sub_end.args[0].abs
+
         front_add_args = []
         for k in 0..(exp.args.length-2)
           front_add_args << exp.args[k]
         end
+        minus_end = add(front_add_args).flatten.conv_pm
 
-        if front_add_args.length == 1
-          return sbt(conventionalise_plus_minus(front_add_args[0]),conventionalise_plus_minus(sub_end))
-        end
-        if front_add_args.length > 1
-          minus_end = conventionalise_plus_minus(add(front_add_args))
-          return sbt(minus_end,sub_end)
-        end
+        sub_end = exp.args[-1].copy
+        sub_end.args[0] = sub_end.args[0].abs
+        sub_end = sub_end.conv_pm
+
+        return sbt(minus_end,sub_end)
       end
 
       if numerical?(exp.args[0]) && exp.args[0] < 0
@@ -100,7 +94,7 @@ module LatexUtilities
           for k in 0..((exp.args.length - i)-1)
             front_add_args << exp.args[k]
           end
-          minus_end = conventionalise_plus_minus(add(front_add_args))
+          minus_end = conv_pm(add(front_add_args))
           front_sbt = sbt(minus_end,exp.args[-i].abs)
           new_args.insert(0,front_sbt)
           return add(new_args)
@@ -113,20 +107,20 @@ module LatexUtilities
           minus_arg_i = exp.args.length  - i
           new_args = []
           for j in (exp.args.length-i+1)..(exp.args.length-1)
-            new_args << conventionalise_plus_minus(exp.args[j]) #check this it needs to be a new copy
+            new_args << conv_pm(exp.args[j]) #check this it needs to be a new copy
           end
           front_add_args = []
           for k in 0..((exp.args.length - i)-1)
             front_add_args << exp.args[k]
           end
           if front_add_args.length == 1
-            minus_end = conventionalise_plus_minus(front_add_args[0])
+            minus_end = conv_pm(front_add_args[0])
           else
-            minus_end = conventionalise_plus_minus(add(front_add_args))
+            minus_end = conv_pm(add(front_add_args))
           end
 
           exp.args[-i].args[0] = exp.args[-i].args[0].abs
-          exp.args[-i] = conventionalise_plus_minus(exp.args[-i])
+          exp.args[-i] = conv_pm(exp.args[-i])
           # p exp.args[-i]
 
           front_sbt = sbt(minus_end,exp.args[-i])
@@ -136,22 +130,22 @@ module LatexUtilities
         end
       end
 
-      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
       return exp.class.new(conv_args)
     end
 
     if exp.is_a?(multiplication) && numerical?(exp.args[0]) && exp.args[0] < 0
       exp.args[0] = exp.args[0].abs
-      return sbt(nil,conventionalise_plus_minus(exp))
+      return sbt(nil,exp.conv_pm)
     end
 
     if exp.is_a?(multiplication) && !(numerical?(exp.args[0]) && exp.args[0] < 0)
-      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
       return exp.class.new(conv_args)
     end
 
     if _standard_class?(exp)
-      conv_args = exp.args.inject([]){|r,e| r << conventionalise_plus_minus(e)}
+      conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
       return exp.class.new(conv_args)
     end
 
@@ -160,7 +154,7 @@ module LatexUtilities
     end
 
     if exp.is_a?(square_root)
-      exp.value = conventionalise_plus_minus(exp.value)
+      exp.value = exp.value.conv_pm
       return exp
     end
 
@@ -185,7 +179,7 @@ module LatexUtilities
   end
 
   def conventionalise(exp)
-    conventionalise_one_times(conventionalise_plus_minus(exp))
+    conventionalise_one_times(exp.conv_pm)
   end
 
 end
