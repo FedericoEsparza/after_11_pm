@@ -170,6 +170,7 @@ solution_latex = equation.latex
 > - One quadratic and one linear simultaneous equation question generator.
 > - Non-standard Core 2 trigonometric equation solver.  (Machine learning see below)
 > - Almost all A-level Maths topics!
+> - Add a webapp to the project.
 
 
 --------
