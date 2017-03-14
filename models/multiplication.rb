@@ -91,7 +91,7 @@ class Multiplication
       evaled_nums = evaled_pow.evaluate_numeral
       steps = [self,evaled_pow,evaled_nums]
     end
-    result = delete_duplicate_steps(steps)
+    result = steps.delete_duplicate_steps
 
     if result[-1].is_a?(power)
       if result[-1].index == 1
@@ -114,18 +114,6 @@ class Multiplication
       i += 1
     end
     args
-  end
-
-  def delete_duplicate_steps(steps)
-    i = 0
-    while i < steps.length
-      if steps[i] == steps[i+1]
-        steps.delete_at(i)
-      else
-        i += 1
-      end
-    end
-    steps
   end
 
   def eval_num_pow
@@ -199,7 +187,7 @@ class Multiplication
       i = i + 1
     end
     self.args = result_args
-    [copy,self]
+    self
   end
 
   def empty?
@@ -231,30 +219,57 @@ class Multiplication
   end
 
   def simplify_product_of_m_forms
-    copy = self.copy.standardise_m_form
-    copy.separate_variables
-    variables_separated = copy
+    # copy = self.copy.standardise_m_form.separate_variables
+    # new_args = []
+    # i = 0
+    # while i < copy.args.length do
+    #   new_args << copy.args[i].combine_powers
+    #   i += 1
+    # end
+    # new_args = new_args.equalise_array_lengths.transpose
+    # i = 0
+    # steps = []
+    # while i < new_args.length
+    #   steps << mtp(new_args[i])
+    #   i += 1
+    # end
+    # steps.insert(0,self.copy)
+    # steps = delete_duplicate_steps(steps)
+    #
+    # self.args = steps[-1].args
+    #
+    # steps.each {|a| a.delete_nils}
+    #
+    # new_args = [steps.last.remove_exp] + steps.last.remove_coef
+    # steps[-1] = mtp(new_args)
+    #
+    # steps
+
+    copy = self.copy.standardise_m_form.separate_variables
     new_args = []
     i = 0
-    while i < variables_separated.args.length && i <=100 do
-      new_args << variables_separated.args[i].combine_powers
+    while i < copy.args.length do
+      new_args << copy.args[i].combine_powers
       i += 1
     end
-    new_args = new_args.equalise_array_lengths
-    new_args = new_args.transpose
+    new_args = new_args.equalise_array_lengths.transpose
     i = 0
     steps = []
     while i < new_args.length
       steps << mtp(new_args[i])
       i += 1
     end
-    steps.insert(0,self.copy)
-    steps = delete_duplicate_steps(steps)
-    self.args = steps[-1].args
-    steps.each {|a| a.delete_nils}
+
     new_args = [steps.last.remove_exp] + steps.last.remove_coef
     steps[-1] = mtp(new_args)
-    steps
+
+    result = [self.copy] + steps
+
+    self.args = steps[-1].args
+
+    result = result.delete_duplicate_steps
+    result.each {|a| a.delete_nils}
+    result
   end
 
   def reverse_subject_step(subject,rs)
@@ -397,7 +412,7 @@ class Multiplication
 
     result = [self.copy] + expansion_steps + [ordered_terms, combined_terms]
     result.map!{ |step| conventionalise_one_times(step).flatten  }
-    result = delete_duplicate_steps(result)
+    result.delete_duplicate_steps
   end
 
   def sort_elements
@@ -422,39 +437,6 @@ class Multiplication
     mtp.args.each{|a| brac = true if a.is_a?(Addition)}
     brac
   end
-
-  # def old_combine_two_brackets
-  #   copy = self.copy
-  #   new_args = []
-  #   copy.args.first.args.each_with_index do |a|
-  #     copy.args.last.args.each_with_index do |b|
-  #       c = mtp(a,b)
-  #       new_args << c
-  #       end
-  #   end
-  #   new_args = new_args.map {|a| a.standardise_m_form.simplify_product_of_m_forms}
-  #   new_args.equalise_array_lengths
-  #   new_add = []
-  #   new_args.first.each_with_index do |a,i|
-  #     c = []
-  #     new_args.each_with_index do |b,j|
-  #       c << new_args[j][i]
-  #     end
-  #     new_add << add(c)
-  #   end
-  #   # new_add << new_add.last.sort_elements
-  #   new_step = new_add.last.copy
-  #   new_step.args.each do |m|
-  #     m.m_form_sort
-  #   end
-  #   new_add << new_step
-  #
-  #   # new_add << new_add.last.simplify_add_m_forms
-  #   new_add = delete_duplicate_steps(new_add)
-  #   new_add.insert(0,self.copy)
-  #   self.args = new_add[-1].args
-  #   new_add
-  # end
 
   def combine_brackets
     copy = self.copy
@@ -482,7 +464,7 @@ class Multiplication
       expanded_brackets.each{|a| expanded_brackets_steps << a}
       expanded_brackets_steps.insert(0,self)
       expanded_brackets_steps = expanded_brackets_steps.map{|a| a.flatit}
-      expanded_brackets_steps = delete_duplicate_steps(expanded_brackets_steps)
+      expanded_brackets_steps = expanded_brackets_steps.delete_duplicate_steps
       expanded_brackets_steps
     end
 
@@ -649,7 +631,7 @@ class Multiplication
       next_steps = brackets.combine_brackets
       steps = steps + next_steps
       steps = steps.map{|a| a.flatit}
-      steps = delete_duplicate_steps(steps)
+      steps = steps.delete_duplicate_steps
       steps
     else
       copy = copy.top_heavy_div

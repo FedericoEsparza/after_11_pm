@@ -210,50 +210,28 @@ describe Multiplication do
      exp = mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5)))
      result  = exp.separate_variables
      expect(exp).to eq mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
-     expect(result).to eq [
-       mtp(mtp(pow('x',2),pow('y',3)),mtp(pow('x',4),pow('y',5))),
-       mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
-     ]
-    end
-
-    it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
-     exp = mtp(mtp(3,pow('x',2)),mtp(4,pow('x',3),pow('y',2)))
-     result = exp.separate_variables
-     expect(exp).to eq mtp(mtp(3,4),mtp(pow('x',2),pow('x',3)),mtp(pow('y',2)))
-     expect(result).to eq [
-       mtp(mtp(3,pow('x',2)),mtp(4,pow('x',3),pow('y',2))),
-       mtp(mtp(3,4),mtp(pow('x',2),pow('x',3)),mtp(pow('y',2)))
-     ]
+     expect(result).to eq mtp(mtp(pow('x',2),pow('x',4)),mtp(pow('y',3),pow('y',5)))
     end
 
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
      exp = mtp(mtp(3,pow('x',2)),mtp(4,'x',pow('y',2)))
      result = exp.separate_variables
      expect(exp).to eq mtp(mtp(3,4),mtp(pow('x',2),'x'),mtp(pow('y',2)))
-     expect(result).to eq [
-       mtp(mtp(3,pow('x',2)),mtp(4,'x',pow('y',2))),
-       mtp(mtp(3,4),mtp(pow('x',2),'x'),mtp(pow('y',2)))
-     ]
+     expect(result).to eq mtp(mtp(3,4),mtp(pow('x',2),'x'),mtp(pow('y',2)))
     end
 
     it 'separates (3x^2)(4xy^2) as (3 4)(x^2x)(y^2)' do
      exp = mtp(mtp(3,'x'),mtp(4,pow('x', 2),pow('y',2)))
      result = exp.separate_variables
      expect(exp).to eq mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
-     expect(result).to eq [
-       mtp(mtp(3,'x'),mtp(4,pow('x', 2),pow('y',2))),
-       mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
-     ]
+     expect(result).to eq mtp(mtp(3,4),mtp('x',pow('x', 2)),mtp(pow('y',2)))
     end
 
     it 'separates (3^2x^2)(4x) as (3^2 4)(x^2x)' do
      exp = mtp(mtp(pow(3,2),pow('x',2)),mtp(4,'x'))
      result = exp.separate_variables
      expect(exp).to eq mtp(mtp(pow(3,2),4),mtp(pow('x', 2),'x'))
-     expect(result).to eq [
-       mtp(mtp(pow(3,2),pow('x',2)),mtp(4,'x')),
-       mtp(mtp(pow(3,2),4),mtp(pow('x', 2),'x'))
-     ]
+     expect(result).to eq mtp(mtp(pow(3,2),4),mtp(pow('x', 2),'x'))
     end
 
     it 'separates (x^2)(3x)(4xy)' do
@@ -322,11 +300,9 @@ describe Multiplication do
        'x^23x'.objectify,
        '3x^3'.objectify
      ]
-
     end
-
   end
-
+  
   describe '#standardize m form' do
     it 'turns m(x,m(xy)) to m(m(x)m(xy))' do
       exp = mtp('x',mtp('x','y'))
