@@ -35,6 +35,11 @@ class Fixnum
     self
   end
 
+  def evaluate_numeral
+    self
+  end
+
+
   # def mult(fract)
   #   if fract.is_a?(fraction)
   #     frac(mtp(fract.numerator,self).evaluate_numeral,fract.denominator)

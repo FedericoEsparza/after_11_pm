@@ -54,14 +54,6 @@ class Addition < Expression
 
   def copy
     DeepClone.clone(self)
-    # new_args = args.inject([]) do |r,e|
-    #   if e.is_a?(string) || numerical?(e)
-    #     r << e
-    #   else
-    #     r << e.copy
-    #   end
-    # end
-    # add(new_args)
   end
 
   def evaluate

@@ -533,6 +533,7 @@ class Multiplication
       end
     end
   end
+  
   # RECURSION
   def includes?(object_class)
     args.any? do |arg|
