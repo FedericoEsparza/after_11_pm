@@ -75,8 +75,9 @@ module LatexUtilities
         for k in 0..(exp.args.length-2)
           front_add_args << exp.args[k]
         end
+
         if front_add_args.length == 1
-          return sbt(front_add_args[0],sub_end)
+          return sbt(conventionalise_plus_minus(front_add_args[0]),conventionalise_plus_minus(sub_end))
         end
         if front_add_args.length > 1
           minus_end = conventionalise_plus_minus(add(front_add_args))
@@ -175,13 +176,11 @@ module LatexUtilities
     if exp.is_a?(multiplication) && exp.args.length > 1 && exp.args[0] == 1
       exp.args.delete_at(0)
     end
-
     unless numerical?(exp) || exp.is_a?(string) || exp.nil?
       for i in 0..exp.args.length-1
         conventionalise_one_times(exp.args[i])
       end
     end
-
     return exp
   end
 
