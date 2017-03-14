@@ -52,7 +52,7 @@ module LatexUtilities
   end
 
   def conv_pm(exp = nil)
-    exp = exp || self
+    exp = exp.copy || self.copy
     if exp.is_a?(addition)
       if numerical?(exp.args[-1]) && exp.args[-1] < 0
         front_add_args = []
