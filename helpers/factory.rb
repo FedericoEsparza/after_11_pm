@@ -14,14 +14,6 @@ module Factory
     Power.new(*args)
   end
 
-  # def var(string)
-  #   Variable.new(string)
-  # end
-
-  def num(n)
-    Numeral.new(n)
-  end
-
   def eqn(*args)
     Equation.new(*args)
   end
@@ -89,5 +81,4 @@ module Factory
   def quad(quad_term,linear_term,constant_term,variable)
     QuadraticEquation.new(quad_term: quad_term, linear_term: linear_term, constant_term: constant_term, variable: variable)
   end
-
 end

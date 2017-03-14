@@ -41,4 +41,23 @@ describe Power do
       expect(power.evaluate).to eq -8
     end
   end
+
+  describe '#evaluate' do
+    it 'evaluates to a product of the arguments' do
+      power = pow(-2,3)
+      expect(power.evaluate).to eq -8
+    end
+  end
+
+  describe '#base_latex' do
+    it 'should return 2^{-2}' do
+      power = pow(2,-2)
+      expect(power.base_latex).to eq '2^{-2}'
+    end
+
+    it 'should return x^3' do
+      power = pow('x',3)
+      expect(power.base_latex).to eq 'x^3'
+    end
+  end
 end
