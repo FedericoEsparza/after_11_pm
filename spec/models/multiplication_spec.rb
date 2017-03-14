@@ -281,7 +281,6 @@ describe Multiplication do
      end
    end
 
-
    describe '#simplify_product_of_m_forms' do
      it 'simplifies (3x^2y3)(3xy^4) to 9x^3y^7' do
        exp = mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4)))
