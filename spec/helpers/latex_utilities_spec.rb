@@ -23,16 +23,16 @@ describe LatexUtilities do
       exp = add('x',2,-3,4,5,-6,7,8)
       expect(dummy_class.conv_pm(exp)).to eq add(sbt(add(sbt(add('x',2),3),4,5),6),7,8)
     end
-    #
-    # it '' do
-    #   exp = add('x',-2,-3,-4)
-    #     expect(dummy_class.conv_pm(exp)).to eq sbt(sbt(sbt('x',2),3),4)
-    # end
-    #
-    # it '' do
-    #   exp = add('x',-2)
-    #   expect(dummy_class.conv_pm(exp)).to eq sbt('x',2)
-    # end
+
+    it '' do
+      exp = add('x',-2,-3,-4)
+        expect(dummy_class.conv_pm(exp)).to eq sbt(sbt(sbt('x',2),3),4)
+    end
+
+    it '' do
+      exp = add('x',-2)
+      expect(dummy_class.conv_pm(exp)).to eq sbt('x',2)
+    end
     #
     # it '' do
     #   exp = add('x',mtp(-2,'y'))
