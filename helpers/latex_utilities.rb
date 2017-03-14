@@ -168,17 +168,17 @@ module LatexUtilities
   def conventionalise_one_times(exp)
     if exp.is_a?(multiplication) && exp.args.length > 1 && exp.args[0] == 1
       exp.args.delete_at(0)
-      for i in 0..exp.args.length-1
-        conventionalise_one_times(exp.args[i])
-      end
-      return exp
+      # for i in 0..exp.args.length-1
+      #   conventionalise_one_times(exp.args[i])
+      # end
+      # return exp
     end
 
-    if exp.is_a?(addition) || exp.is_a?(subtraction) || exp.is_a?(division) || exp.is_a?(power) || exp.is_a?(cosine) || exp.is_a?(sine) || exp.is_a?(tangent)
+    if exp.is_a?(addition) || exp.is_a?(subtraction) || exp.is_a?(division) || exp.is_a?(power) || exp.is_a?(cosine) || exp.is_a?(sine) || exp.is_a?(tangent) || exp.is_a?(multiplication)
       for i in 0..exp.args.length-1
         conventionalise_one_times(exp.args[i])
       end
-      return exp
+      # return exp
     end
 
     return exp

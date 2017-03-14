@@ -252,6 +252,10 @@ class Multiplication
     steps = delete_duplicate_steps(steps)
     self.args = steps[-1].args
     steps.each {|a| a.delete_nils}
+    if steps.last.remove_exp != 1
+      new_args = [steps.last.remove_exp] + steps.last.remove_coef
+      steps[-1] = mtp(new_args)
+    end
     steps
   end
 
@@ -395,19 +399,20 @@ class Multiplication
     new_args = new_args.transpose
     new_add = new_args.map{|a| add(a)}
 
-    new_step = new_add.last.copy
-    new_step.args.each do |m|
-      m.m_form_sort
-    end
-    new_add << new_step
+    # new_step = new_add.last.copy
+    # new_step.args.each do |m|
+    #   m.m_form_sort
+    # end
+    # new_add << new_step
 
     new_add << new_add.last.order_similar_terms
-    new_add << new_add.last.simplify_add_m_forms
+    new_add << new_add.last.combine_similar_terms
     new_add = delete_duplicate_steps(new_add)
     new_add.insert(0,self.copy)
     self.args = new_add[-1].args
     new_add[1] = add(new_brackets)
     new_add.map { |step| step.flatten  }
+
   end
 
   def sort_elements
