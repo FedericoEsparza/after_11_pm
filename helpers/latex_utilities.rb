@@ -14,8 +14,6 @@ module LatexUtilities
           return add(add_args)
         else
           add_first_arg = add(front_add_args).conv_pm
-          # add_args = [add_first_arg] + [exp.args[-1]]
-          # return add(add_args).flatit
           return add(add_first_arg,exp.args[-1]).flatit
         end
       end
