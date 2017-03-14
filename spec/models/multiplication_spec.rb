@@ -347,10 +347,22 @@ describe Multiplication do
       #  puts write_test(result)
        expect(result).to eq [
          '(2x+3)(4x+5)'.objectify,
-         '(2x)(4x)+(2x)5+3(4x)+3\times5'.objectify,
+         '2x(4x+5)+3(4x+5)'.objectify,
          '8x^2+10x+12x+15'.objectify,
          '8x^2+22x+15'.objectify
        ]
+     end
+
+     it 'combines (3+2x)(4x+5)' do
+       exp = '(3+2x)(4x+5)'.objectify
+       result = exp.combine_two_brackets
+       puts write_test(result)
+      #  expect(result).to eq [
+      #    '(2x+3)(4x+5)'.objectify,
+      #    '2x(4x+5)+3(4x+5)'.objectify,
+      #    '8x^2+10x+12x+15'.objectify,
+      #    '8x^2+22x+15'.objectify
+      #  ]
      end
 
     #  it 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do

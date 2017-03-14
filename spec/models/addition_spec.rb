@@ -39,121 +39,121 @@ describe Addition do
   # end
 
 
-  xdescribe '#simplify_add_m_forms' do
+  describe '#simplify_add_m_forms' do
 
     it '#simplifies 3xy+2xy+xyz'do
-    addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
-    result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp('x','y','z'),mtp(5,'x','y'))
+      addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
+      result = addition.combine_similar_terms
+      expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
     end
     #
-    it '#simplifies 3xy+yx+x^2' do
-    addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
-    result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(pow('x',2)),mtp(4,'x','y'))
-    end
-
-    it '#simplifies x^2 + xy + yx + y^2' do
-    addition = add(mtp(pow('x',2)),mtp('x','y'),mtp('y','x'),mtp(pow('y',2)))
-    result = addition.simplify_add_m_forms
-    expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
-    end
-
-    it '#simplifies x^2 + x^2 + y^2' do
-      addition = add(mtp(pow('x',2)),mtp(pow('x',2)),mtp(pow('y',2)))
-      result = addition.simplify_add_m_forms
-      expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
-    end
-
-    xit '#simplifies x^2 + 4x + 4 + (x-2)' do
-      addition = 'x^2 + 4x + 4 + x-2'.objectify.standardize_add_m_form
-      result = addition.simplify_add_m_forms.flatit
-      expect(result).to eq 'x^2 + 5x + 2'.objectify
-    end
-
-    it 'simplifies 25-10y+3y' do
-      addition = add(mtp(25),mtp(-10,'y'),mtp(3,'y'))
-      result = addition.simplify_add_m_forms
-      expect(result).to eq add(mtp(-7,'y'),mtp(25))
-    end
+    # it '#simplifies 3xy+yx+x^2' do
+    # addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
+    # result = addition.simplify_add_m_forms
+    # expect(result).to eq add(mtp(pow('x',2)),mtp(4,'x','y'))
+    # end
+    #
+    # it '#simplifies x^2 + xy + yx + y^2' do
+    # addition = add(mtp(pow('x',2)),mtp('x','y'),mtp('y','x'),mtp(pow('y',2)))
+    # result = addition.simplify_add_m_forms
+    # expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
+    # end
+    #
+    # it '#simplifies x^2 + x^2 + y^2' do
+    #   addition = add(mtp(pow('x',2)),mtp(pow('x',2)),mtp(pow('y',2)))
+    #   result = addition.simplify_add_m_forms
+    #   expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
+    # end
+    #
+    # xit '#simplifies x^2 + 4x + 4 + (x-2)' do
+    #   addition = 'x^2 + 4x + 4 + x-2'.objectify.standardize_add_m_form
+    #   result = addition.simplify_add_m_forms.flatit
+    #   expect(result).to eq 'x^2 + 5x + 2'.objectify
+    # end
+    #
+    # it 'simplifies 25-10y+3y' do
+    #   addition = add(mtp(25),mtp(-10,'y'),mtp(3,'y'))
+    #   result = addition.simplify_add_m_forms
+    #   expect(result).to eq add(mtp(-7,'y'),mtp(25))
+    # end
   end
 
-  describe '#simplify_brackets' do
-    it 'simplifies (x+y)(a+b) + (w+z)(c+d)' do
-      exp = add(mtp(add('x','y'),add('a','b')),mtp(add('w','z'),add('c','d')))
-      result = exp.simplify_brackets
-      expect(result.last).to eq '(ax+bx+ay+by)+(cw+dw+cz+dz)'.objectify
-    end
-
-    it 'leaves x' do
-      exp = add('x')
-      result = exp.simplify_brackets
-      expect(result).to eq add('x')
-    end
-
-    it 'simplifies x(x+y) + y' do
-      exp = add(mtp('x',add('x','y')),'y')
-      result = exp.simplify_brackets
-      expect(result.last).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
-
-      expect(result[0]).to eq add(mtp('x',add('x','y')),'y')
-      expect(result[1]).to eq add(mtp(add('x'),add('x','y')),'y')
-      expect(result[2]).to eq add(add(mtp(mtp('x'),mtp('x')),mtp(mtp('x'),mtp('y'))),'y')
-      expect(result[3]).to eq add(add(mtp(mtp('x','x')),mtp('x','y')),'y')
-      expect(result[4]).to eq add(add(mtp(mtp(pow('x',1),pow('x',1))),mtp('x','y')),'y')
-      expect(result[5]).to eq add(add(mtp(pow('x',add(1,1))),mtp('x','y')),'y')
-      expect(result[6]).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
-    end
-  end
-
-  describe '#order_similar_terms' do
-    it '2x + 3a + 4x -> 2x + 4x + 3a' do
-      exp = add(mtp(2,'x'),mtp(3,'a'),mtp(4,'x'))
-      result = exp.order_similar_terms
-      expect(result).to eq add(mtp(2,'x'),mtp(4,'x'),mtp(3,'a'))
-    end
-
-    it '2xy^3+3a+b^3+4xy^3 -> ....' do
-      exp = add(mtp(2,'x',pow('y',3)),mtp(3,'a'),mtp(pow('b',3)),mtp(4,'x',pow('y',3)),mtp(4,'a'),mtp(pow('b',5)))
-      result = exp.order_similar_terms
-      expect(result).to eq add(mtp(2,'x',pow('y',3)),mtp(4,'x',pow('y',3)),mtp(3,'a'),mtp(4,'a'),mtp(pow('b',3)),mtp(pow('b',5)))
-    end
-
-  end
-
-  describe '#flatit' do
-    it 'flats x+(x+xy) + ((x+y)+xz)' do
-      exp = add('x',add('x',mtp('x','y')),add(add('x','y'),mtp('x','z')))
-      result = exp.flatit
-      expect(result).to eq add('x','x',mtp('x','y'),'x','y',mtp('x','z'))
-    end
-  end
-
-  describe '#split_num' do
-    it 'splits (x^2+6x+7)/5' do
-      exp = frac(add(pow('x',2),mtp(6,'x'),7),5)
-      result = exp.split_num
-
-      expect(result).to eq add(frac(pow('x',2),5),frac(mtp(6,'x'),5),frac(7,5))
-
-    end
-  end
-
-  describe '#elim_common_factors' do
-    it 'simplifies x(x+1)/x' do
-      exp = frac(mtp('x',add('x',1)),'x')
-      result = exp.elim_common_factors
-
-      expect(result).to eq add('x',1)
-    end
-
-    it 'simplifies (x-1)yz/xz(y-1)' do
-      exp = frac(mtp(add('x',-1),'y','z'),mtp('x','z',add('y',-1)))
-      result = exp.elim_common_factors
-      expect(result).to eq frac(mtp(add('x',-1),'y'),mtp('x',add('y',-1)))
-    end
-  end
-
+  # describe '#simplify_brackets' do
+  #   it 'simplifies (x+y)(a+b) + (w+z)(c+d)' do
+  #     exp = add(mtp(add('x','y'),add('a','b')),mtp(add('w','z'),add('c','d')))
+  #     result = exp.simplify_brackets
+  #     expect(result.last).to eq '(ax+bx+ay+by)+(cw+dw+cz+dz)'.objectify
+  #   end
+  #
+  #   it 'leaves x' do
+  #     exp = add('x')
+  #     result = exp.simplify_brackets
+  #     expect(result).to eq add('x')
+  #   end
+  #
+  #   it 'simplifies x(x+y) + y' do
+  #     exp = add(mtp('x',add('x','y')),'y')
+  #     result = exp.simplify_brackets
+  #     expect(result.last).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
+  #
+  #     expect(result[0]).to eq add(mtp('x',add('x','y')),'y')
+  #     expect(result[1]).to eq add(mtp(add('x'),add('x','y')),'y')
+  #     expect(result[2]).to eq add(add(mtp(mtp('x'),mtp('x')),mtp(mtp('x'),mtp('y'))),'y')
+  #     expect(result[3]).to eq add(add(mtp(mtp('x','x')),mtp('x','y')),'y')
+  #     expect(result[4]).to eq add(add(mtp(mtp(pow('x',1),pow('x',1))),mtp('x','y')),'y')
+  #     expect(result[5]).to eq add(add(mtp(pow('x',add(1,1))),mtp('x','y')),'y')
+  #     expect(result[6]).to eq add(add(mtp(pow('x',2)),mtp('x','y')),'y')
+  #   end
+  # end
+  #
+  # describe '#order_similar_terms' do
+  #   it '2x + 3a + 4x -> 2x + 4x + 3a' do
+  #     exp = add(mtp(2,'x'),mtp(3,'a'),mtp(4,'x'))
+  #     result = exp.order_similar_terms
+  #     expect(result).to eq add(mtp(2,'x'),mtp(4,'x'),mtp(3,'a'))
+  #   end
+  #
+  #   it '2xy^3+3a+b^3+4xy^3 -> ....' do
+  #     exp = add(mtp(2,'x',pow('y',3)),mtp(3,'a'),mtp(pow('b',3)),mtp(4,'x',pow('y',3)),mtp(4,'a'),mtp(pow('b',5)))
+  #     result = exp.order_similar_terms
+  #     expect(result).to eq add(mtp(2,'x',pow('y',3)),mtp(4,'x',pow('y',3)),mtp(3,'a'),mtp(4,'a'),mtp(pow('b',3)),mtp(pow('b',5)))
+  #   end
+  #
+  # end
+  #
+  # describe '#flatit' do
+  #   it 'flats x+(x+xy) + ((x+y)+xz)' do
+  #     exp = add('x',add('x',mtp('x','y')),add(add('x','y'),mtp('x','z')))
+  #     result = exp.flatit
+  #     expect(result).to eq add('x','x',mtp('x','y'),'x','y',mtp('x','z'))
+  #   end
+  # end
+  #
+  # describe '#split_num' do
+  #   it 'splits (x^2+6x+7)/5' do
+  #     exp = frac(add(pow('x',2),mtp(6,'x'),7),5)
+  #     result = exp.split_num
+  #
+  #     expect(result).to eq add(frac(pow('x',2),5),frac(mtp(6,'x'),5),frac(7,5))
+  #
+  #   end
+  # end
+  #
+  # describe '#elim_common_factors' do
+  #   it 'simplifies x(x+1)/x' do
+  #     exp = frac(mtp('x',add('x',1)),'x')
+  #     result = exp.elim_common_factors
+  #
+  #     expect(result).to eq add('x',1)
+  #   end
+  #
+  #   it 'simplifies (x-1)yz/xz(y-1)' do
+  #     exp = frac(mtp(add('x',-1),'y','z'),mtp('x','z',add('y',-1)))
+  #     result = exp.elim_common_factors
+  #     expect(result).to eq frac(mtp(add('x',-1),'y'),mtp('x',add('y',-1)))
+  #   end
+  # end
+  #
   describe '#~' do
     it 'returns true for 3+4 and 4+3' do
       exp_1 = add(3, 4)
@@ -179,6 +179,6 @@ describe Addition do
       expect(exp_1.~(exp_2)).to be false
     end
   end
-
-
+  #
+  #
 end

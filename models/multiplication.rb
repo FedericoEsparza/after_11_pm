@@ -21,19 +21,9 @@ class Multiplication
     exp.class == self.class && args == exp.args
   end
 
-  def ~(exp)  #multiplicative and additive equivalence
+  def ~(exp)
     return false unless exp.class == self.class
-    return false unless args.length == exp.args.length
-
-    args.each do |arg|
-      return false unless exp.args.any? { |exp_arg| arg.~(exp_arg) }
-    end
-
-    exp.args.each do |exp_arg|
-      return false unless args.any? { |arg| exp_arg.~(arg) }
-    end
-
-    true
+    self.args.~(exp.args)
   end
 
   def standardise_m_form
@@ -382,9 +372,13 @@ class Multiplication
   end
 
   def combine_two_brackets
-    copy = self.copy
+    spare = self.copy
+    new_brackets = []
+    spare.args.first.args.each do |factor|
+      new_brackets << mtp(factor,spare.args.last).flatit
+    end
 
-    
+    copy = self.copy
     new_args = []
     copy.args.first.args.each_with_index do |a|
       copy.args.last.args.each_with_index do |b|
@@ -398,28 +392,21 @@ class Multiplication
 
     new_add = []
 
-    new_args.first.each_with_index do |a,i|
-      c = []
-      new_args.each_with_index do |b,j|
-        c << new_args[j][i]
-      end
-      new_add << add(c)
-    end
-    # new_add << new_add.last.sort_elements
+    new_args = new_args.transpose
+    new_add = new_args.map{|a| add(a)}
+
     new_step = new_add.last.copy
     new_step.args.each do |m|
       m.m_form_sort
     end
     new_add << new_step
 
-    # 3ax^2 + 4y + 2ax^2 + 5y
-    # 3ax^2 + 2ax^2 + 4y  + 5y
-
+    new_add << new_add.last.order_similar_terms
     new_add << new_add.last.simplify_add_m_forms
     new_add = delete_duplicate_steps(new_add)
     new_add.insert(0,self.copy)
     self.args = new_add[-1].args
-
+    new_add[1] = add(new_brackets)
     new_add.map { |step| step.flatten  }
   end
 

@@ -18,17 +18,7 @@ class Addition < Expression
 
   def ~(exp)
     return false unless exp.class == self.class
-    return false unless args.length == exp.args.length
-
-    args.each do |arg|
-      return false unless exp.args.any? { |exp_arg| arg.~(exp_arg) }
-    end
-
-    exp.args.each do |exp_arg|
-      return false unless args.any? { |arg| exp_arg.~(arg) }
-    end
-
-    true
+    self.args.~(exp.args)
   end
 
   def greater?(exp)
@@ -111,35 +101,54 @@ class Addition < Expression
     add(array.sort_elements)
   end
 
-  def simplify_add_m_forms
+  def combine_similar_terms
     copy = self.copy
-    factors = copy.select_variables.sort_elements
-    results = []
-    factors.each do |factor|
-      count = 0
-      for i in 0..copy.args.length-1
-        if copy.args[i].remove_coef.sort_elements==factor
-          count = count + copy.args[i].remove_exp
-        end
+    i = 0
+    j =0
+    while i < copy.args.length-1 && j <100
+      if copy.args[i].remove_coef.~(copy.args[i+1].remove_coef)
+        new_args = [(copy.args[i].remove_exp + copy.args[i+1].remove_exp)]
+        new_args += copy.args[i].remove_coef.copy
+        copy.args.delete_at(i+1)
+        copy.args.delete_at(i)
+        copy.args.insert(i,mtp(new_args))
+      else
+        i += 1
       end
-      if count != 0
-        new_mtp_args = []
-        factor.each{|a| new_mtp_args << a}
-        # if count != 1
-          new_mtp_args = new_mtp_args.insert(0,count)
-        # elsif new_mtp_args = []
-        #   new_mtp_args = 1
-        # end
-        new_mtp = mtp(new_mtp_args).evaluate_nums
-        results << new_mtp
-      end
+      j += 1
     end
-    if results.length == 0
-      0
-    else
-      add(results)
-    end
+    copy
   end
+
+  # def simplify_add_m_forms
+  #   copy = self.copy
+  #   factors = copy.select_variables.sort_elements
+  #   results = []
+  #   factors.each do |factor|
+  #     count = 0
+  #     for i in 0..copy.args.length-1
+  #       if copy.args[i].remove_coef.sort_elements==factor
+  #         count = count + copy.args[i].remove_exp
+  #       end
+  #     end
+  #     if count != 0
+  #       new_mtp_args = []
+  #       factor.each{|a| new_mtp_args << a}
+  #       # if count != 1
+  #         new_mtp_args = new_mtp_args.insert(0,count)
+  #       # elsif new_mtp_args = []
+  #       #   new_mtp_args = 1
+  #       # end
+  #       new_mtp = mtp(new_mtp_args).evaluate_nums
+  #       results << new_mtp
+  #     end
+  #   end
+  #   if results.length == 0
+  #     0
+  #   else
+  #     add(results)
+  #   end
+  # end
 
   def evaluate_numeral
     args.inject(0){|r,e| r + e}

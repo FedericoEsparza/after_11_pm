@@ -92,6 +92,17 @@ class Array
       end
     end
 
+    def ~(array)
+      return false unless array.class == self.class && length == array.length
+      each do |e|
+        return false unless array.any? { |array_e| e.~(array_e) }
+      end
+      array.each do |array_e|
+        return false unless any? { |e| array_e.~(e) }
+      end
+      return true
+    end
+
     ##is no longer needed, will keep if wanted later
 
     # def find_common(array_2)
