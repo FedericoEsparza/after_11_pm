@@ -314,145 +314,101 @@ describe Multiplication do
        '6y'.objectify
      ]
     end
+
+    it 'simplifies 2x^2 3x' do
+     exp = mtp(2,pow('x',2),3,'x')
+     result = exp.simplify_product_of_m_forms
+    #  puts write_test(result)
+     expect(result).to eq [
+       '2x^23x'.objectify,
+       '6x^3'.objectify
+     ]
+    end
   end
 
   describe '#standardize m form' do
     it 'turns m(x,m(xy)) to m(m(x)m(xy))' do
-     exp = mtp('x',mtp('x','y'))
-     result = exp.standardise_m_form
-     expect(result).to eq mtp(mtp('x'),mtp('x','y'))
+      exp = mtp('x',mtp('x','y'))
+      result = exp.standardise_m_form
+      expect(result).to eq mtp(mtp('x'),mtp('x','y'))
     end
 
     it 'turns m(x^2,y^3,m(x^2y))' do
-     exp = mtp(pow('x',2),pow('y',3),mtp(pow('x',2),'y'))
-     result = exp.standardise_m_form
+      exp = mtp(pow('x',2),pow('y',3),mtp(pow('x',2),'y'))
+      result = exp.standardise_m_form
       expect(result).to eq mtp(mtp(pow('x',2)),mtp(pow('y',3)),mtp(pow('x',2),'y'))
     end
   end
- #
- #  xdescribe '#combine_two_brackets' do
- #   it 'combines (x+y)(x+y)' do
- #     exp = mtp(add('x','y'),add('x','y'))
- #     result = exp.combine_two_brackets
- #     expect(result.last).to eq add(mtp(pow('x',2)),mtp('x','y',2),mtp(pow('y',2)))
- #   end
- # end
- #
- #
- #   xdescribe '#combine_two_brackets' do
- #
- #     it 'combines (x+y)(x+y)' do
- #       exp = mtp(add('x','y'),add('x','y'))
- #       result = exp.combine_two_brackets
- #       expect(exp.args).to eq [mtp(pow('x',2)),mtp('x','y',2),mtp(pow('y',2))]
- #       expect(result[0]).to eq mtp(add('x','y'),add('x','y'))
- #
- #       expect(result[1]).to eq add(
- #         mtp(mtp('x'),mtp('x')),
- #         mtp(mtp('x'),mtp('y')),
- #         mtp(mtp('y'),mtp('x')),
- #         mtp(mtp('y'),mtp('y'))
- #        )
- #
- #        expect(result[2]).to eq add(
- #          mtp(mtp('x','x')),
- #          mtp('x','y'),
- #          mtp('y','x'),
- #          mtp(mtp('y','y'))
- #        )
- #
- #        expect(result[3]).to eq add(
- #          mtp(mtp(pow('x',1),pow('x',1))),
- #          mtp('x','y'),
- #          mtp('y','x'),
- #          mtp(mtp(pow('y',1),pow('y',1)))
- #        )
- #
- #        expect(result[4]).to eq add(
- #          mtp(pow('x',add(1,1))),
- #          mtp('x','y'),
- #          mtp('y','x'),
- #          mtp(pow('y',add(1,1)))
- #        )
- #
- #        expect(result[5]).to eq add(
- #          mtp(pow('x',2)),
- #          mtp('x','y'),
- #          mtp('y','x'),
- #          mtp(pow('y',2))
- #        )
- #
- #        expect(result[6]).to eq add(
- #          mtp(pow('x',2)),
- #          mtp('x','y'),
- #          mtp('x','y'),
- #          mtp(pow('y',2))
- #        )
- #
- #        expect(result[7]).to eq add(
- #          mtp(pow('x',2)),
- #          mtp('x','y',2),
- #          mtp(pow('y',2))
- #        )
- #
- #     end
- #
- #     it 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
- #      exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
- #      result = exp.combine_two_brackets
- #      expect(exp.args).to eq [
- #        mtp(pow('x',6),pow('y',3),-24),
- #        mtp(pow('x',5),'y',18),
- #        mtp(pow('x',4),pow('y',9),-20),
- #        mtp(pow('x',3),pow('y',7),15)
- #      ]
- #
- #      expect(result[0]).to eq mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
- #
- #      expect(result[1]).to eq add(
- #        mtp(mtp(3,pow('x',2),pow('y',3)),mtp(5,'x',pow('y',4))),
- #        mtp(mtp(3,pow('x',2),pow('y',3)),mtp(6,pow('x',3),pow('y',-2))),
- #        mtp(mtp(-4,pow('x',3),pow('y',5)),mtp(5,'x',pow('y',4))),
- #        mtp(mtp(-4,pow('x',3),pow('y',5)),mtp(6,pow('x',3),pow('y',-2)))
- #      )
- #
- #      expect(result[2]).to eq add(
- #        mtp(mtp(3,5),mtp(pow('x',2),'x'),mtp(pow('y',3),pow('y',4))),
- #        mtp(mtp(3,6),mtp(pow('x',2),pow('x',3)),mtp(pow('y',3),pow('y',-2))),
- #        mtp(mtp(-4,5),mtp(pow('x',3),'x'),mtp(pow('y',5),pow('y',4))),
- #        mtp(mtp(-4,6),mtp(pow('x',3),pow('x',3)),mtp(pow('y',5),pow('y',-2)))
- #      )
- #
- #      expect(result[3]).to eq add(
- #        mtp(15,mtp(pow('x',2),pow('x',1)),pow('y',add(3,4))),
- #        mtp(18,pow('x',add(2,3)),pow('y',add(3,-2))),
- #        mtp(-20,mtp(pow('x',3),pow('x',1)),pow('y',add(5,4))),
- #        mtp(-24,pow('x',add(3,3)),pow('y',add(5,-2)))
- #      )
- #
- #      expect(result[4]).to eq add(
- #        mtp(15,pow('x',add(2,1)),pow('y',7)),
- #        mtp(18,pow('x',5),pow('y',1)),
- #        mtp(-20,pow('x',add(3,1)),pow('y',9)),
- #        mtp(-24,pow('x',6),pow('y',3))
- #      )
- #
- #      expect(result[5]).to eq add(
- #        mtp(15,pow('x',3),pow('y',7)),
- #        mtp(18,pow('x',5),'y'),
- #        mtp(-20,pow('x',4),pow('y',9)),
- #        mtp(-24,pow('x',6),pow('y',3))
- #      )
- #
- #      expect(result[6]).to eq add(
- #        mtp(pow('x',6),pow('y',3),-24),
- #        mtp(pow('x',5),'y',18),
- #        mtp(pow('x',4),pow('y',9),-20),
- #        mtp(pow('x',3),pow('y',7),15)
- #      )
- #     end
- #
- #   end
+
+  describe '#combine_two_brackets' do
+     it 'combines (2x+3)(4x+5)' do
+       exp = '(2x+3)(4x+5)'.objectify
+       result = exp.combine_two_brackets
+      #  puts write_test(result)
+       expect(result).to eq [
+         '(2x+3)(4x+5)'.objectify,
+         '(2x)(4x)+(2x)5+3(4x)+3\times5'.objectify,
+         '8x^2+10x+12x+15'.objectify,
+         '8x^2+22x+15'.objectify
+       ]
+     end
+
+    #  it 'combines (3x^2y^3-4x^3y^5)(5xy^4+6x^3y^-2)'do
+    #   exp = mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
+    #   result = exp.combine_two_brackets
+    #   expect(exp.args).to eq [
+    #     mtp(pow('x',6),pow('y',3),-24),
+    #     mtp(pow('x',5),'y',18),
+    #     mtp(pow('x',4),pow('y',9),-20),
+    #     mtp(pow('x',3),pow('y',7),15)
+    #   ]
+     #
+    #   expect(result[0]).to eq mtp(add(mtp(3,pow('x',2),pow('y',3)),mtp(-4,pow('x',3),pow('y',5))),add(mtp(5,'x',pow('y',4)),mtp(6,pow('x',3),pow('y',-2))))
+     #
+    #   expect(result[1]).to eq add(
+    #     mtp(mtp(3,pow('x',2),pow('y',3)),mtp(5,'x',pow('y',4))),
+    #     mtp(mtp(3,pow('x',2),pow('y',3)),mtp(6,pow('x',3),pow('y',-2))),
+    #     mtp(mtp(-4,pow('x',3),pow('y',5)),mtp(5,'x',pow('y',4))),
+    #     mtp(mtp(-4,pow('x',3),pow('y',5)),mtp(6,pow('x',3),pow('y',-2)))
+    #   )
+     #
+    #   expect(result[2]).to eq add(
+    #     mtp(mtp(3,5),mtp(pow('x',2),'x'),mtp(pow('y',3),pow('y',4))),
+    #     mtp(mtp(3,6),mtp(pow('x',2),pow('x',3)),mtp(pow('y',3),pow('y',-2))),
+    #     mtp(mtp(-4,5),mtp(pow('x',3),'x'),mtp(pow('y',5),pow('y',4))),
+    #     mtp(mtp(-4,6),mtp(pow('x',3),pow('x',3)),mtp(pow('y',5),pow('y',-2)))
+    #   )
+     #
+    #   expect(result[3]).to eq add(
+    #     mtp(15,mtp(pow('x',2),pow('x',1)),pow('y',add(3,4))),
+    #     mtp(18,pow('x',add(2,3)),pow('y',add(3,-2))),
+    #     mtp(-20,mtp(pow('x',3),pow('x',1)),pow('y',add(5,4))),
+    #     mtp(-24,pow('x',add(3,3)),pow('y',add(5,-2)))
+    #   )
+     #
+    #   expect(result[4]).to eq add(
+    #     mtp(15,pow('x',add(2,1)),pow('y',7)),
+    #     mtp(18,pow('x',5),pow('y',1)),
+    #     mtp(-20,pow('x',add(3,1)),pow('y',9)),
+    #     mtp(-24,pow('x',6),pow('y',3))
+    #   )
+     #
+    #   expect(result[5]).to eq add(
+    #     mtp(15,pow('x',3),pow('y',7)),
+    #     mtp(18,pow('x',5),'y'),
+    #     mtp(-20,pow('x',4),pow('y',9)),
+    #     mtp(-24,pow('x',6),pow('y',3))
+    #   )
+     #
+    #   expect(result[6]).to eq add(
+    #     mtp(pow('x',6),pow('y',3),-24),
+    #     mtp(pow('x',5),'y',18),
+    #     mtp(pow('x',4),pow('y',9),-20),
+    #     mtp(pow('x',3),pow('y',7),15)
+    #   )
+    #  end
+
+   end
  #
  #   xdescribe '#combine n brackets' do
  #
