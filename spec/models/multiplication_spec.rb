@@ -358,6 +358,7 @@ describe Multiplication do
       exp = '(3+2x)(4x+5)'.objectify
       result = exp.combine_two_brackets
       #  puts write_test(result)
+
       expect(result).to eq [
        '(3+2x)(4x+5)'.objectify,
        '3(4x+5)+2x(4x+5)'.objectify,

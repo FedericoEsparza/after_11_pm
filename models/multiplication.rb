@@ -374,43 +374,30 @@ class Multiplication
   end
 
   def combine_two_brackets
+    copy = self.copy
+    new_args = []
+    copy.args.first.args.each_with_index do |a|
+      copy.args.last.args.each_with_index do |b|
+        new_args << mtp(a,b)
+      end
+    end
+    new_args = new_args.map {|a| a.simplify_product_of_m_forms}
+    new_args = new_args.equalise_array_lengths.transpose
+    expansion_steps = new_args.map{|a| add(a)}
+
+    ordered_terms = expansion_steps.last.order_similar_terms
+    combined_terms = ordered_terms.combine_similar_terms
+
     spare = self.copy
     new_brackets = []
     spare.args.first.args.each do |factor|
       new_brackets << mtp(factor,spare.args.last).flatit
     end
+    expansion_steps[0] = add(new_brackets)
 
-    copy = self.copy
-    new_args = []
-    copy.args.first.args.each_with_index do |a|
-      copy.args.last.args.each_with_index do |b|
-        c = mtp(a,b)
-        new_args << c
-        end
-    end
-    # p new_args
-    new_args = new_args.map {|a| a.simplify_product_of_m_forms}
-    new_args.equalise_array_lengths
-
-    new_add = []
-
-    new_args = new_args.transpose
-    new_add = new_args.map{|a| add(a)}
-
-    # new_step = new_add.last.copy
-    # new_step.args.each do |m|
-    #   m.m_form_sort
-    # end
-    # new_add << new_step
-
-    new_add << new_add.last.order_similar_terms
-    new_add << new_add.last.combine_similar_terms
-    new_add = delete_duplicate_steps(new_add)
-    new_add.insert(0,self.copy)
-    self.args = new_add[-1].args
-    new_add[1] = add(new_brackets)
-    new_add.map { |step| conventionalise_one_times(step).flatten  }
-
+    result = [self.copy] + expansion_steps + [ordered_terms, combined_terms]
+    result.map!{ |step| conventionalise_one_times(step).flatten  }
+    result = delete_duplicate_steps(result)
   end
 
   def sort_elements
