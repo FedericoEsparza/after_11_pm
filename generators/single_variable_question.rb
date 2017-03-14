@@ -69,7 +69,7 @@ class SingleVariableQuestion
   end
 
   def _next_step_ops(left_side)
-    return [[:add, :sbt], [:mtp, :div]].sample.sample if GeneralUtilities::depth(left_side) == 1
+    return [[:add, :sbt], [:mtp, :div]].sample.sample if GeneralUtilities::depth(left_side) == 0
     last_ops = left_side.class
     has_div = GeneralUtilities::includes?(Division, object: left_side)
 

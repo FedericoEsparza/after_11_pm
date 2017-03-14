@@ -40,7 +40,7 @@ module GeneralUtilities
     return 0 if exp.is_a?(String)
     array = exp.is_a?(Array) ? exp : tree_to_array(exp)
     comparison = array.dup
-    depth = 1
+    depth = 0
 
     until comparison == array.flatten
       depth+=1
@@ -53,6 +53,7 @@ module GeneralUtilities
   # RECURSION
   def includes?(object_class, object: nil)
     object = object || self
+    return true if object.is_a?(object_class)
 
     if object.respond_to?(:args)
       object.args.any? do |arg|
