@@ -1,5 +1,5 @@
 describe Cosine do
-  describe 'setters for angle' do
+  describe '#angle=' do
     it 'setter for angle' do
       exp = cos(60)
       exp.angle = 70
@@ -28,6 +28,14 @@ describe Cosine do
 
     it 'evaluates cos(90) to 0' do
       expect(cos(90).evaluate_numeral).to eq 0.0
+    end
+  end
+
+  describe '#reverse_step' do
+    it 'call inverse function' do
+      exp = cos(60)
+      response = { ls: 60, rs: arccos(60) }
+      expect(exp.reverse_step(60)).to eq response
     end
   end
 

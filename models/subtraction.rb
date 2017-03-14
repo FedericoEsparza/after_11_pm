@@ -14,14 +14,7 @@ class Subtraction
   end
 
   def copy
-    new_args = args.inject([]) do |r,e|
-      if e.is_a?(string) || numerical?(e)
-        r << e
-      else
-        r << e.copy
-      end
-    end
-    sbt(new_args)
+    DeepClone.clone self
   end
 
   def ==(exp)

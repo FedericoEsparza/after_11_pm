@@ -1,90 +1,90 @@
 describe SimultaneousEquation do
-  # context '#extract_coefficient' do
-  #   it "extract 3 and 5 from 3x+5y=10" do
-  #     equation = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)
-  #     # p mtp(3, 'x').fetch(object: :numeric)
-  #     response = { 'x' => 3, 'y' => 5 }
-  #     exp = described_class.new(equation, equation)
-  #     expect(exp.extract_coefficient(equation)).to eq response
-  #   end
-  #
-  #   it "extract 3 and 1 from 3x+y=10" do
-  #     equation = eqn(add(mtp(3, 'x'), 'y'), 10)
-  #     # p mtp(3, 'x').fetch(object: :numeric)
-  #     response = { 'x' => 3, 'y' => 1 }
-  #     exp = described_class.new(equation, equation)
-  #     expect(exp.extract_coefficient(equation)).to eq response
-  #   end
-  # end
-  #
-  # context '#determine_multiplier' do
-  #   it "return instruction on which equation to mtp by what factor example 1" do
-  #     equation_1 = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)
-  #     equation_2 = eqn(sbt(mtp(6, 'x'), mtp(2, 'y')), 5)
-  #     exp = described_class.new(equation_1, equation_2)
-  #     response = { eq_1: 2 }
-  #     expect(exp.determine_multiplier).to eq response
-  #   end
-  #
-  #   it "return instruction on which equation to mtp by what factor example 2" do
-  #     equation_1 = eqn(add(mtp(4, 'x'), mtp(5, 'y')), 10)
-  #     equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
-  #     exp = described_class.new(equation_1, equation_2)
-  #     response = { eq_2: 2 }
-  #     expect(exp.determine_multiplier).to eq response
-  #   end
-  #
-  #   it "return instruction on which equation to mtp by what factor example 3" do
-  #     equation_1 = eqn(add(mtp(5, 'x'), mtp(2, 'y')), 10)
-  #     equation_2 = eqn(sbt(mtp(2, 'x'), mtp(8, 'y')), 5)
-  #     exp = described_class.new(equation_1, equation_2)
-  #     response = { eq_1: 4 }
-  #     expect(exp.determine_multiplier).to eq response
-  #   end
-  #
-  #   it "return instruction on which equation to mtp by what factor example 4" do
-  #     equation_1 = eqn(add(mtp(5, 'x'), mtp(50, 'y')), 10)
-  #     equation_2 = eqn(sbt(mtp(2, 'x'), mtp(5, 'y')), 5)
-  #     exp = described_class.new(equation_1, equation_2)
-  #     response = { eq_2: 10 }
-  #     expect(exp.determine_multiplier).to eq response
-  #   end
-  #
-  #   context 'lcm' do
-  #     it "return instruction on which equation to mtp by what factor example 1" do
-  #       equation_1 = eqn(add(mtp(3, 'x'), mtp(7, 'y')), 10)
-  #       equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
-  #       exp = described_class.new(equation_1, equation_2)
-  #       response = { eq_1: 2, eq_2: 3 }
-  #       expect(exp.determine_multiplier).to eq response
-  #     end
-  #
-  #     it "return instruction on which equation to mtp by what factor example 2" do
-  #       equation_1 = eqn(add(mtp(3, 'x'), mtp(7, 'y')), 10)
-  #       equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
-  #       exp = described_class.new(equation_1, equation_2)
-  #       response = { eq_1: 2, eq_2: 3 }
-  #       expect(exp.determine_multiplier).to eq response
-  #     end
-  #
-  #     it "return instruction on which equation to mtp by what factor example 3" do
-  #       equation_1 = eqn(add(mtp(11, 'x'), mtp(7, 'y')), 10)
-  #       equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
-  #       exp = described_class.new(equation_1, equation_2)
-  #       response = { eq_1: 2, eq_2: 7 }
-  #       expect(exp.determine_multiplier).to eq response
-  #     end
-  #
-  #     it "return instruction on which equation to mtp by what factor example 4" do
-  #       equation_1 = eqn(add(mtp(4, 'x'), mtp(27, 'y')), 10)
-  #       equation_2 = eqn(sbt(mtp(6, 'x'), mtp(2, 'y')), 5)
-  #       exp = described_class.new(equation_1, equation_2)
-  #       response = { eq_1: 3, eq_2: 2 }
-  #       expect(exp.determine_multiplier).to eq response
-  #     end
-  #   end
-  # end
-  #
+  context '#extract_coefficient' do
+    it "extract 3 and 5 from 3x+5y=10" do
+      equation = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)
+      # p mtp(3, 'x').fetch(object: :numeric)
+      response = { 'x' => 3, 'y' => 5 }
+      exp = described_class.new(equation, equation)
+      expect(exp.extract_coefficient(equation)).to eq response
+    end
+
+    it "extract 3 and 1 from 3x+y=10" do
+      equation = eqn(add(mtp(3, 'x'), 'y'), 10)
+      # p mtp(3, 'x').fetch(object: :numeric)
+      response = { 'x' => 3, 'y' => 1 }
+      exp = described_class.new(equation, equation)
+      expect(exp.extract_coefficient(equation)).to eq response
+    end
+  end
+
+  context '#determine_multiplier' do
+    it "return instruction on which equation to mtp by what factor example 1" do
+      equation_1 = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)
+      equation_2 = eqn(sbt(mtp(6, 'x'), mtp(2, 'y')), 5)
+      exp = described_class.new(equation_1, equation_2)
+      response = { eq_1: 2 }
+      expect(exp.determine_multiplier).to eq response
+    end
+
+    it "return instruction on which equation to mtp by what factor example 2" do
+      equation_1 = eqn(add(mtp(4, 'x'), mtp(5, 'y')), 10)
+      equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
+      exp = described_class.new(equation_1, equation_2)
+      response = { eq_2: 2 }
+      expect(exp.determine_multiplier).to eq response
+    end
+
+    it "return instruction on which equation to mtp by what factor example 3" do
+      equation_1 = eqn(add(mtp(5, 'x'), mtp(2, 'y')), 10)
+      equation_2 = eqn(sbt(mtp(2, 'x'), mtp(8, 'y')), 5)
+      exp = described_class.new(equation_1, equation_2)
+      response = { eq_1: 4 }
+      expect(exp.determine_multiplier).to eq response
+    end
+
+    it "return instruction on which equation to mtp by what factor example 4" do
+      equation_1 = eqn(add(mtp(5, 'x'), mtp(50, 'y')), 10)
+      equation_2 = eqn(sbt(mtp(2, 'x'), mtp(5, 'y')), 5)
+      exp = described_class.new(equation_1, equation_2)
+      response = { eq_2: 10 }
+      expect(exp.determine_multiplier).to eq response
+    end
+
+    context 'lcm' do
+      it "return instruction on which equation to mtp by what factor example 1" do
+        equation_1 = eqn(add(mtp(3, 'x'), mtp(7, 'y')), 10)
+        equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
+        exp = described_class.new(equation_1, equation_2)
+        response = { eq_1: 2, eq_2: 3 }
+        expect(exp.determine_multiplier).to eq response
+      end
+
+      it "return instruction on which equation to mtp by what factor example 2" do
+        equation_1 = eqn(add(mtp(3, 'x'), mtp(7, 'y')), 10)
+        equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
+        exp = described_class.new(equation_1, equation_2)
+        response = { eq_1: 2, eq_2: 3 }
+        expect(exp.determine_multiplier).to eq response
+      end
+
+      it "return instruction on which equation to mtp by what factor example 3" do
+        equation_1 = eqn(add(mtp(11, 'x'), mtp(7, 'y')), 10)
+        equation_2 = eqn(sbt(mtp(2, 'x'), mtp(2, 'y')), 5)
+        exp = described_class.new(equation_1, equation_2)
+        response = { eq_1: 2, eq_2: 7 }
+        expect(exp.determine_multiplier).to eq response
+      end
+
+      it "return instruction on which equation to mtp by what factor example 4" do
+        equation_1 = eqn(add(mtp(4, 'x'), mtp(27, 'y')), 10)
+        equation_2 = eqn(sbt(mtp(6, 'x'), mtp(2, 'y')), 5)
+        exp = described_class.new(equation_1, equation_2)
+        response = { eq_1: 3, eq_2: 2 }
+        expect(exp.determine_multiplier).to eq response
+      end
+    end
+  end
+
   # context '#generate_solution' do
   #   xit "" do
   #     equation_1 = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)
@@ -100,24 +100,12 @@ describe SimultaneousEquation do
   #     equation_2 = eqn(add(mtp(-3, 'x'), mtp(-2, 'y')), -36)
   #     exp = described_class.new(equation_1, equation_2)
   #     response = 1
-  #     # p exp.generate_solution[2].ls.flatit.simplify_add_m_forms
-  #     # p exp.generate_solution.last.ls.expand.last.simplify_add_m_forms.latex
-  #     # puts exp.generate_solution.last.latex
-  #     p exp.generate_solution[:steps][4]
+  #     p exp.generate_solution[:steps]
   #     expect(exp.generate_solution).to eq response
   #   end
   # end
 
   context '#solution_latex' do
-    # xit "" do
-    #   equation_1 = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)
-    #   equation_2 = eqn(sbt(mtp(6, 'x'), mtp(2, 'y')), 5)
-    #   exp = described_class.new(equation_1, equation_2)
-    #   response = 1
-    #   puts exp.generate_solution[1]
-    #   expect(exp.generate_solution).to eq response
-    # end
-
     it "example 1" do
       equation_1 = eqn(add(mtp(2, 'x'), mtp(-3, 'y')), -15)
       equation_2 = eqn(add(mtp(-3, 'x'), mtp(-2, 'y')), -36)
@@ -144,13 +132,6 @@ describe SimultaneousEquation do
       equation_2 = eqn(add(mtp(-2, 'x'), mtp(3, 'y')), 4)
       exp = described_class.new(equation_2, equation_1)
       expect(exp.solution_latex).to eq "\\begin{align*}\n &&  &&  && -2x+3y&=4&(1)& &&  && \\\\\n &&  &&  && x+y&=13&(2)& &&  && \\\\[15pt]\n &&  && &(2)\\times3&3x+3y&=39&(3)& &&  && \\\\[15pt]\n &&  && &(1)-(3)&-2x+3y-\\left(3x+3y\\right)&=4-39 &&  && \\\\\n &&  &&  && -5x&=-35 &&  && \\\\\n &&  &&  && x&=\\displaystyle\\frac{-35}{-5} &&  && \\\\\n &&  &&  && x&=7 &&  && \\\\[15pt]\n &&  && &\\text{Sub}\\hspace{5pt} x\\hspace{5pt} \\text{into}\\hspace{5pt} (1)&-2\\times7+3y&=4 &&  && \\\\\n &&  &&  && 3y-14&=4 &&  && \\\\\n &&  &&  && 3y&=4+14 &&  && \\\\\n &&  &&  && 3y&=18 &&  && \\\\\n &&  &&  && y&=\\displaystyle\\frac{18}{3} &&  && \\\\\n &&  &&  && y&=6 &&  && \n\\end{align*}\n$ x=7, y=6 $"
-    end
-
-    xit 'example 5' do
-      eqns = [eqn(add(mtp(-6, 'x'), mtp(-7, 'y')), -45), eqn(add(mtp(-2, 'x'), mtp(-1, 'y')), -11)]
-      exp = described_class.new(eqns)
-      puts exp.solution_latex
-      # expect(exp.solution_latex).to eq 1
     end
   end
 

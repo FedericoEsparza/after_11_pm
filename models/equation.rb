@@ -33,17 +33,6 @@ class Equation
 
   def copy
     DeepClone.clone self
-    # if ls.is_a?(string) || numerical?(ls)
-    #   left_side = ls
-    # else
-    #   left_side = ls.copy
-    # end
-    # if rs.is_a?(string) || numerical?(rs)
-    #   right_side = rs
-    # else
-    #   right_side = rs.copy
-    # end
-    # eqn(left_side,right_side)
   end
 
   def ==(eqn)
@@ -247,17 +236,6 @@ class Equation
 
     eqn(left,right)
 
-  end
-
-  def solve_two_var_eqn
-    curr_steps = [self.copy]
-    i = 1
-    while (ls.is_a?(string) && numerical?(rs)) == false && i < 100 do
-      reverse_last_step(curr_steps)
-      evaluate_right_side(curr_steps)
-      i += 1
-    end
-    curr_steps
   end
 
   def reverse_last_step(curr_steps)

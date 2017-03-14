@@ -54,14 +54,6 @@ class Addition < Expression
 
   def copy
     DeepClone.clone(self)
-    # new_args = args.inject([]) do |r,e|
-    #   if e.is_a?(string) || numerical?(e)
-    #     r << e
-    #   else
-    #     r << e.copy
-    #   end
-    # end
-    # add(new_args)
   end
 
   def evaluate
@@ -142,7 +134,13 @@ class Addition < Expression
   end
 
   def evaluate_numeral
-    args.inject(0){|r,e| r + e}
+    args.inject(0){ |r, e|
+      if e.respond_to?(:evaluate_numeral)
+        r + e.evaluate_numeral
+      else
+        r + e
+      end
+    }
   end
 
   def contains?(subject)

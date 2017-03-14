@@ -18,4 +18,53 @@ module GeneralUtilities
       return exp
     end
   end
+
+  # RECURSION
+  def tree_to_array(exp=nil)
+    exp = exp || self
+    exp = exp.copy
+    exp = exp.flatten
+    depth = 0
+    args_array = []
+
+    if exp.respond_to?(:args)
+      exp.args.map do |arg|
+        tree_to_array(arg)
+      end
+    else
+      exp
+    end
+  end
+
+  def depth(exp)
+    return 0 if exp.is_a?(String)
+    array = exp.is_a?(Array) ? exp : tree_to_array(exp)
+    comparison = array.dup
+    depth = 0
+
+    until comparison == array.flatten
+      depth+=1
+      comparison = comparison.flatten(1)
+    end
+
+    depth
+  end
+
+  # RECURSION
+  def includes?(object_class, object: nil)
+    object = object || self
+    return true if object.is_a?(object_class)
+
+    if object.respond_to?(:args)
+      object.args.any? do |arg|
+        if arg.is_a?(object_class)
+          return true
+        else
+          includes?(object_class, object: arg)
+        end
+      end
+    else
+      false
+    end
+  end
 end

@@ -45,7 +45,15 @@ class Division
   end
 
   def evaluate_numeral
-    args[0]/args[1]
+    if args[0].respond_to?(:evaluate_numeral) && args[1].respond_to?(:evaluate_numeral)
+      args[0].evaluate_numeral/args[1].evaluate_numeral
+    elsif args[0].respond_to?(:evaluate_numeral)
+      args[0].evaluate_numeral/args[1]
+    elsif args[1].respond_to?(:evaluate_numeral)
+      args[0]/args[1].evaluate_numeral
+    else
+      args[0]/args[1]
+    end
   end
 #
   def contains?(subject)
