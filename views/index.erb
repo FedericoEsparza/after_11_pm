@@ -1,0 +1,31 @@
+<h3> Main UI </h3>
+
+<form action="/generate_paper", method="post">
+  <div class="form-group">
+    <label for="variable">Number of steps</label>
+    <input type="text" class="form-control" id="variable" name="variable">
+  </div>
+  <div class="form-group">
+    <label for="numberOfSteps">Number of steps</label>
+    <input type="text" class="form-control" id="numberOfSteps" name="number_of_steps">
+  </div>
+  <div class="form-group">
+    <label for="solutionMax">Solution Max</label>
+    <input type="text" class="form-control" id="solutionMax" name="solution_max">
+  </div>
+  <div class="checkbox">
+    <label for="negativeValues">
+      <input type="checkbox" id="negativeValue" name="negative_value" value="true"> Allow Negative Values
+    </label>
+  </div>
+  <div class="checkbox">
+    <label for="multipleDivision">
+      <input type="checkbox" id="multipleDivision" name="multiple_division" value="true"> Allow Multiple Division
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="numberOfSingleVarQuestions">Number of questions</label>
+    <input type="text" class="form-control" id="numberOfSingleVarQuestions" name="number_of_steps">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
