@@ -38,44 +38,24 @@ describe Addition do
   # end
   # end
 
-
-  describe '#simplify_add_m_forms' do
-
+  describe '#combine_similar_terms' do
     it '#simplifies 3xy+2xy+xyz'do
       addition = add(mtp(3,'x','y'),mtp(2,'x','y'),mtp('x','y','z'))
       result = addition.combine_similar_terms
       expect(result).to eq add(mtp(5,'x','y'),mtp('x','y','z'))
     end
-    #
-    # it '#simplifies 3xy+yx+x^2' do
-    # addition = add(mtp(3,'x','y'),mtp('y','x'),mtp(pow('x',2)))
-    # result = addition.simplify_add_m_forms
-    # expect(result).to eq add(mtp(pow('x',2)),mtp(4,'x','y'))
-    # end
-    #
-    # it '#simplifies x^2 + xy + yx + y^2' do
-    # addition = add(mtp(pow('x',2)),mtp('x','y'),mtp('y','x'),mtp(pow('y',2)))
-    # result = addition.simplify_add_m_forms
-    # expect(result).to eq add(mtp(pow('x',2)),mtp(2,'x','y'),mtp(pow('y',2)))
-    # end
-    #
-    # it '#simplifies x^2 + x^2 + y^2' do
-    #   addition = add(mtp(pow('x',2)),mtp(pow('x',2)),mtp(pow('y',2)))
-    #   result = addition.simplify_add_m_forms
-    #   expect(result).to eq add(mtp(2,pow('x',2)),mtp(pow('y',2)))
-    # end
-    #
-    # xit '#simplifies x^2 + 4x + 4 + (x-2)' do
-    #   addition = 'x^2 + 4x + 4 + x-2'.objectify.standardize_add_m_form
-    #   result = addition.simplify_add_m_forms.flatit
-    #   expect(result).to eq 'x^2 + 5x + 2'.objectify
-    # end
-    #
-    # it 'simplifies 25-10y+3y' do
-    #   addition = add(mtp(25),mtp(-10,'y'),mtp(3,'y'))
-    #   result = addition.simplify_add_m_forms
-    #   expect(result).to eq add(mtp(-7,'y'),mtp(25))
-    # end
+
+    it '#simplifies 2x^2+x^2-13x+5x-7+3' do
+      addition = '2x^2+x^2-13x+5x-7+3'.objectify.standardize_add_m_form
+      result = addition.combine_similar_terms
+      expect(result).to eq '3x^2-8x-4'.objectify
+    end
+
+    it '#simplifies \sin x+2\sin x' do
+      addition = '\sin x+2\sin x'.objectify.standardize_add_m_form
+      result = addition.combine_similar_terms
+      expect(result).to eq '3\sin x'.objectify
+    end
   end
 
   # describe '#simplify_brackets' do
@@ -154,31 +134,31 @@ describe Addition do
   #   end
   # end
   #
-  describe '#~' do
-    it 'returns true for 3+4 and 4+3' do
-      exp_1 = add(3, 4)
-      exp_2 = add(4,3)
-      expect(exp_1.~(exp_2)).to be true
-    end
-
-    it 'returns true for x^2 +3 +5' do
-      exp_1 = 'x^2+3+5'.objectify
-      exp_2 = '3+5+x^2'.objectify
-      expect(exp_1.~(exp_2)).to be true
-    end
-
-    it 'returns true for \sin x+y^2+z^{-3}' do
-      exp_1 = '\sin x+(y^2+z^{-3})'.objectify
-      exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
-      expect(exp_1.~(exp_2)).to be true
-    end
-
-    it 'returns false for \sin x+y^2+z^{-3}' do
-      exp_1 = '\sin x+y^2+z^{-3}'.objectify
-      exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
-      expect(exp_1.~(exp_2)).to be false
-    end
-  end
+  # describe '#~' do
+  #   it 'returns true for 3+4 and 4+3' do
+  #     exp_1 = add(3, 4)
+  #     exp_2 = add(4,3)
+  #     expect(exp_1.~(exp_2)).to be true
+  #   end
+  #
+  #   it 'returns true for x^2 +3 +5' do
+  #     exp_1 = 'x^2+3+5'.objectify
+  #     exp_2 = '3+5+x^2'.objectify
+  #     expect(exp_1.~(exp_2)).to be true
+  #   end
+  #
+  #   it 'returns true for \sin x+y^2+z^{-3}' do
+  #     exp_1 = '\sin x+(y^2+z^{-3})'.objectify
+  #     exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
+  #     expect(exp_1.~(exp_2)).to be true
+  #   end
+  #
+  #   it 'returns false for \sin x+y^2+z^{-3}' do
+  #     exp_1 = '\sin x+y^2+z^{-3}'.objectify
+  #     exp_2 = '(z^{-3}+y^2)+\sin x'.objectify
+  #     expect(exp_1.~(exp_2)).to be false
+  #   end
+  # end
   #
   #
 end

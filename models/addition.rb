@@ -29,19 +29,6 @@ class Addition < Expression
     end
   end
 
-  def standardize_add_m_form
-    new_args = []
-    args.each do |m|
-      if m.is_a?(Multiplication)
-        new_args << m
-      else
-        new_args << mtp(m)
-      end
-    end
-    add(new_args)
-  end
-
-
   def copy
     DeepClone.clone(self)
     # new_args = args.inject([]) do |r,e|
@@ -104,10 +91,9 @@ class Addition < Expression
   def combine_similar_terms
     copy = self.copy
     i = 0
-    j =0
-    while i < copy.args.length-1 && j <100
-      if copy.args[i].remove_coef.~(copy.args[i+1].remove_coef)
-        new_args = [(copy.args[i].remove_exp + copy.args[i+1].remove_exp)]
+    while i < copy.args.length-1
+      if copy.args[i].remove_coef.~ copy.args[i+1].remove_coef
+        new_args = [copy.args[i].remove_exp + copy.args[i+1].remove_exp]
         new_args += copy.args[i].remove_coef.copy
         copy.args.delete_at(i+1)
         copy.args.delete_at(i)
@@ -115,9 +101,8 @@ class Addition < Expression
       else
         i += 1
       end
-      j += 1
     end
-    copy
+    copy.flatten
   end
 
   # def simplify_add_m_forms
