@@ -34,7 +34,7 @@ describe SingleVariableQuestion do
     it 'sample equation 2 custom options (4 step)' do
       srand(105)
       obj = described_class.generate_question(number_of_steps: 4)
-      expect(obj.question).to eq eqn(mtp(-1, add(mtp(6, add(46, mtp(6, mtp(1,'x')))), 305)), -653)
+      expect(obj.question).to eq eqn(add(div(174, add(46, mtp(6, mtp(1, 'x')))), 83), 86)
     end
   end
 

@@ -134,7 +134,13 @@ class Addition < Expression
   end
 
   def evaluate_numeral
-    args.inject(0){|r,e| r + e}
+    args.inject(0){ |r, e|
+      if e.respond_to?(:evaluate_numeral)
+        r + e.evaluate_numeral
+      else
+        r + e
+      end
+    }
   end
 
   def contains?(subject)

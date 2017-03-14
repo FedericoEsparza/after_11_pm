@@ -236,7 +236,13 @@ class Multiplication
   end
 
   def evaluate_numeral
-    args.inject(1) { |r,e| r * e }
+    args.inject(1) { |r,e|
+      if e.respond_to?(:evaluate_numeral)
+        r * e.evaluate_numeral
+      else
+        r * e
+      end
+    }
   end
 
   def delete_nils
@@ -533,7 +539,7 @@ class Multiplication
       end
     end
   end
-  
+
   # RECURSION
   def includes?(object_class)
     args.any? do |arg|
@@ -648,9 +654,6 @@ class Multiplication
         false
       end
     end
-
-
-
 
   # RECURSION
   def fetch(object:)

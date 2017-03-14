@@ -45,7 +45,6 @@ class SingleVariableQuestion
     @options[:number_of_steps].times do
       next_step = _next_step(left_side, rs)
       subed_solution = next_step.subs_terms(@options[:variable], solution)
-      subed_solution = subed_solution.expand.last.flatten
       rs = subed_solution.evaluate_numeral
 
       return generate_equation if rs.nil? || rs == 1
@@ -60,7 +59,6 @@ class SingleVariableQuestion
     next_step_dir = next_step_ops == :mtp ? :lft : [:lft, :rgt].sample
     next_step_val = _next_step_val(rs, next_step_ops, next_step_dir)
     args = next_step_dir == :lft ? [next_step_val, left_side] : [left_side, next_step_val]
-
     if next_step_ops == :sbt
       mtp(-1, add(args))
     else
@@ -75,7 +73,7 @@ class SingleVariableQuestion
 
     if [addition, subtraction].include?(last_ops)
       no_more_div = (!@options[:multiple_division] && has_div)
-      return no_more_div ? :mtp : [:mtp, :div].sample
+      return no_more_div ? :mtp : [:div, :mtp].sample
     end
     return [:add, :sbt].sample if [multiplication, division].include?(last_ops)
   end
@@ -83,16 +81,14 @@ class SingleVariableQuestion
   def _next_step_val(rs, next_step_ops, next_step_dir)
     return (10..99).to_a.sample if next_step_ops == :add
     return (2..10).to_a.sample if next_step_ops == :mtp
-    return (2..rs - 2).to_a.sample if next_step_ops == :sbt &&
-                                                 next_step_dir == :rgt
-    return (rs + 10..rs + 99).to_a.sample if
-      next_step_ops == :sbt && next_step_dir == :lft
+    return (2..rs.abs - 2).to_a.sample if next_step_ops == :sbt && next_step_dir == :rgt
+    return (rs + 10..rs.abs + 99).to_a.sample if next_step_ops == :sbt && next_step_dir == :lft
     if next_step_ops == :div && next_step_dir == :lft
       multiples_of_rs = (2..10).collect { |n| n * rs }
       return multiples_of_rs.sample
     end
     if next_step_ops == :div && next_step_dir == :rgt
-      divisors_of_rs = (1..rs).select { |n| rs % n == 0 && n != 1 && n < rs }
+      divisors_of_rs = (2..rs).select { |n| rs % n == 0 && n != 1 && n < rs }
       return divisors_of_rs.sample
     end
   end
