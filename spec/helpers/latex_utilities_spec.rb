@@ -5,6 +5,11 @@ describe LatexUtilities do
 
   describe '#conv_pm' do
     it '' do
+      exp = add(["x"])
+      expect(dummy_class.conv_pm(exp)).to eq add(["x"])
+    end
+
+    it '' do
       exp = add('x',2,3)
       expect(dummy_class.conv_pm(exp)).to eq add('x',2,3)
     end
@@ -33,52 +38,57 @@ describe LatexUtilities do
       exp = add('x',-2)
       expect(dummy_class.conv_pm(exp)).to eq sbt('x',2)
     end
-    #
-    # it '' do
-    #   exp = add('x',mtp(-2,'y'))
-    #   expect(dummy_class.conv_pm(exp)).to eq sbt('x',mtp(2,'y'))
-    # end
-    #
-    # it '' do
-    #   exp = add('x',mtp(3,'y'),mtp(-2,'y'))
-    #   expect(dummy_class.conv_pm(exp)).to eq sbt(add('x',mtp(3,'y')),mtp(2,'y'))
-    # end
-    #
-    # it '' do
-    #   exp = add(["x"])
-    #   expect(dummy_class.conv_pm(exp)).to eq add('x')
-    # end
-    #
-    # it '' do
-    #   exp = add('x',mtp(-3,'y'),mtp(2,'y'))
-    #   result = dummy_class.conv_pm(exp)
-    #   expect(result).to eq add(sbt('x',mtp(3,'y')),mtp(2,'y'))
-    # end
-    #
-    # it '' do
-    #   exp = mtp(2,'x',add(3,4,-5))
-    #   expect(dummy_class.conv_pm(exp)).to eq mtp(2,'x',sbt(add(3,4),5))
-    # end
-    #
-    # it '' do
-    #   exp = sbt(2,add(3,4,-5))
-    #   expect(dummy_class.conv_pm(exp)).to eq sbt(2,sbt(add(3,4),5))
-    # end
-    #
-    # it '' do
-    #   exp = div(add(3,4,-5),2)
-    #   expect(dummy_class.conv_pm(exp)).to eq div(sbt(add(3,4),5),2)
-    # end
-    #
-    # it '' do
-    #   exp = pow(add(3,4,-5),2)
-    #   expect(dummy_class.conv_pm(exp)).to eq pow(sbt(add(3,4),5),2)
-    # end
-    #
-    # it '' do
-    #   exp = add(-3,4,5)
-    #   expect(dummy_class.conv_pm(exp)).to eq add(sbt(nil,3),4,5)
-    # end
+
+    it '' do
+      exp = add('x',mtp(-2,'y','a','b'))
+      expect(dummy_class.conv_pm(exp)).to eq sbt('x',mtp(2,'y','a','b'))
+    end
+
+    it '' do
+      exp = add('x',mtp(3,'y'),mtp(-2,'y'))
+      expect(dummy_class.conv_pm(exp)).to eq sbt(add('x',mtp(3,'y')),mtp(2,'y'))
+    end
+
+    it '' do
+      exp = add('x',mtp(-3,'y'),mtp(2,'y'))
+      result = dummy_class.conv_pm(exp)
+      expect(result).to eq add(sbt('x',mtp(3,'y')),mtp(2,'y'))
+    end
+
+    it '' do
+      exp = mtp(2,'x',add(3,4,-5))
+      expect(dummy_class.conv_pm(exp)).to eq mtp(2,'x',sbt(add(3,4),5))
+    end
+
+    it '' do
+      exp = sbt(2,add(3,4,-5))
+      expect(dummy_class.conv_pm(exp)).to eq sbt(2,sbt(add(3,4),5))
+    end
+
+    it '' do
+      exp = div(add(3,4,-5),2)
+      expect(dummy_class.conv_pm(exp)).to eq div(sbt(add(3,4),5),2)
+    end
+
+    it '' do
+      exp = pow(add(3,4,-5),2)
+      expect(dummy_class.conv_pm(exp)).to eq pow(sbt(add(3,4),5),2)
+    end
+
+    it '' do
+      exp = add(mtp(3,'y'),mtp(-2,add('x',-5)))
+      expect(dummy_class.conv_pm(exp)).to eq sbt(mtp(3,'y'),mtp(2,sbt('x',5)))
+    end
+
+    it '' do
+      exp = add(mtp(3,'y'),mtp(-2,add('x',-5),mtp(3,add('x',-6))))
+      expect(dummy_class.conv_pm(exp)).to eq sbt(mtp(3,'y'),mtp(2,sbt('x',5),mtp(3,sbt('x',6))))
+    end
+
+    it '' do
+      exp = add(-3,4,5)
+      expect(dummy_class.conv_pm(exp)).to eq add(sbt(nil,3),4,5)
+    end
     #
     # it '' do
     #   exp = mtp(-2,'y')
@@ -88,21 +98,6 @@ describe LatexUtilities do
     # it '' do
     #   exp = add(2,frac(3,4))
     #   expect(dummy_class.conv_pm(exp)).to eq add(2,frac(3,4))
-    # end
-    #
-    # it '' do
-    #   exp = add(2,frac(3,4,sign: :-))
-    #   expect(dummy_class.conv_pm(exp)).to eq sbt(2,frac(3,4))
-    # end
-    #
-    # it '' do
-    #   exp = mtp(frac(3,4,sign: :-),'x')
-    #   expect(dummy_class.conv_pm(exp)).to eq sbt(nil,mtp(frac(3,4),'x'))
-    # end
-    #
-    # it '' do
-    #   exp = add('x',mtp(frac(2,3),'y'),mtp(frac(4,5,sign: :-),'y'))
-    #   expect(dummy_class.conv_pm(exp)).to eq sbt(add('x',mtp(frac(2,3),'y')),mtp(frac(4,5),'y'))
     # end
     #
     # it '' do
