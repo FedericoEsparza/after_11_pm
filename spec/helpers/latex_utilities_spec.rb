@@ -115,6 +115,10 @@ describe LatexUtilities do
       exp = add(mtp(-1,'x'),-2)
       expect(dummy_class.conventionalise_plus_minus(exp)).to eq sbt(sbt(nil,mtp(1,'x')),2)
     end
+
+    it 'Complete this tets' do
+      exp = add(   mtp(pow('x',2),add(pow('x',2),'x',-5)),mtp(-2,'x',add(pow('x',2),'x',-5)),mtp(7,add(pow('x',2),'x',-5))  )
+    end
   end
 
   describe '#conventionalise_one_times' do
@@ -193,7 +197,7 @@ describe LatexUtilities do
     it '' do
       exp = sin(add(100,mtp(-2,'x')))
       expect(dummy_class.conventionalise(exp)).to eq sin(sbt(100,mtp(2,'x')))
+      expect(exp).to eq sin(add(100,mtp(-2,'x')))
     end
-
   end
 end

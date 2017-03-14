@@ -544,103 +544,18 @@ describe Multiplication do
     it 'expands (x^2-2x+7)(x^2+x-5)(x+3)' do
       exp = '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify
       result = exp.expand
-      p conventionalise_plus_minus(result[1].args[0])
-      puts ''
-      puts ''
-      puts write_test(result)
-
+      # puts write_test(result)
+      expect(result).to eq [
+        '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify,
+        '(x^2(x^2+x-5)-2x(x^2+x-5)+7(x^2+x-5))(x+3)'.objectify,
+        '(x^4+x^3-5x^2-2x^3-2x^2+10x+7x^2+7x-35)(x+3)'.objectify,
+        '(x^4+x^3-2x^3-5x^2-2x^2+7x^2+10x+7x-35)(x+3)'.objectify,
+        '(x^4-x^3+17x-35)(x+3)'.objectify,
+        'x^4(x+3)-x^3(x+3)+17x(x+3)-35(x+3)'.objectify,
+        'x^5+3x^4-x^4-3x^3+17x^2+51x-35x-105'.objectify,
+        'x^5+2x^4-3x^3+17x^2+16x-105'.objectify
+      ]
     end
-
-    # it 'expands x + a(b+c)' do
-    #   exp = add('x',mtp('a',add('b','c')))
-    #   result = exp.expand
-    #
-    #   expect(result).to eq ['x+a(b+c)'.objectify,'x+ab+ac'.objectify]
-    # end
-    #
-    #
-    # it 'expands (xy + z)(a+b)' do
-    #   exp = mtp(add(mtp('x','y'),'z'),add('a','b'))
-    #   result = exp.expand
-    #
-    #
-    #
-    #   expect(result[0]).to eq '(xy+z)(a+b)'.objectify
-    #   expect(result[1]).to eq 'xya+xyb+za+zb'.objectify
-    #   expect(result[2]).to eq 'axy+bxy+az+bz'.objectify
-    #
-    #
-    # end
-    #
-    # xit 'expands (x+y)(x+y)(x+y)' do
-    #   exp = '(x+y)(x+y)(x+y)'.objectify
-    #   result = exp.expand
-    #
-    #
-    #   expect(result[0]).to eq '(x+y)(x+y)(x+y)'.objectify
-    #   expect(result[1]).to eq '(xx+xy+yx+yy)(x+y)'.objectify
-    #   expect(result[2]).to eq '(x^1x^1+xy+yx+y^1y^1)(x+y)'.objectify
-    #   expect(result[3]).to eq '(x^{1+1}+xy+yx+y^{1+1})(x+y)'.objectify
-    #   expect(result[4]).to eq '(x^2+xy+yx+y^2)(x+y)'.objectify
-    #   expect(result[5]).to eq '(x^2+xy+xy+y^2)(x+y)'.objectify
-    #   expect(result[6]).to eq '(x^2+2xy+y^2)(x+y)'.objectify
-    #   expect(result[7]).to eq 'x^2x+x^2y+2xyx+2xyy+y^2x+y^2y'.objectify
-    #   expect(result[8]).to eq 'x^2x+x^2y+2xxy+2xyy+y^2x+y^2y'.objectify
-    #   expect(result[9]).to eq 'x^2x^1+x^2y+2x^1x^1y+2xy^1y^1+y^2x+y^2y^1'.objectify
-    #   expect(result[10]).to eq 'x^{2+1}+x^2y+2x^{1+1}y+2xy^{1+1}+y^2x+y^{2+1}'.objectify
-    #   expect(result[11]).to eq 'x^3+x^2y+2x^2y+2xy^2+y^2x+y^3'.objectify
-    #   expect(result[12]).to eq 'x^3+x^2y+2x^2y+2xy^2+xy^2+y^3'.objectify
-    #
-    #
-    # end
-    #
-    # it 'expands (x(a+b)+c)(y+d(z+e))' do
-    #   exp = '(x(a+b)+c)(y+d(z+e))'.objectify
-    #   result = exp.expand
-    #   expect(result[0]).to eq '(x(a+b)+c)(y+d(z+e))'.objectify
-    #   expect(result[1]).to eq '(xa+xb+c)(y+dz+de)'.objectify
-    #   expect(result[2]).to eq '(ax+bx+c)(y+dz+de)'.objectify
-    #   expect(result[3]).to eq 'axy+axdz+axde+bxy+bxdz+bxde+cy+cdz+cde'.objectify
-    #   expect(result[4]).to eq 'axy+adxz+adex+bxy+bdxz+bdex+cy+cdz+cde'.objectify
-    #   expect(result[5]).to eq nil
-    #
-    # end
-    #
-    # it 'expands (2x^2+3x)(3x^3+5x^2)' do
-    #   exp = '(2x^2+3x)(3x^3+5x^2)'.objectify
-    #   result = exp.expand
-    #
-    #
-    #
-    #   expect(result[0]).to eq '(2x^2+3x)(3x^3+5x^2)'.objectify
-    #   expect(result[1]).to eq '2x^23x^3+2x^25x^2+3x3x^3+3x5x^2'.objectify
-    #   expect(result[2]).to eq '2\times3x^2x^3+2\times5x^2x^2+3\times3xx^3+3\times5xx^2'.objectify
-    #   expect(result[3]).to eq '6x^{2+3}+10x^{2+2}+9x^1x^3+15x^1x^2'.objectify
-    #   expect(result[4]).to eq '6x^5+10x^4+9x^{1+3}+15x^{1+2}'.objectify
-    #   expect(result[5]).to eq '6x^5+10x^4+9x^4+15x^3'.objectify
-    #   expect(result[6]).to eq nil
-    #
-    # end
-    #
-    # xit 'expands (x+2)^2' do
-    #   exp = '(x+2)^2'.objectify
-    #   result = exp.expand
-    #
-    #   # result.each_with_index do |a,i|
-    #   #   string = "expect(result[" + i.to_s + "]).to eq '" + a.latex.shorten + "'.objectify"
-    #   #   puts string
-    #   # end
-    #
-    #   expect(result[0]).to eq '(x+2)(x+2)'.objectify
-    #   expect(result[1]).to eq 'xx+x2+2x+2\times2'.objectify
-    #   expect(result[2]).to eq 'x^1x^1+x2+2x+4'.objectify
-    #   expect(result[3]).to eq 'x^{1+1}+x2+2x+4'.objectify
-    #   expect(result[4]).to eq 'x^2+x2+2x+4'.objectify
-    #   expect(result[5]).to eq 'x^2+2x+2x+4'.objectify
-    #   expect(result[6]).to eq 'x^2+4x+4'.objectify
-    #
-    # end
-
   end
  #
  #  describe '#flatit' do

@@ -72,6 +72,7 @@ class Array
         step_1 = self[i].copy
         step_2 = self[i+1].copy
         if step_1.latex == step_2.latex
+        # if step_1 == step_2
           self.delete_at(i)
         else
           i += 1

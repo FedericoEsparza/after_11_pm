@@ -604,10 +604,9 @@ class Multiplication
 
   def expand
     copy = self.copy
-    i = 0
     #expand all args
     steps = []
-    while i <100
+    while true
       steps += mtp(copy.args[0],copy.args[1]).combine_two_brackets
       steps.map! do |step|
         tail_copy = copy.args[2..-1].map{|arg| arg.copy}
@@ -615,7 +614,6 @@ class Multiplication
       end
       break if steps.last.args.length == 1
       copy = steps.last.copy
-      i += 1
     end
     steps.map!{|step| step.flatten}.delete_duplicate_steps
   end

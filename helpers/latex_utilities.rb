@@ -54,6 +54,7 @@ module LatexUtilities
   def conventionalise_plus_minus(exp)
     if exp.is_a?(addition)
       if numerical?(exp.args[-1]) && exp.args[-1] < 0
+
         front_add_args = []
         for k in 0..(exp.args.length-2)
           front_add_args << exp.args[k]
@@ -105,11 +106,13 @@ module LatexUtilities
         end
 
         if exp.args[-i].is_a?(multiplication) && numerical?(exp.args[-i].args[0]) && exp.args[-i].args[0] < 0
-
+          # puts "value of i is #{i}"
+          # p exp.args[-i]
+          # puts 'hello'
           minus_arg_i = exp.args.length  - i
           new_args = []
           for j in (exp.args.length-i+1)..(exp.args.length-1)
-            new_args << exp.args[j]  #check this it needs to be a new copy
+            new_args << conventionalise_plus_minus(exp.args[j]) #check this it needs to be a new copy
           end
           front_add_args = []
           for k in 0..((exp.args.length - i)-1)
@@ -122,9 +125,12 @@ module LatexUtilities
           end
 
           exp.args[-i].args[0] = exp.args[-i].args[0].abs
+          exp.args[-i] = conventionalise_plus_minus(exp.args[-i])
+          # p exp.args[-i]
 
           front_sbt = sbt(minus_end,exp.args[-i])
           new_args.insert(0,front_sbt)
+          # p new_args[0]
           return add(new_args)
         end
       end
@@ -135,7 +141,7 @@ module LatexUtilities
 
     if exp.is_a?(multiplication) && numerical?(exp.args[0]) && exp.args[0] < 0
       exp.args[0] = exp.args[0].abs
-      return sbt(nil,exp)
+      return sbt(nil,conventionalise_plus_minus(exp))
     end
 
     if exp.is_a?(multiplication) && !(numerical?(exp.args[0]) && exp.args[0] < 0)
