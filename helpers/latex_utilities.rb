@@ -2,20 +2,13 @@ module LatexUtilities
   def conv_pm(exp = nil)
     exp = exp.copy || self.copy
     if exp.is_a?(addition) && exp.args.length > 1
+      first_parts = add(exp.args[0..(exp.args.length-2)]).conv_pm
       if numerical?(exp.args.last) && exp.args.last < 0
-        front_args = exp.args[0..(exp.args.length-2)]
-        minus_end = add(front_args).conv_pm
-        sub_end = exp.args.last.abs
-        return sbt(minus_end,sub_end)
+        last_part = exp.args.last.abs
+        return sbt(first_parts,last_part)
       else
-        front_add_args = exp.args[0..(exp.args.length-2)]
-        if front_add_args.length == 1
-          add_args = front_add_args + [exp.args[-1]]
-          return add(add_args)
-        else
-          add_first_arg = add(front_add_args).conv_pm
-          return add(add_first_arg,exp.args[-1]).flatit
-        end
+        last_part = exp.args.last
+        return add(first_parts,last_part).flatit
       end
     end
 
