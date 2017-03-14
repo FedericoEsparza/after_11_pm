@@ -252,7 +252,6 @@ describe Multiplication do
     it 'simplifies (3x^2y3)(3xy^4) to 9x^3y^7' do
      exp = mtp(mtp(3,pow('x',2),pow('y',3)),mtp(3,'x',pow('y',4)))
      result = exp.simplify_product_of_m_forms
-     expect(exp).to eq mtp(9,pow('x',3),pow('y',7))
       # puts write_test(result)
       expect(result).to eq [
         '(3x^2y^3)(3xy^4)'.objectify,
@@ -263,7 +262,6 @@ describe Multiplication do
     it 'simplifies (3x)(4y)(5z) to 60xyz' do
       exp = mtp(mtp(3,'x'),mtp(4,'y'),mtp(5,'z'))
       result = exp.simplify_product_of_m_forms
-      expect(exp).to eq mtp(60,'x','y','z')
       # puts write_test(result)
       expect(result).to eq [
         '(3x)(4y)(5z)'.objectify,
@@ -274,7 +272,6 @@ describe Multiplication do
     it 'simplifies (3y^3z)(2^2y^-2)' do
      exp = mtp(mtp(3,pow('y',3),'z'),mtp(pow(2,2),pow('y',-2)))
      result = exp.simplify_product_of_m_forms
-     expect(exp).to eq mtp(12,'y','z')
     #  puts write_test(result)
      expect(result).to eq [
        '(3y^3z)(2^2y^{-2})'.objectify,
@@ -285,7 +282,6 @@ describe Multiplication do
     it 'simplifies (2x^2yz)(3x^-2z^-1)' do
      exp = mtp(mtp(2,pow('x',2),'y','z'),mtp(3,pow('x',-2),pow('z',-1)))
      result = exp.simplify_product_of_m_forms
-     expect(exp).to eq mtp(6,'y')
     #  puts write_test(result)
      expect(result).to eq [
        '(2x^2yz)(3x^{-2}z^{-1})'.objectify,
@@ -302,7 +298,7 @@ describe Multiplication do
      ]
     end
   end
-  
+
   describe '#standardize m form' do
     it 'turns m(x,m(xy)) to m(m(x)m(xy))' do
       exp = mtp('x',mtp('x','y'))

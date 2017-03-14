@@ -67,18 +67,17 @@ class Array
     end
 
     def delete_duplicate_steps
-      steps = self
       i = 0
-      while i < (steps.length - 1)
-        step_1 = steps[i].copy
-        step_2 = steps[i+1].copy
+      while i < (self.length - 1)
+        step_1 = self[i].copy
+        step_2 = self[i+1].copy
         if step_1.latex == step_2.latex
-          steps.delete_at(i)
+          self.delete_at(i)
         else
           i += 1
         end
       end
-      steps
+      return self
     end
 
     # RECURSION

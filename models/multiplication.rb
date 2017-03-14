@@ -219,57 +219,23 @@ class Multiplication
   end
 
   def simplify_product_of_m_forms
-    # copy = self.copy.standardise_m_form.separate_variables
-    # new_args = []
-    # i = 0
-    # while i < copy.args.length do
-    #   new_args << copy.args[i].combine_powers
-    #   i += 1
-    # end
-    # new_args = new_args.equalise_array_lengths.transpose
-    # i = 0
-    # steps = []
-    # while i < new_args.length
-    #   steps << mtp(new_args[i])
-    #   i += 1
-    # end
-    # steps.insert(0,self.copy)
-    # steps = delete_duplicate_steps(steps)
-    #
-    # self.args = steps[-1].args
-    #
-    # steps.each {|a| a.delete_nils}
-    #
-    # new_args = [steps.last.remove_exp] + steps.last.remove_coef
-    # steps[-1] = mtp(new_args)
-    #
-    # steps
-
     copy = self.copy.standardise_m_form.separate_variables
-    new_args = []
-    i = 0
-    while i < copy.args.length do
-      new_args << copy.args[i].combine_powers
-      i += 1
+    new_args = copy.args.inject([]) do |res,arg|
+      res.insert(-1,arg.combine_powers)
     end
+    
     new_args = new_args.equalise_array_lengths.transpose
-    i = 0
-    steps = []
-    while i < new_args.length
-      steps << mtp(new_args[i])
-      i += 1
+
+    steps = new_args.inject([]) do |res,arg|
+      res.insert(-1,mtp(arg))
     end
 
-    new_args = [steps.last.remove_exp] + steps.last.remove_coef
-    steps[-1] = mtp(new_args)
+    coef_moved = mtp([steps.last.remove_exp] + steps.last.remove_coef)
+    steps[-1] = coef_moved
 
     result = [self.copy] + steps
 
-    self.args = steps[-1].args
-
-    result = result.delete_duplicate_steps
-    result.each {|a| a.delete_nils}
-    result
+    result.delete_duplicate_steps.each {|a| a.delete_nils}
   end
 
   def reverse_subject_step(subject,rs)
@@ -464,8 +430,7 @@ class Multiplication
       expanded_brackets.each{|a| expanded_brackets_steps << a}
       expanded_brackets_steps.insert(0,self)
       expanded_brackets_steps = expanded_brackets_steps.map{|a| a.flatit}
-      expanded_brackets_steps = expanded_brackets_steps.delete_duplicate_steps
-      expanded_brackets_steps
+      expanded_brackets_steps.delete_duplicate_steps
     end
 
   end
@@ -631,8 +596,7 @@ class Multiplication
       next_steps = brackets.combine_brackets
       steps = steps + next_steps
       steps = steps.map{|a| a.flatit}
-      steps = steps.delete_duplicate_steps
-      steps
+      steps.delete_duplicate_steps
     else
       copy = copy.top_heavy_div
       copy.expand
