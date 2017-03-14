@@ -149,51 +149,51 @@ describe LatexUtilities do
     end
   end
 
-  # describe 'conventionalise' do
-  #   it '' do
-  #     exp = mtp(-1,'x','y')
-  #     expect(dummy_class.conventionalise(exp)).to eq sbt(nil,mtp('x','y'))
-  #   end
-  #
-  #   it '' do
-  #     exp = add('x',2)
-  #     expect(dummy_class.conventionalise(exp)).to eq add('x',2)
-  #   end
-  #
-  #   it '' do
-  #     exp = add(mtp(1,pow('x',2)),mtp(-3,'x'),-4)
-  #     expect(dummy_class.conventionalise(exp)).to eq sbt(sbt(mtp(pow('x',2)),mtp(3,'x')),4)
-  #   end
-  #
-  #   it '' do
-  #     exp = mtp(-1,'x')
-  #     expect(dummy_class.conventionalise(exp)).to eq sbt(nil,mtp('x'))
-  #   end
-  #
-  #   it '' do
-  #     exp = cos(mtp(-1,'x'))
-  #     expect(dummy_class.conventionalise(exp)).to eq cos(sbt(nil,mtp('x')))
-  #   end
-  #
-  #   it '' do
-  #     exp = add(9,div(36,add(mtp(7,'x'),-2)))
-  #     expect(dummy_class.conventionalise(exp)).to eq add(9,div(36,sbt(mtp(7,'x'),2)))
-  #   end
-  #
-  #   it '' do
-  #     exp = add(mtp(2,pow('x',2)),mtp(-3,'x'),-4)
-  #     expect(dummy_class.conventionalise(exp)).to eq sbt(sbt(mtp(2,pow('x',2)),mtp(3,'x')),4)
-  #   end
-  #
-  #   it '' do
-  #     exp = add(mtp(2,pow('x',2)),mtp(-9,'x'),7)
-  #     expect(dummy_class.conventionalise(exp)).to eq add(sbt(mtp(2,pow('x',2)),mtp(9,'x')),7)
-  #   end
-  #
-  #   it '' do
-  #     exp = sin(add(100,mtp(-2,'x')))
-  #     expect(dummy_class.conventionalise(exp)).to eq sin(sbt(100,mtp(2,'x')))
-  #   end
-  #
-  # end
+  describe 'conventionalise' do
+    it '' do
+      exp = mtp(-1,'x','y')
+      expect(dummy_class.conventionalise(exp)).to eq sbt(nil,mtp('x','y'))
+    end
+
+    it '' do
+      exp = add('x',2)
+      expect(dummy_class.conventionalise(exp)).to eq add('x',2)
+    end
+
+    it '' do
+      exp = add(mtp(1,pow('x',2)),mtp(-3,'x'),-4)
+      expect(dummy_class.conventionalise(exp)).to eq sbt(sbt(mtp(pow('x',2)),mtp(3,'x')),4)
+    end
+
+    it '' do
+      exp = mtp(-1,'x')
+      expect(dummy_class.conventionalise(exp)).to eq sbt(nil,mtp('x'))
+    end
+
+    it '' do
+      exp = cos(mtp(-1,'x'))
+      expect(dummy_class.conventionalise(exp)).to eq cos(sbt(nil,mtp('x')))
+    end
+
+    it '' do
+      exp = add(9,div(36,add(mtp(7,'x'),-2)))
+      expect(dummy_class.conventionalise(exp)).to eq add(9,div(36,sbt(mtp(7,'x'),2)))
+    end
+
+    it '' do
+      exp = add(mtp(2,pow('x',2)),mtp(-3,'x'),-4)
+      expect(dummy_class.conventionalise(exp)).to eq sbt(sbt(mtp(2,pow('x',2)),mtp(3,'x')),4)
+    end
+
+    it '' do
+      exp = add(mtp(2,pow('x',2)),mtp(-9,'x'),7)
+      expect(dummy_class.conventionalise(exp)).to eq add(sbt(mtp(2,pow('x',2)),mtp(9,'x')),7)
+    end
+
+    it '' do
+      exp = sin(add(100,mtp(-2,'x')))
+      expect(dummy_class.conventionalise(exp)).to eq sin(sbt(100,mtp(2,'x')))
+    end
+
+  end
 end

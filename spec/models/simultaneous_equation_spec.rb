@@ -1,4 +1,4 @@
-describe SimultaneousEquation do
+xdescribe SimultaneousEquation do
   # context '#extract_coefficient' do
   #   it "extract 3 and 5 from 3x+5y=10" do
   #     equation = eqn(add(mtp(3, 'x'), mtp(5, 'y')), 10)

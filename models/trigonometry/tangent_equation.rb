@@ -11,17 +11,6 @@ class TangentEquation
 
   def copy
     DeepClone.clone self
-    # if ls.is_a?(string) || ls.is_a?(integer)
-    #   left_side = ls
-    # else
-    #   left_side = ls.copy
-    # end
-    # if rs.is_a?(string) || rs.is_a?(integer)
-    #   right_side = rs
-    # else
-    #   right_side = rs.copy
-    # end
-    # cos_eqn(left_side,right_side,options)
   end
 
   def ==(eqn)

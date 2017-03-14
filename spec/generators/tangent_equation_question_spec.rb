@@ -41,7 +41,7 @@ describe TangentEquationQuestion do
       srand(102)
       exp = described_class.new
       gen_eqn = exp.generate_equation
-      expect(gen_eqn).to eq tan_eqn(add(div('x', 2), 100), sqrt(3, sign: :-))
+      expect(gen_eqn).to eq tan_eqn(add(div('x', 2), 100), sqrt(3,:-))
     end
 
     it "equation srand 103" do

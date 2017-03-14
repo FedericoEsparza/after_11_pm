@@ -1,4 +1,4 @@
-describe FactoriseQuadraticEquation do
+xdescribe FactoriseQuadraticEquation do
 
   xdescribe '#factorise_standard_quadractic' do
     it 'factorises 0=3z^2-z-2' do

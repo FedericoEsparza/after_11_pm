@@ -6,7 +6,7 @@ describe SquareRoot do
     end
 
     it 'sign is -' do
-      exp = sqrt(12, sign: :-)
+      exp = sqrt(12,:-)
       expect(exp.sign).to eq '-@'
     end
   end
@@ -26,7 +26,7 @@ describe SquareRoot do
     end
 
     it 'evaluates -sqrt(9) to -3' do
-      exp = sqrt(9, sign: :-)
+      exp = sqrt(9,:-)
       expect(exp.evaluate_numeral).to eq -3
     end
   end

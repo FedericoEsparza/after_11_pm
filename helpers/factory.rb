@@ -78,8 +78,12 @@ module Factory
     Fraction.new(numerator: numerator, denominator: denominator, sign: sign)
   end
 
-  def sqrt(value, sign: :+)
-    SquareRoot.new(value: value, sign: sign)
+  # def sqrt(value, sign: :+)
+  #   SquareRoot.new(value: value, sign: sign)
+  # end
+
+  def sqrt(*args)
+    SquareRoot.new(*args)
   end
 
   def quad(quad_term,linear_term,constant_term,variable)

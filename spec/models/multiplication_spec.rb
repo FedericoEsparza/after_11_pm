@@ -370,7 +370,6 @@ describe Multiplication do
     it 'combines (3x+2y+x^2)(x-x^2+3y)' do
       exp = '(3x+2y+x^2)(x-x^2+3y)'.objectify
       result = exp.combine_two_brackets
-      #  puts write_test(result)
       expect(result).to eq [
        '(3x+2y+x^2)(x-x^2+3y)'.objectify,
        '3x(x-x^2+3y)+2y(x-x^2+3y)+x^2(x-x^2+3y)'.objectify,

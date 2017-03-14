@@ -2,19 +2,36 @@ include Factory
 include Latex
 
 class SquareRoot
-  attr_reader :value, :sign
+  # attr_reader :value, :sign
+  attr_accessor :args
 
-  def initialize(value:, sign: :+)
-    @value = value
-    @sign = sign.is_a?(String) ? sign : sign.to_s + '@'
+  def initialize(*args)
+    if args.length == 1 && args[0].class == Array
+      @args = args.first
+    else
+      @args = args
+    end
+    if @args[1].nil?
+      @args[1]='+@'
+    else
+      @args[1] = @args[1].is_a?(String) ? sign : sign.to_s + '@'
+    end
   end
 
-  def value=(new_value)
-    @value = new_value
+  def value
+    args[0]
   end
 
-  def sign=(new_sign)
-    @sign = new_sign
+  def sign
+    args[1]
+  end
+
+  def value=(value)
+    self.args[0] = value
+  end
+
+  def sign=(sign)
+    @args[1] = sign
   end
 
   def ==(sqr)
@@ -30,12 +47,6 @@ class SquareRoot
 
   def copy
     DeepClone.clone self
-    # if value.is_a?(string) || value.is_a?(integer)
-    #   val = value
-    # else
-    #   val = value.copy
-    # end
-    # sqrt(value: val, sign: sign)
   end
 
   def base_latex
@@ -43,7 +54,7 @@ class SquareRoot
   end
 
   alias_method :~, :==
-  
+
   private
 
   def same_class?(object)

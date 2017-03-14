@@ -252,10 +252,8 @@ class Multiplication
     steps = delete_duplicate_steps(steps)
     self.args = steps[-1].args
     steps.each {|a| a.delete_nils}
-    if steps.last.remove_exp != 1
-      new_args = [steps.last.remove_exp] + steps.last.remove_coef
-      steps[-1] = mtp(new_args)
-    end
+    new_args = [steps.last.remove_exp] + steps.last.remove_coef
+    steps[-1] = mtp(new_args)
     steps
   end
 
@@ -411,7 +409,7 @@ class Multiplication
     new_add.insert(0,self.copy)
     self.args = new_add[-1].args
     new_add[1] = add(new_brackets)
-    new_add.map { |step| step.flatten  }
+    new_add.map { |step| conventionalise_one_times(step).flatten  }
 
   end
 
