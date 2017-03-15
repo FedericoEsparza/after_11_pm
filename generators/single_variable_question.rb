@@ -39,8 +39,9 @@ class SingleVariableQuestion
 
   #RECURSION
   def generate_equation
+    p @options
     solution = rand(2..@options[:solution_max])
-    left_side = mtp(1, @options[:variable])
+    left_side = mtp(@options[:variable])
     rs = solution
 
     @options[:number_of_steps].times do
@@ -105,9 +106,23 @@ class SingleVariableQuestion
                  multiple_division: false
                }
 
+    new_options = {}
+
+    options.each do |k, v|
+      if v =~ /\d+/
+        new_options[k.to_sym] = v.to_i
+      elsif v == ""
+        new_options[k.to_sym] = nil
+      else
+        new_options[k.to_sym] = v
+      end
+    end
+
     defaults.each do |option, value|
-      if !options[option].nil?
-        defaults[option] = options[option]
+      next if new_options[option] != ""
+
+      if !new_options[option].nil?
+        defaults[option] = new_options[option]
       end
     end
     defaults

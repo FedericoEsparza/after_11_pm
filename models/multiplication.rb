@@ -49,7 +49,7 @@ class Multiplication
   end
 
   def copy
-    DeepClone.clone self
+    DeepClone::clone(self)
   end
 
   def de_convert_power

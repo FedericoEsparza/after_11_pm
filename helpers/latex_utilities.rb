@@ -1,5 +1,6 @@
 module LatexUtilities
-  HEADERS = "\\documentclass{article}\n"\
+  HEADERS = "\\nonstopmode\n"\
+    "\\documentclass{article}\n"\
     "\\usepackage[math]{iwona}\n"\
     "\\usepackage[fleqn]{amsmath}\n"\
     "\\usepackage{scrextend}\n"\
@@ -10,7 +11,8 @@ module LatexUtilities
     "\\renewcommand{\\headrulewidth}{0pt}\n"\
     "\\pagestyle{fancy}\n".freeze
 
-  SOLUTION_HEADERS = "\\documentclass{article}\n"\
+  SOLUTION_HEADERS = "\\nonstopmode\n"\
+    "\\documentclass{article}\n"\
     "\\usepackage[math]{iwona}\n"\
     "\\usepackage[fleqn]{amsmath}\n"\
     "\\usepackage{scrextend}\n"\

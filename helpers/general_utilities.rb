@@ -79,6 +79,6 @@ module GeneralUtilities
     ensure
       worksheet_sheet.close unless worksheet_sheet.nil?
     end
-    Pathname.new(file_name)
+    file_name
   end
 end
