@@ -127,7 +127,7 @@ describe LatexUtilities do
       expect(result).to eq add(pow('x',2),5,add(mtp('x',sbt('x',3)),mtp(2,sbt('x',3))))
     end
   end
-
+  #
   describe '#conv_ones' do
     it '' do
       exp = mtp(1,'x')

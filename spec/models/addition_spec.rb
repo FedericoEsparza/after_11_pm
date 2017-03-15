@@ -165,6 +165,14 @@ describe Addition do
   #     expect(exp_1.~(exp_2)).to be false
   #   end
   # end
-  #
+
+  describe '#expand' do
+    it 'expands 3+(x+3)(x-2)+2x' do
+      exp = '3+(x+3)(x-2)+4'.objectify
+      result = exp.expand
+      # p result
+    end
+  end
+
   #
 end

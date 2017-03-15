@@ -45,20 +45,22 @@ module LatexUtilities
     return exp
   end
 
-  def conv_ones(exp)
+  def conv_ones(exp=nil)
+    exp = exp.copy || self.copy
     if exp.is_a?(multiplication) && exp.args.length > 1 && exp.args[0] == 1
       exp.args.delete_at(0)
     end
     unless numerical?(exp) || exp.is_a?(string) || exp.nil?
       for i in 0..exp.args.length-1
-        conv_ones(exp.args[i])
+        exp.args[i] = exp.args[i].conv_ones
       end
     end
     return exp
   end
 
-  def conventionalise(exp)
-    conv_ones(exp.conv_pm)
+  def conventionalise(exp=nil)
+    exp = exp || self
+    exp.conv_pm.conv_ones
   end
 
   def brackets(latex_str)

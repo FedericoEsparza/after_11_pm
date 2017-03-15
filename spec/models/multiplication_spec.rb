@@ -314,6 +314,16 @@ describe Multiplication do
   end
 
   describe '#combine_two_brackets' do
+    it 'combines 2(x+3)' do
+      exp = '2(x+3)'.objectify
+      result = exp.combine_two_brackets
+      # puts write_test(result)
+      expect(result).to eq [
+        '2(x+3)'.objectify,
+        '2x+6'.objectify
+      ]
+    end
+
     it 'combines (2x+3)(4x+5)' do
       exp = '(2x+3)(4x+5)'.objectify
       result = exp.combine_two_brackets
@@ -351,8 +361,106 @@ describe Multiplication do
        '3x^2-2x^3+11xy+yx^2+6y^2-x^4'.objectify
       ]
     end
+
+    it 'combines 2x' do
+      exp = mtp(2,'x')
+      result = exp.combine_two_brackets
+      # puts write_test(result)
+      expect(result).to eq [
+        '2x'.objectify
+      ]
+    end
+
+    it 'combines 3x(x+4)' do
+      exp = mtp(mtp(3,'x'),add('x',4))
+      result = exp.combine_two_brackets
+      # puts write_test(result)
+      expect(result).to eq [
+        '3x(x+4)'.objectify,
+        '3x^2+12x'.objectify
+      ]
+    end
+
+    it 'combines (2x)y' do
+      exp = mtp(mtp(2,'x'),'y')
+      result = exp.combine_two_brackets
+      # puts write_test(result)
+      expect(result).to eq [
+        '2xy'.objectify
+      ]
+    end
+
+    it 'combines y(2x)' do
+      exp = mtp('y',mtp(2,'x'))
+      result = exp.combine_two_brackets
+      # puts write_test(result)
+      expect(result).to eq [
+        'y2x'.objectify,
+        '2yx'.objectify
+      ]
+    end
+
+    it 'combines (3yz)(2x)' do
+      exp = mtp(mtp(3,'y','z'),mtp(2,'x'))
+      result = exp.combine_two_brackets
+      # puts write_test(result)
+      expect(result).to eq [
+        '3yz2x'.objectify,
+        '6yzx'.objectify
+      ]
+    end
+
+    # it 'combines (x-5)(2x)' do
+    #   exp = mtp(add('x',-5),mtp(2,'x'))
+    #   result = exp.combine_two_brackets
+    #   expect(result).to eq [
+    #     '(x-5)(2x)'.objectify,
+    #     'x2x-5\times2x'.objectify,   #bug with simplify_product_of_m_forms  ******************
+    #     '2x^2-10x'.objectify
+    #   ]
+    # end
   end
- #
+
+  describe '#expand' do
+
+    # it 'expands (x^2-2x+7)(x^2+x-5)(x+3)' do
+    #   exp = '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify
+    #   result = exp.expand
+    #   puts write_test(result)
+    # end
+
+    xit 'expands (x+7)(x^2-5)(x+3)(2-x)' do
+      exp = '(x+7)(x^2-5)(x+3)(2-x)'.objectify
+      result = exp.expand
+      puts write_test(result)
+    end
+
+    # it 'expands 2(x+4)' do
+    #   exp = '2(x+4)'.objectify
+    #   result = exp.expand
+    #   puts write_test(result)
+    # end
+    #
+    # it 'expands 2xy' do
+    #   exp = '2xy'.objectify
+    #   result = exp.expand
+    #   puts write_test(result)
+    # end
+
+    xit 'expands 3xyzw(x+1)' do
+      exp = '3xyzw(x+1)'.objectify
+      result = exp.expand
+      puts write_test(result)
+    end
+
+    it 'expands 3x(x+2)x^2(x-4)' do
+      exp = '(2x)(x+2)yzw(x-4)'.objectify
+      result = exp.expand
+      puts write_test(result)
+    end
+  end
+
+
  #   xdescribe '#combine n brackets' do
  #
  #     it 'combines (x+y)(x+y)(x+y)' do
@@ -540,23 +648,7 @@ describe Multiplication do
  #    end
  #  end
  #
-  describe '#expand' do
-    it 'expands (x^2-2x+7)(x^2+x-5)(x+3)' do
-      exp = '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify
-      result = exp.expand
-      # puts write_test(result)
-      expect(result).to eq [
-        '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify,
-        '(x^2(x^2+x-5)-2x(x^2+x-5)+7(x^2+x-5))(x+3)'.objectify,
-        '(x^4+x^3-5x^2-2x^3-2x^2+10x+7x^2+7x-35)(x+3)'.objectify,
-        '(x^4+x^3-2x^3-5x^2-2x^2+7x^2+10x+7x-35)(x+3)'.objectify,
-        '(x^4-x^3+17x-35)(x+3)'.objectify,
-        'x^4(x+3)-x^3(x+3)+17x(x+3)-35(x+3)'.objectify,
-        'x^5+3x^4-x^4-3x^3+17x^2+51x-35x-105'.objectify,
-        'x^5+2x^4-3x^3+17x^2+16x-105'.objectify
-      ]
-    end
-  end
+
  #
  #  describe '#flatit' do
  #    it 'flats x(xy)(x(y(z)))' do

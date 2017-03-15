@@ -105,6 +105,7 @@ class Addition < Expression
       end
     end
     copy.flatten
+    # copy
   end
 
   # def simplify_add_m_forms
@@ -283,16 +284,33 @@ class Addition < Expression
   end
 
   #RECURSION
+  # def expand
+  #   copy = self.copy
+  #   steps = []
+  #   copy.args.each do |exp|
+  #     steps << exp.expand
+  #   end
+  #   steps = steps.equalise_array_lengths.transpose
+  #   steps = steps.map{|a| add(a)}
+  #   steps = steps.map{|a| a.flatit}
+  #   steps = delete_duplicate_steps(steps)
+  # end
+
   def expand
     copy = self.copy
     steps = []
     copy.args.each do |exp|
       steps << exp.expand
+      p exp
     end
-    steps = steps.equalise_array_lengths.transpose
-    steps = steps.map{|a| add(a)}
-    steps = steps.map{|a| a.flatit}
-    steps = delete_duplicate_steps(steps)
+
+    min_length = steps.map{|a| a.length}.min
+
+
+    # steps = steps.equalise_array_lengths.transpose
+    # steps = steps.map{|a| add(a)}
+    # steps = steps.map{|a| a.flatit}
+    # steps = delete_duplicate_steps(steps)
   end
 
   def flatit

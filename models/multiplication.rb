@@ -353,32 +353,11 @@ class Multiplication
     brac
   end
 
-  def combine_two_brackets
-    copy = self.copy
-    new_args = []
-    copy.args.first.args.each_with_index do |a|
-      copy.args.last.args.each_with_index do |b|
-        new_args << mtp(a,b)
-      end
-    end
-    new_args = new_args.map {|a| a.simplify_product_of_m_forms}
-    new_args = new_args.equalise_array_lengths.transpose
-    expansion_steps = new_args.map{|a| add(a)}
-
-    ordered_terms = expansion_steps.last.order_similar_terms
-    combined_terms = ordered_terms.combine_similar_terms
-
-    spare = self.copy
-    new_brackets = []
-    spare.args.first.args.each do |factor|
-      new_brackets << mtp(factor,spare.args.last).flatit
-    end
-    expansion_steps[0] = add(new_brackets)
-
-    result = [self.copy] + expansion_steps + [ordered_terms, combined_terms]
-    result.map!{ |step| conv_ones(step).flatten  }
-    result.delete_duplicate_steps
-  end
+  # copy.args.first.args.each_with_index do |a|
+  #   copy.args.last.args.each_with_index do |b|
+  #     new_args << mtp(a,b)
+  #   end
+  # end
 
   def sort_elements
     array = self.copy.args
@@ -602,21 +581,120 @@ class Multiplication
   #   end
   # end
 
+  def combine_two_brackets
+    copy = self.copy
+    new_args = []
+    first_bracket = add(copy.args.first).flatit.args
+    second_bracket = add(copy.args.last).flatit.args
+    first_bracket.each do |a|
+      second_bracket.each do |b|
+        new_args << mtp(a,b)
+      end
+    end
+    new_args = new_args.map {|a| a.simplify_product_of_m_forms}
+    new_args = new_args.equalise_array_lengths.transpose
+    expansion_steps = new_args.map{|a| add(a)}
+
+    ordered_terms = expansion_steps.last.order_similar_terms
+    combined_terms = ordered_terms.combine_similar_terms
+
+    spare = self.copy
+    new_brackets = []
+    first_bracket = add(spare.args.first).flatit.args
+    first_bracket.each do |factor|
+      new_brackets << mtp(factor,spare.args.last).flatit
+    end
+    expansion_steps[0] = add(new_brackets)
+
+    result = [self.copy] + expansion_steps + [ordered_terms, combined_terms]
+    result.map!{ |step| conv_ones(step).flatten  }
+    result.delete_duplicate_steps
+
+    if (self.args.first.is_a?(multiplication) || self.args.last.is_a?(multiplication)) && self.args.length > 1
+      result.delete_at(0)
+    end
+
+    result
+  end
+
   def expand
     copy = self.copy
     #expand all args
     steps = []
+
+    last_arg_length = nil
+
     while true
-      steps += mtp(copy.args[0],copy.args[1]).combine_two_brackets
-      steps.map! do |step|
+      combined = mtp(copy.args[0],copy.args[1]).combine_two_brackets
+      new_steps = combined
+      new_steps.map! do |step|
         tail_copy = copy.args[2..-1].map{|arg| arg.copy}
-        mtp([step,tail_copy].flatten).flatit
+        res = mtp([step,tail_copy].flatten)
+        res
       end
+      new_steps[0] = new_steps[0].flatit
+
+      puts ''
+      puts '======='
+      new_steps.each do |step|
+        puts step.copy.latex.shorten
+      end
+      puts '======='
+      puts ''
+      puts '*************'
+      puts "number of args is #{new_steps.last.args.length}"
+      puts "last arg class is #{new_steps.last.class}"
+      puts new_steps.last.copy.latex.shorten
+      puts '*************'
+      puts ''
+
+      steps += new_steps
+
+      # curr_last_arg_length = new_steps.last.args.length
+
+      # has_addition = false
+      # steps.last.args.each do |arg|
+      #   puts '&&&&&&&&&&&&&&&'
+      #   p arg
+      #   puts '&&&&&&&&&&&&&&&'
+      #   if arg.is_a?(addition)
+      #     has_addition = true
+      #     break
+      #   end
+      # end
+
       break if steps.last.args.length == 1
+      # last_arg_length = curr_last_arg_length
+
+      # break if steps.last.args.length == 1
+
       copy = steps.last.copy
     end
     steps.map!{|step| step.flatten}.delete_duplicate_steps
   end
+
+
+
+  # def expand
+  #   copy = self.copy
+  #   #expand all args
+  #   steps = []
+  #   while true
+  #     steps += mtp(copy.args[0],copy.args[1]).combine_two_brackets
+  #     steps.map! do |step|
+  #       tail_copy = copy.args[2..-1].map{|arg| arg.copy}
+  #       mtp([step,tail_copy].flatten)
+  #     end
+  #     break if copy.args.length < 3
+  #     copy = steps.last.copy
+  #   end
+  #   steps.map!{|step| step.flatten}.delete_duplicate_steps
+  # end
+
+
+  # def expand
+  #
+  # end
 
   def flatit
     copy = self.copy
