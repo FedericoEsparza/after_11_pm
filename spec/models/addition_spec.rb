@@ -167,10 +167,19 @@ describe Addition do
   # end
 
   describe '#expand' do
-    it 'expands 3+(x+3)(x-2)+2x' do
-      exp = '3+(x+3)(x-2)+4'.objectify
+    # it 'expands 3+(x+3)(x-2)+2x' do
+    #   exp = '(x+2)(x+2)(x+2)+4(x+3)+4(x-3)(x^2+4)+3(x+2)'.objectify
+    #   result = exp.expand
+    #   p result.latex.shorten
+    #
+    # end
+
+
+    it 'expands 4(x+3)+4(x-3)(x^2+4)+3(x+2)' do
+      exp = '4(x+3)+4(x-3)(x^2+4)+3(x+2)'.objectify
       result = exp.expand
-      # p result
+      p result.latex.shorten
+
     end
   end
 

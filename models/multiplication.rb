@@ -617,6 +617,70 @@ class Multiplication
     result
   end
 
+  def combine_two_brackets_v2
+    copy = self.copy
+    new_args = []
+    first_bracket = add(copy.args.first).flatit.args
+    second_bracket = add(copy.args.last).flatit.args
+    first_bracket.each do |a|
+      second_bracket.each do |b|
+        new_args << mtp(a,b)
+      end
+    end
+    new_args = new_args.map {|a| a.simplify_product_of_m_forms}
+    new_args = new_args.equalise_array_lengths.transpose
+    expansion_steps = new_args.map{|a| add(a)}
+
+    ordered_terms = expansion_steps.last.order_similar_terms
+    combined_terms = ordered_terms.combine_similar_terms
+
+    spare = self.copy
+    new_brackets = []
+    first_bracket = add(spare.args.first).flatit.args
+    first_bracket.each do |factor|
+      new_brackets << mtp(factor,spare.args.last).flatit
+    end
+    expansion_steps[0] = add(new_brackets)
+
+    result = [self.copy] + expansion_steps
+    result.map!{ |step| conv_ones(step).flatten  }
+    result.delete_duplicate_steps
+
+    if (self.args.first.is_a?(multiplication) || self.args.last.is_a?(multiplication)) && self.args.length > 1
+      result.delete_at(0)
+    end
+
+    result
+  end
+
+  def expand_v2
+    #expand all args
+    steps = self.collect_non_add
+    copy = steps.last.copy
+    steps = steps[0..-2]
+
+    last_arg_length = nil
+
+    while true
+      combined = mtp(copy.args[0],copy.args[1]).combine_two_brackets_v2
+      new_steps = combined
+      new_steps.map! do |step|
+        tail_copy = copy.args[2..-1].map{|arg| arg.copy}
+        res = mtp([step,tail_copy].flatten)
+        res
+      end
+      new_steps[0] = new_steps[0].flatit
+
+      steps += new_steps
+
+      break if steps.last.args.length == 1
+      copy = steps.last.copy
+    end
+    steps.map!{|step| step.flatten}.delete_duplicate_steps
+  end
+
+
+
   def collect_non_add
     copy = self.copy
     new_args = []

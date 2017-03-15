@@ -104,19 +104,25 @@ class Array
     end
 
     def collect_move &block
-        return [] if self.length == 0
-        collected_elements = []
-        index = 0
-        while true
-          if block.call(self[index])
-            collected_elements << self.delete_at(index)
-            return collected_elements if index == self.length
-          else
-            return collected_elements if index == self.length - 1
-            index += 1
-          end
+      return [] if self.length == 0
+      collected_elements = []
+      index = 0
+      while true
+        if block.call(self[index])
+          collected_elements << self.delete_at(index)
+          return collected_elements if index == self.length
+        else
+          return collected_elements if index == self.length - 1
+          index += 1
         end
       end
+    end
+
+  def cut_array_lengths
+    copy = self.copy
+    min_length = self.map{|a| a.length}.min
+    copy.map!{|arr| arr[0...min_length]}
+  end
 
     ##is no longer needed, will keep if wanted later
 

@@ -63,5 +63,13 @@ describe Array do
       expect(collected_elements).to eq []
     end
   end
-  
+
+  describe '#cut_array_lengths' do
+    it 'cuts [[1,2],[1,2,3,4,5],[1,2,3]]' do
+      exp = [[1,2],[1,2,3,4,5],[1,2,3]]
+      expect(exp.cut_array_lengths).to eq [[1,2],[1,2],[1,2]]
+      expect(exp).to eq [[1,2],[1,2,3,4,5],[1,2,3]]
+    end
+  end
+
 end

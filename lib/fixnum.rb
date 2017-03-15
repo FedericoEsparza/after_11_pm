@@ -35,6 +35,12 @@ class Fixnum
     self
   end
 
+  def similar?(exp)
+    self.class == exp.class
+  end
+
+  
+
   # def mult(fract)
   #   if fract.is_a?(fraction)
   #     frac(mtp(fract.numerator,self).evaluate_numeral,fract.denominator)
