@@ -23,7 +23,7 @@ class SimultaneousEquationQuestion
     c = @options[:coef_range_2].sample
 
     while a.abs == c.abs
-      c = solution_set.sample
+      c = @options[:coef_range_2].sample
     end
 
     b = possible_set(a).sample

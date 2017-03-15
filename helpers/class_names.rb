@@ -86,4 +86,12 @@ module ClassName
   def tan_eqn_qs
     TangentEquationQuestion
   end
+
+  def sim_eqn_qs
+    SimultaneousEquationQuestion
+  end
+
+  def single_var_qs
+    SingleVariableQuestion
+  end
 end

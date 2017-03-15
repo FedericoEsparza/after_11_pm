@@ -44,6 +44,7 @@ class SingleVariableQuestion
 
     @options[:number_of_steps].times do
       next_step = _next_step(left_side, rs)
+      return generate_equation if GeneralUtilities::includes?(NilClass, object: next_step)
       subed_solution = next_step.subs_terms(@options[:variable], solution)
       rs = subed_solution.evaluate_numeral
 

@@ -422,7 +422,7 @@ class Addition < Expression
     if self == old_var
       return new_var
     else
-      add(args.map{|a| a.subs_terms(old_var,new_var)})
+      add(args.map{ |a| a.subs_terms(old_var,new_var) })
     end
   end
 
