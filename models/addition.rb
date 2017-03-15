@@ -300,10 +300,11 @@ class Addition < Expression
     copy = self.copy
     curr_steps = []
 
-    add_terms = []
+    add_steps = [add()]
     bracket_terms = copy.args
-    # while bracket_terms != []
+    while bracket_terms != []
       steps = []
+      # p bracket_terms
       bracket_terms.each do |exp|
         step = exp.expand_v2
         # puts write_test(step)
@@ -312,27 +313,30 @@ class Addition < Expression
       min_length = steps.map{|a| a.length}.min
 
       add_terms = steps.select{|step| step.length == min_length}
+      add_terms += add_steps[0].args
       bracket_terms = steps.select{|step| step.length != min_length}
       # p add(add_terms.transpose.last).flatit
 
       curr_steps = steps.cut_array_lengths.transpose.map{|step| add(step)}
-      puts write_test(curr_steps)
-      p curr_steps.last.args.length
+      # puts write_test(curr_steps)
+      # p curr_steps.last.args.length
       add_steps = [add(add_terms.transpose.last).flatit.standardize_add_m_form.order_similar_terms]
       # p add_steps
       add_steps << add_steps.last.copy.combine_similar_terms
 
-      bracket_steps = bracket_terms.map{|step| step[min_length-1]}
-      bracket_steps = bracket_steps.map!{|term| term.expand_v2[1..-1]}
+      bracket_steps = bracket_terms.map!{|step| step[min_length-1]}
+      p bracket_terms
+      bracket_steps = bracket_steps.map{|term| term.expand_v2[1..-1]}
 
       result = [add_steps] + bracket_steps
       result = result.equalise_array_lengths.transpose
       result.map!{|step| add(step)}
 
       curr_steps += result
-
-      puts write_test(curr_steps)
-    # end
+      p bracket_terms
+      p add_steps
+      # puts write_test(curr_steps)
+    end
 
     # curr_expansion_args = steps.map{|step| step[min_length-1]}
 
