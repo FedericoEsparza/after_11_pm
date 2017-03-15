@@ -653,9 +653,17 @@ class Multiplication
     result
   end
 
-  def expand_v2
+  def expand
     #expand all args
-    steps = self.collect_non_add
+    expanded_steps = self.copy.args.inject([]) do |res,arg|
+      res << arg.expand
+    end
+
+    steps = expanded_steps.equalise_array_lengths.transpose.map{|step| mtp(step)}
+    step_to_expand = steps.slice!(-1)
+
+    steps += step_to_expand.collect_non_add
+    # steps = self.collect_non_add
 
     if steps.last.args.length == 1
       return [steps.last.args.first.copy]
@@ -667,7 +675,10 @@ class Multiplication
     last_arg_length = nil
 
     while true
-      combined = mtp(copy.args[0],copy.args[1]).combine_two_brackets_v2
+      to_combine = mtp(copy.args[0],copy.args[1])
+      # p to_combine
+      combined = to_combine.combine_two_brackets
+
       new_steps = combined
       new_steps.map! do |step|
         tail_copy = copy.args[2..-1].map{|arg| arg.copy}
@@ -678,11 +689,25 @@ class Multiplication
 
       steps += new_steps
 
+      # curr_last_arg_length = new_steps.last.args.length
+
+      # has_addition = false
+      # steps.last.args.each do |arg|
+      #   puts '&&&&&&&&&&&&&&&'
+      #   p arg
+      #   puts '&&&&&&&&&&&&&&&'
+      #   if arg.is_a?(addition)
+      #     has_addition = true
+      #     break
+      #   end
+      # end
+
       break if steps.last.args.length == 1
       copy = steps.last.copy
     end
     steps.map!{|step| step.flatten}.delete_duplicate_steps
   end
+
 
 
 
@@ -720,7 +745,7 @@ class Multiplication
     ([self.copy] + result).delete_duplicate_steps
   end
 
-  def expand
+  def expand_v2
     #expand all args
     expanded_steps = self.copy.args.inject([]) do |res,arg|
       res << arg.expand
@@ -744,7 +769,7 @@ class Multiplication
     while true
       to_combine = mtp(copy.args[0],copy.args[1])
       # p to_combine
-      combined = to_combine.combine_two_brackets
+      combined = to_combine.combine_two_brackets_v2
 
       new_steps = combined
       new_steps.map! do |step|

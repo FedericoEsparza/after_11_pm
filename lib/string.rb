@@ -53,6 +53,10 @@ class String
     [self]
   end
 
+  def expand_v2
+    [self]
+  end
+
   def find_denoms
     []
   end

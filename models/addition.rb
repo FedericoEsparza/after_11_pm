@@ -369,8 +369,6 @@ class Addition < Expression
       puts 'Next to expand is  ' + next_to_exp.latex.shorten
       # p next_to_exp
 
-
-
       expanded_steps_arry = next_to_exp.args.inject([]) do |res,arg|
         # puts ''
         # puts ''
@@ -381,7 +379,7 @@ class Addition < Expression
         # p arg
         # puts '*********'
 
-        expansion = arg.expand
+        expansion = arg.expand_v2
         # puts '%%%%%%%%%%%%%%%'
         # puts 'The resulting expansion is'
         # p expansion

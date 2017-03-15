@@ -31,6 +31,10 @@ class Fixnum
     [self]
   end
 
+  def expand_v2
+    [self]
+  end
+
   def flatit
     self
   end
@@ -39,7 +43,7 @@ class Fixnum
     self.class == exp.class
   end
 
-  
+
 
   # def mult(fract)
   #   if fract.is_a?(fraction)
