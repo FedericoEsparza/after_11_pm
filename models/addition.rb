@@ -409,6 +409,9 @@ class Addition < Expression
 
       next_to_exp = steps_to_add.slice!(min_length-1)
 
+      #check this!!!!!!!!!
+      next_to_exp = next_to_exp.flatit
+      #check this!!!!!!!!!
 
       puts 'Steps to add is '
       puts write_test steps_to_add
