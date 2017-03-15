@@ -171,7 +171,8 @@ solution_latex = equation.latex
 > - Non-standard Core 2 trigonometric equation solver.  (Machine learning see below)
 > - Almost all A-level Maths topics!
 > - Add a webapp to the project.
-
+> - Add question sheet generator.
+> - Refactor / rewrite expand.
 
 --------
 ## Machine Learning
