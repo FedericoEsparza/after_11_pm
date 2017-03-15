@@ -376,7 +376,7 @@ class Multiplication
     expansion_steps[0] = add(new_brackets)
 
     result = [self.copy] + expansion_steps + [ordered_terms, combined_terms]
-    result.map!{ |step| conventionalise_one_times(step).flatten  }
+    result.map!{ |step| conv_ones(step).flatten  }
     result.delete_duplicate_steps
   end
 

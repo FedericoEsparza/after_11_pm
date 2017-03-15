@@ -1,4 +1,4 @@
-describe QuadraticEquation do
+xdescribe QuadraticEquation do
 
   # describe '#simplify' do
   #

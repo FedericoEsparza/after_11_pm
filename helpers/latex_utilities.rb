@@ -37,259 +37,28 @@ module LatexUtilities
       return sbt(nil,exp)
     end
 
-    if exp.is_a?(addition) == false && !(numerical?(exp) || exp.is_a?(string))
+    if !(exp.nil?) && exp.is_a?(addition) == false && !(numerical?(exp) || exp.is_a?(string))
       conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
       return exp.class.new(conv_args)
     end
 
     return exp
   end
-    # if exp.is_a?(addition)
-    #   if numerical?(exp.args[-1]) && exp.args[-1] < 0
-    #     front_add_args = []
-    #     for k in 0..(exp.args.length-2)
-    #       front_add_args << exp.args[k]
-    #     end
-    #     minus_end = add(front_add_args).flatten.conv_pm
-    #     sub_end = exp.args[-1].abs.conv_pm
-    #     return sbt(minus_end,sub_end)
-    #   end
-    #
-    #   if exp.args[-1].is_a?(multiplication) && numerical?(exp.args[-1].args[0]) && exp.args[-1].args[0] < 0
-    #
-    #     front_add_args = []
-    #     for k in 0..(exp.args.length-2)
-    #       front_add_args << exp.args[k]
-    #     end
-    #     minus_end = add(front_add_args).flatten.conv_pm
-    #
-    #     sub_end = exp.args[-1].copy
-    #     sub_end.args[0] = sub_end.args[0].abs
-    #     sub_end = sub_end.conv_pm
-    #
-    #     return sbt(minus_end,sub_end)
-    #   end
-    #
-    #   if numerical?(exp.args[0]) && exp.args[0] < 0
-    #     exp.args[0] = sbt(nil,exp.args[0].abs)
-    #   end
-    #
-    #   for i in 2..(exp.args.length-1)
-    #     if numerical?(exp.args[-i]) && exp.args[-i] < 0
-    #       minus_arg_i = exp.args.length  - i
-    #       new_args = []
-    #       for j in (exp.args.length-i+1)..(exp.args.length-1)
-    #         new_args << exp.args[j]  #check this it needs to be a new copy
-    #       end
-    #       front_add_args = []
-    #       for k in 0..((exp.args.length - i)-1)
-    #         front_add_args << exp.args[k]
-    #       end
-    #       minus_end = conv_pm(add(front_add_args))
-    #       front_sbt = sbt(minus_end,exp.args[-i].abs)
-    #       new_args.insert(0,front_sbt)
-    #       return add(new_args)
-    #     end
-    #
-    #     if exp.args[-i].is_a?(multiplication) && numerical?(exp.args[-i].args[0]) && exp.args[-i].args[0] < 0
-    #       # puts "value of i is #{i}"
-    #       # p exp.args[-i]
-    #       # puts 'hello'
-    #       minus_arg_i = exp.args.length  - i
-    #       new_args = []
-    #       for j in (exp.args.length-i+1)..(exp.args.length-1)
-    #         new_args << conv_pm(exp.args[j]) #check this it needs to be a new copy
-    #       end
-    #       front_add_args = []
-    #       for k in 0..((exp.args.length - i)-1)
-    #         front_add_args << exp.args[k]
-    #       end
-    #       if front_add_args.length == 1
-    #         minus_end = conv_pm(front_add_args[0])
-    #       else
-    #         minus_end = conv_pm(add(front_add_args))
-    #       end
-    #
-    #       exp.args[-i].args[0] = exp.args[-i].args[0].abs
-    #       exp.args[-i] = conv_pm(exp.args[-i])
-    #       # p exp.args[-i]
-    #
-    #       front_sbt = sbt(minus_end,exp.args[-i])
-    #       new_args.insert(0,front_sbt)
-    #       # p new_args[0]
-    #       return add(new_args)
-    #     end
-    #   end
-    #
-    #   conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
-    #   return exp.class.new(conv_args)
-    # end
-    #
-    # if exp.is_a?(multiplication) && numerical?(exp.args[0]) && exp.args[0] < 0
-    #   exp.args[0] = exp.args[0].abs
-    #   return sbt(nil,exp.conv_pm)
-    # end
-    #
-    # if exp.is_a?(multiplication) && !(numerical?(exp.args[0]) && exp.args[0] < 0)
-    #   conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
-    #   return exp.class.new(conv_args)
-    # end
-    #
-    # if _standard_class?(exp)
-    #   conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
-    #   return exp.class.new(conv_args)
-    # end
-    #
-    # if numerical?(exp) || exp.is_a?(string)
-    #   return exp
-    # end
-    #
-    # if exp.is_a?(square_root)
-    #   exp.value = exp.value.conv_pm
-    #   return exp
-    # end
 
-    # should not have the line below
-    # return exp
-
-
-
-
-
-
-
-
-
-
-  # def conv_pm(exp = nil)
-  #   exp = exp.copy || self.copy
-  #   if exp.is_a?(addition)
-  #     if numerical?(exp.args[-1]) && exp.args[-1] < 0
-  #       front_add_args = []
-  #       for k in 0..(exp.args.length-2)
-  #         front_add_args << exp.args[k]
-  #       end
-  #       minus_end = add(front_add_args).flatten.conv_pm
-  #       sub_end = exp.args[-1].abs.conv_pm
-  #       return sbt(minus_end,sub_end)
-  #     end
-  #
-  #     if exp.args[-1].is_a?(multiplication) && numerical?(exp.args[-1].args[0]) && exp.args[-1].args[0] < 0
-  #
-  #       front_add_args = []
-  #       for k in 0..(exp.args.length-2)
-  #         front_add_args << exp.args[k]
-  #       end
-  #       minus_end = add(front_add_args).flatten.conv_pm
-  #
-  #       sub_end = exp.args[-1].copy
-  #       sub_end.args[0] = sub_end.args[0].abs
-  #       sub_end = sub_end.conv_pm
-  #
-  #       return sbt(minus_end,sub_end)
-  #     end
-  #
-  #     if numerical?(exp.args[0]) && exp.args[0] < 0
-  #       exp.args[0] = sbt(nil,exp.args[0].abs)
-  #     end
-  #
-  #     for i in 2..(exp.args.length-1)
-  #       if numerical?(exp.args[-i]) && exp.args[-i] < 0
-  #         minus_arg_i = exp.args.length  - i
-  #         new_args = []
-  #         for j in (exp.args.length-i+1)..(exp.args.length-1)
-  #           new_args << exp.args[j]  #check this it needs to be a new copy
-  #         end
-  #         front_add_args = []
-  #         for k in 0..((exp.args.length - i)-1)
-  #           front_add_args << exp.args[k]
-  #         end
-  #         minus_end = conv_pm(add(front_add_args))
-  #         front_sbt = sbt(minus_end,exp.args[-i].abs)
-  #         new_args.insert(0,front_sbt)
-  #         return add(new_args)
-  #       end
-  #
-  #       if exp.args[-i].is_a?(multiplication) && numerical?(exp.args[-i].args[0]) && exp.args[-i].args[0] < 0
-  #         # puts "value of i is #{i}"
-  #         # p exp.args[-i]
-  #         # puts 'hello'
-  #         minus_arg_i = exp.args.length  - i
-  #         new_args = []
-  #         for j in (exp.args.length-i+1)..(exp.args.length-1)
-  #           new_args << conv_pm(exp.args[j]) #check this it needs to be a new copy
-  #         end
-  #         front_add_args = []
-  #         for k in 0..((exp.args.length - i)-1)
-  #           front_add_args << exp.args[k]
-  #         end
-  #         if front_add_args.length == 1
-  #           minus_end = conv_pm(front_add_args[0])
-  #         else
-  #           minus_end = conv_pm(add(front_add_args))
-  #         end
-  #
-  #         exp.args[-i].args[0] = exp.args[-i].args[0].abs
-  #         exp.args[-i] = conv_pm(exp.args[-i])
-  #         # p exp.args[-i]
-  #
-  #         front_sbt = sbt(minus_end,exp.args[-i])
-  #         new_args.insert(0,front_sbt)
-  #         # p new_args[0]
-  #         return add(new_args)
-  #       end
-  #     end
-  #
-  #     conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
-  #     return exp.class.new(conv_args)
-  #   end
-  #
-  #   if exp.is_a?(multiplication) && numerical?(exp.args[0]) && exp.args[0] < 0
-  #     exp.args[0] = exp.args[0].abs
-  #     return sbt(nil,exp.conv_pm)
-  #   end
-  #
-  #   if exp.is_a?(multiplication) && !(numerical?(exp.args[0]) && exp.args[0] < 0)
-  #     conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
-  #     return exp.class.new(conv_args)
-  #   end
-  #
-  #   if _standard_class?(exp)
-  #     conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
-  #     return exp.class.new(conv_args)
-  #   end
-  #
-  #   if numerical?(exp) || exp.is_a?(string)
-  #     return exp
-  #   end
-  #
-  #   if exp.is_a?(square_root)
-  #     exp.value = exp.value.conv_pm
-  #     return exp
-  #   end
-  #
-  #   # should not have the line below
-  #   # return exp
-  # end
-
-  def _standard_class?(exp)
-    [power,division,subtraction,sine,cosine,tangent,arcsine,arctangent,arccosine,equation].include?(exp.class)
-  end
-
-  def conventionalise_one_times(exp)
+  def conv_ones(exp)
     if exp.is_a?(multiplication) && exp.args.length > 1 && exp.args[0] == 1
       exp.args.delete_at(0)
     end
     unless numerical?(exp) || exp.is_a?(string) || exp.nil?
       for i in 0..exp.args.length-1
-        conventionalise_one_times(exp.args[i])
+        conv_ones(exp.args[i])
       end
     end
     return exp
   end
 
   def conventionalise(exp)
-    conventionalise_one_times(exp.conv_pm)
+    conv_ones(exp.conv_pm)
   end
 
   def brackets(latex_str)
