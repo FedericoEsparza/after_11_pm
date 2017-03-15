@@ -67,4 +67,18 @@ module GeneralUtilities
       false
     end
   end
+
+  def to_file(path: nil, name:, extension: '.tex', content:)
+    path ||= './temp/'
+    file_name = path + name.to_s + extension
+    begin
+      worksheet_sheet = File.open(file_name, 'w')
+      worksheet_sheet.write(content)
+    rescue IOError => e
+      puts "Error occured #{e}"
+    ensure
+      worksheet_sheet.close unless worksheet_sheet.nil?
+    end
+    Pathname.new(file_name)
+  end
 end

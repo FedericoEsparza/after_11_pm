@@ -185,6 +185,7 @@ class Division
     return [bot]
   end
 
+
   def elim_common_factors
     if top.is_a?(multiplication)
       num_factors = top.args
@@ -201,7 +202,7 @@ class Division
       denom_factors = [bot]
       denom = mtp(bot)
     end
-
+    p denom_factors
     i = 0
     while i < denom_factors.length
       factor = denom_factors[i]

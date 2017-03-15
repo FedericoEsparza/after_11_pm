@@ -1,4 +1,45 @@
 module LatexUtilities
+  HEADERS = "\\documentclass{article}\n"\
+    "\\usepackage[math]{iwona}\n"\
+    "\\usepackage[fleqn]{amsmath}\n"\
+    "\\usepackage{scrextend}\n"\
+    "\\changefontsizes[20pt]{14pt}\n"\
+    "\\usepackage[a4paper, left=0.7in,right=0.7in,top=1in,bottom=1in]{geometry}\n"\
+    "\\pagenumbering{gobble}\n"\
+    "\\usepackage{fancyhdr}\n"\
+    "\\renewcommand{\\headrulewidth}{0pt}\n"\
+    "\\pagestyle{fancy}\n".freeze
+
+  SOLUTION_HEADERS = "\\documentclass{article}\n"\
+    "\\usepackage[math]{iwona}\n"\
+    "\\usepackage[fleqn]{amsmath}\n"\
+    "\\usepackage{scrextend}\n"\
+    "\\changefontsizes[16pt]{12pt}\n"\
+    "\\usepackage[a4paper, left=0.7in,right=0.7in,top=1in,bottom=1in]{geometry}\n"\
+    "\\pagenumbering{gobble}\n"\
+    "\\usepackage{fancyhdr}\n"\
+    "\\renewcommand{\\headrulewidth}{0pt}\n"\
+    "\\pagestyle{fancy}\n".freeze
+
+  def add_page(latex:, type:, title:)
+    prefix = type.to_s[0].upcase
+    topic_prefix = nil
+    title ||= nil
+    serial = generate_serial
+    student = nil
+    section = "\\section*{\\centerline{#{title}}}\n\n"
+    footer = "\\lfoot{#{topic_prefix}-#{serial}-#{prefix}\\quad \\textc"\
+             "opyright\\, One Maths #{Time.now.year}}\n\\rfoot{\\textit{student:}\\quad"\
+             " #{student}}\n\\begin{document}\n"
+    page_end = '\\end{document}'
+
+    if type == :question
+      HEADERS + footer + section + latex + page_end
+    else
+      SOLUTION_HEADERS + footer + section + latex + page_end
+    end
+  end
+
   def brackets(latex_str)
     '\left(' + latex_str + '\right)'
   end
@@ -42,6 +83,26 @@ module LatexUtilities
   def add_align_env(latex)
     start = "\\begin{align*}\n"
     align_end = "\n\\end{align*}\n"
+    if latex.is_a?(Array)
+      latex.map do |solution|
+        start + solution + align_end
+      end
+    else
+      start + latex + align_end
+    end
+  end
+
+  def add_minipage(latex:, questions_per_row:)
+    minipage_width = '%.4f' % (1.to_f / questions_per_row)
+    start = "\\begin{minipage}[t]{#{minipage_width}\\textwidth}\n"
+    minipage_end = "\\end{minipage}\n"
+
+    start + latex + minipage_end
+  end
+
+  def add_falign_env(latex)
+    start = "\\begin{flalign*}\n"
+    align_end = "\n\\end{flalign*}$\\$\n"
     if latex.is_a?(Array)
       latex.map do |solution|
         start + solution + align_end
@@ -188,4 +249,12 @@ module LatexUtilities
     conventionalise_one_times(conventionalise_plus_minus(exp))
   end
 
+  def generate_serial
+    letters = [*'A'..'Z']
+    digits = [*'0'..'9']
+    serial_number = ''
+    2.times { serial_number += letters.sample }
+    6.times { serial_number += digits.sample }
+    serial_number
+  end
 end

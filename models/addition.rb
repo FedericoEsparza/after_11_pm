@@ -422,7 +422,68 @@ class Addition < Expression
     if self == old_var
       return new_var
     else
-      add(args.map{|a| a.subs_terms(old_var,new_var)})
+      add(args.map{ |a| a.subs_terms(old_var,new_var) })
     end
   end
+
+  def convert_to_power
+    new_args = []
+    args.each do |a|
+      if a.is_a?(multiplication)
+        temp = a.copy
+        new_args << temp.convert_to_power
+      elsif a.is_a?(power)
+        new_args << a
+      else
+        new_args << pow(a,1)
+      end
+    end
+    add(new_args)
+  end
+
+  def find_common_factors
+    exp = self.copy
+    exp = exp.standardize_add_m_form
+    exp = exp.convert_to_power
+    factors = []
+    exp.args.first.args.each do |fact|
+      factors << fact.base
+    end
+
+    common_factors = []
+    factors.each do |factor|
+      if exp.args.all? {|a| a.args.any?{|b| b.base == factor}}
+        powers = []
+        exp.args.each{|arg| arg.args.each{|a| powers << a.index if a.base==factor}}
+        common_power = powers.min
+        if common_power == 1
+          common_factors << factor
+        elsif common_power > 0
+          common_factors << pow(factor,powers.min)
+        end
+      end
+    end
+    common_factors
+  end
+
+  def factorise_common_factors
+    exp = self.copy
+    exp = exp.standardize_add_m_form
+    exp = exp.convert_to_power
+    common_factors = find_common_factors
+    new_args = []
+    args.each do |arg|
+      factors = common_factors.copy
+      new_args << arg.divide_factors(mtp(common_factors))
+    end
+    remainder = add(new_args)
+    common_factors << remainder
+
+    if common_factors.length == 1
+      common_factors.first
+    else
+      mtp(common_factors)
+    end
+  end
+
 end

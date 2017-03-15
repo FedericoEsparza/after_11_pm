@@ -132,5 +132,17 @@ describe GeneralUtilities do
         expect(dummy_class.includes?(Multiplication, object: exp)).to be true
       end
     end
+
+    context 'looking for Nil' do
+      it 'return false for 2/3' do
+        exp = div(2, 3)
+        expect(dummy_class.includes?(NilClass, object: exp)).to be false
+      end
+
+      it 'return true for 2(2+2x/nil)' do
+        exp = mtp(2, add(2, div(mtp(2, 'x'), nil)))
+        expect(dummy_class.includes?(NilClass, object: exp)).to be true
+      end
+    end
   end
 end
