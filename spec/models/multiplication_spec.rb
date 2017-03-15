@@ -409,54 +409,125 @@ describe Multiplication do
         '6yzx'.objectify
       ]
     end
-
-    # it 'combines (x-5)(2x)' do
-    #   exp = mtp(add('x',-5),mtp(2,'x'))
-    #   result = exp.combine_two_brackets
-    #   expect(result).to eq [
-    #     '(x-5)(2x)'.objectify,
-    #     'x2x-5\times2x'.objectify,   #bug with simplify_product_of_m_forms  ******************
-    #     '2x^2-10x'.objectify
-    #   ]
-    # end
   end
 
   describe '#expand' do
 
-    # it 'expands (x^2-2x+7)(x^2+x-5)(x+3)' do
-    #   exp = '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify
-    #   result = exp.expand
-    #   puts write_test(result)
-    # end
-
-    xit 'expands (x+7)(x^2-5)(x+3)(2-x)' do
-      exp = '(x+7)(x^2-5)(x+3)(2-x)'.objectify
+    it 'expands (x^2-2x+7)(x^2+x-5)(x+3)' do
+      exp = '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify
       result = exp.expand
-      puts write_test(result)
+      # puts write_test(result)
+      expect(result).to eq [
+        '(x^2-2x+7)(x^2+x-5)(x+3)'.objectify,
+        '(x^2(x^2+x-5)-2x(x^2+x-5)+7(x^2+x-5))(x+3)'.objectify,
+        '(x^4+x^3-5x^2-2x^3-2x^2+10x+7x^2+7x-35)(x+3)'.objectify,
+        '(x^4+x^3-2x^3-5x^2-2x^2+7x^2+10x+7x-35)(x+3)'.objectify,
+        '(x^4-x^3+17x-35)(x+3)'.objectify,
+        'x^4(x+3)-x^3(x+3)+17x(x+3)-35(x+3)'.objectify,
+        'x^5+3x^4-x^4-3x^3+17x^2+51x-35x-105'.objectify,
+        'x^5+2x^4-3x^3+17x^2+16x-105'.objectify
+      ]
     end
 
-    # it 'expands 2(x+4)' do
-    #   exp = '2(x+4)'.objectify
-    #   result = exp.expand
-    #   puts write_test(result)
-    # end
-    #
-    # it 'expands 2xy' do
-    #   exp = '2xy'.objectify
-    #   result = exp.expand
-    #   puts write_test(result)
-    # end
-
-    xit 'expands 3xyzw(x+1)' do
-      exp = '3xyzw(x+1)'.objectify
+    it 'expands (x+7)(x^2-5)(x+3)(2-x)' do
+      exp = '(x+7)(x^2-5)(x+3)(2-x)'.objectify
       result = exp.expand
-      puts write_test(result)
+      # puts write_test(result)
+      expect(result).to eq [
+        '(x+7)(x^2-5)(x+3)(2-x)'.objectify,
+        '(x(x^2-5)+7(x^2-5))(x+3)(2-x)'.objectify,
+        '(x^3-5x+7x^2-35)(x+3)(2-x)'.objectify,
+        '(x^3(x+3)-5x(x+3)+7x^2(x+3)-35(x+3))(2-x)'.objectify,
+        '(x^4+3x^3-5x^2-15x+7x^3+21x^2-35x-105)(2-x)'.objectify,
+        '(x^4+3x^3+7x^3-5x^2+21x^2-15x-35x-105)(2-x)'.objectify,
+        '(x^4+10x^3+16x^2-50x-105)(2-x)'.objectify,
+        'x^4(2-x)+10x^3(2-x)+16x^2(2-x)-50x(2-x)-105(2-x)'.objectify,
+        '2x^4-x^5+20x^3-10x^4+32x^2-16x^3-100x+50x^2-210+105x'.objectify,
+        '2x^4-10x^4-x^5+20x^3-16x^3+32x^2+50x^2-100x+105x-210'.objectify,
+        '-8x^4-x^5+4x^3+82x^2+5x-210'.objectify
+      ]
+    end
+
+    it 'expands 3xyzw(x+1)' do
+      exp = '3xyzw(x+1)y'.objectify
+      result = exp.expand
+      # puts write_test(result)
+      expect(result).to eq [
+        '3xyzw(x+1)y'.objectify,
+        '(3xyzw)y(x+1)'.objectify,
+        '3xy^2zw(x+1)'.objectify,
+        '3x^2y^2zw+3xy^2zw'.objectify
+      ]
     end
 
     it 'expands 3x(x+2)x^2(x-4)' do
-      exp = '(2x)(x+2)yzw(x-4)'.objectify
+      exp = '2x(x+2)yzw(x-4)'.objectify
       result = exp.expand
-      puts write_test(result)
+      # puts write_test(result)
+      expect(result).to eq [
+        '2x(x+2)yzw(x-4)'.objectify,
+        '(2x)(yzw)(x+2)(x-4)'.objectify,
+        '2xyzw(x+2)(x-4)'.objectify,
+        '(2x^2yzw+4xyzw)(x-4)'.objectify,
+        '2x^2yzw(x-4)+4xyzw(x-4)'.objectify,
+        '2x^3yzw-8x^2yzw+4x^2yzw-16xyzw'.objectify,
+        '2x^3yzw-4x^2yzw-16xyzw'.objectify
+      ]
+    end
+
+    it 'expands (x^2+5x)3x' do
+      exp = '(x^2+5x)3x'.objectify
+      result = exp.expand
+      # puts write_test(result)
+      expect(result).to eq [
+        '(x^2+5x)3x'.objectify,
+        '3x(x^2+5x)'.objectify,
+        '3x^3+15x^2'.objectify
+      ]
+    end
+  end
+
+  describe '#collect_non_add' do
+    it 'collcets x(x-3)3x^2y^4(x+6)' do
+      exp = 'x(x-3)3x^2y^4(x+6)'.objectify
+      result = exp.collect_non_add
+      # p result
+      # puts write_test(result)
+      expect(result).to eq [
+        'x(x-3)3x^2y^4(x+6)'.objectify,
+        'x(3x^2y^4)(x-3)(x+6)'.objectify,
+        '(3x^3y^4)(x-3)(x+6)'.objectify
+      ]
+    end
+
+    it 'expand xyz(x+2)3z(y-3)z^2w' do
+      exp = 'xyz(x+2)3z(y-3)z^2w'.objectify
+      result = exp.collect_non_add
+      # puts write_test(result)
+      expect(result).to eq [
+        'xyz(x+2)3z(y-3)z^2w'.objectify,
+        '(xyz)(3z)(z^2w)(x+2)(y-3)'.objectify,
+        '(3xyz^4w)(x+2)(y-3)'.objectify
+      ]
+    end
+
+    it 'expands 3xyzw(x+1)' do
+      exp = '3xyzw(x+1)'.objectify
+      result = exp.collect_non_add
+      # puts write_test(result)
+      expect(result).to eq [
+        '3xyzw(x+1)'.objectify,
+        '(3xyzw)(x+1)'.objectify
+      ]
+    end
+
+    it 'collects nothing' do
+      exp = '(x+3)(x+1)'.objectify
+      result = exp.collect_non_add
+      # puts write_test(result)
+      expect(result).to eq [
+        '(x+3)(x+1)'.objectify
+      ]
     end
   end
 

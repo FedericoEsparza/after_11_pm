@@ -617,10 +617,45 @@ class Multiplication
     result
   end
 
-  def expand
+  def collect_non_add
     copy = self.copy
+    new_args = []
+    i = 0
+    while i < args.length
+      if args[i].is_a?(addition)
+        new_args << [args[i]]
+        i += 1
+      else
+        arr = [args[i]]
+        j = i+1
+        while j < args.length && !args[j].is_a?(addition)
+          arr << args[j]
+          j += 1
+        end
+        new_args << arr
+        i = j
+      end
+    end
+    new_args.map!{|e|  e.length > 1 ? mtp(e) : e.first}
+    non_adds = new_args.collect_move{|arg| !arg.is_a?(addition)}
+    return [self] if non_adds == []
+
+    result = mtp(non_adds).simplify_product_of_m_forms
+    result.map!.with_index do |e,i|
+      if i < result.length-1
+        mtp(e.args+new_args)
+      else
+        mtp([e]+new_args)
+      end
+    end
+    ([self.copy] + result).delete_duplicate_steps
+  end
+
+  def expand
     #expand all args
-    steps = []
+    steps = self.collect_non_add
+    copy = steps.last.copy
+    steps = steps[0..-2]
 
     last_arg_length = nil
 
@@ -633,20 +668,6 @@ class Multiplication
         res
       end
       new_steps[0] = new_steps[0].flatit
-
-      puts ''
-      puts '======='
-      new_steps.each do |step|
-        puts step.copy.latex.shorten
-      end
-      puts '======='
-      puts ''
-      puts '*************'
-      puts "number of args is #{new_steps.last.args.length}"
-      puts "last arg class is #{new_steps.last.class}"
-      puts new_steps.last.copy.latex.shorten
-      puts '*************'
-      puts ''
 
       steps += new_steps
 
@@ -664,10 +685,6 @@ class Multiplication
       # end
 
       break if steps.last.args.length == 1
-      # last_arg_length = curr_last_arg_length
-
-      # break if steps.last.args.length == 1
-
       copy = steps.last.copy
     end
     steps.map!{|step| step.flatten}.delete_duplicate_steps
