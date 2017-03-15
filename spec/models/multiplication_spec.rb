@@ -495,6 +495,20 @@ describe Multiplication do
       ]
     end
 
+    it 'expands (x+3(x+2))(x-4)' do
+      exp = '(x+3(x+2))(x-4)'.objectify
+      result = exp.expand
+      # puts write_test(result)
+      expect(result).to eq [
+        '(x+3(x+2))(x-4)'.objectify,
+        '(x+3x+6)(x-4)'.objectify,
+        'x(x-4)+3x(x-4)+6(x-4)'.objectify,
+        'x^2-4x+3x^2-12x+6x-24'.objectify,
+        'x^2+3x^2-4x-12x+6x-24'.objectify,
+        '4x^2-10x-24'.objectify
+      ]
+    end
+
   end
 
   # describe '#collect_non_add' do

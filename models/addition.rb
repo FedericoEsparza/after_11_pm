@@ -377,8 +377,10 @@ class Addition < Expression
         # puts ''
         # puts 'Next addition argument to expand is '
         # puts '*********'
+        # puts arg.latex.shorten
         # p arg
         # puts '*********'
+
         expansion = arg.expand
         # puts '%%%%%%%%%%%%%%%'
         # puts 'The resulting expansion is'
@@ -405,9 +407,9 @@ class Addition < Expression
       break if min_length == 1
       # puts write_test curr_expansion
 
-      steps_to_add = curr_expansion[0..min_length-1] #cut out the next one
+      steps_to_add = curr_expansion[1..min_length-1] #cut out the next one
 
-      next_to_exp = steps_to_add.slice!(min_length-1)
+      next_to_exp = steps_to_add.last.copy
 
       #check this!!!!!!!!!
       next_to_exp = next_to_exp.flatit

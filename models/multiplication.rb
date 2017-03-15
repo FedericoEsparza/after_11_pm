@@ -660,7 +660,7 @@ class Multiplication
     if steps.last.args.length == 1
       return [steps.last.args.first.copy]
     end
-  
+
     copy = steps.last.copy
     steps = steps[0..-2]
 
@@ -722,7 +722,15 @@ class Multiplication
 
   def expand
     #expand all args
-    steps = self.collect_non_add
+    expanded_steps = self.copy.args.inject([]) do |res,arg|
+      res << arg.expand
+    end
+
+    steps = expanded_steps.equalise_array_lengths.transpose.map{|step| mtp(step)}
+    step_to_expand = steps.slice!(-1)
+
+    steps += step_to_expand.collect_non_add
+    # steps = self.collect_non_add
 
     if steps.last.args.length == 1
       return [steps.last.args.first.copy]

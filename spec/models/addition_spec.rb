@@ -175,10 +175,10 @@ describe Addition do
     # end
 
 
-    # it 'expands 4(x+3)+4(x-3)(x^2+4)+3(x+2)' do
-    #   exp = '4(x+3)+4(x-3)(x^2+4)+3'.objectify
-    it 'expands 4(x+3)+4(x-3)(4+x)+3' do
-      exp = '4(x+3)+4(x-3)(4+x)+3'.objectify
+    it 'expands 4(x+3)+4(x-3)(x^2+4)+3(x+2)' do
+      exp = '4(x+3)+(2x+5)(x+3)+4(x-3)(x+2)(x+4)+3'.objectify
+    # it 'expands 4(x+3)+4(x-3)(4+x)+3' do
+    #   exp = '4(x+3)+4(x-3)(4+x)+3'.objectify
       result = exp.expand
       # p result.latex.shorten
       # puts write_test(result)
