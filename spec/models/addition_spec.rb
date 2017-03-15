@@ -175,13 +175,23 @@ describe Addition do
     # end
 
 
-    it 'expands 4(x+3)+4(x-3)(x^2+4)+3(x+2)' do
-      exp = '4(x+3)+4(x-3)(x^2+4)+3(x+2)'.objectify
-      result = exp.expand
-      p result.latex.shorten
+  #   it 'expands 4(x+3)+4(x-3)(x^2+4)+3(x+2)' do
+  #     exp = '4(x+3)+4(x-3)(x^2+4)+3'.objectify
+  #     result = exp.expand
+  #     # p result.latex.shorten
+  #     puts write_test(result)
+  #     expect(exp._min_exp_steps([[1,2,3],[1,2,3,4],[1,2],[1]])).to eq 2
+  #     expect(exp._min_exp_steps([[1,2,3],[1,2],[1]])).to eq 2
+  #     expect(exp._min_exp_steps([[1],[1],[1]])).to eq 1
+  #   end
+  # end
 
+    it 'expands 4x+12' do
+      exp = '4x+12'.objectify
+      result = exp.expand
+      # p result.latex.shorten
+      # puts write_test(result)
     end
   end
-
   #
 end

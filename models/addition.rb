@@ -296,57 +296,115 @@ class Addition < Expression
   #   steps = delete_duplicate_steps(steps)
   # end
 
+  # def expand
+  #   copy = self.copy
+  #   curr_steps = []
+  #
+  #   # add_steps = [add()]
+  #   bracket_terms = copy.args
+  #   while bracket_terms != []
+  #     steps = []
+  #     # p bracket_terms
+  #     bracket_terms.each do |exp|
+  #       step = exp.expand_v2
+  #       # puts write_test(step)
+  #       steps << step
+  #     end
+  #     min_length = steps.map{|a| a.length}.min
+  #
+  #     add_terms = steps.select{|step| step.length == min_length}
+  #     add_terms += add_steps[0].args
+  #     bracket_terms = steps.select{|step| step.length != min_length}
+  #     # p add(add_terms.transpose.last).flatit
+  #
+  #     curr_steps = steps.cut_array_lengths.transpose.map{|step| add(step)}
+  #     # puts write_test(curr_steps)
+  #     # p curr_steps.last.args.length
+  #     add_steps = [add(add_terms.transpose.last).flatit.standardize_add_m_form.order_similar_terms]
+  #     # p add_steps
+  #     add_steps << add_steps.last.copy.combine_similar_terms
+  #
+  #     bracket_steps = bracket_terms.map!{|step| step[min_length-1]}
+  #     p bracket_terms
+  #     bracket_steps = bracket_steps.map{|term| term.expand_v2[1..-1]}
+  #
+  #     result = [add_steps] + bracket_steps
+  #     result = result.equalise_array_lengths.transpose
+  #     result.map!{|step| add(step)}
+  #
+  #     curr_steps += result
+  #     p bracket_terms
+  #     p add_steps
+  #     # puts write_test(curr_steps)
+  #   end
+  #
+  #   # curr_expansion_args = steps.map{|step| step[min_length-1]}
+  #
+  #   # add(curr_expansion_args)
+  #
+  #
+  #   # steps = steps.equalise_array_lengths.transpose
+  #   # steps = steps.map{|a| add(a)}
+  #   # steps = steps.map{|a| a.flatit}
+  #   # steps = delete_duplicate_steps(steps)
+  # end
+
+
   def expand
-    copy = self.copy
-    curr_steps = []
+    result = []
+    next_to_exp = self.copy
 
-    add_steps = [add()]
-    bracket_terms = copy.args
-    while bracket_terms != []
-      steps = []
-      # p bracket_terms
-      bracket_terms.each do |exp|
-        step = exp.expand_v2
-        # puts write_test(step)
-        steps << step
+    # p next_to_exp.latex.shorten
+    i = 1
+    while true
+      puts 'Current i is  ' + i.to_s
+      puts 'Next to expand is  ' + next_to_exp.latex.shorten
+
+
+
+      expanded_steps_arry = next_to_exp.args.inject([]) do |res,arg|
+        puts 'Current mtp expansion expression is   '
+        p arg
+        expansion = arg.expand
+
+
+        res << expansion
       end
-      min_length = steps.map{|a| a.length}.min
 
-      add_terms = steps.select{|step| step.length == min_length}
-      add_terms += add_steps[0].args
-      bracket_terms = steps.select{|step| step.length != min_length}
-      # p add(add_terms.transpose.last).flatit
 
-      curr_steps = steps.cut_array_lengths.transpose.map{|step| add(step)}
-      # puts write_test(curr_steps)
-      # p curr_steps.last.args.length
-      add_steps = [add(add_terms.transpose.last).flatit.standardize_add_m_form.order_similar_terms]
-      # p add_steps
-      add_steps << add_steps.last.copy.combine_similar_terms
+      min_length = _min_exp_steps(expanded_steps_arry)
 
-      bracket_steps = bracket_terms.map!{|step| step[min_length-1]}
-      p bracket_terms
-      bracket_steps = bracket_steps.map{|term| term.expand_v2[1..-1]}
+      curr_expansion = expanded_steps_arry.equalise_array_lengths.transpose.map{|step| add(step)}
+      puts 'Current expansion is '
+      puts write_test curr_expansion
+      puts 'min length is ' + min_length.to_s
 
-      result = [add_steps] + bracket_steps
-      result = result.equalise_array_lengths.transpose
-      result.map!{|step| add(step)}
+      break if min_length == 1
+      # puts write_test curr_expansion
 
-      curr_steps += result
-      p bracket_terms
-      p add_steps
-      # puts write_test(curr_steps)
+      steps_to_add = curr_expansion[0..min_length-1] #cut out the next one
+
+      next_to_exp = steps_to_add.slice!(min_length-1)
+
+
+      puts 'Steps to add is '
+      puts write_test steps_to_add
+      puts ''
+      puts ''
+
+
+      result += steps_to_add
+      i +=1
+      # break
     end
+    result
+  end
 
-    # curr_expansion_args = steps.map{|step| step[min_length-1]}
-
-    # add(curr_expansion_args)
-
-
-    # steps = steps.equalise_array_lengths.transpose
-    # steps = steps.map{|a| add(a)}
-    # steps = steps.map{|a| a.flatit}
-    # steps = delete_duplicate_steps(steps)
+  def _min_exp_steps(steps)
+    copy = steps.copy
+    copy.delete_if {|step| step.length == 1}
+    return 1 if copy == []
+    return copy.map{|a| a.length}.min
   end
 
   def flatit

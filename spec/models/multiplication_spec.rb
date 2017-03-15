@@ -485,51 +485,61 @@ describe Multiplication do
         '3x^3+15x^2'.objectify
       ]
     end
+
+    it 'expands 3x' do
+      exp = '3xy(2+x)'.objectify
+      result = exp.expand
+      expect(result).to eq [
+        '3xy(2+x)'.objectify,
+        '6xy+3x^2y'.objectify
+      ]
+    end
+
   end
 
-  describe '#collect_non_add' do
-    it 'collcets x(x-3)3x^2y^4(x+6)' do
-      exp = 'x(x-3)3x^2y^4(x+6)'.objectify
-      result = exp.collect_non_add
-      # p result
-      # puts write_test(result)
-      expect(result).to eq [
-        'x(x-3)3x^2y^4(x+6)'.objectify,
-        'x(3x^2y^4)(x-3)(x+6)'.objectify,
-        '(3x^3y^4)(x-3)(x+6)'.objectify
-      ]
-    end
-
-    it 'expand xyz(x+2)3z(y-3)z^2w' do
-      exp = 'xyz(x+2)3z(y-3)z^2w'.objectify
-      result = exp.collect_non_add
-      # puts write_test(result)
-      expect(result).to eq [
-        'xyz(x+2)3z(y-3)z^2w'.objectify,
-        '(xyz)(3z)(z^2w)(x+2)(y-3)'.objectify,
-        '(3xyz^4w)(x+2)(y-3)'.objectify
-      ]
-    end
-
-    it 'expands 3xyzw(x+1)' do
-      exp = '3xyzw(x+1)'.objectify
-      result = exp.collect_non_add
-      # puts write_test(result)
-      expect(result).to eq [
-        '3xyzw(x+1)'.objectify,
-        '(3xyzw)(x+1)'.objectify
-      ]
-    end
-
-    it 'collects nothing' do
-      exp = '(x+3)(x+1)'.objectify
-      result = exp.collect_non_add
-      # puts write_test(result)
-      expect(result).to eq [
-        '(x+3)(x+1)'.objectify
-      ]
-    end
-  end
+  # describe '#collect_non_add' do
+  #   it 'collcets x(x-3)3x^2y^4(x+6)' do
+  #     exp = 'x(x-3)3x^2y^4(x+6)'.objectify
+  #     result = exp.collect_non_add
+  #     # p result
+  #     # puts write_test(result)
+  #     expect(result).to eq [
+  #       'x(x-3)3x^2y^4(x+6)'.objectify,
+  #       'x(3x^2y^4)(x-3)(x+6)'.objectify,
+  #       '(3x^3y^4)(x-3)(x+6)'.objectify
+  #     ]
+  #   end
+  #
+  #   it 'expand xyz(x+2)3z(y-3)z^2w' do
+  #     exp = 'xyz(x+2)3z(y-3)z^2w'.objectify
+  #     result = exp.collect_non_add
+  #     # puts write_test(result)
+  #     expect(result).to eq [
+  #       'xyz(x+2)3z(y-3)z^2w'.objectify,
+  #       '(xyz)(3z)(z^2w)(x+2)(y-3)'.objectify,
+  #       '(3xyz^4w)(x+2)(y-3)'.objectify
+  #     ]
+  #   end
+  #
+  #   it 'expands 3xyzw(x+1)' do
+  #     exp = '3xyzw(x+1)'.objectify
+  #     result = exp.collect_non_add
+  #     # puts write_test(result)
+  #     expect(result).to eq [
+  #       '3xyzw(x+1)'.objectify,
+  #       '(3xyzw)(x+1)'.objectify
+  #     ]
+  #   end
+  #
+  #   it 'collects nothing' do
+  #     exp = '(x+3)(x+1)'.objectify
+  #     result = exp.collect_non_add
+  #     # puts write_test(result)
+  #     expect(result).to eq [
+  #       '(x+3)(x+1)'.objectify
+  #     ]
+  #   end
+  # end
 
 
  #   xdescribe '#combine n brackets' do

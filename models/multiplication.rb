@@ -656,6 +656,11 @@ class Multiplication
   def expand_v2
     #expand all args
     steps = self.collect_non_add
+
+    if steps.last.args.length == 1
+      return [steps.last.args.first.copy]
+    end
+  
     copy = steps.last.copy
     steps = steps[0..-2]
 
@@ -718,13 +723,21 @@ class Multiplication
   def expand
     #expand all args
     steps = self.collect_non_add
+
+    if steps.last.args.length == 1
+      return [steps.last.args.first.copy]
+    end
+
     copy = steps.last.copy
     steps = steps[0..-2]
 
     last_arg_length = nil
 
     while true
-      combined = mtp(copy.args[0],copy.args[1]).combine_two_brackets
+      to_combine = mtp(copy.args[0],copy.args[1])
+      # p to_combine
+      combined = to_combine.combine_two_brackets
+
       new_steps = combined
       new_steps.map! do |step|
         tail_copy = copy.args[2..-1].map{|arg| arg.copy}
