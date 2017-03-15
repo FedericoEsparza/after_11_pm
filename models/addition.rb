@@ -351,32 +351,55 @@ class Addition < Expression
 
 
   def expand
-    result = []
+    result = [self.copy]
     next_to_exp = self.copy
 
     # p next_to_exp.latex.shorten
     i = 1
     while true
+      if i == 1
+        puts ''
+        puts "$$$$$$$$$$$$$$$$$$$"
+        puts 'New Addition Expansion Started...'
+        puts self.copy.latex.shorten
+        puts "$$$$$$$$$$$$$$$$$$$"
+        puts ''
+      end
       puts 'Current i is  ' + i.to_s
       puts 'Next to expand is  ' + next_to_exp.latex.shorten
+      # p next_to_exp
 
 
 
       expanded_steps_arry = next_to_exp.args.inject([]) do |res,arg|
-        puts 'Current mtp expansion expression is   '
-        p arg
+        # puts ''
+        # puts ''
+        # puts ''
+        # puts 'Next addition argument to expand is '
+        # puts '*********'
+        # p arg
+        # puts '*********'
         expansion = arg.expand
-
-
+        # puts '%%%%%%%%%%%%%%%'
+        # puts 'The resulting expansion is'
+        # p expansion
+        # puts '%%%%%%%%%%%%%%%'
+        # puts ''
+        # puts ''
+        # puts ''
         res << expansion
       end
-
-
+      # puts '^^^^^^^^^^^^^^^'
+      # puts 'The current expanded_steps_arry is'
+      # p expanded_steps_arry
+      # puts '^^^^^^^^^^^^^^^'
       min_length = _min_exp_steps(expanded_steps_arry)
 
       curr_expansion = expanded_steps_arry.equalise_array_lengths.transpose.map{|step| add(step)}
       puts 'Current expansion is '
+      # p curr_expansion
       puts write_test curr_expansion
+      # p curr_expansion
       puts 'min length is ' + min_length.to_s
 
       break if min_length == 1
@@ -397,7 +420,7 @@ class Addition < Expression
       i +=1
       # break
     end
-    result
+    result.delete_duplicate_steps
   end
 
   def _min_exp_steps(steps)
