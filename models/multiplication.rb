@@ -50,14 +50,6 @@ class Multiplication
 
   def copy
     DeepClone.clone self
-    # new_args = args.inject([]) do |r,e|
-    #   if e.is_a?(string) || numerical?(e)
-    #     r << e
-    #   else
-    #     r << e.copy
-    #   end
-    # end
-    # mtp(new_args)
   end
 
   def de_convert_power

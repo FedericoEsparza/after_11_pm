@@ -1,5 +1,6 @@
 class SingleVariableQuestion
-  attr_reader :options, :question
+  attr_reader :options
+  attr_accessor :question
 
   def initialize(options={})
     @options = init_defaults(options)

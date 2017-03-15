@@ -47,6 +47,7 @@ class Equation
     #assume left exp, right num and it is one variable
     #reverse the outer most expression until 'x' is left
     curr_steps = [self.copy]
+
     i = 1
     while (ls.is_a?(string) && numerical?(rs)) == false && i < 100 do
       reverse_last_step(curr_steps)
@@ -239,7 +240,7 @@ class Equation
   end
 
   def reverse_last_step(curr_steps)
-    new_sides = ls.reverse_step(rs)
+    new_sides = ls.flatten.reverse_step(rs)
     self.ls = new_sides[:ls]
     self.rs = new_sides[:rs]
     curr_steps << self.copy
