@@ -1,18 +1,15 @@
 module LatexUtilities
   def conv_pm(exp = nil)
     exp = exp.copy || self.copy
+    #ordered if statements
     if exp.is_a?(addition) && exp.args.length > 1
       first_parts = add(exp.args[0..(exp.args.length-2)]).flatten.conv_pm
       last_arg = exp.args.last
 
       if numerical?(last_arg) && last_arg < 0
-        last_part = last_arg.abs
+        last_arg = last_arg.abs
+        last_part = last_arg.conv_pm
         return sbt(first_parts,last_part)
-      end
-
-      if numerical?(last_arg) && last_arg >= 0
-        last_part = last_arg
-        return add(first_parts,last_part).flatit
       end
 
       if last_arg.is_a?(multiplication) && numerical?(last_arg.args.first) && last_arg.args.first < 0
@@ -21,19 +18,28 @@ module LatexUtilities
         return sbt(first_parts,last_part)
       end
 
-      if last_arg.is_a?(multiplication) && numerical?(last_arg.args.first) && last_arg.args.first >= 0
-        last_part = last_arg.conv_pm
-        return add(first_parts,last_part).flatit
+      last_part = last_arg.conv_pm
+
+      if first_parts.is_a?(addition)
+        add_args = first_parts.args + [last_part]
+        return add(add_args)
       end
+
+      return add(first_parts,last_part)
+    end
+
+    if numerical?(exp) && exp < 0
+      return sbt(nil,exp.abs)
+    end
+
+    if exp.is_a?(multiplication) && numerical?(exp.args.first) && exp.args.first < 0
+      exp.args[0] = exp.args[0].abs
+      return sbt(nil,exp)
     end
 
     if exp.is_a?(addition) == false && !(numerical?(exp) || exp.is_a?(string))
       conv_args = exp.args.inject([]){|r,e| r << e.conv_pm}
       return exp.class.new(conv_args)
-    end
-
-    if numerical?(exp) && exp < 0
-      return sbt(nil,exp.abs)
     end
 
     return exp
