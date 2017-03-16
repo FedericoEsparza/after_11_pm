@@ -105,6 +105,12 @@ describe Addition do
   #     expect(result).to eq add(mtp(2,'x',pow('y',3)),mtp(4,'x',pow('y',3)),mtp(3,'a'),mtp(4,'a'),mtp(pow('b',3)),mtp(pow('b',5)))
   #   end
   #
+    # it '4x+12+(2x(x+3)+5(x+3))+(4x-12)(x+2)(x+4)+3' do
+    #   exp = '4x+12+(2x(x+3)+5(x+3))+(4x-12)(x+2)(x+4)+3'.objectify
+    #   result = exp.order_similar_terms
+    #   puts result.latex.shorten
+    # end
+#
   # end
   #
   # describe '#flatit' do
