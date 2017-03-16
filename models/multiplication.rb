@@ -746,6 +746,8 @@ class Multiplication
   end
 
   def expand_v2
+    # puts 'I am called'
+    # puts self.copy.latex.shorten
     #expand all args
     expanded_steps = self.copy.args.inject([]) do |res,arg|
       res << arg.expand
@@ -797,7 +799,9 @@ class Multiplication
       break if steps.last.args.length == 1
       copy = steps.last.copy
     end
-    steps.map!{|step| step.flatten}.delete_duplicate_steps
+    last_return = steps.map!{|step| step.flatten}.delete_duplicate_steps
+    # puts write_test(last_return)
+    last_return
   end
 
 

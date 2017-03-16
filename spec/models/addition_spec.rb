@@ -181,29 +181,31 @@ describe Addition do
     # end
 
 
-    it 'expands 4(x+3)+4(x-3)(x^2+4)+3(x+2)' do
-      exp = '4(x+3)+(2x+5)(x+3)+4(x-3)(x+2)(x+4)+3'.objectify
-    # it 'expands 4(x+3)+4(x-3)(4+x)+3' do
-    #   exp = '4(x+3)+4(x-3)(4+x)+3'.objectify
+    # it 'expands 4(x+3)+4(x-3)(x^2+4)+3(x+2)' do
+    #   exp = '4(x+3)+(2x+5)(x+3)+4(x-3)(x+2)(x+4)+3'.objectify
+    it 'expands (2-x)(x+3)+(x+4)(x-3)' do
+      exp = '(2-x)(x+3)+(x+4)(x-3)'.objectify
       result = exp.expand
-
-      # p result.latex.shorten
-      puts write_test(result)
-        # puts ''
-        # puts ''
-        # puts ''
-        # puts '££££££££££££££££££££££££££££££££'
-        # puts write_test(result)
-        # puts '££££££££££££££££££££££££££££££££'
-      # expect(exp._min_exp_steps([[1,2,3],[1,2,3,4],[1,2],[1]])).to eq 2
-      # expect(exp._min_exp_steps([[1,2,3],[1,2],[1]])).to eq 2
-      # expect(exp._min_exp_steps([[1],[1],[1]])).to eq 1
+      # puts write_test(result)
+      expect(result).to eq [
+        '(2-x)(x+3)+(x+4)(x-3)'.objectify,
+        '(2(x+3)-x(x+3))+(x(x-3)+4(x-3))'.objectify,
+        '(2x+6-x^2-3x)+(x^2-3x+4x-12)'.objectify,
+        '2x-3x-3x+4x+6-12-x^2+x^2'.objectify,
+        '-6'.objectify
+      ]
     end
 
     xit 'asdf' do
-      exp = '2x+4'.objectify
+      exp = 'x+2'.objectify
       result = exp.expand
       puts write_test(result)
+    end
+
+    xit 'asdfasdfa' do
+      exp = '2x+4'.objectify
+      arry = [[1,2,3],[2,3,3]]
+      expect(exp._all_change?(arry,1)).to eq false
     end
 
     # it 'expands (4x-2)(3+x)+12' do

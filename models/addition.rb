@@ -429,49 +429,68 @@ class Addition < Expression
   def expand
     result_steps = []
     expanding_steps = self.copy.args.inject([]) do |res,arg|
+      # puts arg.latex.shorten
       expansion = arg.expand_v2
+      # puts 'multiplication expansions below'
+      # puts write_test(expansion)
       res << expansion
     end
 
     if expanding_steps.all?{|step| step.length == 1}
         result_steps << self.copy
-      ordered = self.copy.order_similar_terms
+      ordered = self.copy.standardize_add_m_form.order_similar_terms
         result_steps << ordered
       combined = ordered.copy.standardize_add_m_form.combine_similar_terms
         result_steps << combined
       return result_steps.delete_duplicate_steps
     end
 
-    expanding_steps = expanding_steps.equalise_array_lengths.transpose
+    expanding_steps = expanding_steps.equalise_array_lengths
 
     # p "length of expanding_steps is #{expanding_steps.first.length}"
+    next_expanding_step = expanding_steps.map{|step| step.delete_at(0).copy}
+    result_steps << add(next_expanding_step)
+    # p "length of expanding_steps is #{expanding_steps.first.length}"
 
+    next_combine = false
 
+    latest_expanded = nil
 
+    i = 0
+    # puts 'outside while'
+    while expanding_steps.first.length > 0 && i < 11
+      if _all_change?(expanding_steps,i) && next_combine == false
+        next_expanding_step = expanding_steps.map{|step| step.delete_at(0).copy}
+        result_steps << add(next_expanding_step)
+        next
+      end
+      i += 1
+    end
+    # puts '((((((((((((()))))))))))))'
+    # puts add(next_expanding_step).latex.shorten
+    # puts '((((((((((((()))))))))))))'
 
+      last_step = result_steps.last.flatit
+    ordered = last_step.standardize_add_m_form.order_similar_terms
+      result_steps << ordered.copy.flatten
+    combined = ordered.copy.standardize_add_m_form.combine_similar_terms
+      result_steps << combined.flatten
 
-    result_steps = expanding_steps.map{|step| add(step)}
+    # result_steps = expanding_steps.transpose.map{|step| add(step)}
 
-    return result_steps
-
-    # puts write_test(curr_expansion)
-
-    # break if min_length == 1
-    #
-    # steps_to_add = curr_expansion[1..min_length-1] #cut out the next one
-    #
-    # next_to_exp = steps_to_add.last.copy
-    #
-    # #check this!!!!!!!!!
-    # next_to_exp = next_to_exp.flatit
-    # #check this!!!!!!!!!
-    #
-    # result += steps_to_add
-    # i +=1
-  # end
-  # result.delete_duplicate_steps
+    return result_steps.delete_duplicate_steps
   end
 
+  def _all_change?(steps,i)
+    steps.each do |step|
+      return false if step[i] == step[i+1]
+    end
+    return true
+  end
+
+  def _any_no_change?(steps,i)
+    _all_change?(steps,i) == false
+  end
 
   def _min_exp_steps(steps)
     copy = steps.copy
