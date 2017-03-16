@@ -186,17 +186,24 @@ describe Addition do
     # it 'expands 4(x+3)+4(x-3)(4+x)+3' do
     #   exp = '4(x+3)+4(x-3)(4+x)+3'.objectify
       result = exp.expand
+
       # p result.latex.shorten
-      # puts write_test(result)
-        puts ''
-        puts ''
-        puts ''
-        puts '££££££££££££££££££££££££££££££££'
-        puts write_test(result)
-        puts '££££££££££££££££££££££££££££££££'
+      puts write_test(result)
+        # puts ''
+        # puts ''
+        # puts ''
+        # puts '££££££££££££££££££££££££££££££££'
+        # puts write_test(result)
+        # puts '££££££££££££££££££££££££££££££££'
       # expect(exp._min_exp_steps([[1,2,3],[1,2,3,4],[1,2],[1]])).to eq 2
       # expect(exp._min_exp_steps([[1,2,3],[1,2],[1]])).to eq 2
       # expect(exp._min_exp_steps([[1],[1],[1]])).to eq 1
+    end
+
+    xit 'asdf' do
+      exp = '2x+4'.objectify
+      result = exp.expand
+      puts write_test(result)
     end
 
     # it 'expands (4x-2)(3+x)+12' do

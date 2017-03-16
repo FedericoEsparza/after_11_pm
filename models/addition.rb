@@ -427,45 +427,49 @@ class Addition < Expression
   # end
 
   def expand
-    # result = []
-    # expanding_steps = self.copy.args.inject([]) do |res,arg|
-    #   expansion = arg.expand_v2
-    #   res << expansion
-    # end
-    # result
-
-
-    result = [self.copy]
-    next_to_exp = self.copy
-
-    # p next_to_exp.latex.shorten
-    i = 1
-    while true
-      expanded_steps_arry = next_to_exp.args.inject([]) do |res,arg|
-        expansion = arg.expand_v2
-        res << expansion
-      end
-
-      min_length = _min_exp_steps(expanded_steps_arry)
-
-      curr_expansion = expanded_steps_arry.equalise_array_lengths.transpose.map{|step| add(step)}
-
-      puts write_test(curr_expansion)
-
-      break if min_length == 1
-
-      steps_to_add = curr_expansion[1..min_length-1] #cut out the next one
-
-      next_to_exp = steps_to_add.last.copy
-
-      #check this!!!!!!!!!
-      next_to_exp = next_to_exp.flatit
-      #check this!!!!!!!!!
-
-      result += steps_to_add
-      i +=1
+    result_steps = []
+    expanding_steps = self.copy.args.inject([]) do |res,arg|
+      expansion = arg.expand_v2
+      res << expansion
     end
-    result.delete_duplicate_steps
+
+    if expanding_steps.all?{|step| step.length == 1}
+        result_steps << self.copy
+      ordered = self.copy.order_similar_terms
+        result_steps << ordered
+      combined = ordered.copy.standardize_add_m_form.combine_similar_terms
+        result_steps << combined
+      return result_steps.delete_duplicate_steps
+    end
+
+    expanding_steps = expanding_steps.equalise_array_lengths.transpose
+
+    # p "length of expanding_steps is #{expanding_steps.first.length}"
+
+
+
+
+
+    result_steps = expanding_steps.map{|step| add(step)}
+
+    return result_steps
+
+    # puts write_test(curr_expansion)
+
+    # break if min_length == 1
+    #
+    # steps_to_add = curr_expansion[1..min_length-1] #cut out the next one
+    #
+    # next_to_exp = steps_to_add.last.copy
+    #
+    # #check this!!!!!!!!!
+    # next_to_exp = next_to_exp.flatit
+    # #check this!!!!!!!!!
+    #
+    # result += steps_to_add
+    # i +=1
+  # end
+  # result.delete_duplicate_steps
   end
 
 
