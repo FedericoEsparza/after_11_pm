@@ -1,3 +1,9 @@
 # Ignore all logfiles and tempfiles. #
 ######################################
 /coverage/*
+
+# Might want to actually check these in to version control, 
+# but it's less disruptive to contributors, if they're ignored,
+# while also keeping gemset users happy
+.ruby-gemset
+.ruby-version
